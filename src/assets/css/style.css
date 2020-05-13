@@ -1,0 +1,29 @@
+@media (max-width: 1200px) {
+    body {
+      width: 1200px;
+    }
+  }
+/* 间距样式 */
+.ml-10{
+    margin-left: 10px;
+}
+.mr-10{
+    margin-right: 10px;
+}
+.mt-10{
+    margin-top: 10px;
+}
+.mb-10{
+    margin-bottom: 10px;
+}
+.mlr-10{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.mtb-10{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.m-10{
+    margin: 10px;
+}

@@ -92,3 +92,12 @@ th {
 .el-select  {
     width: 100%!important;
 }
+.current-row{
+  background-color: #009bfe!important;
+}
+.el-card__header{
+  background:#eaf3fc
+}
+.el-card{
+  border-radius: 0!important;
+}

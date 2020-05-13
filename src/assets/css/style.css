@@ -27,3 +27,13 @@
 .m-10{
     margin: 10px;
 }
+.page-box{
+    background: #ffffff;
+    padding: 20px;
+    min-height: 600px;
+}
+.page-btn-box{
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}

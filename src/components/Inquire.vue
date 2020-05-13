@@ -81,7 +81,7 @@ export default {
 </script>
 <style scoped>
 .inquire {
-  padding: 20px;
+  padding: 15px 15px 50x;
   border-bottom: 1px solid #295287;
   margin-bottom: 20px;
 }

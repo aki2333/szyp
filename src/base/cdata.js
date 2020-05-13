@@ -165,7 +165,7 @@ const menu = [
                     },
                     {
                         "menu_name": "单位管理",
-                        "menu_url": "dwgl",
+                        "menu_url": "UnitManagement",
                         "parent_id": "000101",
                         "serial": "1845e567-c09c-4ce0-8814-f9b1510df5fc",
                         "childrenMenuButton": [],

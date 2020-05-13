@@ -12,7 +12,14 @@
         >{{pb.button_name}}</el-button>
       </div>
     </div>
-    <el-table size="small" :data="tableData.list" style="width: 100%" @row-click="rowClick">
+    <el-table
+      size="small"
+      stripe
+      :row-class-name="rowClass"
+      :data="tableData.list"
+      style="width: 100%"
+      @row-click="rowClick"
+    >
       <el-table-column v-if="isSelect" align="center" type="selection" width="50"></el-table-column>
       <el-table-column
         align="center"
@@ -98,9 +105,10 @@ export default {
   data() {
     return {
       pageNum: "1",
-      pageSize: "10"
+      pageSize: "10",
       // order: "serial",
-      // direction: 1
+      // direction: 1,
+      currentRow: 0
     };
   },
   methods: {
@@ -121,7 +129,13 @@ export default {
       if (!this.isRowClick) {
         return false;
       }
+      this.currentRow = row;
       console.log(row, column, event);
+    },
+    rowClass({ row, rowIndex }) {
+      console.log({ row, rowIndex });
+
+      return;
     }
   }
 };

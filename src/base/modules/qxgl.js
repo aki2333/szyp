@@ -73,15 +73,11 @@ const yhgl = {
     ],
     lbBtn: [
         {
-            "button_name": "编辑",
+            "button_name": "密码重置",
             "serial": "201",
         },
         {
-            "button_name": "详情",
-            "serial": "201",
-        },
-        {
-            "button_name": "删除",
+            "button_name": "生成随机密码",
             "serial": "201",
         }
     ],
@@ -94,25 +90,20 @@ const yhgl = {
         {
             "button_name": "修改",
             "serial": "201",
-            "type": "primary"
+            "type": "success"
         },
         {
             "button_name": "删除",
             "serial": "201",
-            "type": "primary"
+            "type": "success"
         },
         {
-            "button_name": "单位信息",
+            "button_name": "批量密码重置",
             "serial": "201",
             "type": "primary"
         },
         {
-            "button_name": "密码重置",
-            "serial": "201",
-            "type": "primary"
-        },
-        {
-            "button_name": "生成随机密码",
+            "button_name": "批量生成随机密码",
             "serial": "201",
             "type": "primary"
         }

@@ -21,6 +21,11 @@ const routes = [
         path: '/UserManagement',
         name: 'UserManagement',
         component: () => import(/* webpackChunkName: "OMSupport" */ '../views/OMSupport/UserFunction/UserManagement.vue')
+      },
+      {
+        path: '/UnitManagement',
+        name: 'UnitManagement',
+        component: () => import(/* webpackChunkName: "OMSupport" */ '../views/OMSupport/UserFunction/UnitManagement.vue')
       }
     ]
   }

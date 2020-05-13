@@ -43,6 +43,7 @@ export default {
   },
   mounted() {
     this.getNav();
+    this.getUser();
   },
   methods: {
     getNav() {
@@ -54,8 +55,14 @@ export default {
       this.toLeftMenu(this.$store.state.menu[0], 0);
     },
     toLeftMenu(item, index) {
+      console.log(1, item);
       this.active = index;
       this.$store.commit("getLeftMenu", item.childrenMenu);
+    },
+    getUser() {
+      this.$api.post("userController/getUser", {}, r => {
+        this.$store.dispatch("aGetUser", r);
+      });
     }
   }
 };

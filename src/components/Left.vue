@@ -49,17 +49,16 @@ export default {
     },
     toChildren(item, index) {
       this.active1 = index;
-      console.log(item, index);
+      console.log(2, item);
       this.chilrenNav = item.childrenMenu;
       this.bread = [];
       this.bread.push(item);
       this.toPage(this.chilrenNav[0]);
     },
     toPage(item) {
+      console.log(3, item);
       this.bread[1] = item;
-      this.$store.dispatch("aGetBread", this.bread).then(data => {
-        console.log(data);
-      });
+      this.$store.dispatch("aGetBread", this.bread);
       this.$router.push({ name: item.menu_url });
     }
   }

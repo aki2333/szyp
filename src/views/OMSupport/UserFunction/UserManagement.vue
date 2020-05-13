@@ -27,8 +27,8 @@ export default {
   data() {
     return {
       // 【展示数据】
-      isSelect: true,
-      isEdit: false,
+      isSelect: false,
+      isEdit: true,
       cxData: this.$cdata.qxgl.yhgl.cx,
       lbData: this.$cdata.qxgl.yhgl.lb,
       lbBtn: this.$cdata.qxgl.yhgl.lbBtn,

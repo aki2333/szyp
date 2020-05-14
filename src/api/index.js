@@ -4,7 +4,7 @@ var root = 'http://192.168.3.131:9404'
 // 引用axios
 import axios from 'axios';
 import store from '@/store'
-
+import { Message } from 'element-ui';
 
 // 自定义判断元素类型JS
 function toType(obj) {
@@ -67,6 +67,10 @@ function apiAxios(method, url, params, success, failure) {
           if (failure) {
             failure(res.data.data)
           } else {
+            Message({
+              message: '警告哦，这是一条警告消息',
+              type: 'warning'
+            });
             console.log("er:", res.data)
           }
         }

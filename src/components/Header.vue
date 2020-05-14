@@ -17,9 +17,9 @@
       <div class="user-box">
         <img class="user-tx mr-10" src="@/assets/images/main/tx.png" />
         <div class="user-msg">
-          <div class="user-name">郑军</div>
+          <div class="user-name">{{$store.state.user.xm}}</div>
           <div class="user-dd">
-            苏州总队·技术科
+            {{$store.state.user.xtyhbmmc}}
             <i class="el-icon-location"></i>
           </div>
         </div>

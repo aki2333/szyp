@@ -24,7 +24,7 @@
     <el-table
       size="small"
       stripe
-      :row-class-name="rowClass"
+      highlight-current-row
       :data="tableData.list"
       style="width: 100%"
       @row-click="rowClick"
@@ -50,7 +50,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <div align="center" class="mt-10">
+    <div align="center" class="mt-10" v-if="isPagination">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -87,6 +87,10 @@ export default {
       default: true
     },
     isRowClick: {
+      type: Boolean,
+      default: true
+    },
+    isPagination: {
       type: Boolean,
       default: true
     },
@@ -145,11 +149,6 @@ export default {
       }
       this.currentRow = row;
       console.log(row, column, event);
-    },
-    rowClass({ row, rowIndex }) {
-      console.log({ row, rowIndex });
-
-      return;
     },
     lbTabFun(val) {
       this.page = val;

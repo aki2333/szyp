@@ -4,24 +4,36 @@
       <el-col :span="8">
         <TreeCard
           cardTitle="单位列表"
+          treeType="dwlb"
           :treeData="treeData1"
           :treeProps="treeProps1"
           nodeKey="bmbh"
-          @getTree="getDeptBmbh"
+          @getTree="getTree"
+          @getCheckedKeys="getCheckedKeys"
         ></TreeCard>
       </el-col>
       <el-col :span="8">
         <TreeCard
           cardTitle="功能列表"
+          treeType="gnlb"
           :treeData="treeData2"
           :treeProps="treeProps2"
           :defaultChecked="defaultChecked2"
           nodeKey="serial"
           :isExpand="true"
+          @getCheckedKeys="getCheckedKeys"
         ></TreeCard>
       </el-col>
       <el-col :span="8">
-        <TreeCard cardTitle="模板列表" :treeData="treeData3" :treeProps="treeProps3" nodeKey="serial"></TreeCard>
+        <TreeCard
+          cardTitle="模板列表"
+          treeType="mblb"
+          :treeData="treeData3"
+          :treeProps="treeProps3"
+          nodeKey="serial"
+          :isCheckbox="false"
+          @getTree="getTree"
+        ></TreeCard>
       </el-col>
     </el-row>
     <div class="page-btn-box">
@@ -53,61 +65,54 @@ export default {
       treeProps3: {
         label: "template_name",
         children: "children"
-      }
+      },
+      bmbhList: [],
+      menuList: [],
+      templateId: ""
     };
   },
   mounted() {
-    console.log(this.$store.state);
+    //console.log(this.$store.state);
     this.cancel();
   },
   methods: {
     // 获取单位列表
     getDeptTreeByBmbh() {
-      this.$api.post(
-        "dept/getDeptTreeByBmbh",
-        { bmbh: "320507000000" },
-        // { bmbh: this.$store.state.user.bmbh },
-        r => {
-          this.treeData1 = r;
-        }
-      );
+      this.$cdata.qxgl.getDeptTreeByBmbh().then(r => {
+        this.treeData1 = r;
+      });
     },
     // 获取功能列表
     getPermissionTree(deptBmbh) {
-      this.$api.post(
-        "dept/getPermissionTree",
-        {
-          userId: this.$store.state.user.userId,
-          userBmbh: this.$store.state.user.bmbh,
-          deptBmbh: deptBmbh
-        },
-        r => {
-          this.treeData2 = r;
-          let arr = [...r];
-          this.$fnc
-            .arrayIndex(arr, "choose", "serial", "childrenMenu")
-            .then(data => {
-              this.defaultChecked2 = data;
-            });
-        }
-      );
+      this.$cdata.qxgl.getPermissionTree(deptBmbh).then(r => {
+        this.treeData2 = r;
+        let arr = [...r];
+        this.$fnc
+          .arrayIndex(arr, "choose", "serial", "childrenMenu")
+          .then(data => {
+            this.defaultChecked2 = data;
+          });
+      });
     },
     // 获取模板列表
     getTemplate() {
-      this.$api.post(
-        "dept/getTemplate",
-        {
-          userId: this.$store.state.user.userId,
-          bmbh: this.$store.state.user.bmbh
-        },
-        r => {
-          this.treeData3 = r;
-        }
-      );
+      this.$cdata.qxgl.getTemplate().then(r => {
+        this.treeData3 = r;
+      });
     },
-    // 获取部门编号
-    getDeptBmbh(data) {
-      this.getPermissionTree(data.bmbh);
+    getTree(data) {
+      if (data.type == "dwlb") {
+        this.getPermissionTree(data.data.bmbh);
+      } else if (data.type == "mblb") {
+        this.templateId = data.data.serial;
+      }
+    },
+    getCheckedKeys(data) {
+      if (data.type == "dwlb") {
+        this.bmbhList = data.data;
+      } else if (data.type == "gnlb") {
+        this.menuList = data.data;
+      }
     },
     // 部门赋权
     addPermissionToDept() {
@@ -115,9 +120,9 @@ export default {
         "dept/addPermissionToDept",
         {
           userId: this.$store.state.user.userId,
-          bmbhList: [],
-          menuList: [],
-          templateId: ""
+          bmbhList: this.bmbhList,
+          menuList: this.menuList,
+          templateId: this.templateId
         },
         r => {
           console.log(r);
@@ -129,6 +134,9 @@ export default {
       this.getDeptTreeByBmbh();
       this.getPermissionTree("");
       this.getTemplate();
+      this.templateId = "";
+      this.bmbhList = [];
+      this.menuList = [];
     }
   }
 };

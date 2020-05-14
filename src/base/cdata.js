@@ -24,7 +24,7 @@ const menu = [
                     },
                     {
                         "menu_name": "角色管理",
-                        "menu_url": "jsgl",
+                        "menu_url": "RoleManagement",
                         "parent_id": "000101",
                         "serial": "1745e567-c09c-4ce0-8814-f9b1510df5fc",
                         "childrenMenuButton": [],
@@ -159,7 +159,7 @@ const menu = [
                     },
                     {
                         "menu_name": "角色管理",
-                        "menu_url": "jsgl",
+                        "menu_url": "RoleManagement",
                         "parent_id": "000101",
                         "serial": "1745e567-c09c-4ce0-8814-f9b1510df5fc",
                         "childrenMenuButton": [],

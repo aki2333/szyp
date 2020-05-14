@@ -6,6 +6,7 @@
       </div>
       <div>
         <el-tree
+          ref="tree"
           :default-expand-all="isExpand"
           :expand-on-click-node="false"
           :default-checked-keys="defaultChecked"
@@ -13,7 +14,7 @@
           :data="treeData"
           :props="treeProps"
           :node-key="nodeKey"
-          show-checkbox
+          :show-checkbox="isCheckbox"
           @check-change="handleCheckChange"
           @node-click="nodeClick"
         ></el-tree>
@@ -25,6 +26,10 @@
 export default {
   props: {
     cardTitle: {
+      type: String,
+      default: ""
+    },
+    treeType: {
       type: String,
       default: ""
     },
@@ -44,6 +49,10 @@ export default {
       type: Boolean,
       default: true
     },
+    isCheckbox: {
+      type: Boolean,
+      default: true
+    },
     defaultChecked: {
       type: Array,
       default: () => []
@@ -58,11 +67,15 @@ export default {
     };
   },
   methods: {
-    nodeClick(a, b, c) {
-      console.log(a, b, c);
-      this.$emit("getTree", a);
+    nodeClick(a) {
+      // console.log(a, b, c);
+      this.$emit("getTree", { type: this.treeType, data: a });
     },
-    handleCheckChange() {}
+    handleCheckChange() {
+      let data = this.$refs.tree.getCheckedKeys(false);
+      console.log("tree", data);
+      this.$emit("getCheckedKeys", { type: this.treeType, data: data });
+    }
   }
 };
 </script>

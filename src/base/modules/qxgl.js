@@ -1,3 +1,6 @@
+import api from '@/api/index.js'
+import store from '@/store'
+
 // 【用户管理】
 const yhgl = {
     cx: [
@@ -17,14 +20,21 @@ const yhgl = {
             dm: 'jinghao'
         },
         {
-            cm: '创建开始日期',
-            type: 'datePicker',
-            dm: 'startTime'
-        },
-        {
-            cm: '创建结束日期',
-            type: 'datePicker',
-            dm: 'endTime'
+            cm: '创建时间',
+            type: 'double',
+            dm: 'xfTime',
+            children: [
+                {
+                    cm: '创建开始日期',
+                    type: 'date',
+                    dm: 'startTime'
+                },
+                {
+                    cm: '创建结束日期',
+                    type: 'date',
+                    dm: 'endTime'
+                }
+            ]
         },
         {
             cm: '责任区',
@@ -109,6 +119,100 @@ const yhgl = {
         }
     ]
 }
+// 【角色管理】
+const jsgl = {
+    lb: [
+        {
+            cm: '角色类型',
+            dm: 'role_type'
+        },
+        {
+            cm: '角色名称',
+            dm: 'role_name'
+        },
+        {
+            cm: '所属单位',
+            dm: 'create_unitid'
+        }
+    ],
+    lbBtn: [
+        {
+            "button_name": "编辑",
+            "serial": "201",
+        },
+        {
+            "button_name": "用户",
+            "serial": "201",
+        },
+        {
+            "button_name": "停用",
+            "serial": "201",
+        }
+    ],
+    plBtn: [
+        {
+            "button_name": "新建全局角色",
+            "serial": "201",
+            "type": "success"
+        },
+        {
+            "button_name": "新建本地角色",
+            "serial": "201",
+            "type": "primary"
+        }
+    ]
+}
+// 获取单位列表
+function getDeptTreeByBmbh() {
+    return new Promise((resolve) => {
+        api.post(
+            "dept/getDeptTreeByBmbh",
+            { bmbh: "320507000000" },
+            // { bmbh: this.$store.state.user.bmbh },
+            r => {
+                resolve(r)
+            }
+        );
+
+    })
+}
+// 获取功能列表
+function getPermissionTree(deptBmbh) {
+    return new Promise((resolve) => {
+        api.post(
+            "dept/getDeptPermissionTree",
+            {
+                userId: store.state.user.userId,
+                userBmbh: store.state.user.bmbh,
+                deptBmbh: deptBmbh
+            },
+            r => {
+                resolve(r)
+            }
+        );
+    })
+
+}
+// 获取模板列表
+function getTemplate() {
+    return new Promise((resolve) => {
+        api.post(
+            "dept/getTemplate",
+            {
+                userId: store.state.user.userId,
+                bmbh: store.state.user.bmbh
+            },
+            r => {
+                resolve(r)
+            }
+        );
+    })
+
+}
 export default {
-    yhgl
+    yhgl,
+    jsgl,
+    getDeptTreeByBmbh,
+    getPermissionTree,
+    getTemplate
 }

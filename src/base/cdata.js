@@ -1,4 +1,5 @@
 import qxgl from './modules/qxgl.js'
+import zxhc from './modules/zxhc.js'
 // 【菜单】
 const menu = [
     {
@@ -206,5 +207,6 @@ const options = {
 export default {
     menu,
     options,
-    qxgl
+    qxgl,
+    zxhc
 }

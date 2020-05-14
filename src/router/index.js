@@ -26,6 +26,12 @@ const routes = [
         path: '/UnitManagement',
         name: 'UnitManagement',
         component: () => import(/* webpackChunkName: "OMSupport" */ '../views/OMSupport/UserFunction/UnitManagement.vue')
+      },
+      // 业务管理
+      {
+        path: '/Specialcheck',
+        name: 'Specialcheck',
+        component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/Specialcheck.vue')
       }
     ]
   }

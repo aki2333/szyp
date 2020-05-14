@@ -1,13 +1,17 @@
 <template>
   <div class="table-box">
     <div class="table-other">
-      <div class="table-tab-box" v-if="isTab"></div>
+      <div class="table-tab-box" v-if="isTab">
+        <span class="hand">市局未处理</span>
+        <span class="hand">分局未处理</span>
+      </div>
       <div class="table-btn-box" v-if="isPl">
         <el-button
           size="mini"
           :type="pb.type"
           round
           v-for="(pb,pbi) in plBtn"
+          @click="plBtnFun(pb.button_name)"
           :key="pbi"
         >{{pb.button_name}}</el-button>
       </div>
@@ -136,7 +140,10 @@ export default {
       console.log({ row, rowIndex });
 
       return;
-    }
+    },
+    plBtnFun(val){
+      this.$emit("plFnc",val)
+    },
   }
 };
 </script>
@@ -155,6 +162,11 @@ export default {
 .table-tab-box {
   position: absolute;
   left: 0;
+}
+.table-tab-box span{
+  font-size: 12px;
+  color: #9EA5BF;
+  margin-right: 20px;
 }
 .table-btn-box {
   position: absolute;

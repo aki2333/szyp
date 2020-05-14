@@ -2,7 +2,13 @@
   <div class="table-box">
     <div class="table-other">
       <div class="table-tab-box" v-if="isTab">
-        <span class="hand" :class="{'tab_active':page==lt.page}" v-for="(lt,lti) in lbTab" :key="lti" @click="lbTabFun(lt.page)">{{lt.tab_name}}</span>
+        <span
+          class="hand"
+          :class="{'tab_active':page==lt.page}"
+          v-for="(lt,lti) in lbTab"
+          :key="lti"
+          @click="lbTabFun(lt.page)"
+        >{{lt.tab_name}}</span>
       </div>
       <div class="table-btn-box" v-if="isPl">
         <el-button
@@ -100,7 +106,7 @@ export default {
       type: Array,
       default: () => []
     },
-    lbTab:{
+    lbTab: {
       type: Array,
       default: () => []
     },
@@ -116,7 +122,7 @@ export default {
       // order: "serial",
       // direction: 1,
       currentRow: 0,
-      page:0,
+      page: 0
     };
   },
   methods: {
@@ -145,22 +151,17 @@ export default {
 
       return;
     },
-    lbTabFun(val){
+    lbTabFun(val) {
       this.page = val;
-      this.$emit("tabFnc",this.page);
+      this.$emit("tabFnc", this.page);
     },
-    plBtnFun(val){
-      this.$emit("plFnc",val)
-    },
+    plBtnFun(val) {
+      this.$emit("plFnc", val);
+    }
   }
 };
 </script>
 <style scoped>
-.table-box {
-  background: #ffffff;
-  border-radius: 0 0 20px 20px;
-  padding: 10px 15px 20px 15px;
-}
 .table-other {
   position: relative;
   height: 60px;
@@ -171,17 +172,17 @@ export default {
   position: absolute;
   left: 0;
 }
-.table-tab-box span{
+.table-tab-box span {
   font-size: 12px;
-  color: #9EA5BF;
+  color: #9ea5bf;
   margin-right: 20px;
   display: inline-block;
   padding: 0 2px 10px;
   box-sizing: border-box;
 }
-.tab_active{
-  color:#2576DC;
-  border-bottom: 3px solid #2576DC;
+.tab_active {
+  color: #2576dc;
+  border-bottom: 3px solid #2576dc;
 }
 .table-btn-box {
   position: absolute;

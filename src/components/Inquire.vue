@@ -29,6 +29,28 @@
               <template v-else-if="cx.type=='datePicker'">
                 <el-date-picker v-model="inquire[cx.dm]" type="date" placeholder="选择日期"></el-date-picker>
               </template>
+              <template v-else-if="cx.type=='double'">
+                <div class="double-box">
+                  <div class="double">
+                    <el-date-picker
+                      v-model="inquire[cx.children[0].dm]"
+                      :type="cx.children[0].type"
+                      placeholder="选择开始日期"
+                    ></el-date-picker>
+                  </div>
+                  <div>-</div>
+                  <div class="double">
+                    <el-date-picker
+                      v-model="inquire[cx.children[1].dm]"
+                      :type="cx.children[1].type"
+                      placeholder="选择结束日期"
+                    ></el-date-picker>
+                  </div>
+                  <!-- <div class="double" v-for="(c,chi) in cx.children" :key="chi">
+                    <el-date-picker v-model="inquire[c.dm]" :type="c.type" placeholder="选择日期"></el-date-picker>
+                  </div>-->
+                </div>
+              </template>
             </el-form-item>
           </el-col>
         </el-col>
@@ -84,8 +106,16 @@ export default {
   padding: 15px 15px 50x;
   border-bottom: 1px solid #295287;
   margin-bottom: 20px;
+  color: #e1e8ee;
 }
 .cx-btn {
   margin-bottom: 18px;
+}
+.double-box {
+  display: flex;
+  justify-content: space-between;
+}
+.double {
+  width: 48%;
 }
 </style>

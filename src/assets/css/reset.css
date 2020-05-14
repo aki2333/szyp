@@ -84,7 +84,7 @@ th {
 .el-input__inner{
   border-color: #1a355b!important;
 }
-.el-form-item__label{
+.inquire .el-form-item__label{
   color: #dfe6ee!important;
 }
 .el-date-editor.el-input, 

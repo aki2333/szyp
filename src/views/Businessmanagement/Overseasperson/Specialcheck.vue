@@ -1,18 +1,20 @@
 <template>
   <div class="page">
     <Inquire :cxData="cxData" @cxFnc="cxFnc"></Inquire>
-    <Table
-      :lbData="lbData"
-      :lbBtn="lbBtn"
-      :plBtn="plBtn"
-      :isTab="isTab"
-      :lbTab="lbTab"
-      :tableData="tableData"
-      @plFnc="plFnc"
-      @pageSizeFnc="pageSizeFnc"
-      @pageNumFnc="pageNumFnc"
-      @tabFnc="tabFnc"
-    ></Table>
+    <div class="page-box">
+      <Table
+        :lbData="lbData"
+        :lbBtn="lbBtn"
+        :plBtn="plBtn"
+        :isTab="isTab"
+        :lbTab="lbTab"
+        :tableData="tableData"
+        @plFnc="plFnc"
+        @pageSizeFnc="pageSizeFnc"
+        @pageNumFnc="pageNumFnc"
+        @tabFnc="tabFnc"
+      ></Table>
+    </div>
   </div>
 </template>
 <script>
@@ -24,34 +26,34 @@ export default {
     Table
   },
   data() {
-      return{
-        // 查询项
-        
-        //数据展示
-        isTab:true,
-        cxData:this.$cdata.zxhc.zxhc.cx,
-        lbData:this.$cdata.zxhc.zxhc.lb,
-        lbBtn:this.$cdata.zxhc.zxhc.lbBtn,
-        plBtn:this.$cdata.zxhc.zxhc.plBtn,
-        lbTab:this.$cdata.zxhc.zxhc.lbTab,
-        //业务数据
-        cx:{
-            pd:{},
-            pageSize:10,
-            pageNum:1,
-        },
-        tableData: {
-            list: [],
-            total: 0,
-            pageSize: 10,
-            pageNum: 1
-        },
-        page:0,
-      }
+    return {
+      // 查询项
+
+      //数据展示
+      isTab: true,
+      cxData: this.$cdata.zxhc.zxhc.cx,
+      lbData: this.$cdata.zxhc.zxhc.lb,
+      lbBtn: this.$cdata.zxhc.zxhc.lbBtn,
+      plBtn: this.$cdata.zxhc.zxhc.plBtn,
+      lbTab: this.$cdata.zxhc.zxhc.lbTab,
+      //业务数据
+      cx: {
+        pd: {},
+        pageSize: 10,
+        pageNum: 1
+      },
+      tableData: {
+        list: [],
+        total: 0,
+        pageSize: 10,
+        pageNum: 1
+      },
+      page: 0
+    };
   },
-  methods:{
-    cxFnc(data){
-        this.cx.pd=data;
+  methods: {
+    cxFnc(data) {
+      this.cx.pd = data;
     },
     // 获取分页等信息
     pageSizeFnc(data) {
@@ -69,12 +71,12 @@ export default {
       });
     },
     //批量操作按钮  data==按钮名字
-    plFnc(data){
-        console.log(data);
+    plFnc(data) {
+      console.log(data);
     },
     //列表tab切换  data==page 从0开始
-    tabFnc(data){
-        this.page = data
+    tabFnc(data) {
+      this.page = data;
     }
   }
 };

@@ -1,16 +1,18 @@
 <template>
   <div class="page">
     <Inquire :cxData="cxData" @cxFnc="cxFnc"></Inquire>
-    <Table
-      :lbData="lbData"
-      :isSelect="isSelect"
-      :isEdit="isEdit"
-      :lbBtn="lbBtn"
-      :plBtn="plBtn"
-      :tableData="tableData"
-      @pageSizeFnc="pageSizeFnc"
-      @pageNumFnc="pageNumFnc"
-    ></Table>
+    <div class="page-box">
+      <Table
+        :lbData="lbData"
+        :isSelect="isSelect"
+        :isEdit="isEdit"
+        :lbBtn="lbBtn"
+        :plBtn="plBtn"
+        :tableData="tableData"
+        @pageSizeFnc="pageSizeFnc"
+        @pageNumFnc="pageNumFnc"
+      ></Table>
+    </div>
   </div>
 </template>
 <script>

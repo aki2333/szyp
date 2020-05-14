@@ -144,6 +144,20 @@ const zxhc = {
             "type": "primary"
         },
     ],
+    lbTab:[
+        {
+            "tab_name":'市局未处理',
+            "page":0,
+        },
+        {
+            "tab_name":'分局未处理',
+            "page":1,
+        },
+        {
+            "tab_name":'派出所未处理',
+            "page":2,
+        },
+    ],
 }
 export default {
     zxhc

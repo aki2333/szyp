@@ -6,10 +6,12 @@
       :lbBtn="lbBtn"
       :plBtn="plBtn"
       :isTab="isTab"
+      :lbTab="lbTab"
       :tableData="tableData"
       @plFnc="plFnc"
       @pageSizeFnc="pageSizeFnc"
       @pageNumFnc="pageNumFnc"
+      @tabFnc="tabFnc"
     ></Table>
   </div>
 </template>
@@ -31,6 +33,7 @@ export default {
         lbData:this.$cdata.zxhc.zxhc.lb,
         lbBtn:this.$cdata.zxhc.zxhc.lbBtn,
         plBtn:this.$cdata.zxhc.zxhc.plBtn,
+        lbTab:this.$cdata.zxhc.zxhc.lbTab,
         //业务数据
         cx:{
             pd:{},
@@ -42,7 +45,8 @@ export default {
             total: 0,
             pageSize: 10,
             pageNum: 1
-        }
+        },
+        page:0,
       }
   },
   methods:{
@@ -64,9 +68,14 @@ export default {
         this.tableData = r.resultList;
       });
     },
+    //批量操作按钮  data==按钮名字
     plFnc(data){
         console.log(data);
     },
+    //列表tab切换  data==page 从0开始
+    tabFnc(data){
+        this.page = data
+    }
   }
 };
 </script>

@@ -2,8 +2,7 @@
   <div class="table-box">
     <div class="table-other">
       <div class="table-tab-box" v-if="isTab">
-        <span class="hand">市局未处理</span>
-        <span class="hand">分局未处理</span>
+        <span class="hand" :class="{'tab_active':page==lt.page}" v-for="(lt,lti) in lbTab" :key="lti" @click="lbTabFun(lt.page)">{{lt.tab_name}}</span>
       </div>
       <div class="table-btn-box" v-if="isPl">
         <el-button
@@ -101,6 +100,10 @@ export default {
       type: Array,
       default: () => []
     },
+    lbTab:{
+      type: Array,
+      default: () => []
+    },
     tableData: {
       type: Object,
       default: () => {}
@@ -112,7 +115,8 @@ export default {
       pageSize: "10",
       // order: "serial",
       // direction: 1,
-      currentRow: 0
+      currentRow: 0,
+      page:0,
     };
   },
   methods: {
@@ -141,6 +145,10 @@ export default {
 
       return;
     },
+    lbTabFun(val){
+      this.page = val;
+      this.$emit("tabFnc",this.page);
+    },
     plBtnFun(val){
       this.$emit("plFnc",val)
     },
@@ -167,6 +175,13 @@ export default {
   font-size: 12px;
   color: #9EA5BF;
   margin-right: 20px;
+  display: inline-block;
+  padding: 0 2px 10px;
+  box-sizing: border-box;
+}
+.tab_active{
+  color:#2576DC;
+  border-bottom: 3px solid #2576DC;
 }
 .table-btn-box {
   position: absolute;

@@ -54,15 +54,15 @@ const menu = [
         "serial": "0002",
         "childrenMenu": [
             {
-                "menu_name": "用户功能管理",
+                "menu_name": "业务管理",
                 "menu_icon": "yhgngl",
-                "menu_url": "yhgngl",
+                "menu_url": "ywglgn",
                 "parent_id": "0001",
                 "serial": "000101",
                 "childrenMenu": [
                     {
-                        "menu_name": "用户管理",
-                        "menu_url": "yhgl",
+                        "menu_name": "核查走访管理",
+                        "menu_url": "Specialcheck",
                         "parent_id": "000101",
                         "serial": "1645e567-c09c-4ce0-8814-f9b1510df5fc",
                         "childrenMenuButton": []

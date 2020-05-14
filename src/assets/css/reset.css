@@ -101,3 +101,6 @@ th {
 .el-card{
   border-radius: 0!important;
 }
+.hand{
+  cursor: pointer;
+}

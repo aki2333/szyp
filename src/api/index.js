@@ -7,28 +7,28 @@ import store from '@/store'
 
 
 // 自定义判断元素类型JS
-// function toType(obj) {
-//   return {}.toString
-//     .call(obj)
-//     .match(/\s([a-zA-Z]+)/)[1]
-//     .toLowerCase()
-// }
+function toType(obj) {
+  return {}.toString
+    .call(obj)
+    .match(/\s([a-zA-Z]+)/)[1]
+    .toLowerCase()
+}
 // 参数过滤函数
-// function filterNull(o) {
-//   for (var key in o) {
-//     if (o[key] === null) {
-//       delete o[key]
-//     }
-//     if (toType(o[key]) === 'string') {
-//       o[key] = o[key].trim()
-//     } else if (toType(o[key]) === 'object') {
-//       o[key] = filterNull(o[key])
-//     } else if (toType(o[key]) === 'array') {
-//       o[key] = filterNull(o[key])
-//     }
-//   }
-//   return o
-// }
+function filterNull(o) {
+  for (var key in o) {
+    if (o[key] === null) {
+      delete o[key]
+    }
+    if (toType(o[key]) === 'string') {
+      o[key] = o[key].trim()
+    } else if (toType(o[key]) === 'object') {
+      o[key] = filterNull(o[key])
+    } else if (toType(o[key]) === 'array') {
+      o[key] = filterNull(o[key])
+    }
+  }
+  return o
+}
 //使用token作为请求头2，拦截请求，将token插入Authorization
 axios.interceptors.request.use(
   config => {
@@ -44,7 +44,7 @@ axios.interceptors.request.use(
 
 function apiAxios(method, url, params, success, failure) {
   if (params) {
-    // params = filterNull(params);
+    params = filterNull(params);
   }
   axios({
     method: method,

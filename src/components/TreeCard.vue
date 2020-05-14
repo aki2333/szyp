@@ -6,10 +6,16 @@
       </div>
       <div>
         <el-tree
+          :default-expand-all="isExpand"
+          :expand-on-click-node="false"
+          :default-checked-keys="defaultChecked"
+          highlight-current
+          :data="treeData"
           :props="treeProps"
           :node-key="nodeKey"
           show-checkbox
           @check-change="handleCheckChange"
+          @node-click="nodeClick"
         ></el-tree>
       </div>
     </el-card>
@@ -30,7 +36,15 @@ export default {
       type: Object,
       default: () => {}
     },
-    cxData: {
+    treeData: {
+      type: Array,
+      default: () => []
+    },
+    isExpand: {
+      type: Boolean,
+      default: true
+    },
+    defaultChecked: {
       type: Array,
       default: () => []
     }
@@ -44,11 +58,20 @@ export default {
     };
   },
   methods: {
+    nodeClick(a, b, c) {
+      console.log(a, b, c);
+      this.$emit("getTree", a);
+    },
     handleCheckChange() {}
   }
 };
 </script>
 <style scoped>
+.box-card {
+  /* min-height: 300px; */
+  height: 70vh;
+  overflow: auto;
+}
 .card-title {
   font-weight: bold;
   font-size: 15px;

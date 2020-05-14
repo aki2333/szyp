@@ -40,7 +40,8 @@ export default {
     getDeptTreeByBmbh() {
       this.$api.post(
         "dept/getDeptTreeByBmbh",
-        { bmbh: this.$store.state.user.bmbh },
+        { bmbh: "320507000000" },
+        // { bmbh: this.$store.state.user.bmbh },
         r => {
           console.log(r);
         }
@@ -60,7 +61,6 @@ export default {
         }
       );
     },
-
     // 获取模板列表
     getTemplate() {
       this.$api.post(

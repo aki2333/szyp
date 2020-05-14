@@ -1,5 +1,5 @@
 // 配置API接口地址
-var root = 'http://10.0.30.57:9404'
+var root = 'http://192.168.3.131:9404'
 
 // 引用axios
 import axios from 'axios';

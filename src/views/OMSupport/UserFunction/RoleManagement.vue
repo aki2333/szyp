@@ -28,7 +28,7 @@
     <!-- 弹窗 -->
     <Dialog :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
       <RoleEdit
-        v-if="dialogType=='bj'"
+        v-if="dialogType=='bj'&&isShowDialog"
         :dialogType="dialogType"
         :dialogData="dialogData"
         @dialogCancel="isShowDialog=false"
@@ -103,6 +103,7 @@ export default {
     plFnc() {},
     // 表格内操作
     blFnc(data) {
+      console.log("表内", data);
       this.dialogTitle = data.btn.button_name;
       this.dialogType = data.btn.type;
       if (data.btn.type == "bj") {
@@ -116,20 +117,23 @@ export default {
       }
     },
     dialogSave(data) {
-      if (data.btn.type == "bj") {
+      console.log(data);
+      if (data.type == "bj") {
         this.editRole(data.data);
-      } else if (data.btn.type == "yh") {
+      } else if (data.type == "yh") {
         this.getRoleUser(data.data);
       }
     },
     // 编辑
     editRole(data) {
-      let p = {
-        roleId: "320508000000",
-        menuList: data
-      };
+      let p = data;
+      p.roleId = "320508000000";
+      p.userId = "";
       this.$api.post("role/editRole", p, r => {
-        console.log(r);
+        this.$message({
+          message: r,
+          type: "success"
+        });
         this.isShowDialog = false;
       });
     },

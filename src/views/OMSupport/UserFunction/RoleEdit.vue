@@ -9,7 +9,7 @@
           :treeProps="treeProps1"
           :defaultChecked="defaultChecked1"
           nodeKey="serial"
-          @getTree="getTree"
+          @getCheckedNodes="getCheckedNodes"
         ></TreeCard>
       </el-col>
     </el-row>
@@ -41,10 +41,13 @@ export default {
         label: "menu_name",
         children: "childrenMenu"
       },
-      defaultChecked1: []
+      defaultChecked1: [],
+      buttonList: [],
+      menuList: []
     };
   },
   mounted() {
+    console.log("编辑", this.dialogType, this.dialogData);
     this.begin();
   },
   methods: {
@@ -59,11 +62,27 @@ export default {
           });
       });
     },
-    getTree(data) {
-      console.log(data);
+    getCheckedNodes(data) {
+      if (data.type == "gnlb") {
+        console.log("gnlb", data);
+        this.buttonList = [];
+        this.menuList = [];
+        let arr = [...data.data];
+
+        arr.forEach(item => {
+          if (item.menu_type == "B") {
+            this.buttonList.push(item.serial);
+          } else {
+            this.menuList.push(item.serial);
+          }
+        });
+      }
     },
     save() {
-      this.$emit("dialogSave", { type: this.dialogType });
+      this.$emit("dialogSave", {
+        type: this.dialogType,
+        data: { buttonList: this.buttonList, menuList: this.menuList }
+      });
     },
     cancel() {
       this.$emit("dialogCancel");

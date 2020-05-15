@@ -127,7 +127,6 @@ export default {
             this.menuList.push(item.serial);
           }
         });
-        // this.menuList = data.data;
       }
     },
     // 部门赋权

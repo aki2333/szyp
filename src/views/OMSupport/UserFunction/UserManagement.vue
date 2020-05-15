@@ -23,7 +23,8 @@
           <Table
             lbType="dwtb"
             :lbData="$cdata.qxgl.yhgl.dwtb"
-            :isSelect="isSelect"
+            :isSelect="false"
+            :isPl="false"
             :isEdit="false"
             :tableData="tableData2"
             :isPagination="false"
@@ -35,11 +36,14 @@
             lbType="jstb"
             :isSelect="true"
             :lbData="$cdata.qxgl.jsgl.lb"
+            :isPl="false"
             :isEdit="false"
             :lbBtn="$cdata.qxgl.jsgl.lbBtn"
             :tableData="tableData3"
             :isPagination="false"
+            :selection="selection"
             @rowClick="rowClick"
+            @userRole="saveUserRoleInfo"
           ></Table>
         </el-col>
         <el-col :span="6">
@@ -74,7 +78,6 @@ import Inquire from "@/components/Inquire.vue";
 import Dialog from "@/components/Dialog.vue";
 import Table from "@/components/Table.vue";
 import TreeCard from "@/components/TreeCard.vue";
-
 import Form from "@/components/Form.vue";
 export default {
   components: {
@@ -108,6 +111,7 @@ export default {
         pageSize: 10,
         pageNum: 1
       },
+      selection: [],
       tableData2: { list: [] },
       tableData3: { list: [] },
       treeData1: [],
@@ -159,10 +163,21 @@ export default {
     },
     // 获取角色列表
     getRole(bmbh) {
-      this.$api.post("role/getRole", { bmbh: bmbh, quanJu: "true" }, r => {
-        this.tableData3.list = r;
-      });
+      this.$api.post(
+        "role/getRole",
+        { bmbh: bmbh, quanJu: "true", userId: this.dialogData.userId },
+        r => {
+          this.tableData3.list = r;
+          let arr = [...r];
+          arr.forEach(item => {
+            if (item.ischeck) {
+              this.selection.push(item);
+            }
+          });
+        }
+      );
     },
+
     //获取角色权限列表树形结构
     getRolePermissionTree(roleId) {
       this.$cdata.qxgl.getRolePermissionTree(roleId).then(data => {
@@ -311,6 +326,22 @@ export default {
         });
         this.getTable();
         this.isShowDialog = false;
+      });
+    },
+    // 用户关联角色添加取消
+    saveUserRoleInfo(data) {
+      console.log("xuanzhong", data);
+      let p = {
+        list: data,
+        userId: this.dialogData.userId
+      };
+      this.$api.post("userRoleController/saveUserRoleInfo", p, r => {
+        this.$message({
+          message: r.message,
+          type: "success"
+        });
+        this.getTable();
+        // this.isShowDialog = false;
       });
     }
   }

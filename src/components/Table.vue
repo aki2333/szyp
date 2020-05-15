@@ -28,6 +28,7 @@
       :data="tableData.list"
       style="width: 100%"
       @row-click="rowClick"
+      @selection-change="handleSelectionChange"
     >
       <el-table-column v-if="isSelect" align="center" type="selection" width="50"></el-table-column>
       <el-table-column
@@ -117,6 +118,10 @@ export default {
     tableData: {
       type: Object,
       default: () => {}
+    },
+    selection: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -128,11 +133,9 @@ export default {
       page: 0
     };
   },
-  mounted() {},
-  watch: {
-    tableData(val) {
-      console.log("tableData", this.tableData, val);
-    }
+  mounted() {
+    console.log("表格", this.lbType);
+    this.toggleSelection(this.selection);
   },
   methods: {
     handleSizeChange(val) {
@@ -144,6 +147,18 @@ export default {
       console.log(`当前页: ${val}`);
       this.pageNum = val;
       this.$emit("pageNumFnc", this.pageNum);
+    },
+    handleSelectionChange(val) {
+      this.$emit("userRole", val);
+    },
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row);
+        });
+      } else {
+        this.$refs.multipleTable.clearSelection();
+      }
     },
     rowClick(row, column, event) {
       if (!this.isRowClick) {

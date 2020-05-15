@@ -185,6 +185,14 @@ const menu = [
 ]
 // 【下拉选项】
 const options = {
+    nationality:[],
+    gender:[],
+    passportType:[],
+    suboffice:[],
+    policepolicestation:[],
+    // 【非大众】
+    datatype:[],//下发类别
+    backstatus:[],//数据状态
     bmbh: [
         {
             value: "dw1",
@@ -202,8 +210,6 @@ const options = {
         }
     ]
 }
-
-
 export default {
     menu,
     options,

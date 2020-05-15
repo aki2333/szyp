@@ -30,6 +30,9 @@
 .page{
     min-height: 96%;
 }
+.ml--33{
+    margin-left: -33px;
+}
 .page-box{
     background: #ffffff;
     padding: 20px;
@@ -39,4 +42,26 @@
     display: flex;
     justify-content: center;
     margin-top: 40px;
+}
+.t-tab-top{
+    display: flex;
+    justify-content: start;
+}
+.tab-top-item{
+    position: relative;
+    width: 124px;
+    height: 30px;
+}
+.tab-top-item img{
+    height: 100%;
+}
+.tab-top-item span{
+    position: absolute;
+    top: 6px;
+    left: 24px;
+    color:#ffffff;
+    font-size:14px
+}
+.t-leftT{
+    left: 34px!important;
 }

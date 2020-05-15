@@ -36,11 +36,11 @@ const yhgl = {
                 }
             ]
         },
-        {
-            cm: '责任区',
-            type: 'select',
-            dm: 'userType'
-        },
+        // {
+        //     cm: '责任区',
+        //     type: 'select',
+        //     dm: 'userType'
+        // },
         {
             cm: '用户类型',
             type: 'select',
@@ -73,52 +73,148 @@ const yhgl = {
             dm: 'yddh'
         },
         {
+            cm: '状态',
+            dm: 'valid'
+        },
+        {
             cm: '责任区',
             dm: 'llcs'
         },
         {
             cm: '创建人',
             dm: 'createUser'
-        },
+        }
     ],
     lbBtn: [
         {
             "button_name": "密码重置",
+            "button_type": "mmcz",
             "serial": "201",
         },
         {
             "button_name": "生成随机密码",
+            "button_type": "scsjmm",
             "serial": "201",
         }
     ],
     plBtn: [
         {
             "button_name": "新建",
+            "button_type": "xj",
             "serial": "201",
             "type": "success"
         },
         {
             "button_name": "修改",
+            "button_type": "xg",
+            "user_ctrl": 1,
             "serial": "201",
             "type": "success"
         },
         {
             "button_name": "删除",
+            "button_type": "sc",
+            "user_ctrl": 1,
             "serial": "201",
             "type": "success"
         },
         {
             "button_name": "批量密码重置",
+            "button_type": "plmmcz",
             "serial": "201",
             "type": "primary"
         },
         {
             "button_name": "批量生成随机密码",
+            "button_type": "plscsjmm",
             "serial": "201",
             "type": "primary"
         }
+    ],
+    // 【单位列表】
+    dwtb: [
+        {
+            cm: '单位名称',
+            dm: 'xtyhbmmc'
+        },
+        {
+            cm: '单位类型',
+            dm: 'xtyhbmcj'
+        },
+    ],
+    xj: [
+        {
+            cm: '姓名',
+            type: 'input',
+            dm: 'xm'
+        },
+        {
+            cm: '电话号码',
+            type: 'input',
+            dm: 'yddh'
+        },
+        {
+            cm: '警号',
+            type: 'input',
+            dm: 'jingHao'
+        },
+        {
+            cm: '证件号码',
+            type: 'input',
+            dm: 'sfzh'
+        },
+        {
+            cm: '部门编号',
+            type: 'input',
+            dm: 'bmbh'
+        },
+        {
+            cm: '密码',
+            type: 'input',
+            dm: 'xtmm'
+        },
+        {
+            cm: '用户类型',
+            type: 'select',
+            dm: 'userType'
+        },
+    ],
+    xg: [
+        {
+            cm: '姓名',
+            type: 'input',
+            dm: 'xm'
+        },
+        {
+            cm: '电话号码',
+            type: 'input',
+            dm: 'yddh'
+        },
+        {
+            cm: '警号',
+            type: 'input',
+            dm: 'jingHao'
+        },
+        {
+            cm: '证件号码',
+            type: 'input',
+            dm: 'sfzh'
+        },
+        {
+            cm: '部门编号',
+            type: 'input',
+            dm: 'bmbh'
+        }
+    ],
+    plmmcz: [
+        {
+            cm: '密码',
+            type: 'input',
+            dm: 'xtmm'
+        },
     ]
 }
+
 // 【角色管理】
 const jsgl = {
     lb: [
@@ -138,14 +234,17 @@ const jsgl = {
     lbBtn: [
         {
             "button_name": "编辑",
+            "type": "bj",
             "serial": "201",
         },
         {
             "button_name": "用户",
+            "type": "yh",
             "serial": "201",
         },
         {
             "button_name": "停用",
+            "type": "ty",
             "serial": "201",
         }
     ],
@@ -209,10 +308,25 @@ function getTemplate() {
     })
 
 }
+// 获取角色权限列表树形结构
+function getRolePermissionTree(roleId) {
+    return new Promise((resolve) => {
+        api.post(
+            "role/getRolePermissionTree",
+            {
+                roleId: roleId,
+            },
+            r => {
+                resolve(r)
+            }
+        );
+    })
+}
 export default {
     yhgl,
     jsgl,
     getDeptTreeByBmbh,
     getPermissionTree,
-    getTemplate
+    getTemplate,
+    getRolePermissionTree
 }

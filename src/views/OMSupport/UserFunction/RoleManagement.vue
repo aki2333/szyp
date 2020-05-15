@@ -1,15 +1,15 @@
 <template>
-  <div class="page-box">
+  <div class="page-box page">
     <el-row type="flex">
       <el-col :span="8">
         <TreeCard
           cardTitle="单位列表"
           treeType="dwlb"
+          :isCheckbox="false"
           :treeData="treeData1"
           :treeProps="treeProps1"
           nodeKey="bmbh"
           @getTree="getTree"
-          @getCheckedKeys="getCheckedKeys"
         ></TreeCard>
       </el-col>
       <el-col :span="16">
@@ -21,21 +21,30 @@
           :lbBtn="lbBtn"
           :plBtn="plBtn"
           :tableData="tableData"
+          @blFnc="blFnc"
         ></Table>
       </el-col>
     </el-row>
-    <!-- <div class="page-btn-box">
-      <el-button size="mini" type="primary" round @click="addPermissionToDept">保存</el-button>
-      <el-button size="mini" type="info" round @click="cancel">清除</el-button>
-    </div>-->
+    <!-- 弹窗 -->
+    <Dialog :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
+      <RoleEdit
+        v-if="dialogType=='bj'"
+        :dialogType="dialogType"
+        :dialogData="dialogData"
+        @dialogCancel="isShowDialog=false"
+        @dialogSave="dialogSave"
+      ></RoleEdit>
+    </Dialog>
   </div>
 </template>
 <script>
 import TreeCard from "@/components/TreeCard.vue";
 import Table from "@/components/Table.vue";
+import Dialog from "@/components/Dialog.vue";
+import RoleEdit from "./RoleEdit.vue";
 
 export default {
-  components: { TreeCard, Table },
+  components: { TreeCard, Table, Dialog, RoleEdit },
   data() {
     return {
       treeData1: [],
@@ -52,23 +61,24 @@ export default {
       plBtn: this.$cdata.qxgl.jsgl.plBtn,
       // 【业务数据】
       cx: {
-        pd: {},
-        pageSize: 10,
-        pageNum: 1,
-        order: "serial",
-        direction: 1
+        bmbh: "",
+        quanJu: "true"
       },
       tableData: {
         list: [],
         total: 0,
         pageSize: 10,
         pageNum: 1
-      }
+      },
+      // 弹窗数据
+      isShowDialog: false,
+      dialogTitle: "",
+      dialogType: "",
+      dialogData: {}
     };
   },
   mounted() {
-    console.log(this.$store.state);
-    this.cancel();
+    this.begin();
   },
   methods: {
     // 获取单位列表
@@ -77,44 +87,63 @@ export default {
         this.treeData1 = data;
       });
     },
-    getTree() {
-      // if (data.type == "dwlb") {
-      //   this.getPermissionTree(data.data.bmbh);
-      // } else if (data.type == "mblb") {
-      //   this.templateId = data.data.serial;
-      // }
+    // 获取角色列表
+    getRole(bmbh) {
+      this.cx.bmbh = bmbh;
+      this.$api.post("role/getRole", this.cx, r => {
+        this.tableData.list = r;
+      });
     },
-    getCheckedKeys() {
-      // if (data.type == "dwlb") {
-      //   this.bmbhList = data.data;
-      // } else if (data.type == "gnlb") {
-      //   this.menuList = data.data;
-      // }
+    getTree(data) {
+      if (data.type == "dwlb") {
+        this.getRole(data.data.bmbh);
+      }
     },
-    // 部门赋权
-    addPermissionToDept() {
-      // this.$api.post(
-      //   "dept/addPermissionToDept",
-      //   {
-      //     userId: this.$store.state.user.userId,
-      //     bmbhList: this.bmbhList,
-      //     menuList: this.menuList,
-      //     templateId: this.templateId
-      //   },
-      //   r => {
-      //     console.log(r);
-      //   }
-      // );
+    // 批量操作
+    plFnc() {},
+    // 表格内操作
+    blFnc(data) {
+      this.dialogTitle = data.btn.button_name;
+      this.dialogType = data.btn.type;
+      if (data.btn.type == "bj") {
+        this.isShowDialog = true;
+        this.dialogData = data.data;
+      } else if (data.btn.type == "yh") {
+        this.isShowDialog = true;
+        this.dialogData = data.data;
+      } else if (data.btn.type == "ty") {
+        this.deleteRole(data.data);
+      }
     },
-    // 清除
-    cancel() {
-      // this.getDeptTreeByBmbh();
-      // // this.getPermissionTree("");
-      // // this.getTemplate();
-      // this.templateId = "";
-      // this.bmbhList = [];
-      // this.menuList = [];
+    dialogSave(data) {
+      if (data.btn.type == "bj") {
+        this.editRole(data.data);
+      } else if (data.btn.type == "yh") {
+        this.getRoleUser(data.data);
+      }
+    },
+    // 编辑
+    editRole(data) {
+      let p = {
+        roleId: "320508000000",
+        menuList: data
+      };
+      this.$api.post("role/editRole", p, r => {
+        console.log(r);
+        this.isShowDialog = false;
+      });
+    },
+    // 用户
+    getRoleUser() {},
+    // 停用
+    deleteRole() {},
+    handleSave() {},
+    // 开始
+    begin() {
+      this.getDeptTreeByBmbh();
     }
   }
 };
 </script>
+<style scoped>
+</style>

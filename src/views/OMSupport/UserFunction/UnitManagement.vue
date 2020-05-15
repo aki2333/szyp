@@ -1,5 +1,5 @@
 <template>
-  <div class="page-box">
+  <div class="page-box page">
     <el-row type="flex">
       <el-col :span="8">
         <TreeCard
@@ -21,7 +21,7 @@
           :defaultChecked="defaultChecked2"
           nodeKey="serial"
           :isExpand="true"
-          @getCheckedKeys="getCheckedKeys"
+          @getCheckedNodes="getCheckedNodes"
         ></TreeCard>
       </el-col>
       <el-col :span="8">
@@ -68,6 +68,7 @@ export default {
       },
       bmbhList: [],
       menuList: [],
+      buttonList: [],
       templateId: ""
     };
   },
@@ -110,8 +111,23 @@ export default {
     getCheckedKeys(data) {
       if (data.type == "dwlb") {
         this.bmbhList = data.data;
-      } else if (data.type == "gnlb") {
-        this.menuList = data.data;
+      }
+    },
+    getCheckedNodes(data) {
+      if (data.type == "gnlb") {
+        console.log("gnlb", data);
+        this.buttonList = [];
+        this.menuList = [];
+        let arr = [...data.data];
+
+        arr.forEach(item => {
+          if (item.menu_type == "B") {
+            this.buttonList.push(item.serial);
+          } else {
+            this.menuList.push(item.serial);
+          }
+        });
+        // this.menuList = data.data;
       }
     },
     // 部门赋权
@@ -122,10 +138,14 @@ export default {
           userId: this.$store.state.user.userId,
           bmbhList: this.bmbhList,
           menuList: this.menuList,
+          buttonList: this.buttonList,
           templateId: this.templateId
         },
         r => {
-          console.log(r);
+          this.$message({
+            message: r,
+            type: "success"
+          });
         }
       );
     },

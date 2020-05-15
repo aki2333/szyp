@@ -1,23 +1,23 @@
 <template>
-  <div class="inquire">
+  <div>
     <el-form
-      :model="inquire"
+      :model="form"
       status-icon
       :rules="rules"
       size="small"
-      ref="inquire"
-      label-width="100px"
-      class="inquire-ruleForm"
+      ref="form"
+      label-width="70px"
+      class="form-ruleForm"
     >
-      <el-row :gutter="20" type="flex" align="middle" justify="center">
-        <el-col :span="20">
-          <el-col :span="8" v-for="(cx,i) in cxData" :key="i">
+      <el-row :gutter="30" type="flex" align="middle" justify="center">
+        <el-col :span="16">
+          <el-col :span="24" v-for="(cx,i) in cxData" :key="i">
             <el-form-item :label="cx.cm" :prop="cx.dm">
               <template v-if="cx.type=='input'">
-                <el-input v-model="inquire[cx.dm]"></el-input>
+                <el-input v-model="form[cx.dm]"></el-input>
               </template>
               <template v-else-if="cx.type=='select'">
-                <el-select v-model="inquire[cx.dm]" clearable placeholder="请选择">
+                <el-select v-model="form[cx.dm]" clearable placeholder="请选择">
                   <el-option
                     v-for="item in $cdata.options[cx.dm]"
                     :key="item.value"
@@ -27,13 +27,13 @@
                 </el-select>
               </template>
               <template v-else-if="cx.type=='datePicker'">
-                <el-date-picker v-model="inquire[cx.dm]" type="date" placeholder="选择日期"></el-date-picker>
+                <el-date-picker v-model="form[cx.dm]" type="date" placeholder="选择日期"></el-date-picker>
               </template>
               <template v-else-if="cx.type=='double'">
                 <div class="double-box">
                   <div class="double">
                     <el-date-picker
-                      v-model="inquire[cx.children[0].dm]"
+                      v-model="form[cx.children[0].dm]"
                       :type="cx.children[0].type"
                       placeholder="选择开始日期"
                     ></el-date-picker>
@@ -41,72 +41,72 @@
                   <div>-</div>
                   <div class="double">
                     <el-date-picker
-                      v-model="inquire[cx.children[1].dm]"
+                      v-model="form[cx.children[1].dm]"
                       :type="cx.children[1].type"
                       placeholder="选择结束日期"
                     ></el-date-picker>
                   </div>
                   <!-- <div class="double" v-for="(c,chi) in cx.children" :key="chi">
-                    <el-date-picker v-model="inquire[c.dm]" :type="c.type" placeholder="选择日期"></el-date-picker>
+                    <el-date-picker v-model="form[c.dm]" :type="c.type" placeholder="选择日期"></el-date-picker>
                   </div>-->
                 </div>
               </template>
             </el-form-item>
           </el-col>
         </el-col>
-        <el-col :span="4" align="center">
-          <el-button
-            class="cx-btn"
-            round
-            size="small"
-            type="primary"
-            @click="submitForm('inquire')"
-          >查询</el-button>
-          <el-button size="mini" type="info" round @click="resetForm('inquire')">清除</el-button>
-        </el-col>
       </el-row>
+      <div class="page-btn-box">
+        <el-button size="mini" type="primary" round @click="save('form')">保存</el-button>
+        <el-button size="mini" type="info" round @click="cancel">取消</el-button>
+      </div>
     </el-form>
   </div>
 </template>
 <script>
 export default {
   props: {
-    cxType: {
-      type: String,
-      default: ""
-    },
     cxData: {
       type: Array,
       default: () => []
+    },
+    dialogType: {
+      type: String,
+      default: ""
+    },
+    dialogData: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
     return {
-      inquire: {
-        userType: "0"
-      },
+      form: {},
       rules: {}
     };
   },
+  mounted() {
+    console.log(this.dialogData);
+    this.form = this.dialogData;
+  },
   methods: {
-    submitForm(formName) {
+    save(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$emit("cxFnc", this.inquire);
+          this.$emit("dialogSave", { type: this.dialogType, data: this.form });
         } else {
           console.log("error submit!!");
           return false;
         }
       });
     },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
+    cancel() {
+      this.$emit("dialogCancel");
     }
   }
 };
 </script>
 <style scoped>
-.inquire {
+.form {
   padding: 15px 15px 50x;
   border-bottom: 1px solid #295287;
   margin-bottom: 20px;

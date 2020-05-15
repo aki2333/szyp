@@ -41,6 +41,7 @@ export default {
     };
   },
   mounted() {
+    console.log("left");
     this.toChildren(this.$store.state.leftMenu[0], 0);
   },
   methods: {
@@ -68,7 +69,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .left-box {
-  min-height: 90vh;
+  /* min-height: 90vh; */
   background: rgba(10, 22, 49, 0.3);
   display: flex;
 }

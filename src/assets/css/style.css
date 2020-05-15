@@ -27,12 +27,13 @@
 .m-10{
     margin: 10px;
 }
+.page{
+    min-height: 96%;
+}
 .page-box{
     background: #ffffff;
     padding: 20px;
-    min-height: 600px;
     border-radius: 0 0 20px 20px;
-    /* min-height:70vh */
 }
 .page-btn-box{
     display: flex;

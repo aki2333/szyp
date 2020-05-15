@@ -2,8 +2,8 @@
   <div id="frame">
     <Header></Header>
     <el-container>
-      <Left></Left>
-      <el-main>
+      <Left v-if="$store.state.leftMenu.length>0"></Left>
+      <el-main class="main">
         <Breadcrumb></Breadcrumb>
         <router-view />
       </el-main>
@@ -36,5 +36,8 @@ export default {
   background: url(../assets/images/main/bg.jpg);
   background-size: 100% 100%;
   min-height: 100vh;
+}
+.main {
+  min-height: 91vh;
 }
 </style>>

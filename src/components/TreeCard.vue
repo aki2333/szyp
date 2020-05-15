@@ -1,26 +1,24 @@
 <template>
-  <div>
-    <el-card class="box-card">
-      <div slot="header" class="clearfix card-title">
-        <span>{{cardTitle}}</span>
-      </div>
-      <div>
-        <el-tree
-          ref="tree"
-          :default-expand-all="isExpand"
-          :expand-on-click-node="false"
-          :default-checked-keys="defaultChecked"
-          highlight-current
-          :data="treeData"
-          :props="treeProps"
-          :node-key="nodeKey"
-          :show-checkbox="isCheckbox"
-          @check-change="handleCheckChange"
-          @node-click="nodeClick"
-        ></el-tree>
-      </div>
-    </el-card>
-  </div>
+  <el-card class="box-card">
+    <div slot="header" class="clearfix card-title">
+      <span>{{cardTitle}}</span>
+    </div>
+    <div>
+      <el-tree
+        ref="tree"
+        :default-expand-all="isExpand"
+        :expand-on-click-node="false"
+        :default-checked-keys="defaultChecked"
+        highlight-current
+        :data="treeData"
+        :props="treeProps"
+        :node-key="nodeKey"
+        :show-checkbox="isCheckbox"
+        @check-change="handleCheckChange"
+        @node-click="nodeClick"
+      ></el-tree>
+    </div>
+  </el-card>
 </template>
 <script>
 export default {
@@ -73,8 +71,9 @@ export default {
     },
     handleCheckChange() {
       let data = this.$refs.tree.getCheckedKeys(false);
-      console.log("tree", data);
       this.$emit("getCheckedKeys", { type: this.treeType, data: data });
+      let data2 = this.$refs.tree.getCheckedNodes(false, true);
+      this.$emit("getCheckedNodes", { type: this.treeType, data: data2 });
     }
   }
 };
@@ -82,7 +81,8 @@ export default {
 <style scoped>
 .box-card {
   /* min-height: 300px; */
-  height: 70vh;
+  min-height: 500px;
+  max-height: 70vh;
   overflow: auto;
 }
 .card-title {

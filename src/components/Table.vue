@@ -1,6 +1,6 @@
 <template>
   <div class="table-box">
-    <div class="table-other">
+    <div class="table-other" v-if="isTab||isPl">
       <div class="table-tab-box" v-if="isTab">
         <span
           class="hand"
@@ -16,7 +16,7 @@
           :type="pb.type"
           round
           v-for="(pb,pbi) in plBtn"
-          @click="plBtnFun(pb.button_name)"
+          @click="plBtnFun(pb)"
           :key="pbi"
         >{{pb.button_name}}</el-button>
       </div>
@@ -43,14 +43,14 @@
           <el-button
             v-for="(lbt,lbi) in lbBtn"
             :key="lbi"
-            @click="handleClick(scope.row)"
+            @click="handleClick(scope.row,lbt)"
             type="text"
             size="small"
           >{{lbt.button_name}}</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <div align="center" class="mt-10" v-if="isPagination">
+    <div align="center" class="mtb-10" v-if="isPagination">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -66,7 +66,7 @@
 <script>
 export default {
   props: {
-    listType: {
+    lbType: {
       type: String,
       default: ""
     },
@@ -125,14 +125,16 @@ export default {
       pageSize: "10",
       // order: "serial",
       // direction: 1,
-      currentRow: 0,
       page: 0
     };
   },
+  mounted() {},
+  watch: {
+    tableData(val) {
+      console.log("tableData", this.tableData, val);
+    }
+  },
   methods: {
-    handleClick(row) {
-      console.log(row);
-    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
       this.pageSize = val;
@@ -147,8 +149,12 @@ export default {
       if (!this.isRowClick) {
         return false;
       }
-      this.currentRow = row;
+      this.$emit("rowClick", { type: this.lbType, data: row });
       console.log(row, column, event);
+    },
+    handleClick(row, btn) {
+      console.log(row, btn);
+      this.$emit("blFnc", { btn: btn, data: row });
     },
     lbTabFun(val) {
       this.page = val;

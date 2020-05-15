@@ -57,7 +57,7 @@ function apiAxios(method, url, params, success, failure) {
   })
     .then(function (res) {
       if (res.status == 200) {
-        if (res.data.code == -1) {
+        if (res.data.success) {
           // 请求成功
           if (success) {
             success(res.data.data)
@@ -68,7 +68,7 @@ function apiAxios(method, url, params, success, failure) {
             failure(res.data.data)
           } else {
             Message({
-              message: '警告哦，这是一条警告消息',
+              message: res.data.message,
               type: 'warning'
             });
             console.log("er:", res.data)

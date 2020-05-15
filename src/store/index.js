@@ -21,7 +21,7 @@ export default new Vuex.Store({
     gender:[],
     passportType:[],//证件种类
     suboffice:[],//所属分局
-    policepolicestation:[],//派出所
+    policestation:[],//派出所
     // 【非大众】
     datatype:[],//下发类别
     backstatus:[],//数据状态
@@ -59,16 +59,18 @@ export default new Vuex.Store({
       cdata.options.suboffice = data;
     },
     getPolice(state,data){
-      state.policepolicestation = data;
-      cdata.options.policepolicestation = data;
+      state.policestation = data;
+      cdata.options.policestation = data;
     },
     getDatatype(state,data){
       state.datatype = data;
       cdata.options.datatype = data;
     },
     getBackstatus(state,data){
-      state.backstatus = data;
-      cdata.options.backstatus = data;
+      console.log('=====',state,data);
+      // state.backstatus = data;
+      // cdata.options.backstatus = data;
+      // console.log('cdata.options.backstatus',cdata.options.backstatus)
     }
   },
   actions: {
@@ -156,9 +158,9 @@ export default new Vuex.Store({
     },
     aGetBackstatus(context,payload){
       return new Promise((resolve) => {
-        api.post(api.root1+'/dm/getDmList',{tableName:'dm_zfztb'},r => {
+        api.post(api.root1+'/dm/getDmList',{tableName:'dm_zfztb',sjly:payload},r => {
           context.commit('getBackstatus',r)
-          resolve(payload)
+          resolve(r)
         })
       })
     }

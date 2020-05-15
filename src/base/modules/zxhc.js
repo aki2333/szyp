@@ -1,3 +1,4 @@
+// import store from '@/store'
 const zxhc = {
     cx: [
         {
@@ -50,7 +51,7 @@ const zxhc = {
         {
             cm: '所属派出所',
             type: 'select',
-            dm: 'policepolicestation'
+            dm: 'policestation'
         },
         {
             cm: '下发时间',
@@ -77,12 +78,12 @@ const zxhc = {
                 {
                     cm: '反馈开始时间',
                     type: 'date',
-                    dm: 'policepolicestation_backtimeStar'
+                    dm: 'policestation_backtimeStar'
                 },
                 {
                     cm: '反馈结束时间',
                     type: 'date',
-                    dm: 'policepolicestation_backtimeEnd'
+                    dm: 'policestation_backtimeEnd'
                 },
             ],
         },
@@ -155,6 +156,7 @@ const zxhc = {
     lbBtn: [
         {
             "button_name": "编辑",
+            "button_type":'edit',
             "serial": "201",
         },
     ],
@@ -162,12 +164,12 @@ const zxhc = {
         {
             "button_name": "上报",
             "serial": "201",
-            "type": "success"
+            "button_type": "sb"
         },
         {
             "button_name": "下发",
             "serial": "201",
-            "type": "primary"
+            "button_type": "xf"
         },
     ],
     lbTab: [
@@ -184,7 +186,96 @@ const zxhc = {
             "page": 3,
         },
     ],
+    editcontent:[
+        {
+            cm:'姓名',
+            type:'input',
+            dm:'name',
+            dis:false,
+        },
+        {
+            cm:'性别',
+            type:'select',
+            dm:'gender',
+            dis:false,
+        },
+        {
+            cm:'出生日期',
+            type:'datePicker',
+            dm:'birthday',
+            dis:false,
+        },
+        {
+            cm:'国家地区',
+            type:'select',
+            dm:'nationality',
+            dis:false,
+        },
+        {
+            cm:'证件种类',
+            type:'select',
+            dm:'passportType',
+            dis:false,
+        },
+        {
+            cm:'证件号码',
+            type:'input',
+            dm:'passportno',
+            dis:false,
+        },
+        {
+            cm:'下发类别',
+            type:'select',
+            dm:'datatype',
+            dis:false,
+        },
+        {
+            cm:'住宿地址',
+            type:'input',
+            dm:'address',
+            dis:true,
+        },
+        {
+            cm:'所属分局',
+            type:'select',
+            dm:'suboffice',
+            dis:false,
+        },
+        {
+            cm:'所属派出所',
+            type:'select',
+            dm:'policestation',
+            dis:false,
+        },
+        {
+            cm:'走访状态',
+            type:'radio',
+            dm:'backstatus'
+        },
+        {
+            cm:'备注',
+            type:'input',
+            dm:'remarks'
+        },
+    ],
+    xfSContent:[
+        {
+            cm:'所属分局',
+            type:'select',
+            dm:'suboffice',
+            dis:false,
+        },
+    ],
+    xfFContent:[
+        {
+            cm:'所属派出所',
+            type:'select',
+            dm:'policestation',
+            dis:false,
+        },
+    ],
 }
+
 export default {
     zxhc
 }

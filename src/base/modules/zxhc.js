@@ -12,33 +12,45 @@ const zxhc = {
         },
         {
             cm: '年龄段',
-            type: 'input',
-            dm: 'age'
+            type: 'ageDouble',
+            dm: 'age',
+            children:[
+                {
+                    cm:'开始年龄',
+                    type:'number',
+                    dm:'birthdayStart'
+                },
+                {
+                    cm:'结束年龄',
+                    type:'number',
+                    dm:'birthdayEnd'
+                },
+            ],
         },
         {
             cm: '国家地区',
             type: 'select',
-            dm: 'gjdq'
+            dm: 'nationality'
         },
         {
             cm: '证件种类',
             type: 'select',
-            dm: 'zjzl'
+            dm: 'passportType'
         },
         {
             cm: '证件号码',
             type: 'input',
-            dm: 'zjhm'
+            dm: 'passportno'
         },
         {
             cm: '所属分局',
             type: 'select',
-            dm: 'ssfj'
+            dm: 'suboffice'
         },
         {
             cm: '所属派出所',
             type: 'select',
-            dm: 'sspcs'
+            dm: 'policepolicestation'
         },
         {
             cm: '下发时间',
@@ -48,35 +60,41 @@ const zxhc = {
                 {
                     cm: '下发开始时间',
                     type: 'date',
-                    dm: 'xfSTime'
+                    dm: 'suboffice_issuedateStart'
                 },
                 {
                     cm: '下发结束时间',
                     type: 'date',
-                    dm: 'xfETime'
+                    dm: 'suboffice_issuedateEnd'
                 }
             ]
         },
-
         {
-            cm: '反馈开始时间',
-            type: 'datePicker',
-            dm: 'startTime'
-        },
-        {
-            cm: '反馈结束日期',
-            type: 'datePicker',
-            dm: 'endTime'
+            cm: '反馈时间',
+            type: 'double',
+            dm: 'fkTime',
+            children: [
+                {
+                    cm: '反馈开始时间',
+                    type: 'date',
+                    dm: 'policepolicestation_backtimeStar'
+                },
+                {
+                    cm: '反馈结束时间',
+                    type: 'date',
+                    dm: 'policepolicestation_backtimeEnd'
+                },
+            ],
         },
         {
             cm: '下发类别',
             type: 'select',
-            dm: 'xfType'
+            dm: 'datatype'
         },
         {
             cm: '数据状态',
             type: 'select',
-            dm: 'dataType'
+            dm: 'backstatus'
         },
     ],
     lb: [
@@ -86,51 +104,51 @@ const zxhc = {
         },
         {
             cm: '性别',
-            dm: 'xb'
+            dm: 'gender_desc'
         },
         {
             cm: '出生日期',
-            dm: 'birth'
+            dm: 'birthday'
         },
         {
             cm: '国家地区',
-            dm: 'gjdq'
+            dm: 'nationality_desc'
         },
         {
             cm: '证件种类',
-            dm: 'zjzl'
+            dm: 'passporttype'
         },
         {
             cm: '证件号码',
-            dm: 'zjhm'
+            dm: 'passportno'
         },
         {
             cm: '详细地址',
-            dm: 'dz'
+            dm: 'address'
         },
         {
             cm: '所属分局',
-            dm: 'ssfj'
+            dm: 'suboffice_desc'
         },
         {
             cm: '所属派出所',
-            dm: 'sspcs'
+            dm: 'policestation_desc'
         },
         {
             cm: '下发类别',
-            dm: 'xslb'
+            dm: 'datatype_desc'
         },
         {
             cm: '数据状态',
-            dm: 'sjzt'
+            dm: 'status_desc'
         },
         {
             cm: '下发时间',
-            dm: 'xfsj'
+            dm: 'issuedate'
         },
         {
             cm: '反馈时间',
-            dm: 'fksj'
+            dm: 'policestation_backtime'
         },
 
     ],
@@ -155,15 +173,15 @@ const zxhc = {
     lbTab: [
         {
             "tab_name": '市局未处理',
-            "page": 0,
-        },
-        {
-            "tab_name": '分局未处理',
             "page": 1,
         },
         {
-            "tab_name": '派出所未处理',
+            "tab_name": '分局未处理',
             "page": 2,
+        },
+        {
+            "tab_name": '派出所未处理',
+            "page": 3,
         },
     ],
 }

@@ -19,10 +19,10 @@
               <template v-else-if="cx.type=='select'">
                 <el-select v-model="inquire[cx.dm]" clearable placeholder="请选择">
                   <el-option
-                    v-for="item in $cdata.options[cx.dm]"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
+                    v-for="(item,ind) in $cdata.options[cx.dm]"
+                    :key="ind"
+                    :label="item.mc"
+                    :value="item.dm"
                   ></el-option>
                 </el-select>
               </template>
@@ -49,6 +49,17 @@
                   <!-- <div class="double" v-for="(c,chi) in cx.children" :key="chi">
                     <el-date-picker v-model="inquire[c.dm]" :type="c.type" placeholder="选择日期"></el-date-picker>
                   </div>-->
+                </div>
+              </template>
+              <template v-else-if="cx.type=='ageDouble'">
+                <div class="double-box">
+                  <div class="double">
+                    <el-input v-model="inquire[cx.children[0].dm]" :type="cx.children[0].type"></el-input>
+                  </div>
+                  <div>-</div>
+                  <div class="double">
+                    <el-input v-model="inquire[cx.children[1].dm]" :type="cx.children[1].type"></el-input>
+                  </div>
                 </div>
               </template>
             </el-form-item>

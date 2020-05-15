@@ -125,7 +125,8 @@ export default {
       pageSize: "10",
       // order: "serial",
       // direction: 1,
-      page: 0
+      currentRow: 0,
+      page: 1
     };
   },
   mounted() {},

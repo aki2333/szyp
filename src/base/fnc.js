@@ -31,12 +31,18 @@ function arrayIndex(arr, sx1, sx2, arrsx) {
     });
     resolve(getArr)
   })
-
 }
-
+function ToArray(data) {
+    var returnValue = new Array();
+    for (var key in data) {
+        returnValue.push({dm: key, mc: data[key]});
+    }
+    return sortByKey(returnValue,'dm')
+}
 export default {
   test,
   sortNumber,
   sortByKey,
-  arrayIndex
+  arrayIndex,
+  ToArray
 }

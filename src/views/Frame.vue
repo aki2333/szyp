@@ -28,7 +28,24 @@ export default {
   },
   data() {
     return {};
-  }
+  },
+  mounted(){
+    // let token = this.getUrlParam('authorization');
+    // this.$store.commit('getToken',token);
+  },
+  methods:{
+    //  getUrlParam(name) {
+        // var url="http://10.0.30.78:8083/#/?authorization=jskdjfkjdslkfjdslkjflks"
+        // var url = window.location.href;
+        // 取得url中?后面的字符
+        // var query = url.split("?")[1];
+        // var query = window.location.search.substring(1);
+        // var pair = query.split("=");
+        // if(pair[0] == name){
+          // return pair[1];
+        // }
+    // }
+  },
 };
 </script>
 <style scoped>

@@ -17,27 +17,22 @@
                 <el-input v-model="inquire[cx.dm]"></el-input>
               </template>
               <template v-else-if="cx.type=='select'">
-                <el-select v-model="inquire[cx.dm]"  v-if="cx.optype" clearable placeholder="请选择" @change="linkChange(cx,inquire[cx.dm])">
+                <el-select v-model="inquire[cx.dm]"  filterable v-if="cx.optype"  clearable placeholder="请选择" @change="linkChange(cx,inquire[cx.dm])">
                   <el-option
                     v-for="(item,ind) in $cdata.options[cx.dm]"
                     :key="ind"
-                    :label="item.mc"
+                    :label="item.dm+' - '+item.mc"
                     :value="item.dm"
                   ></el-option>
                 </el-select>
-                <el-select v-model="inquire[cx.dm]" v-else clearable placeholder="请选择" @change="linkChange(cx,inquire[cx.dm])">
+                <el-select v-model="inquire[cx.dm]" filterable v-else clearable placeholder="请选择" @change="linkChange(cx,inquire[cx.dm])">
                   <el-option
                     v-for="(item,ind) in $store.state[cx.dm]"
                     :key="ind"
-                    :label="item.mc"
+                    :label="item.dm+' - '+item.mc"
                     :value="item.dm"
                   ></el-option>
                 </el-select>
-              </template>
-              <template v-else-if="cx.type=='select'">
-                
-                  
-                
               </template>
               <template v-else-if="cx.type=='datePicker'">
                 <el-date-picker v-model="inquire[cx.dm]" type="date" placeholder="选择日期"></el-date-picker>
@@ -49,6 +44,7 @@
                       v-model="inquire[cx.children[0].dm]"
                       :type="cx.children[0].type"
                       placeholder="选择开始日期"
+                      value-format="yyyy-MM-dd"
                     ></el-date-picker>
                   </div>
                   <div>-</div>
@@ -57,6 +53,7 @@
                       v-model="inquire[cx.children[1].dm]"
                       :type="cx.children[1].type"
                       placeholder="选择结束日期"
+                      value-format="yyyy-MM-dd"
                     ></el-date-picker>
                   </div>
                   <!-- <div class="double" v-for="(c,chi) in cx.children" :key="chi">

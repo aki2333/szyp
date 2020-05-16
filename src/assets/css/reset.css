@@ -84,6 +84,9 @@ th {
 .el-input__inner{
   border-color: #1a355b!important;
 }
+.inquire-ruleForm .el-col-8{
+  height: 45px;
+}
 .inquire .el-form-item__label{
   color: #dfe6ee!important;
 }

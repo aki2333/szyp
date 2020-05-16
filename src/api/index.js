@@ -8,6 +8,7 @@ var root1 = 'http://192.168.3.131:9405'//石飞
 import axios from 'axios';
 import store from '@/store'
 import { Message } from 'element-ui';
+import { Loading } from 'element-ui';
 
 // 自定义判断元素类型JS
 function toType(obj) {
@@ -46,6 +47,8 @@ axios.interceptors.request.use(
 )
 
 function apiAxios(method, url, params, success, failure) {
+  let loadingInstance1=null;
+  loadingInstance1 = Loading.service({ fullscreen: true, spinner: 'el-icon-loading',text:'正在加载中',background:'rgba(0,0,0,0.6)',customClass:'loadingClass'});
   if (params) {
     params = filterNull(params);
   }
@@ -60,6 +63,9 @@ function apiAxios(method, url, params, success, failure) {
   })
     .then(function (res) {
       if (res.status == 200) {
+        if(loadingInstance1){
+          loadingInstance1.close();
+        }
         if (res.data.success) {
           // 请求成功
           if (success) {
@@ -78,11 +84,17 @@ function apiAxios(method, url, params, success, failure) {
           }
         }
       } else {
+        if(loadingInstance1){
+          loadingInstance1.close();
+        }
         // 后台错误
         console.log('后台错误: ' + JSON.stringify(res.data))
       }
     })
     .catch(function (err) {
+      if(loadingInstance1){
+        loadingInstance1.close();
+      }
       console.log(err)
     })
 }

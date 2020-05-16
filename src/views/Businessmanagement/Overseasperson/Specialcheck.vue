@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <Inquire :cxData="cxData" @cxFnc="cxFnc" @lcFnc="lcFnc" @bbF="bbF"></Inquire>
+    <Inquire :cxData="cxData" @cxFnc="cxFnc" @lcFnc="lcFnc"></Inquire>
     <div class="t-tab-top">
         <div class="tab-top-item hand" @click="clzt=1">
             <img :src="clzt==1?tabImgActive_1:tabImg_1" alt="">
@@ -109,22 +109,8 @@ export default {
       this.getTable();
     },
     lcFnc(data){
-      // console.log(key,data)
       if(data.key.dm=='datatype'){
-        this.changeK = data.data;
-        this.$store.dispatch("aGetBackstatus",data.data).then((val) => {
-          console.log('val===',val)
-          this.$cdata.options.backstatus=[];
-          this.$cdata.options.backstatus = val;
-        });
-      }
-    },
-    bbF(val){
-      if(val.dm=='backstatus'){
-        this.$store.dispatch("aGetBackstatus",this.changeK).then((data) => {
-         console.log('valbb===',data)
-          this.$set(this.$cdata.options,'backstatus',data)
-        });
+        this.$store.dispatch("aGetBackstatus",data.data).then(() => {});
       }
     },
     // 获取分页等信息
@@ -199,6 +185,8 @@ export default {
       this.dialogType = data.btn.button_type;
       if(data.btn.button_type == 'edit'){
         this.labelData = this.$cdata.zxhc.zxhc.editcontent;
+        console.log('===',data.data.datatype)
+        this.$store.dispatch("aGetBackstatus",data.data.datatype)
         this.isShowDialog = true;
         this.dialogData = data.data
       }

@@ -60,7 +60,6 @@ function apiAxios(method, url, params, success, failure) {
   })
     .then(function (res) {
       if (res.status == 200) {
-        console.log('===',res)
         if (res.data.success) {
           // 请求成功
           if (success) {

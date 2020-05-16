@@ -17,7 +17,7 @@ export default new Vuex.Store({
     menu: menu || cdata.menu,
     leftMenu: [],
     breadcrumb: breadData || [],
-    nation:[],
+    nationality:[],
     gender:[],
     passportType:[],//证件种类
     suboffice:[],//所属分局
@@ -43,34 +43,25 @@ export default new Vuex.Store({
       window.localStorage.setItem("bread", JSON.stringify(data));
     },
     getNation(state,data){
-      state.nation = data;
-      cdata.options.nationality = data;
+      state.nationality = data;
     },
     getGender(state,data){
       state.gender = data;
-      cdata.options.gender = data;
     },
     getPassport(state,data){
       state.passportType = data;
-      cdata.options.passportType = data;
     },
     getSuboffice(state,data){
       state.suboffice = data;
-      cdata.options.suboffice = data;
     },
     getPolice(state,data){
       state.policestation = data;
-      cdata.options.policestation = data;
     },
     getDatatype(state,data){
       state.datatype = data;
-      cdata.options.datatype = data;
     },
     getBackstatus(state,data){
-      console.log('=====',state,data);
-      // state.backstatus = data;
-      // cdata.options.backstatus = data;
-      // console.log('cdata.options.backstatus',cdata.options.backstatus)
+      state.backstatus = data;
     }
   },
   actions: {
@@ -160,7 +151,7 @@ export default new Vuex.Store({
       return new Promise((resolve) => {
         api.post(api.root1+'/dm/getDmList',{tableName:'dm_zfztb',sjly:payload},r => {
           context.commit('getBackstatus',r)
-          resolve(r)
+          resolve(payload)
         })
       })
     }

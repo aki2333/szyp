@@ -199,14 +199,6 @@ const menu = [
 ]
 // 【下拉选项】
 const options = {
-    nationality: [],
-    gender: [],
-    passportType: [],
-    suboffice: [],
-    policepolicestation: [],
-    // 【非大众】
-    datatype: [],//下发类别
-    backstatus: [],//数据状态
     bmbh: [
         {
             dm: "dw1",
@@ -238,5 +230,6 @@ export default {
     menu,
     options,
     qxgl,
-    zxhc
+    zxhc,
+
 }

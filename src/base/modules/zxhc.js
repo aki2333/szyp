@@ -9,7 +9,7 @@ const zxhc = {
         {
             cm: '性别',
             type: 'select',
-            dm: 'gender'
+            dm: 'gender',
         },
         {
             cm: '年龄段',
@@ -191,43 +191,36 @@ const zxhc = {
             cm:'姓名',
             type:'input',
             dm:'name',
-            dis:false,
         },
         {
             cm:'性别',
             type:'select',
             dm:'gender',
-            dis:false,
         },
         {
             cm:'出生日期',
             type:'datePicker',
             dm:'birthday',
-            dis:false,
         },
         {
             cm:'国家地区',
             type:'select',
             dm:'nationality',
-            dis:false,
         },
         {
             cm:'证件种类',
             type:'select',
             dm:'passportType',
-            dis:false,
         },
         {
             cm:'证件号码',
             type:'input',
             dm:'passportno',
-            dis:false,
         },
         {
             cm:'下发类别',
             type:'select',
             dm:'datatype',
-            dis:false,
         },
         {
             cm:'住宿地址',
@@ -239,13 +232,11 @@ const zxhc = {
             cm:'所属分局',
             type:'select',
             dm:'suboffice',
-            dis:false,
         },
         {
             cm:'所属派出所',
             type:'select',
             dm:'policestation',
-            dis:false,
         },
         {
             cm:'走访状态',

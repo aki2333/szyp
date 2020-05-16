@@ -17,7 +17,7 @@
                 <el-input v-model="inquire[cx.dm]"></el-input>
               </template>
               <template v-else-if="cx.type=='select'">
-                <el-select v-model="inquire[cx.dm]" clearable placeholder="请选择">
+                <el-select v-model="inquire[cx.dm]"  v-if="cx.optype" clearable placeholder="请选择" @change="linkChange(cx,inquire[cx.dm])">
                   <el-option
                     v-for="(item,ind) in $cdata.options[cx.dm]"
                     :key="ind"
@@ -25,6 +25,19 @@
                     :value="item.dm"
                   ></el-option>
                 </el-select>
+                <el-select v-model="inquire[cx.dm]" v-else clearable placeholder="请选择" @change="linkChange(cx,inquire[cx.dm])">
+                  <el-option
+                    v-for="(item,ind) in $store.state[cx.dm]"
+                    :key="ind"
+                    :label="item.mc"
+                    :value="item.dm"
+                  ></el-option>
+                </el-select>
+              </template>
+              <template v-else-if="cx.type=='select'">
+                
+                  
+                
               </template>
               <template v-else-if="cx.type=='datePicker'">
                 <el-date-picker v-model="inquire[cx.dm]" type="date" placeholder="选择日期"></el-date-picker>
@@ -112,6 +125,9 @@ export default {
           return false;
         }
       });
+    },
+    linkChange(key,val){
+      this.$emit("lcFnc",{key:key,data:val});
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();

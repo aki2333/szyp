@@ -7,7 +7,8 @@ const yhgl = {
         {
             cm: '所属单位',
             type: 'select',
-            dm: 'bmbh'
+            dm: 'bmbh',
+            optype:true
         },
         {
             cm: '用户名称',

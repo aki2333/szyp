@@ -164,12 +164,12 @@ const zxhc = {
         {
             "button_name": "上报",
             "serial": "201",
-            "button_type": "sb"
+            "button_type": "sb",
         },
         {
             "button_name": "下发",
             "serial": "201",
-            "button_type": "xf"
+            "button_type": "xf",
         },
     ],
     lbTab: [
@@ -186,6 +186,21 @@ const zxhc = {
             "page": 3,
         },
     ],
+    lbTab1: [
+        {
+            "tab_name": '市局已处理',
+            "page": 1,
+        },
+        {
+            "tab_name": '分局已处理',
+            "page": 2,
+        },
+        {
+            "tab_name": '派出所已处理',
+            "page": 3,
+        },
+    ],
+    //编辑弹窗
     editcontent:[
         {
             cm:'姓名',
@@ -249,6 +264,7 @@ const zxhc = {
             dm:'remarks'
         },
     ],
+    //下发市局弹窗
     xfSContent:[
         {
             cm:'所属分局',
@@ -257,6 +273,7 @@ const zxhc = {
             dis:false,
         },
     ],
+    //下发分局弹窗
     xfFContent:[
         {
             cm:'所属派出所',
@@ -266,7 +283,37 @@ const zxhc = {
         },
     ],
 }
-
+function plBtnShow(flag){
+    return new Promise((resolve) => {
+        if(flag==1){
+            zxhc.plBtn=[
+                {
+                    "button_name": "下发",
+                    "serial": "201",
+                    "button_type": "xf",
+                },
+            ]
+        }else if(flag==3){
+            zxhc.plBtn=[]
+        }else if(flag==2){
+            zxhc.plBtn=[
+                {
+                    "button_name": "上报",
+                    "serial": "201",
+                    "button_type": "sb",
+                },
+                {
+                    "button_name": "下发",
+                    "serial": "201",
+                    "button_type": "xf",
+                },
+            ]
+        }
+        resolve(zxhc.plBtn)
+    })
+    
+}
 export default {
-    zxhc
+    zxhc,
+    plBtnShow
 }

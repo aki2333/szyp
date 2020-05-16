@@ -18,19 +18,19 @@
               </template>
               <template v-else-if="cx.type=='select'">
                 <!-- 取常量值 optype=true  取store值 optype=!true -->
-                <el-select v-model="form[cx.dm]" v-if="cx.optype" clearable :disabled="cx.dis" placeholder="请选择">
+                <el-select v-model="form[cx.dm]" filterable v-if="cx.optype" clearable :disabled="cx.dis" placeholder="请选择">
                   <el-option
                     v-for="item in $cdata.options[cx.dm]"
                     :key="item.dm"
-                    :label="item.mc"
+                    :label="item.dm+' - '+item.mc"
                     :value="item.dm"
                   ></el-option>
                 </el-select>
-                <el-select v-model="form[cx.dm]" v-else clearable :disabled="cx.dis" placeholder="请选择">
+                <el-select v-model="form[cx.dm]" filterable v-else clearable :disabled="cx.dis" placeholder="请选择" @change="linkChange(cx,form[cx.dm])">
                   <el-option
                     v-for="item in $store.state[cx.dm]"
                     :key="item.dm"
-                    :label="item.mc"
+                    :label="item.dm+' - '+item.mc"
                     :value="item.dm"
                   ></el-option>
                 </el-select>
@@ -112,6 +112,9 @@ export default {
           return false;
         }
       });
+    },
+    linkChange(key,val){
+      this.$emit('formLcFnc',{key:key,data:val})
     },
     cancel() {
       this.$emit("dialogCancel");

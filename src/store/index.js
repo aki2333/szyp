@@ -6,13 +6,14 @@ import fnc from '@/base/fnc.js'
 let breadData = JSON.parse(localStorage.getItem('bread'))
 let user = JSON.parse(localStorage.getItem('user'))
 let menu = JSON.parse(localStorage.getItem('menu'))
+let token = localStorage.getItem('token')
 
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    token: "6DDF3A214DD94F9F9BEEE04973DA397F",
+    token: token || '',
     user: user || {},
     menu: menu || cdata.menu,
     leftMenu: [],
@@ -41,6 +42,10 @@ export default new Vuex.Store({
     getBread(state, data) {
       state.breadcrumb = data;
       window.localStorage.setItem("bread", JSON.stringify(data));
+    },
+    getToken(state,data){
+      state.token = data;
+      window.localStorage.setItem("token",data)
     },
     getNation(state,data){
       state.nationality = data;
@@ -118,7 +123,7 @@ export default new Vuex.Store({
           p={tableName:'dm_pcsb',dmNameRightLike:user.bmbh.slice(0,6)+'000000',lvl:'2'}
         }
         api.post(api.root1+'/dm/getDmList',p,r => {
-          context.commit('getSuboffice',r)
+          context.commit('getSuboffice',fnc.sortByKey(r,'dm'))
           resolve(payload)
         })
       })
@@ -134,7 +139,7 @@ export default new Vuex.Store({
           p={tableName:'dm_pcsb',dmNameRightLike:user.bmbh,lvl:'3'}
         }
         api.post(api.root1+'/dm/getDmList',p,r => {
-          context.commit('getPolice',r)
+          context.commit('getPolice',fnc.sortByKey(r,'dm'))
           resolve(payload)
         })
       })
@@ -142,7 +147,7 @@ export default new Vuex.Store({
     aGetDatatype(context,payload){
       return new Promise((resolve) => {
         api.post(api.root1+'/dm/getDmList',{tableName:'dm_issue_data'},r => {
-          context.commit('getDatatype',r)
+          context.commit('getDatatype',fnc.sortByKey(r,'dm'))
           resolve(payload)
         })
       })
@@ -150,7 +155,7 @@ export default new Vuex.Store({
     aGetBackstatus(context,payload){
       return new Promise((resolve) => {
         api.post(api.root1+'/dm/getDmList',{tableName:'dm_zfztb',sjly:payload},r => {
-          context.commit('getBackstatus',r)
+          context.commit('getBackstatus',fnc.sortByKey(r,'dm'))
           resolve(payload)
         })
       })

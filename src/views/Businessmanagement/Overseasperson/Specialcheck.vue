@@ -1,12 +1,12 @@
 <template>
   <div class="page">
-    <Inquire :cxData="cxData" @cxFnc="cxFnc" @lcFnc="lcFnc"></Inquire>
+    <Inquire :cxData="cxData" :pd="cx.pd" @cxFnc="cxFnc" @lcFnc="lcFnc"></Inquire>
     <div class="t-tab-top">
-        <div class="tab-top-item hand" @click="clzt=1">
+        <div class="tab-top-item hand" @click="clzt=1;lbTab=$cdata.zxhc.zxhc.lbTab">
             <img :src="clzt==1?tabImgActive_1:tabImg_1" alt="">
             <span>未处理</span>
         </div>
-        <div class="tab-top-item hand ml--33" @click="clzt=2">
+        <div class="tab-top-item hand ml--33" @click="clzt=2;lbTab=$cdata.zxhc.zxhc.lbTab1">
             <img :src="clzt==2?tabImgActive_2:tabImg_2" alt="">
             <span class="t-leftT">已处理</span>
         </div>
@@ -25,7 +25,7 @@
         @pageNumFnc="pageNumFnc"
         @tabFnc="tabFnc"
         @blFnc="blFnc"
-        @lbSelect="lbSelect"
+        @userRole="userRole"
         
       ></Table>
     </div>
@@ -38,6 +38,7 @@
         :dialogData="dialogData"
         @dialogCancel="isShowDialog=false"
         @dialogSave="dialogSave"
+        @formLcFnc="formLcFnc"
       ></Form>
     </Dialog>
   </div>
@@ -95,6 +96,7 @@ export default {
     };
   },
   mounted(){
+    this.$nextTick(()=>{
       this.$store.dispatch("aGetNation");
       this.$store.dispatch("aGetGender");
       this.$store.dispatch("aGetPassport");
@@ -102,13 +104,24 @@ export default {
       this.$store.dispatch("aGetPolice");
       this.$store.dispatch("aGetDatatype");
       this.$store.dispatch("aGetBackstatus");
+      this.$cdata.zxhc.plBtnShow(this.page).then(data => {
+        this.plBtn = data
+      })
+    })
+      
   },
   methods: {
     cxFnc(data) {
       this.cx.pd = data;
       this.getTable();
     },
+    //下拉框联动
     lcFnc(data){
+      if(data.key.dm=='datatype'){
+        this.$store.dispatch("aGetBackstatus",data.data).then(() => {});
+      }
+    },
+    formLcFnc(data){
       if(data.key.dm=='datatype'){
         this.$store.dispatch("aGetBackstatus",data.data).then(() => {});
       }
@@ -122,7 +135,8 @@ export default {
       this.cx.pageNum = data;
       this.getTable();
     },
-    lbSelect(data){
+    //表格复选框选择
+    userRole(data){
       this.multipleSelection = data;
       this.multipleArr=[];
       for(var i=0;i<this.multipleSelection.length;i++){
@@ -185,7 +199,6 @@ export default {
       this.dialogType = data.btn.button_type;
       if(data.btn.button_type == 'edit'){
         this.labelData = this.$cdata.zxhc.zxhc.editcontent;
-        console.log('===',data.data.datatype)
         this.$store.dispatch("aGetBackstatus",data.data.datatype)
         this.isShowDialog = true;
         this.dialogData = data.data
@@ -227,6 +240,9 @@ export default {
     //列表tab切换  data==page 从1开始
     tabFnc(data) {
       this.page = data;
+      this.$cdata.zxhc.plBtnShow(this.page).then(data => {
+        this.plBtn = data
+      })
       this.getTable();
     },
     dialogSave(data){

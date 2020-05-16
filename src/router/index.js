@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Frame from '../views/Frame.vue'
+import Login from '../views/Login.vue'
 
 Vue.use(VueRouter)
 // 解决两次访问相同路由地址报错
@@ -11,6 +12,11 @@ VueRouter.prototype.push = function push(location) {
 const routes = [
   {
     path: '/',
+    name: 'Login',
+    component: Login,
+  },
+  {
+    path: '/Frame',
     name: 'Frame',
     component: Frame,
     children: [

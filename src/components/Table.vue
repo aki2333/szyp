@@ -136,12 +136,18 @@ export default {
       // order: "serial",
       // direction: 1,
       currentRow: 0,
-      page: 1
+      page: 1,
     };
   },
   watch: {
     selection(val) {
       this.toggleSelection(val);
+    },
+    plBtn:{
+      handler(newVal,oldVal){
+        console.log(newVal,oldVal)
+      },
+      deep:true
     }
   },
   mounted() {
@@ -160,7 +166,7 @@ export default {
     },
     handleSelectionChange(val) {
       console.log(val);
-      // this.$emit("userRole", val);
+      this.$emit("userRole", val);
     },
     toggleSelection(rows) {
       if (rows) {

@@ -22,18 +22,26 @@
           :plBtn="plBtn"
           :tableData="tableData"
           @blFnc="blFnc"
+          @plFnc="plFnc"
         ></Table>
       </el-col>
     </el-row>
     <!-- 弹窗 -->
     <Dialog :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
       <RoleEdit
-        v-if="dialogType=='bj'&&isShowDialog"
+        v-if="(dialogType=='bj'||dialogType=='xjqjjs'||dialogType=='xjbdjs')&&isShowDialog"
         :dialogType="dialogType"
         :dialogData="dialogData"
         @dialogCancel="isShowDialog=false"
         @dialogSave="dialogSave"
       ></RoleEdit>
+      <RoleUser
+        v-if="dialogType=='yh'&&isShowDialog"
+        :dialogType="dialogType"
+        :dialogData="dialogData"
+        @dialogCancel="isShowDialog=false"
+        @dialogSave="dialogSave"
+      ></RoleUser>
     </Dialog>
   </div>
 </template>
@@ -42,9 +50,10 @@ import TreeCard from "@/components/TreeCard.vue";
 import Table from "@/components/Table.vue";
 import Dialog from "@/components/Dialog.vue";
 import RoleEdit from "./RoleEdit.vue";
+import RoleUser from "./RoleUser.vue";
 
 export default {
-  components: { TreeCard, Table, Dialog, RoleEdit },
+  components: { TreeCard, Table, Dialog, RoleEdit, RoleUser },
   data() {
     return {
       treeData1: [],
@@ -100,48 +109,98 @@ export default {
       }
     },
     // 批量操作
-    plFnc() {},
+    plFnc(data) {
+      console.log("点击批量按钮-", data);
+      if (this.cx.bmbh == "") {
+        this.$message({
+          message: "请先选择部门",
+          type: "warning"
+        });
+        return false;
+      }
+      // data.btn按钮信息
+      this.dialogTitle = data.button_name;
+      this.dialogType = data.button_type;
+      // data.data行内信息
+      this.dialogData = this.cx;
+      this.isShowDialog = true;
+    },
     // 表格内操作
     blFnc(data) {
-      console.log("表内", data);
+      console.log("点击表格按钮-", data);
+      // data.btn按钮信息
       this.dialogTitle = data.btn.button_name;
-      this.dialogType = data.btn.type;
-      if (data.btn.type == "bj") {
+      this.dialogType = data.btn.button_type;
+      // data.data行内信息
+      this.dialogData = data.data;
+      if (this.dialogType == "bj") {
         this.isShowDialog = true;
-        this.dialogData = data.data;
-      } else if (data.btn.type == "yh") {
+      } else if (this.dialogType == "yh") {
         this.isShowDialog = true;
-        this.dialogData = data.data;
-      } else if (data.btn.type == "ty") {
+      } else if (this.dialogType == "ty") {
         this.deleteRole(data.data);
       }
     },
+    // 弹窗返回接口
     dialogSave(data) {
-      console.log(data);
+      // data.type操作类型 data.data操作数据
       if (data.type == "bj") {
         this.editRole(data.data);
       } else if (data.type == "yh") {
         this.getRoleUser(data.data);
+      } else if (data.type == "xjqjjs") {
+        let data1 = data.data;
+        data1.roleType = "1";
+        this.addRole(data1);
+      } else if (data.type == "xjbdjs") {
+        let data1 = data.data;
+        data1.roleType = "2";
+        this.addRole(data1);
       }
+    },
+    // 新建
+    addRole(data) {
+      console.log("新建弹窗获得数据-", data);
+      this.$api.post("role/addRole", data, r => {
+        this.$message({
+          message: r,
+          type: "success"
+        });
+        this.isShowDialog = false;
+        this.getRole(data.bmbh);
+      });
     },
     // 编辑
     editRole(data) {
       let p = data;
-      p.roleId = "320508000000";
-      p.userId = "";
+      p.roleId = this.dialogData.serial;
+      p.userId = this.dialogData.create_user_id;
       this.$api.post("role/editRole", p, r => {
         this.$message({
           message: r,
           type: "success"
         });
         this.isShowDialog = false;
+        this.getRole(data.bmbh);
       });
     },
     // 用户
     getRoleUser() {},
     // 停用
-    deleteRole() {},
-    handleSave() {},
+    deleteRole() {
+      let p = {
+        roleId: this.dialogData.serial,
+        userId: this.dialogData.create_user_id
+      };
+      this.$api.post("role/deleteRole", p, r => {
+        this.$message({
+          message: r,
+          type: "success"
+        });
+        this.isShowDialog = false;
+        this.getRole(this.cx.bmbh);
+      });
+    },
     // 开始
     begin() {
       this.getDeptTreeByBmbh();

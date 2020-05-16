@@ -42,6 +42,13 @@ const menu = [
                         "parent_id": "000101",
                         "serial": "1945e567-c09c-4ce0-8814-f9b1510df5fc",
                         "childrenMenuButton": [],
+                    },
+                    {
+                        "menu_name": "菜单管理",
+                        "menu_url": "MenuManagement",
+                        "parent_id": "000101",
+                        "serial": "1945e567-c09c-4ce0-8814-f9b1510df5fc",
+                        "childrenMenuButton": [],
                     }
                 ]
             }
@@ -177,6 +184,13 @@ const menu = [
                         "parent_id": "000101",
                         "serial": "1945e567-c09c-4ce0-8814-f9b1510df5fc",
                         "childrenMenuButton": [],
+                    },
+                    {
+                        "menu_name": "菜单管理",
+                        "menu_url": "MenuManagement",
+                        "parent_id": "000101",
+                        "serial": "1945e567-c09c-4ce0-8814-f9b1510df5fc",
+                        "childrenMenuButton": [],
                     }
                 ]
             }
@@ -185,28 +199,38 @@ const menu = [
 ]
 // 【下拉选项】
 const options = {
-    nationality:[],
-    gender:[],
-    passportType:[],
-    suboffice:[],
-    policepolicestation:[],
+    nationality: [],
+    gender: [],
+    passportType: [],
+    suboffice: [],
+    policepolicestation: [],
     // 【非大众】
-    datatype:[],//下发类别
-    backstatus:[],//数据状态
+    datatype: [],//下发类别
+    backstatus: [],//数据状态
     bmbh: [
         {
-            value: "dw1",
-            label: "单位一"
+            dm: "dw1",
+            mc: "单位一"
+        }
+    ],
+    status: [
+        {
+            dm: 'true',
+            mc: "已添加"
+        },
+        {
+            dm: 'false',
+            mc: "未添加"
         }
     ],
     userType: [
         {
-            value: '0',
-            label: "系统用户"
+            dm: '0',
+            mc: "系统用户"
         },
         {
-            value: '1',
-            label: "其他用户"
+            dm: '1',
+            mc: "其他用户"
         }
     ]
 }

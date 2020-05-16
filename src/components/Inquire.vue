@@ -73,7 +73,7 @@
             type="primary"
             @click="submitForm('inquire')"
           >查询</el-button>
-          <el-button size="mini" type="info" round @click="resetForm('inquire')">清除</el-button>
+          <el-button size="small" type="info" round @click="resetForm('inquire')">清除</el-button>
         </el-col>
       </el-row>
     </el-form>
@@ -89,16 +89,19 @@ export default {
     cxData: {
       type: Array,
       default: () => []
+    },
+    pd: {
+      type: Object,
+      default: () => {}
     }
   },
   data() {
     return {
-      inquire: {
-        userType: "0"
-      },
+      inquire: this.pd,
       rules: {}
     };
   },
+  mounted() {},
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {

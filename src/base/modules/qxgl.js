@@ -234,30 +234,124 @@ const jsgl = {
     lbBtn: [
         {
             "button_name": "编辑",
-            "type": "bj",
+            "button_type": "bj",
             "serial": "201",
         },
         {
             "button_name": "用户",
-            "type": "yh",
+            "button_type": "yh",
             "serial": "201",
         },
         {
             "button_name": "停用",
-            "type": "ty",
+            "button_type": "ty",
             "serial": "201",
         }
     ],
     plBtn: [
         {
             "button_name": "新建全局角色",
+            "button_type": "xjqjjs",
             "serial": "201",
             "type": "success"
         },
         {
             "button_name": "新建本地角色",
+            "button_type": "xjbdjs",
             "serial": "201",
             "type": "primary"
+        }
+    ],
+    yhcx: [
+        {
+            cm: '选择状态',
+            type: 'select',
+            dm: 'status'
+        },
+        {
+            cm: '所属单位',
+            type: 'select',
+            dm: 'bmbh'
+        },
+        {
+            cm: '登录名称',
+            type: 'input',
+            dm: 'loginName'
+        },
+        {
+            cm: '用户名称',
+            type: 'input',
+            dm: 'xm'
+        },
+        {
+            cm: '警号',
+            type: 'input',
+            dm: 'jinghao'
+        }
+    ],
+    yhlb: [
+        {
+            cm: '姓名',
+            dm: 'xm'
+        },
+        {
+            cm: '警号',
+            dm: 'jingHao'
+        },
+        {
+            cm: '身份证号',
+            dm: 'sfzh'
+        },
+        {
+            cm: '部门编号',
+            dm: 'bmbh'
+        },
+        {
+            cm: '部门名称',
+            dm: 'xtyhbmmc'
+        },
+        {
+            cm: '部门级别',
+            dm: 'jb'
+        }
+    ],
+    yhlbBtn: [
+        {
+            "button_name": "添加",
+            "button_type": "tj",
+            "status": "false",
+            "serial": "201",
+        },
+        {
+            "button_name": "删除",
+            "button_type": "sc",
+            "status": "true",
+            "serial": "201",
+        }
+    ],
+}
+// 【菜单管理】
+const cdgl = {
+    cd: [
+        {
+            cm: '当前名称',
+            type: 'input',
+            dm: 'menu_name'
+        },
+        {
+            cm: '级别',
+            type: 'input',
+            dm: 'menu_grade'
+        },
+        {
+            cm: '序号',
+            type: 'input',
+            dm: 'menu_order'
+        },
+        {
+            cm: 'URL',
+            type: 'input',
+            dm: 'menu_url'
         }
     ]
 }
@@ -266,7 +360,7 @@ function getDeptTreeByBmbh() {
     return new Promise((resolve) => {
         api.post(
             "dept/getDeptTreeByBmbh",
-            { bmbh: "320507000000" },
+            { bmbh: store.state.user.bmbh },
             // { bmbh: this.$store.state.user.bmbh },
             r => {
                 resolve(r)
@@ -322,11 +416,28 @@ function getRolePermissionTree(roleId) {
         );
     })
 }
+// 单位下的角色权限列表树形结构
+function getDeptRolePermTree(deptBmbh, roleId) {
+    return new Promise((resolve) => {
+        api.post(
+            "role/getDeptRolePermTree",
+            {
+                deptBmbh: deptBmbh,
+                roleId: roleId,
+            },
+            r => {
+                resolve(r)
+            }
+        );
+    })
+}
 export default {
     yhgl,
     jsgl,
+    cdgl,
     getDeptTreeByBmbh,
     getPermissionTree,
     getTemplate,
-    getRolePermissionTree
+    getRolePermissionTree,
+    getDeptRolePermTree
 }

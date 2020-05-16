@@ -3,17 +3,6 @@
     <el-row type="flex">
       <el-col :span="8">
         <TreeCard
-          cardTitle="单位列表"
-          treeType="dwlb"
-          :treeData="treeData1"
-          :treeProps="treeProps1"
-          nodeKey="bmbh"
-          @getTree="getTree"
-          @getCheckedKeys="getCheckedKeys"
-        ></TreeCard>
-      </el-col>
-      <el-col :span="8">
-        <TreeCard
           cardTitle="功能列表"
           treeType="gnlb"
           :treeData="treeData2"
@@ -21,19 +10,18 @@
           :defaultChecked="defaultChecked2"
           nodeKey="serial"
           :isExpand="true"
+          :isCheckbox="false"
+          @getTree="getTree"
           @getCheckedNodes="getCheckedNodes"
         ></TreeCard>
       </el-col>
-      <el-col :span="8">
-        <TreeCard
-          cardTitle="模板列表"
-          treeType="mblb"
-          :treeData="treeData3"
-          :treeProps="treeProps3"
-          nodeKey="serial"
-          :isCheckbox="false"
-          @getTree="getTree"
-        ></TreeCard>
+      <el-col :span="16">
+        <Form
+          :cxData="labelData"
+          :dialogType="formType"
+          :dialogData="formData"
+          @dialogSave="formSave"
+        ></Form>
       </el-col>
     </el-row>
     <div class="page-btn-box">
@@ -49,65 +37,32 @@ export default {
   components: { TreeCard },
   data() {
     return {
-      treeData1: [],
-      treeProps1: {
-        label: "bmmc",
-        children: "children"
-      },
-      defaultChecked1: [],
       treeData2: [],
       treeProps2: {
         label: "menu_name",
         children: "childrenMenu"
       },
       defaultChecked2: [],
-      treeData3: [],
-      treeProps3: {
-        label: "template_name",
-        children: "children"
-      },
-      bmbhList: [],
       menuList: [],
       buttonList: [],
-      templateId: ""
+      labelData: this.$cdata.qxgl.cdgl.cd,
+      formData: {},
+      formType: ""
     };
   },
   mounted() {
-    //console.log(this.$store.state);
     this.cancel();
   },
   methods: {
-    // 获取单位列表
-    getDeptTreeByBmbh() {
-      this.$cdata.qxgl.getDeptTreeByBmbh().then(r => {
-        this.treeData1 = r;
-      });
-    },
     // 获取功能列表
-    getPermissionTree(deptBmbh) {
-      this.$cdata.qxgl.getPermissionTree(deptBmbh).then(r => {
-        this.treeData2 = r.menuList;
-        this.defaultChecked2 = r.choose;
-        // let arr = [...r];
-        // this.$fnc
-        //   .arrayIndex(arr, "choose", "serial", "childrenMenu")
-        //   .then(data => {
-        //     this.defaultChecked2 = data;
-        //   });
-      });
-    },
-    // 获取模板列表
-    getTemplate() {
-      this.$cdata.qxgl.getTemplate().then(r => {
-        this.treeData3 = r;
+    getMenuTree() {
+      this.$api.post("menuController/getMenuTree", {}, r => {
+        this.treeData2 = r;
+        // this.defaultChecked2 = r.choose;
       });
     },
     getTree(data) {
-      if (data.type == "dwlb") {
-        this.getPermissionTree(data.data.bmbh);
-      } else if (data.type == "mblb") {
-        this.templateId = data.data.serial;
-      }
+      console.log("点击树节点-", data);
     },
     getCheckedKeys(data) {
       if (data.type == "dwlb") {
@@ -120,7 +75,6 @@ export default {
         this.buttonList = [];
         this.menuList = [];
         let arr = [...data.data];
-
         arr.forEach(item => {
           if (item.menu_type == "B") {
             this.buttonList.push(item.serial);
@@ -149,12 +103,10 @@ export default {
         }
       );
     },
+    formSave() {},
     // 清除
     cancel() {
-      this.getDeptTreeByBmbh();
-      this.getPermissionTree("");
-      this.getTemplate();
-      this.templateId = "";
+      this.getMenuTree();
       this.bmbhList = [];
       this.menuList = [];
     }

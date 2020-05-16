@@ -32,6 +32,11 @@ const routes = [
         name: 'UnitManagement',
         component: () => import(/* webpackChunkName: "OMSupport" */ '../views/OMSupport/UserFunction/UnitManagement.vue')
       },
+      {
+        path: '/MenuManagement',
+        name: 'MenuManagement',
+        component: () => import(/* webpackChunkName: "OMSupport" */ '../views/OMSupport/UserFunction/MenuManagement.vue')
+      },
       // 业务管理
       {
         path: '/Specialcheck',

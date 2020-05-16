@@ -1,5 +1,12 @@
 <template>
   <div class="page-box page">
+    <el-row v-if="dialogType!='bj'" type="flex" justify="center" class="mb-10">
+      <el-col :span="8">
+        <el-input placeholder="请输入" v-model="roleName" size="small">
+          <template slot="prepend">角色名称</template>
+        </el-input>
+      </el-col>
+    </el-row>
     <el-row type="flex">
       <el-col :span="24">
         <TreeCard
@@ -43,7 +50,8 @@ export default {
       },
       defaultChecked1: [],
       buttonList: [],
-      menuList: []
+      menuList: [],
+      roleName: ""
     };
   },
   mounted() {
@@ -52,14 +60,10 @@ export default {
   },
   methods: {
     //获取角色权限列表树形结构
-    getRolePermissionTree(roleId) {
-      this.$cdata.qxgl.getRolePermissionTree(roleId).then(data => {
-        this.treeData1 = data;
-        this.$fnc
-          .arrayIndex(data, "choose", "serial", "childrenMenu")
-          .then(data => {
-            this.defaultChecked1 = data;
-          });
+    getDeptRolePermTree(deptBmbh, roleId) {
+      this.$cdata.qxgl.getDeptRolePermTree(deptBmbh, roleId).then(data => {
+        this.treeData1 = data.menuList;
+        this.defaultChecked1 = data.choose;
       });
     },
     getCheckedNodes(data) {
@@ -81,7 +85,13 @@ export default {
     save() {
       this.$emit("dialogSave", {
         type: this.dialogType,
-        data: { buttonList: this.buttonList, menuList: this.menuList }
+        data: {
+          buttonList: this.buttonList,
+          menuList: this.menuList,
+          roleName: this.roleName,
+          userId: this.$store.state.user.userId,
+          bmbh: this.dialogData.bmbh
+        }
       });
     },
     cancel() {
@@ -89,7 +99,16 @@ export default {
     },
     // 开始
     begin() {
-      this.getRolePermissionTree(this.dialogData.serial);
+      if (this.dialogType == "bj") {
+        this.getDeptRolePermTree(
+          //this.dialogData.create_unitid || "",
+          this.$store.state.user.bmbh,
+          this.dialogData.serial || ""
+        );
+      } else {
+        // this.getDeptRolePermTree(this.dialogData.bmbh, "");
+        this.getDeptRolePermTree(this.$store.state.user.bmbh, "");
+      }
     }
   }
 };

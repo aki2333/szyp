@@ -23,6 +23,7 @@
     </div>
     <el-table
       size="small"
+      :ref="refName"
       stripe
       highlight-current-row
       :data="tableData.list"
@@ -79,6 +80,10 @@ export default {
       type: Boolean,
       default: true
     },
+    refName: {
+      type: String,
+      default: "aa"
+    },
     isSelect: {
       type: Boolean,
       default: false
@@ -134,9 +139,13 @@ export default {
       page: 1
     };
   },
+  watch: {
+    selection(val) {
+      this.toggleSelection(val);
+    }
+  },
   mounted() {
     console.log("表格", this.lbType);
-    this.toggleSelection(this.selection);
   },
   methods: {
     handleSizeChange(val) {
@@ -150,26 +159,26 @@ export default {
       this.$emit("pageNumFnc", this.pageNum);
     },
     handleSelectionChange(val) {
-      this.$emit("userRole", val);
+      console.log(val);
+      // this.$emit("userRole", val);
     },
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row);
+          console.log("row", row, this.$refs[this.refName], this.refName);
+          this.$refs[this.refName].toggleRowSelection(row);
         });
       } else {
-        this.$refs.multipleTable.clearSelection();
+        this.$refs[this.refName].clearSelection();
       }
     },
-    rowClick(row, column, event) {
+    rowClick(row) {
       if (!this.isRowClick) {
         return false;
       }
       this.$emit("rowClick", { type: this.lbType, data: row });
-      console.log(row, column, event);
     },
     handleClick(row, btn) {
-      console.log(row, btn);
       this.$emit("blFnc", { btn: btn, data: row });
     },
     lbTabFun(val) {

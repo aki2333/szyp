@@ -1,6 +1,12 @@
 <template>
   <div class="page">
-    <Inquire :cxData="cxData" @cxFnc="cxFnc"></Inquire>
+    <Inquire :cxData="cxData" :pd="cx.pd" @cxFnc="cxFnc"></Inquire>
+    <div class="t-tab-top">
+      <div class="tab-top-item hand">
+        <img src="../../../assets/images/main/tab_2_pre.png" alt />
+        <span>用户管理</span>
+      </div>
+    </div>
     <div class="page-box">
       <el-row :gutter="20">
         <el-col :span="24">
@@ -38,6 +44,7 @@
             :lbData="$cdata.qxgl.jsgl.lb"
             :isPl="false"
             :isEdit="false"
+            refName="jstb"
             :lbBtn="$cdata.qxgl.jsgl.lbBtn"
             :tableData="tableData3"
             :isPagination="false"
@@ -135,7 +142,6 @@ export default {
   methods: {
     // 获取查询参数
     cxFnc(data) {
-      console.log(data);
       this.cx.pd = data;
       this.getTable();
     },
@@ -169,6 +175,7 @@ export default {
         r => {
           this.tableData3.list = r;
           let arr = [...r];
+          this.selection = [];
           arr.forEach(item => {
             if (item.ischeck) {
               this.selection.push(item);

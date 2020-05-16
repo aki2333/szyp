@@ -1,5 +1,8 @@
 <template>
-  <el-card class="box-card">
+  <el-card
+    class="box-card"
+    :body-style="{'min-height': '300px','max-height': '60vh',overflow: 'auto'}"
+  >
     <div slot="header" class="clearfix card-title">
       <span>{{cardTitle}}</span>
     </div>
@@ -81,9 +84,9 @@ export default {
 <style scoped>
 .box-card {
   /* min-height: 300px; */
-  min-height: 500px;
+  /* min-height: 500px;
   max-height: 70vh;
-  overflow: auto;
+  overflow: auto; */
 }
 .card-title {
   font-weight: bold;

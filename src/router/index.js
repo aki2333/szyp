@@ -33,6 +33,11 @@ const routes = [
         component: () => import(/* webpackChunkName: "OMSupport" */ '../views/OMSupport/UserFunction/UnitManagement.vue')
       },
       {
+        path: '/TemplateManagement',
+        name: 'TemplateManagement',
+        component: () => import(/* webpackChunkName: "OMSupport" */ '../views/OMSupport/UserFunction/TemplateManagement.vue')
+      },
+      {
         path: '/MenuManagement',
         name: 'MenuManagement',
         component: () => import(/* webpackChunkName: "OMSupport" */ '../views/OMSupport/UserFunction/MenuManagement.vue')

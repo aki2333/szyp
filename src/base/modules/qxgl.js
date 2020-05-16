@@ -361,6 +361,33 @@ const cdgl = {
         }
     ]
 }
+// 【模板管理】
+const mbgl = {
+    lb: [
+        {
+            cm: '模板名称',
+            dm: 'template_name'
+        },
+        {
+            cm: '单位级别',
+            dm: 'grade'
+        }
+    ],
+    plBtn: [
+        {
+            "button_name": "新建",
+            "button_type": "xj",
+            "serial": "201",
+            "type": "success"
+        },
+        {
+            "button_name": "删除",
+            "button_type": "sc",
+            "serial": "201",
+            "type": "primary"
+        }
+    ]
+}
 // 获取单位列表
 function getDeptTreeByBmbh() {
     return new Promise((resolve) => {
@@ -441,6 +468,7 @@ export default {
     yhgl,
     jsgl,
     cdgl,
+    mbgl,
     getDeptTreeByBmbh,
     getPermissionTree,
     getTemplate,

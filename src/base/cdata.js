@@ -38,7 +38,7 @@ const menu = [
                     },
                     {
                         "menu_name": "模板管理",
-                        "menu_url": "mbgl",
+                        "menu_url": "TemplateManagement",
                         "parent_id": "000101",
                         "serial": "1945e567-c09c-4ce0-8814-f9b1510df5fc",
                         "childrenMenuButton": [],
@@ -180,7 +180,7 @@ const menu = [
                     },
                     {
                         "menu_name": "模板管理",
-                        "menu_url": "mbgl",
+                        "menu_url": "TemplateManagement",
                         "parent_id": "000101",
                         "serial": "1945e567-c09c-4ce0-8814-f9b1510df5fc",
                         "childrenMenuButton": [],

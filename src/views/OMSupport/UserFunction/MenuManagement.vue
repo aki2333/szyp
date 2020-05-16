@@ -62,12 +62,10 @@ export default {
       });
     },
     getTree(data) {
-      console.log("点击树节点-", data);
-      this.formType = data.type;
+      this.formType = data.data.menu_name;
+      // Object.assign(this.formData, data.data);
+      console.log("点击树节点-", data, this.formData);
       this.formData = data.data;
-      // if (data.data.menu_type == "P") {
-      //   // this.formData.
-      // }
     },
     getCheckedKeys(data) {
       if (data.type == "dwlb") {
@@ -89,31 +87,53 @@ export default {
         });
       }
     },
-    // 部门赋权
-    addPermissionToDept() {
-      this.$api.post(
-        "dept/addPermissionToDept",
-        {
-          userId: this.$store.state.user.userId,
-          bmbhList: this.bmbhList,
-          menuList: this.menuList,
-          buttonList: this.buttonList,
-          templateId: this.templateId
-        },
-        r => {
-          this.$message({
-            message: r,
-            type: "success"
-          });
-        }
-      );
+    // 添加
+    addMenuInfo(data) {
+      this.$api.post("menuController/addMenuInfo", data, r => {
+        this.$message({
+          message: r,
+          type: "success"
+        });
+        this.cancel();
+      });
     },
-    formSave() {},
+    // 修改
+    updateMenuInfo(data) {
+      this.$api.post("menuController/updateMenuInfo", data, r => {
+        this.$message({
+          message: r,
+          type: "success"
+        });
+        this.cancel();
+      });
+    },
+    // 删除
+    deleteMenuInfo(data) {
+      this.$api.post("menuController/deleteMenuInfo", data, r => {
+        this.$message({
+          message: r,
+          type: "success"
+        });
+        this.cancel();
+      });
+    },
+    formSave(data) {
+      console.log("获取表单数据=", data);
+      let _data = data.data;
+      _data.userId = this.$store.state.user.userId;
+      if (data.btnType == "del") {
+        this.deleteMenuInfo(_data);
+      } else if (data.data.serial) {
+        this.updateMenuInfo(_data);
+      } else {
+        this.addMenuInfo(_data);
+      }
+    },
     // 清除
     cancel() {
       this.getMenuTree();
-      this.bmbhList = [];
-      this.menuList = [];
+      this.formData = {};
+      this.formType = "";
     }
   }
 };

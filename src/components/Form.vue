@@ -1,24 +1,31 @@
 <template>
   <div>
     <el-form
-      :model="form"
+      :model="dialogData"
       status-icon
       :rules="rules"
       size="small"
       ref="form"
       label-width="70px"
       class="form-ruleForm"
+      v-if="!isXJ"
     >
       <el-row :gutter="30" type="flex" align="middle" justify="center">
         <el-col :span="16">
           <el-col :span="24" v-for="(cx,i) in cxData" :key="i">
             <el-form-item :label="cx.cm" :prop="cx.dm">
               <template v-if="cx.type=='input'">
-                <el-input v-model="form[cx.dm]" :disabled="cx.dis"></el-input>
+                <el-input v-model="dialogData[cx.dm]" :disabled="cx.dis"></el-input>
               </template>
               <template v-else-if="cx.type=='select'">
                 <!-- 取常量值 optype=true  取store值 optype=!true -->
-                <el-select v-model="form[cx.dm]" v-if="cx.optype" clearable :disabled="cx.dis" placeholder="请选择">
+                <el-select
+                  v-model="dialogData[cx.dm]"
+                  v-if="cx.optype"
+                  clearable
+                  :disabled="cx.dis"
+                  placeholder="请选择"
+                >
                   <el-option
                     v-for="item in $cdata.options[cx.dm]"
                     :key="item.dm"
@@ -26,7 +33,13 @@
                     :value="item.dm"
                   ></el-option>
                 </el-select>
-                <el-select v-model="form[cx.dm]" v-else clearable :disabled="cx.dis" placeholder="请选择">
+                <el-select
+                  v-model="dialogData[cx.dm]"
+                  v-else
+                  clearable
+                  :disabled="cx.dis"
+                  placeholder="请选择"
+                >
                   <el-option
                     v-for="item in $store.state[cx.dm]"
                     :key="item.dm"
@@ -36,13 +49,18 @@
                 </el-select>
               </template>
               <template v-else-if="cx.type=='datePicker'">
-                <el-date-picker v-model="form[cx.dm]" :disabled="cx.dis" type="date" placeholder="选择日期"></el-date-picker>
+                <el-date-picker
+                  v-model="dialogData[cx.dm]"
+                  :disabled="cx.dis"
+                  type="date"
+                  placeholder="选择日期"
+                ></el-date-picker>
               </template>
               <template v-else-if="cx.type=='double'">
                 <div class="double-box">
                   <div class="double">
                     <el-date-picker
-                      v-model="form[cx.children[0].dm]"
+                      v-model="dialogData[cx.children[0].dm]"
                       :type="cx.children[0].type"
                       placeholder="选择开始日期"
                     ></el-date-picker>
@@ -50,7 +68,7 @@
                   <div>-</div>
                   <div class="double">
                     <el-date-picker
-                      v-model="form[cx.children[1].dm]"
+                      v-model="dialogData[cx.children[1].dm]"
                       :type="cx.children[1].type"
                       placeholder="选择结束日期"
                     ></el-date-picker>
@@ -60,20 +78,120 @@
                   </div>-->
                 </div>
               </template>
-              <template v-else-if="cx.type=='radio'"> 
-                <el-radio-group v-model="form[cx.dm]">
-                  <el-radio :label="item.dm" v-for="(item,ind) in $store.state[cx.dm]" :key="ind">{{item.mc}}</el-radio>
+              <template v-else-if="cx.type=='radio'">
+                <el-radio-group v-model="dialogData[cx.dm]">
+                  <el-radio
+                    :label="item.dm"
+                    v-for="(item,ind) in $store.state[cx.dm]"
+                    :key="ind"
+                  >{{item.mc}}</el-radio>
                 </el-radio-group>
               </template>
             </el-form-item>
           </el-col>
         </el-col>
       </el-row>
-      <div class="page-btn-box">
-        <el-button size="mini" type="primary" round @click="save('form')">保存</el-button>
-        <el-button size="mini" type="info" round @click="cancel">取消</el-button>
-      </div>
     </el-form>
+    <el-form
+      :model="newForm"
+      status-icon
+      :rules="rules"
+      size="small"
+      ref="form"
+      label-width="70px"
+      class="form-ruleForm"
+      v-else
+    >
+      <el-row :gutter="30" type="flex" align="middle" justify="center">
+        <el-col :span="16">
+          <el-col :span="24" v-for="(cx,i) in cxData" :key="i">
+            <el-form-item :label="cx.cm" :prop="cx.dm">
+              <template v-if="cx.type=='input'">
+                <el-input v-model="newForm[cx.dm]" :disabled="cx.dis"></el-input>
+              </template>
+              <template v-else-if="cx.type=='select'">
+                <!-- 取常量值 optype=true  取store值 optype=!true -->
+                <el-select
+                  v-model="newForm[cx.dm]"
+                  v-if="cx.optype"
+                  clearable
+                  :disabled="cx.dis"
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in $cdata.options[cx.dm]"
+                    :key="item.dm"
+                    :label="item.mc"
+                    :value="item.dm"
+                  ></el-option>
+                </el-select>
+                <el-select
+                  v-model="newForm[cx.dm]"
+                  v-else
+                  clearable
+                  :disabled="cx.dis"
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in $store.state[cx.dm]"
+                    :key="item.dm"
+                    :label="item.mc"
+                    :value="item.dm"
+                  ></el-option>
+                </el-select>
+              </template>
+              <template v-else-if="cx.type=='datePicker'">
+                <el-date-picker
+                  v-model="newForm[cx.dm]"
+                  :disabled="cx.dis"
+                  type="date"
+                  placeholder="选择日期"
+                ></el-date-picker>
+              </template>
+              <template v-else-if="cx.type=='double'">
+                <div class="double-box">
+                  <div class="double">
+                    <el-date-picker
+                      v-model="newForm[cx.children[0].dm]"
+                      :type="cx.children[0].type"
+                      placeholder="选择开始日期"
+                    ></el-date-picker>
+                  </div>
+                  <div>-</div>
+                  <div class="double">
+                    <el-date-picker
+                      v-model="newForm[cx.children[1].dm]"
+                      :type="cx.children[1].type"
+                      placeholder="选择结束日期"
+                    ></el-date-picker>
+                  </div>
+                  <!-- <div class="double" v-for="(c,chi) in cx.children" :key="chi">
+                    <el-date-picker v-model="form[c.dm]" :type="c.type" placeholder="选择日期"></el-date-picker>
+                  </div>-->
+                </div>
+              </template>
+              <template v-else-if="cx.type=='radio'">
+                <el-radio-group v-model="newForm[cx.dm]">
+                  <el-radio
+                    :label="item.dm"
+                    v-for="(item,ind) in $store.state[cx.dm]"
+                    :key="ind"
+                  >{{item.mc}}</el-radio>
+                </el-radio-group>
+              </template>
+            </el-form-item>
+          </el-col>
+        </el-col>
+      </el-row>
+    </el-form>
+    <div class="page-btn-box">
+      <el-button size="mini" type="primary" round @click="xj()">新建</el-button>
+
+      <el-button size="mini" type="primary" round @click="save('form')">保存</el-button>
+      <el-button size="mini" type="info" round @click="cancel">取消</el-button>
+
+      <el-button size="mini" type="info" round @click="save('form','del')">删除</el-button>
+    </div>
   </div>
 </template>
 <script>
@@ -94,19 +212,53 @@ export default {
   },
   data() {
     return {
-      form: {},
-      rules: {}
+      // form: {},
+      rules: {},
+      isXJ: false,
+      newForm: {}
     };
   },
+  watch: {
+    dialogType() {
+      this.isXJ = false;
+    }
+  },
   mounted() {
-    console.log(this.dialogData);
-    this.form = this.dialogData;
+    // this.form = this.dialogData;
+    // console.log(this.form);
   },
   methods: {
-    save(formName) {
+    xj() {
+      this.isXJ = true;
+      this.newForm = this.dialogData;
+      // Object.assign(this.newForm, this.dialogData);
+      console.log(this.newForm);
+      if (this.newForm.menu_grade == "3") {
+        this.newForm.menu_type = "B";
+      } else {
+        this.newForm.menu_type = "P";
+      }
+      this.newForm.parent_id = this.newForm.serial;
+      this.newForm.menu_name = "";
+      this.newForm.menu_order = "";
+      this.newForm.menu_url = "";
+      this.newForm.serial = "";
+    },
+    save(formName, type) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$emit("dialogSave", { type: this.dialogType, data: this.form });
+          if (!this.isXJ) {
+            this.$emit("dialogSave", {
+              type: this.dialogType,
+              data: this.dialogData,
+              btnType: type
+            });
+          } else {
+            this.$emit("dialogSave", {
+              type: this.dialogType,
+              data: this.newForm
+            });
+          }
         } else {
           console.log("error submit!!");
           return false;

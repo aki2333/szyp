@@ -17,14 +17,15 @@ export default new Vuex.Store({
     menu: menu || cdata.menu,
     leftMenu: [],
     breadcrumb: breadData || [],
-    nationality:[],
-    gender:[],
-    passportType:[],//证件种类
-    suboffice:[],//所属分局
-    policestation:[],//派出所
+    nationality: [],
+    gender: [],
+    grade: [],
+    passportType: [],//证件种类
+    suboffice: [],//所属分局
+    policestation: [],//派出所
     // 【非大众】
-    datatype:[],//下发类别
-    backstatus:[],//数据状态
+    datatype: [],//下发类别
+    backstatus: [],//数据状态
   },
   mutations: {
     getUser(state, data) {
@@ -42,25 +43,28 @@ export default new Vuex.Store({
       state.breadcrumb = data;
       window.localStorage.setItem("bread", JSON.stringify(data));
     },
-    getNation(state,data){
+    getNation(state, data) {
       state.nationality = data;
     },
-    getGender(state,data){
+    getGender(state, data) {
       state.gender = data;
     },
-    getPassport(state,data){
+    getGrade(state, data) {
+      state.grade = data;
+    },
+    getPassport(state, data) {
       state.passportType = data;
     },
-    getSuboffice(state,data){
+    getSuboffice(state, data) {
       state.suboffice = data;
     },
-    getPolice(state,data){
+    getPolice(state, data) {
       state.policestation = data;
     },
-    getDatatype(state,data){
+    getDatatype(state, data) {
       state.datatype = data;
     },
-    getBackstatus(state,data){
+    getBackstatus(state, data) {
       state.backstatus = data;
     }
   },
@@ -83,74 +87,83 @@ export default new Vuex.Store({
         resolve(payload)
       })
     },
-    aGetNation(context,payload){
+    aGetNation(context, payload) {
       return new Promise((resolve) => {
-        api.post('/DmController/getDMInfo',{tableName:'dm_gjdqb'},r => {
-          context.commit('getNation',fnc.ToArray(r.list))
+        api.post('/DmController/getDMInfo', { tableName: 'dm_gjdqb' }, r => {
+          context.commit('getNation', fnc.ToArray(r.list))
           resolve(payload)
         })
       })
     },
-    aGetGender(context,payload){
+    aGetGender(context, payload) {
       return new Promise((resolve) => {
-        api.post('/DmController/getDMInfo',{tableName:'dm_xbb'},r => {
-          context.commit('getGender',fnc.ToArray(r.list))
+        api.post('/DmController/getDMInfo', { tableName: 'dm_xbb' }, r => {
+          context.commit('getGender', fnc.ToArray(r.list))
           resolve(payload)
         })
       })
     },
-    aGetPassport(context,payload){
+    aGetGrade(context, payload) {
+      console.log("payload", context)
       return new Promise((resolve) => {
-        api.post('/DmController/getDMInfo',{tableName:'dm_zjzlb'},r => {
-          context.commit('getPassport',fnc.ToArray(r.list))
+        api.post('/templateController/getGrade', { template_grade: payload }, r => {
+          context.commit('getGrade', fnc.ToArray(r.list))
           resolve(payload)
         })
       })
     },
-    aGetSuboffice(context,payload){
+    aGetPassport(context, payload) {
       return new Promise((resolve) => {
-        let p={}
-        if(user.jb=='1'){
-          p={tableName:'dm_pcsb',lvl:'2'}
-        }else if(user.jb=='2'){
-          p={tableName:'dm_pcsb',dmNameRightLike:user.bmbh.slice(0,6),lvl:'2'}
-        }else if(user.jb=='3'){
-          p={tableName:'dm_pcsb',dmNameRightLike:user.bmbh.slice(0,6)+'000000',lvl:'2'}
+        api.post('/DmController/getDMInfo', { tableName: 'dm_zjzlb' }, r => {
+          context.commit('getPassport', fnc.ToArray(r.list))
+          resolve(payload)
+        })
+      })
+    },
+    aGetSuboffice(context, payload) {
+      return new Promise((resolve) => {
+        let p = {}
+        if (user.jb == '1') {
+          p = { tableName: 'dm_pcsb', lvl: '2' }
+        } else if (user.jb == '2') {
+          p = { tableName: 'dm_pcsb', dmNameRightLike: user.bmbh.slice(0, 6), lvl: '2' }
+        } else if (user.jb == '3') {
+          p = { tableName: 'dm_pcsb', dmNameRightLike: user.bmbh.slice(0, 6) + '000000', lvl: '2' }
         }
-        api.post(api.root1+'/dm/getDmList',p,r => {
-          context.commit('getSuboffice',r)
+        api.post(api.root1 + '/dm/getDmList', p, r => {
+          context.commit('getSuboffice', r)
           resolve(payload)
         })
       })
     },
-    aGetPolice(context,payload){
+    aGetPolice(context, payload) {
       return new Promise((resolve) => {
-        let p={}
-        if(user.jb=='1'){
-          p={tableName:'dm_pcsb',lvl:'3'}
-        }else if(user.jb=='2'){
-          p={tableName:'dm_pcsb',dmNameRightLike:user.bmbh.slice(0,6),lvl:'3'}
-        }else if(user.jb=='3'){
-          p={tableName:'dm_pcsb',dmNameRightLike:user.bmbh,lvl:'3'}
+        let p = {}
+        if (user.jb == '1') {
+          p = { tableName: 'dm_pcsb', lvl: '3' }
+        } else if (user.jb == '2') {
+          p = { tableName: 'dm_pcsb', dmNameRightLike: user.bmbh.slice(0, 6), lvl: '3' }
+        } else if (user.jb == '3') {
+          p = { tableName: 'dm_pcsb', dmNameRightLike: user.bmbh, lvl: '3' }
         }
-        api.post(api.root1+'/dm/getDmList',p,r => {
-          context.commit('getPolice',r)
+        api.post(api.root1 + '/dm/getDmList', p, r => {
+          context.commit('getPolice', r)
           resolve(payload)
         })
       })
     },
-    aGetDatatype(context,payload){
+    aGetDatatype(context, payload) {
       return new Promise((resolve) => {
-        api.post(api.root1+'/dm/getDmList',{tableName:'dm_issue_data'},r => {
-          context.commit('getDatatype',r)
+        api.post(api.root1 + '/dm/getDmList', { tableName: 'dm_issue_data' }, r => {
+          context.commit('getDatatype', r)
           resolve(payload)
         })
       })
     },
-    aGetBackstatus(context,payload){
+    aGetBackstatus(context, payload) {
       return new Promise((resolve) => {
-        api.post(api.root1+'/dm/getDmList',{tableName:'dm_zfztb',sjly:payload},r => {
-          context.commit('getBackstatus',r)
+        api.post(api.root1 + '/dm/getDmList', { tableName: 'dm_zfztb', sjly: payload }, r => {
+          context.commit('getBackstatus', r)
           resolve(payload)
         })
       })

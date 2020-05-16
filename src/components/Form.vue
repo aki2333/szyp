@@ -20,7 +20,7 @@
               <template v-else-if="cx.type=='select'">
                 <!-- 取常量值 optype=true  取store值 optype=!true -->
                 <el-select
-                  v-model="form[cx.dm]"
+                  v-model="dialogData[cx.dm]"
                   filterable
                   v-if="cx.optype"
                   clearable
@@ -35,13 +35,13 @@
                   ></el-option>
                 </el-select>
                 <el-select
-                  v-model="form[cx.dm]"
+                  v-model="dialogData[cx.dm]"
                   filterable
                   v-else
                   clearable
                   :disabled="cx.dis"
                   placeholder="请选择"
-                  @change="linkChange(cx,form[cx.dm])"
+                  @change="linkChange(cx,dialogData[cx.dm])"
                 >
                   <el-option
                     v-for="item in $store.state[cx.dm]"

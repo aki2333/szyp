@@ -62,9 +62,9 @@ export default {
       });
     },
     getTree(data) {
+      console.log("点击树节点-", data);
       this.formType = data.data.menu_name;
       // Object.assign(this.formData, data.data);
-      console.log("点击树节点-", data, this.formData);
       this.formData = data.data;
     },
     getCheckedKeys(data) {

@@ -17,11 +17,11 @@ export default new Vuex.Store({
     menu: menu || cdata.menu,
     leftMenu: [],
     breadcrumb: breadData || [],
-    nation:[],
+    nationality:[],
     gender:[],
     passportType:[],//证件种类
     suboffice:[],//所属分局
-    policepolicestation:[],//派出所
+    policestation:[],//派出所
     // 【非大众】
     datatype:[],//下发类别
     backstatus:[],//数据状态
@@ -43,32 +43,25 @@ export default new Vuex.Store({
       window.localStorage.setItem("bread", JSON.stringify(data));
     },
     getNation(state,data){
-      state.nation = data;
-      cdata.options.nationality = data;
+      state.nationality = data;
     },
     getGender(state,data){
       state.gender = data;
-      cdata.options.gender = data;
     },
     getPassport(state,data){
       state.passportType = data;
-      cdata.options.passportType = data;
     },
     getSuboffice(state,data){
       state.suboffice = data;
-      cdata.options.suboffice = data;
     },
     getPolice(state,data){
-      state.policepolicestation = data;
-      cdata.options.policepolicestation = data;
+      state.policestation = data;
     },
     getDatatype(state,data){
       state.datatype = data;
-      cdata.options.datatype = data;
     },
     getBackstatus(state,data){
       state.backstatus = data;
-      cdata.options.backstatus = data;
     }
   },
   actions: {
@@ -156,7 +149,7 @@ export default new Vuex.Store({
     },
     aGetBackstatus(context,payload){
       return new Promise((resolve) => {
-        api.post(api.root1+'/dm/getDmList',{tableName:'dm_zfztb'},r => {
+        api.post(api.root1+'/dm/getDmList',{tableName:'dm_zfztb',sjly:payload},r => {
           context.commit('getBackstatus',r)
           resolve(payload)
         })

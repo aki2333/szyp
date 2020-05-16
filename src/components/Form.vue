@@ -14,20 +14,29 @@
           <el-col :span="24" v-for="(cx,i) in cxData" :key="i">
             <el-form-item :label="cx.cm" :prop="cx.dm">
               <template v-if="cx.type=='input'">
-                <el-input v-model="form[cx.dm]"></el-input>
+                <el-input v-model="form[cx.dm]" :disabled="cx.dis"></el-input>
               </template>
               <template v-else-if="cx.type=='select'">
-                <el-select v-model="form[cx.dm]" clearable placeholder="请选择">
+                <!-- 取常量值 optype=true  取store值 optype=!true -->
+                <el-select v-model="form[cx.dm]" v-if="cx.optype" clearable :disabled="cx.dis" placeholder="请选择">
                   <el-option
                     v-for="item in $cdata.options[cx.dm]"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value"
+                    :key="item.dm"
+                    :label="item.mc"
+                    :value="item.dm"
+                  ></el-option>
+                </el-select>
+                <el-select v-model="form[cx.dm]" v-else clearable :disabled="cx.dis" placeholder="请选择">
+                  <el-option
+                    v-for="item in $store.state[cx.dm]"
+                    :key="item.dm"
+                    :label="item.mc"
+                    :value="item.dm"
                   ></el-option>
                 </el-select>
               </template>
               <template v-else-if="cx.type=='datePicker'">
-                <el-date-picker v-model="form[cx.dm]" type="date" placeholder="选择日期"></el-date-picker>
+                <el-date-picker v-model="form[cx.dm]" :disabled="cx.dis" type="date" placeholder="选择日期"></el-date-picker>
               </template>
               <template v-else-if="cx.type=='double'">
                 <div class="double-box">
@@ -50,6 +59,11 @@
                     <el-date-picker v-model="form[c.dm]" :type="c.type" placeholder="选择日期"></el-date-picker>
                   </div>-->
                 </div>
+              </template>
+              <template v-else-if="cx.type=='radio'"> 
+                <el-radio-group v-model="form[cx.dm]">
+                  <el-radio :label="item.dm" v-for="(item,ind) in $store.state[cx.dm]" :key="ind">{{item.mc}}</el-radio>
+                </el-radio-group>
               </template>
             </el-form-item>
           </el-col>

@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <Inquire :cxData="cxData" @cxFnc="cxFnc"></Inquire>
+    <Inquire :cxData="cxData" @cxFnc="cxFnc" @lcFnc="lcFnc"></Inquire>
     <div class="t-tab-top">
         <div class="tab-top-item hand" @click="clzt=1">
             <img :src="clzt==1?tabImgActive_1:tabImg_1" alt="">
@@ -14,6 +14,7 @@
     <div class="page-box">
       <Table
         :lbData="lbData"
+        :isSelect="isSelect"
         :lbBtn="lbBtn"
         :plBtn="plBtn"
         :isTab="isTab"
@@ -23,17 +24,35 @@
         @pageSizeFnc="pageSizeFnc"
         @pageNumFnc="pageNumFnc"
         @tabFnc="tabFnc"
+        @blFnc="blFnc"
+        @lbSelect="lbSelect"
+        
       ></Table>
     </div>
+    <!-- 弹窗 -->
+    <Dialog :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
+      <Form
+        v-if="isShowDialog"
+        :cxData="labelData"
+        :dialogType="dialogType"
+        :dialogData="dialogData"
+        @dialogCancel="isShowDialog=false"
+        @dialogSave="dialogSave"
+      ></Form>
+    </Dialog>
   </div>
 </template>
 <script>
 import Inquire from "@/components/Inquire.vue";
 import Table from "@/components/Table.vue";
+import Dialog from "@/components/Dialog.vue";
+import Form from "@/components/Form.vue";
 export default {
   components: {
     Inquire,
-    Table
+    Table,
+    Dialog,
+    Form
   },
   data() {
     return {
@@ -43,6 +62,7 @@ export default {
       tabImg_2:require('../../../assets/images/main/tab_1.png'),
       tabImgActive_2:require('../../../assets/images/main/tab_1_pre.png'),
       //数据展示
+      isSelect:true,
       isTab: true,
       cxData: this.$cdata.zxhc.zxhc.cx,
       lbData: this.$cdata.zxhc.zxhc.lb,
@@ -63,6 +83,15 @@ export default {
       },
       page:1,
       clzt:1,
+      multipleSelection:[],
+      multipleArr:[],
+      changeK:'',
+      //弹窗数据
+      isShowDialog: false,
+      dialogTitle: "",
+      dialogType: "",
+      dialogData: {},
+      labelData: []
     };
   },
   mounted(){
@@ -79,6 +108,11 @@ export default {
       this.cx.pd = data;
       this.getTable();
     },
+    lcFnc(data){
+      if(data.key.dm=='datatype'){
+        this.$store.dispatch("aGetBackstatus",data.data).then(() => {});
+      }
+    },
     // 获取分页等信息
     pageSizeFnc(data) {
       this.cx.pageSize = data;
@@ -87,6 +121,14 @@ export default {
     pageNumFnc(data) {
       this.cx.pageNum = data;
       this.getTable();
+    },
+    lbSelect(data){
+      this.multipleSelection = data;
+      this.multipleArr=[];
+      for(var i=0;i<this.multipleSelection.length;i++){
+        this.multipleArr = this.multipleArr.concat([this.multipleSelection[i].serial])
+      }
+      
     },
     // 查询列表
     getTable() {
@@ -99,17 +141,101 @@ export default {
       this.cx.pd = Object.assign({},this.cx.pd,pdAdd)
       this.$api.post(this.$api.root1+"/issueData/getIssueDataPage", this.cx, r => {
         this.tableData.list = r.list;
+        this.tableData.total = r.total;
       });
     },
     //批量操作按钮  data==按钮名字
     plFnc(data) {
-      console.log(data);
+      if(this.multipleArr.length==0){
+        this.$message({
+            message: "请先选择数据！",
+            type: "warning"
+          });
+          return false;
+      }
+      this.dialogTitle = data.button_name;
+      this.dialogType = data.button_type;
+      if(data.button_type=='sb'){
+        let p={
+          serialList:this.multipleArr,
+          bmbh:this.$store.state.user.bmbh,
+          jb:this.$store.state.user.jb,
+          userId:this.$store.state.user.userId
+        };
+        this.$api.post(this.$api.root1+'/issueData/reportDataSuboffice',p,r => {
+            this.$message({
+              message:r.message,
+              type:'success'
+            })
+            this.getTable(); 
+        })
+      }else if(data.button_type=='xf'){
+        this.dialogData = {};
+        if(this.$store.state.user.jb=='1'){
+          this.labelData = this.$cdata.zxhc.zxhc.xfSContent;
+        }else if(this.$store.state.user.jb=='2'){
+          this.labelData = this.$cdata.zxhc.zxhc.xfFContent;
+        }
+        this.isShowDialog = true;
+      }
+    },
+    //列表内按钮
+    blFnc(data){
+      this.dialogTitle = data.btn.button_name;
+      this.dialogType = data.btn.button_type;
+      if(data.btn.button_type == 'edit'){
+        this.labelData = this.$cdata.zxhc.zxhc.editcontent;
+        console.log('===',data.data.datatype)
+        this.$store.dispatch("aGetBackstatus",data.data.datatype)
+        this.isShowDialog = true;
+        this.dialogData = data.data
+      }
+    },
+    //编辑保存
+    editSave(data){
+      let p=data;
+      // delete p.createtime;
+      // delete p.updatetime;
+      p.jb=this.$store.state.user.jb;
+      p.bmbh=this.$store.state.user.bmbh;
+      p.userId = this.$store.state.user.userId;
+      this.$api.post(this.$api.root1+'/issueData/updateIssueData',p,r=>{
+          this.$message({
+            message: r.message,
+            type: "success"
+          });
+          this.getTable();
+          this.isShowDialog = false;
+      })
+    },
+    //下发保存
+    xfSave(data){
+      let p=data;
+      p.serialList = this.multipleArr;
+      p.jb=this.$store.state.user.jb;
+      p.bmbh=this.$store.state.user.bmbh;
+      p.userId = this.$store.state.user.userId;
+      this.$api.post(this.$api.root1+'/issueData/issueDataTrigger',p,r=>{
+        this.$message({
+            message: r.message,
+            type: "success"
+          });
+          this.getTable();
+          this.isShowDialog = false;
+      })
     },
     //列表tab切换  data==page 从1开始
     tabFnc(data) {
       this.page = data;
       this.getTable();
-    }
+    },
+    dialogSave(data){
+      if(data.type=='edit'){
+        this.editSave(data.data)
+      }else if(data.type=='xf'){
+        this.xfSave(data.data)
+      }
+    },
   }
 };
 </script>

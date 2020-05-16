@@ -8,6 +8,7 @@
       ref="inquire"
       label-width="100px"
       class="inquire-ruleForm"
+      v-if="queryIsShow"
     >
       <el-row :gutter="20" type="flex" align="middle" justify="center">
         <el-col :span="20">
@@ -87,6 +88,7 @@
         </el-col>
       </el-row>
     </el-form>
+    <img :src="queryIsShow==true?closeImg:openImg" alt="" @click="queryShow" class="changeBtn">
   </div>
 </template>
 <script>
@@ -108,7 +110,10 @@ export default {
   data() {
     return {
       inquire: this.pd,
-      rules: {}
+      rules: {},
+      queryIsShow:true,
+      openImg:require('../assets/images/main/open_query.png'),
+      closeImg:require('../assets/images/main/close_query.png')
     };
   },
   mounted() {},
@@ -122,6 +127,10 @@ export default {
           return false;
         }
       });
+    },
+    queryShow(){
+      this.queryIsShow = !this.queryIsShow;
+      this.$emit("queryShowFnc",this.queryIsShow)
     },
     linkChange(key,val){
       this.$emit("lcFnc",{key:key,data:val});
@@ -138,6 +147,12 @@ export default {
   border-bottom: 1px solid #295287;
   margin-bottom: 20px;
   color: #e1e8ee;
+  position: relative;
+}
+.changeBtn{
+  position: absolute;
+  bottom: -23px;
+  right: 0px;
 }
 .cx-btn {
   margin-bottom: 18px;

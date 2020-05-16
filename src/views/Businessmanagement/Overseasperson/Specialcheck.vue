@@ -26,7 +26,6 @@
         @tabFnc="tabFnc"
         @blFnc="blFnc"
         @userRole="userRole"
-        
       ></Table>
     </div>
     <!-- 弹窗 -->
@@ -126,6 +125,9 @@ export default {
         this.$store.dispatch("aGetBackstatus",data.data).then(() => {});
       }
     },
+    // queryShowFnc(data){
+    //   // data = !data;
+    // },
     // 获取分页等信息
     pageSizeFnc(data) {
       this.cx.pageSize = data;

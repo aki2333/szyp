@@ -188,12 +188,18 @@
       </el-row>
     </el-form>
     <div class="page-btn-box">
-      <el-button size="mini" type="primary" round @click="xj()">新建</el-button>
+      <el-button v-if="dialogType=='gnlb'" size="mini" type="primary" round @click="xj()">新建</el-button>
 
       <el-button size="mini" type="primary" round @click="save('form')">保存</el-button>
       <el-button size="mini" type="info" round @click="cancel">取消</el-button>
 
-      <el-button size="mini" type="info" round @click="save('form','del')">删除</el-button>
+      <el-button
+        v-if="dialogType=='gnlb'"
+        size="mini"
+        type="info"
+        round
+        @click="save('form','del')"
+      >删除</el-button>
     </div>
   </div>
 </template>
@@ -222,7 +228,8 @@ export default {
     };
   },
   watch: {
-    dialogType() {
+    dialogType(val) {
+      console.log(val);
       this.isXJ = false;
     }
   },

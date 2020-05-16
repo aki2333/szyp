@@ -63,7 +63,7 @@ export default {
     },
     getTree(data) {
       console.log("点击树节点-", data);
-      this.formType = data.data.menu_name;
+      this.formType = data.type;
       // Object.assign(this.formData, data.data);
       this.formData = data.data;
     },

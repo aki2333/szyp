@@ -16,25 +16,25 @@
         ></TreeCard>
       </el-col>
       <el-col :span="16">
-        <Form
-          :cxData="labelData"
-          :dialogType="formType"
-          :dialogData="formData"
-          @dialogSave="formSave"
-        ></Form>
+        <div class="form-box">
+          <Form
+            v-if="formType"
+            :cxData="labelData"
+            :dialogType="formType"
+            :dialogData="formData"
+            @dialogSave="formSave"
+          ></Form>
+        </div>
       </el-col>
     </el-row>
-    <div class="page-btn-box">
-      <el-button size="mini" type="primary" round @click="addPermissionToDept">保存</el-button>
-      <el-button size="mini" type="info" round @click="cancel">清除</el-button>
-    </div>
   </div>
 </template>
 <script>
 import TreeCard from "@/components/TreeCard.vue";
+import Form from "@/components/Form.vue";
 
 export default {
-  components: { TreeCard },
+  components: { TreeCard, Form },
   data() {
     return {
       treeData2: [],
@@ -63,6 +63,11 @@ export default {
     },
     getTree(data) {
       console.log("点击树节点-", data);
+      this.formType = data.type;
+      this.formData = data.data;
+      // if (data.data.menu_type == "P") {
+      //   // this.formData.
+      // }
     },
     getCheckedKeys(data) {
       if (data.type == "dwlb") {
@@ -113,3 +118,10 @@ export default {
   }
 };
 </script>
+<style scoped>
+.form-box {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+</style>

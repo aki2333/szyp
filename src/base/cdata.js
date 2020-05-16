@@ -232,6 +232,16 @@ const options = {
             dm: '1',
             mc: "其他用户"
         }
+    ],
+    menu_type: [
+        {
+            dm: 'P',
+            mc: "菜单"
+        },
+        {
+            dm: 'B',
+            mc: "按钮"
+        }
     ]
 }
 export default {

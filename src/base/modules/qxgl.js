@@ -7,7 +7,8 @@ const yhgl = {
         {
             cm: '所属单位',
             type: 'select',
-            dm: 'bmbh'
+            dm: 'bmbh',
+            optype: true
         },
         {
             cm: '用户名称',
@@ -44,7 +45,8 @@ const yhgl = {
         {
             cm: '用户类型',
             type: 'select',
-            dm: 'userType'
+            dm: 'userType',
+            optype: true
         },
     ],
     lb: [
@@ -176,7 +178,8 @@ const yhgl = {
         {
             cm: '用户类型',
             type: 'select',
-            dm: 'userType'
+            dm: 'userType',
+            optype: true
         },
     ],
     xg: [
@@ -266,12 +269,14 @@ const jsgl = {
         {
             cm: '选择状态',
             type: 'select',
-            dm: 'status'
+            dm: 'status',
+            optype: true
         },
         {
             cm: '所属单位',
             type: 'select',
-            dm: 'bmbh'
+            dm: 'bmbh',
+            optype: true
         },
         {
             cm: '登录名称',
@@ -339,9 +344,10 @@ const cdgl = {
             dm: 'menu_name'
         },
         {
-            cm: '级别',
-            type: 'input',
-            dm: 'menu_grade'
+            cm: '种类',
+            type: 'select',
+            dm: 'menu_type',
+            optype: true
         },
         {
             cm: '序号',

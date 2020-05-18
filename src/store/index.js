@@ -27,6 +27,11 @@ export default new Vuex.Store({
     // 【非大众】
     datatype: [],//下发类别
     backstatus: [],//数据状态
+    bmbh: [],
+    sjBmbh: [],
+    fjBmbh: [],
+    pcsBmbh: []
+
   },
   mutations: {
     getUser(state, data) {
@@ -74,6 +79,19 @@ export default new Vuex.Store({
     },
     getBackstatus(state, data) {
       state.backstatus = data;
+    },
+    getBmbh(state, data) {
+      state.bmbh = data
+    },
+    getSjBmbh(state, data) {
+      state.sjBmbh = data
+    },
+    getFjBmbh(state, data) {
+      console.log("getFjBmbh", data)
+      state.fjBmbh = data
+    },
+    getPcsBmbh(state, data) {
+      state.pcsBmbh = data
     }
   },
   actions: {
@@ -115,8 +133,8 @@ export default new Vuex.Store({
       console.log("payload", context)
       return new Promise((resolve) => {
         api.post('/templateController/getGrade', { template_grade: payload }, r => {
-          context.commit('getGrade', fnc.ToArray(r.list))
-          resolve(payload)
+          context.commit('getGrade', r)
+          resolve(r)
         })
       })
     },
@@ -175,7 +193,31 @@ export default new Vuex.Store({
           resolve(payload)
         })
       })
+    },
+    aGetBmbh(context, payload) {
+      return new Promise((resolve) => {
+        api.post('dept/getAllSubDept', payload, r => {
+          context.commit('getBmbh', r)
+          resolve(r)
+        })
+      })
     }
+    // aGetBmbh(context, payload) {
+    //   return new Promise((resolve) => {
+    //     api.post('dept/getSubDeptBmMc', payload, r => {
+    //       console.log(payload.type, 'payload.type == "fjBmbh"', payload.type == "fjBmbh")
+    //       if (payload.type == "sjBmbh") {
+    //         context.commit('getSjBmbh', r)
+    //       } else if (payload.type == "fjBmbh") {
+    //         console.log(payload.type, "进入")
+    //         context.commit('getFjBmbh', r)
+    //       } else if (payload.type == "pcsBmbh") {
+    //         context.commit('getPcsBmbh', r)
+    //       }
+    //       resolve(r)
+    //     })
+    //   })
+    // }
   },
   modules: {
   }

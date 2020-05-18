@@ -8,6 +8,7 @@
           :isCheckbox="false"
           :treeData="treeData1"
           :treeProps="treeProps1"
+          :isExpand="false"
           nodeKey="bmbh"
           @getTree="getTree"
         ></TreeCard>

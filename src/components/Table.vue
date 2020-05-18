@@ -14,6 +14,7 @@
         <el-button
           size="mini"
           :type="pb.type"
+          :disabled="pb.user_ctrl==1&&disPlBtn"
           round
           v-for="(pb,pbi) in plBtn"
           @click="plBtnFun(pb)"
@@ -24,6 +25,7 @@
     <el-table
       size="small"
       :ref="refName"
+      border
       stripe
       highlight-current-row
       :data="tableData.list"
@@ -32,9 +34,10 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column v-if="isSelect" align="center" type="selection" width="50"></el-table-column>
-      <!-- show-overflow-tooltip -->
+      <!--  -->
       <el-table-column
         align="center"
+        show-overflow-tooltip
         v-for="(lb,i) in lbData"
         :key="i"
         :prop="lb.dm"
@@ -79,6 +82,10 @@ export default {
     isPl: {
       type: Boolean,
       default: true
+    },
+    disPlBtn: {
+      type: Boolean,
+      default: false
     },
     refName: {
       type: String,
@@ -200,7 +207,7 @@ export default {
 <style scoped>
 .table-other {
   position: relative;
-  height: 60px;
+  height: 36px;
   /* display: flex;
   justify-content: space-between; */
 }

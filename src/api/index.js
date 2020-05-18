@@ -47,8 +47,8 @@ axios.interceptors.request.use(
 )
 
 function apiAxios(method, url, params, success, failure) {
-  let loadingInstance1=null;
-  loadingInstance1 = Loading.service({ fullscreen: true, spinner: 'el-icon-loading',text:'正在加载中',background:'rgba(0,0,0,0.6)',customClass:'loadingClass'});
+  let loadingInstance1 = null;
+  loadingInstance1 = Loading.service({ fullscreen: true, spinner: 'el-icon-loading', text: '正在加载中', background: 'rgba(0,0,0,0.6)', customClass: 'loadingClass' });
   if (params) {
     params = filterNull(params);
   }
@@ -63,7 +63,7 @@ function apiAxios(method, url, params, success, failure) {
   })
     .then(function (res) {
       if (res.status == 200) {
-        if(loadingInstance1){
+        if (loadingInstance1) {
           loadingInstance1.close();
         }
         if (res.data.success) {
@@ -84,7 +84,7 @@ function apiAxios(method, url, params, success, failure) {
           }
         }
       } else {
-        if(loadingInstance1){
+        if (loadingInstance1) {
           loadingInstance1.close();
         }
         // 后台错误
@@ -92,7 +92,7 @@ function apiAxios(method, url, params, success, failure) {
       }
     })
     .catch(function (err) {
-      if(loadingInstance1){
+      if (loadingInstance1) {
         loadingInstance1.close();
       }
       console.log(err)

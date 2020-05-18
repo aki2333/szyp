@@ -34,7 +34,7 @@ const menu = [
         "serial": "0004",
         "childrenMenu": [
             {
-                "menu_name": "用户功能管理",
+                "menu_name": "权限管理",
                 "menu_icon": "yhgngl",
                 "menu_url": "yhgngl",
                 "parent_id": "0001",
@@ -105,7 +105,7 @@ const options = {
         },
         {
             dm: '1',
-            mc: "其他用户"
+            mc: "外部用户"
         }
     ],
     menu_type: [

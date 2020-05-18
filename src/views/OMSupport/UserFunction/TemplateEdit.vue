@@ -1,14 +1,21 @@
 <template>
   <div class="page-box page">
     <el-row v-if="dialogType!='bj'" type="flex" justify="center" class="mb-10" :gutter="30">
-      <el-col :span="8">
-        <el-input placeholder="请输入" v-model="template_grade" size="small">
-          <template slot="prepend">单位级别</template>
-        </el-input>
+      <el-col :span="8" class="bj-item">
+        <label>单位级别</label>
+        <el-select v-model="template_grade" filterable clearable placeholder="请选择" size="small">
+          <el-option
+            v-for="(item,ind) in $store.state.grade"
+            :key="ind"
+            :label="item.dm+' - '+item.mc"
+            :value="item.dm"
+          ></el-option>
+        </el-select>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="8" class="bj-item">
+        <label>模板名称</label>
         <el-input placeholder="请输入" v-model="template_name" size="small">
-          <template slot="prepend">模板名称</template>
+          <!-- <template slot="prepend">模板名称</template> -->
         </el-input>
       </el-col>
     </el-row>
@@ -114,4 +121,14 @@ export default {
 };
 </script>
 <style scoped>
+.bj-item {
+  display: flex;
+}
+.bj-item label {
+  width: 100px;
+  vertical-align: middle;
+  line-height: 32px;
+  text-align: right;
+  padding-right: 5px;
+}
 </style>

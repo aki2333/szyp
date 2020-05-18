@@ -17,6 +17,7 @@
             :isEdit="isEdit"
             :lbBtn="lbBtn"
             :plBtn="plBtn"
+            :disPlBtn="disPlBtn"
             :tableData="tableData"
             @pageSizeFnc="pageSizeFnc"
             @pageNumFnc="pageNumFnc"
@@ -50,12 +51,11 @@
             :isPagination="false"
             :selection="selection"
             @rowClick="rowClick"
-            @userRole="saveUserRoleInfo"
+            @userRole="userRole"
           ></Table>
         </el-col>
         <el-col :span="6">
           <TreeCard
-            cardTitle="功能列表"
             :isCheckbox="false"
             treeType="gnlb"
             :treeData="treeData1"
@@ -66,7 +66,11 @@
           ></TreeCard>
         </el-col>
       </el-row>
+      <div class="page-btn-box">
+        <el-button size="mini" type="primary" round @click="saveUserRoleInfo">保存</el-button>
+      </div>
     </div>
+
     <!-- 弹窗 -->
     <Dialog :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
       <Form
@@ -112,6 +116,7 @@ export default {
         order: "serial",
         direction: 1
       },
+      disPlBtn: true,
       tableData: {
         list: [],
         total: 0,
@@ -133,16 +138,21 @@ export default {
       dialogTitle: "",
       dialogType: "",
       dialogData: {},
-      labelData: []
+      labelData: [],
+      userRoleData: []
     };
   },
   mounted() {
     this.getTable();
+    this.$store.dispatch("aGetBmbh", { bmbh: this.$store.state.user.bmbh });
   },
+
   methods: {
     // 获取查询参数
     cxFnc(data) {
       this.cx.pd = data;
+      console.log("用户类型", data);
+      this.disPlBtn = data.userType == 0 ? true : false;
       this.getTable();
     },
     // 获取分页等信息
@@ -159,6 +169,8 @@ export default {
       console.log(this.cx);
       this.$api.post("userController/queryUserInfo", this.cx, r => {
         this.tableData = r.resultList;
+        this.tableData2 = { list: [] };
+        this.tableData3 = { list: [] };
       });
     },
     // 查询用户单位列表
@@ -202,7 +214,7 @@ export default {
     rowClick(data) {
       if (data.type == "yhtb") {
         this.queryUserDept(data.data.bmbh);
-        this.dialogData = data.data;
+        this.currentRow = data.data;
       } else if (data.type == "dwtb") {
         this.getRole(data.data.xtyhbmbh);
       } else if (data.type == "jstb") {
@@ -217,9 +229,10 @@ export default {
       this.dialogType = data.button_type;
       this.labelData = this.$cdata.qxgl.yhgl[data.button_type];
       if (data.button_type == "xj") {
-        this.dialogData = {};
+        //this.dialogData = {};
         this.isShowDialog = true;
       } else if (data.button_type == "xg") {
+        this.dialogData = this.currentRow;
         if (JSON.stringify(this.dialogData) == "{}") {
           this.$message({
             message: "请先选择用户",
@@ -230,6 +243,8 @@ export default {
         this.isShowDialog = true;
         // this.dialogData = data.data;
       } else if (data.button_type == "sc") {
+        this.dialogData = this.currentRow;
+
         if (JSON.stringify(this.dialogData) == "{}") {
           this.$message({
             message: "请先选择用户",
@@ -267,7 +282,7 @@ export default {
       } else if (data.type == "plmmcz") {
         this.batchUpdateUserPassword(data.data);
       } else if (data.type == "mmcz") {
-        this.batchUpdateUserPassword(data.data, this.dialogData);
+        this.batchUpdateUserPassword(data.data, this.currentRow);
       }
     },
     // 新增用户
@@ -335,12 +350,14 @@ export default {
         this.isShowDialog = false;
       });
     },
+    userRole(data) {
+      this.userRoleData = data;
+    },
     // 用户关联角色添加取消
-    saveUserRoleInfo(data) {
-      console.log("xuanzhong", data);
+    saveUserRoleInfo() {
       let p = {
-        list: data,
-        userId: this.dialogData.userId
+        list: this.userRoleData,
+        userId: this.currentRow.userId
       };
       this.$api.post("userRoleController/saveUserRoleInfo", p, r => {
         this.$message({
@@ -350,6 +367,12 @@ export default {
         this.getTable();
         // this.isShowDialog = false;
       });
+    },
+    begin() {
+      this.getTable();
+      this.tableData2 = { list: [] };
+      this.tableData3 = { list: [] };
+      this.treeData1 = [];
     }
   }
 };

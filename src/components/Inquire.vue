@@ -22,7 +22,7 @@
                   v-model="inquire[cx.dm]"
                   filterable
                   v-if="cx.optype"
-                  clearable
+                  :clearable="!cx.must"
                   placeholder="请选择"
                   @change="linkChange(cx,inquire[cx.dm])"
                 >

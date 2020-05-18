@@ -7,6 +7,7 @@
           treeType="dwlb"
           :treeData="treeData1"
           :treeProps="treeProps1"
+          :isExpand="false"
           nodeKey="bmbh"
           @getTree="getTree"
           @getCheckedKeys="getCheckedKeys"
@@ -88,12 +89,12 @@ export default {
       this.$cdata.qxgl.getPermissionTree(deptBmbh).then(r => {
         this.treeData2 = r.menuList;
         this.defaultChecked2 = r.choose;
-        // let arr = [...r];
-        // this.$fnc
-        //   .arrayIndex(arr, "choose", "serial", "childrenMenu")
-        //   .then(data => {
-        //     this.defaultChecked2 = data;
-        //   });
+      });
+    },
+    getDeptTempPermTree(tempId) {
+      this.$cdata.qxgl.getDeptTempPermTree(tempId).then(r => {
+        this.treeData2 = r.menuList;
+        this.defaultChecked2 = r.choose;
       });
     },
     // 获取模板列表
@@ -107,6 +108,7 @@ export default {
         this.getPermissionTree(data.data.bmbh);
       } else if (data.type == "mblb") {
         this.templateId = data.data.serial;
+        this.getDeptTempPermTree(this.templateId);
       }
     },
     getCheckedKeys(data) {

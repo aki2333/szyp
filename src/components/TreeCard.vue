@@ -3,7 +3,7 @@
     class="box-card"
     :body-style="{'min-height': '300px','max-height': '60vh',width:'100%','overflow-y': 'auto','overflow-x': 'auto'}"
   >
-    <div slot="header" class="clearfix card-title">
+    <div slot="header" class="clearfix card-title" v-if="cardTitle">
       <span>{{cardTitle}}</span>
     </div>
     <div>

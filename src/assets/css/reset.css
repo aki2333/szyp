@@ -81,13 +81,15 @@ th {
   padding: 0;
   text-align: left;
 }
-.el-input__inner{
+.inquire .el-input__inner{
   border-color: #1a355b!important;
+  background-color: #1a355b!important;
 }
+
 .inquire-ruleForm .el-col-8{
   height: 45px;
 }
-.inquire .el-form-item__label{
+.inquire .el-form-item__label,.inquire input{
   color: #dfe6ee!important;
 }
 
@@ -95,6 +97,11 @@ th {
 .el-date-editor.el-input__inner,
 .el-select  {
     width: 100%!important;
+}
+.el-table th{
+  background-color: #85bcfc!important;
+  color: #ffffff!important;
+
 }
 .el-table__body tr.current-row>td{
   background-color: transparent!important;

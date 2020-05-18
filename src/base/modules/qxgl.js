@@ -8,8 +8,22 @@ const yhgl = {
             cm: '所属单位',
             type: 'select',
             dm: 'bmbh',
-            optype: true
         },
+        // {
+        //     cm: '市局单位',
+        //     type: 'select',
+        //     dm: 'sjBmbh',
+        // },
+        // {
+        //     cm: '分局单位',
+        //     type: 'select',
+        //     dm: 'fjBmbh',
+        // },
+        // {
+        //     cm: '派出所单位',
+        //     type: 'select',
+        //     dm: 'pcsBmbh',
+        // },
         {
             cm: '用户名称',
             type: 'input',
@@ -46,6 +60,7 @@ const yhgl = {
             cm: '用户类型',
             type: 'select',
             dm: 'userType',
+            must: true,
             optype: true
         },
     ],
@@ -103,6 +118,7 @@ const yhgl = {
         {
             "button_name": "新建",
             "button_type": "xj",
+            "user_ctrl": 1,
             "serial": "201",
             "type": "success"
         },
@@ -121,13 +137,13 @@ const yhgl = {
             "type": "success"
         },
         {
-            "button_name": "批量密码重置",
+            "button_name": "全部密码重置",
             "button_type": "plmmcz",
             "serial": "201",
             "type": "primary"
         },
         {
-            "button_name": "批量生成随机密码",
+            "button_name": "全部生成随机密码",
             "button_type": "plscsjmm",
             "serial": "201",
             "type": "primary"
@@ -139,10 +155,10 @@ const yhgl = {
             cm: '单位名称',
             dm: 'xtyhbmmc'
         },
-        {
-            cm: '单位类型',
-            dm: 'xtyhbmcj'
-        },
+        // {
+        //     cm: '单位类型',
+        //     dm: 'xtyhbmcj'
+        // },
     ],
     xj: [
         {
@@ -166,21 +182,36 @@ const yhgl = {
             dm: 'sfzh'
         },
         {
-            cm: '部门编号',
-            type: 'input',
-            dm: 'bmbh'
+            cm: '所属单位',
+            type: 'select',
+            dm: 'bmbh',
         },
+        // {
+        //     cm: '市局单位',
+        //     type: 'select',
+        //     dm: 'sjBmbh',
+        // },
+        // {
+        //     cm: '分局单位',
+        //     type: 'select',
+        //     dm: 'fjBmbh',
+        // },
+        // {
+        //     cm: '派出所单位',
+        //     type: 'select',
+        //     dm: 'pcsBmbh',
+        // },
         {
             cm: '密码',
             type: 'input',
             dm: 'xtmm'
         },
-        {
-            cm: '用户类型',
-            type: 'select',
-            dm: 'userType',
-            optype: true
-        },
+        // {
+        //     cm: '用户类型',
+        //     type: 'select',
+        //     dm: 'userType',
+        //     optype: true
+        // },
     ],
     xg: [
         {
@@ -204,8 +235,8 @@ const yhgl = {
             dm: 'sfzh'
         },
         {
-            cm: '部门编号',
-            type: 'input',
+            cm: '所属单位',
+            type: 'select',
             dm: 'bmbh'
         }
     ],
@@ -223,7 +254,7 @@ const jsgl = {
     lb: [
         {
             cm: '角色类型',
-            dm: 'role_type'
+            dm: 'role_type_desc'
         },
         {
             cm: '角色名称',
@@ -231,7 +262,7 @@ const jsgl = {
         },
         {
             cm: '所属单位',
-            dm: 'create_unitid'
+            dm: 'create_unitid_desc'
         }
     ],
     lbBtn: [
@@ -266,16 +297,17 @@ const jsgl = {
         }
     ],
     yhcx: [
-        {
-            cm: '选择状态',
-            type: 'select',
-            dm: 'status',
-            optype: true
-        },
+
         {
             cm: '所属单位',
             type: 'select',
             dm: 'bmbh',
+        },
+        {
+            cm: '选择状态',
+            type: 'select',
+            dm: 'status',
+            must: true,
             optype: true
         },
         {
@@ -419,6 +451,23 @@ function getPermissionTree(deptBmbh) {
     })
 
 }
+// 获取功能列表
+function getDeptTempPermTree(tempId) {
+    return new Promise((resolve) => {
+        api.post(
+            "dept/getDeptTempPermTree",
+            {
+                userId: store.state.user.userId,
+                userBmbh: store.state.user.bmbh,
+                tempId: tempId
+            },
+            r => {
+                resolve(r)
+            }
+        );
+    })
+
+}
 // 获取模板列表
 function getTemplate() {
     return new Promise((resolve) => {
@@ -457,6 +506,7 @@ function getDeptRolePermTree(deptBmbh, roleId) {
             {
                 deptBmbh: deptBmbh,
                 roleId: roleId,
+                userId: store.state.user.userId
             },
             r => {
                 resolve(r)
@@ -471,6 +521,7 @@ export default {
     mbgl,
     getDeptTreeByBmbh,
     getPermissionTree,
+    getDeptTempPermTree,
     getTemplate,
     getRolePermissionTree,
     getDeptRolePermTree

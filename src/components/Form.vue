@@ -6,7 +6,7 @@
       :rules="rules"
       size="small"
       ref="form"
-      label-width="70px"
+      label-width="100px"
       class="form-ruleForm"
       v-if="!isXJ"
     >
@@ -101,7 +101,7 @@
       :rules="rules"
       size="small"
       ref="form"
-      label-width="70px"
+      label-width="100px"
       class="form-ruleForm"
       v-else
     >

@@ -126,12 +126,18 @@ export default {
     },
     // 删除
     delRoleUser(data) {
-      this.$api.post("role/delRoleUser", data, r => {
-        this.$message({
-          message: r,
-          type: "success"
+      this.$confirm("是否确认删除?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.$api.post("role/delRoleUser", data, r => {
+          this.$message({
+            message: r,
+            type: "success"
+          });
+          this.getTable();
         });
-        this.getTable();
       });
     },
     // save() {
@@ -146,6 +152,7 @@ export default {
     // 开始
     begin() {
       this.getTable();
+      this.$store.dispatch("aGetBmbh", { bmbh: this.$store.state.user.bmbh });
     }
   }
 };

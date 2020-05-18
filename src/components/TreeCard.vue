@@ -1,7 +1,7 @@
 <template>
   <el-card
     class="box-card"
-    :body-style="{'min-height': '300px','max-height': '60vh',overflow: 'auto'}"
+    :body-style="{'min-height': '300px','max-height': '60vh',width:'100%','overflow-y': 'auto','overflow-x': 'auto'}"
   >
     <div slot="header" class="clearfix card-title">
       <span>{{cardTitle}}</span>

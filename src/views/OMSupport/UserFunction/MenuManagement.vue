@@ -46,7 +46,7 @@ export default {
       menuList: [],
       buttonList: [],
       labelData: this.$cdata.qxgl.cdgl.cd,
-      formData: {},
+      formData: { menu_url: "" },
       formType: ""
     };
   },

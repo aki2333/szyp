@@ -10,15 +10,22 @@
       class="inquire-ruleForm"
       v-if="queryIsShow"
     >
-      <el-row :gutter="20" type="flex" align="middle" justify="center">
+      <el-row :gutter="0" type="flex" align="middle" justify="center">
         <el-col :span="20">
-          <el-col :span="8" v-for="(cx,i) in cxData" :key="i">
+          <el-col :md="12" :lg="8" v-for="(cx,i) in cxData" :key="i">
             <el-form-item :label="cx.cm" :prop="cx.dm">
               <template v-if="cx.type=='input'">
                 <el-input v-model="inquire[cx.dm]"></el-input>
               </template>
               <template v-else-if="cx.type=='select'">
-                <el-select v-model="inquire[cx.dm]"  filterable v-if="cx.optype"  clearable placeholder="请选择" @change="linkChange(cx,inquire[cx.dm])">
+                <el-select
+                  v-model="inquire[cx.dm]"
+                  filterable
+                  v-if="cx.optype"
+                  clearable
+                  placeholder="请选择"
+                  @change="linkChange(cx,inquire[cx.dm])"
+                >
                   <el-option
                     v-for="(item,ind) in $cdata.options[cx.dm]"
                     :key="ind"
@@ -26,7 +33,14 @@
                     :value="item.dm"
                   ></el-option>
                 </el-select>
-                <el-select v-model="inquire[cx.dm]" filterable v-else clearable placeholder="请选择" @change="linkChange(cx,inquire[cx.dm])">
+                <el-select
+                  v-model="inquire[cx.dm]"
+                  filterable
+                  v-else
+                  clearable
+                  placeholder="请选择"
+                  @change="linkChange(cx,inquire[cx.dm])"
+                >
                   <el-option
                     v-for="(item,ind) in $store.state[cx.dm]"
                     :key="ind"
@@ -88,7 +102,7 @@
         </el-col>
       </el-row>
     </el-form>
-    <img :src="queryIsShow==true?closeImg:openImg" alt="" @click="queryShow" class="changeBtn">
+    <img :src="queryIsShow==true?closeImg:openImg" alt @click="queryShow" class="changeBtn" />
   </div>
 </template>
 <script>
@@ -97,6 +111,10 @@ export default {
     cxType: {
       type: String,
       default: ""
+    },
+    labelWidth: {
+      type: String,
+      default: "100px"
     },
     cxData: {
       type: Array,
@@ -111,9 +129,9 @@ export default {
     return {
       inquire: this.pd,
       rules: {},
-      queryIsShow:true,
-      openImg:require('../assets/images/main/open_query.png'),
-      closeImg:require('../assets/images/main/close_query.png')
+      queryIsShow: true,
+      openImg: require("../assets/images/main/open_query.png"),
+      closeImg: require("../assets/images/main/close_query.png")
     };
   },
   mounted() {},
@@ -128,12 +146,12 @@ export default {
         }
       });
     },
-    queryShow(){
+    queryShow() {
       this.queryIsShow = !this.queryIsShow;
-      this.$emit("queryShowFnc",this.queryIsShow)
+      this.$emit("queryShowFnc", this.queryIsShow);
     },
-    linkChange(key,val){
-      this.$emit("lcFnc",{key:key,data:val});
+    linkChange(key, val) {
+      this.$emit("lcFnc", { key: key, data: val });
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
@@ -149,7 +167,7 @@ export default {
   color: #e1e8ee;
   position: relative;
 }
-.changeBtn{
+.changeBtn {
   position: absolute;
   bottom: -23px;
   right: 0px;

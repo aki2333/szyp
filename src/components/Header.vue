@@ -5,12 +5,14 @@
       <div
         class="head-nav-item"
         :class="{'head-nav-item-hover':active==nind}"
-        v-for="(nn,nind) in $store.state.menu"
+        v-for="(nn,nind) in headData"
         :key="nind"
         @click="toLeftMenu(nn,nind)"
       >
-        <img v-if="active==nind" :src="require('@/assets/images/menu/'+nn.menu_icon+'_1.png')" />
-        <img v-else :src="require('@/assets/images/menu/'+nn.menu_icon+'.png')" />
+        <img v-if="active==nind" :src="require('@/assets/images/menu/'+nn.menu_url+'_1_1.png')" />
+        <img v-else :src="require('@/assets/images/menu/'+nn.menu_url+'_1.png')" />
+        <!-- <img v-if="active==nind" :src="require('@/assets/images/menu/fxyp_1_1.png')" />
+        <img v-else :src="require('@/assets/images/menu/fxyp_1.png')" />-->
 
         <div class="ml-10">{{nn.menu_name}}</div>
       </div>
@@ -34,6 +36,12 @@
 <script>
 export default {
   name: "Header",
+  props: {
+    headData: {
+      type: Array,
+      default: () => []
+    }
+  },
   data() {
     return {
       msg: "我是头部",
@@ -43,26 +51,15 @@ export default {
   },
   mounted() {
     this.getNav();
-    this.getUser();
   },
   methods: {
     getNav() {
-      // this.$api.post("userController/getUserAuthority", {}, r => {
-      //   this.$store.dispatch("aGetMenu", r).then(data => {
-      //     this.headMenu = data;
-      //   });
-      // });
-      this.toLeftMenu(this.$store.state.menu[0], 0);
+      this.toLeftMenu(this.headData[0], 0);
     },
     toLeftMenu(item, index) {
       console.log(1, item);
       this.active = index;
       this.$store.commit("getLeftMenu", item.childrenMenu);
-    },
-    getUser() {
-      this.$api.post("userController/getUser", {}, r => {
-        this.$store.dispatch("aGetUser", r);
-      });
     }
   }
 };

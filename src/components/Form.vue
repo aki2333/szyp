@@ -118,7 +118,7 @@
                   v-model="newForm[cx.dm]"
                   v-if="cx.optype"
                   clearable
-                  :disabled="cx.dis"
+                  :disabled="cx.dis||newForm.menu_type!=''"
                   placeholder="请选择"
                 >
                   <el-option
@@ -240,9 +240,8 @@ export default {
   methods: {
     xj() {
       this.isXJ = true;
-      this.newForm = this.dialogData;
-      // Object.assign(this.newForm, this.dialogData);
-      console.log(this.newForm);
+      Object.assign(this.newForm, this.dialogData);
+      this.newForm = JSON.parse(JSON.stringify(this.newForm));
       if (this.newForm.menu_grade == "3") {
         this.newForm.menu_type = "B";
       } else {
@@ -279,7 +278,11 @@ export default {
       this.$emit("formLcFnc", { key: key, data: val });
     },
     cancel() {
-      this.$emit("dialogCancel");
+      if (this.isXJ) {
+        this.isXJ = false;
+      } else {
+        this.$emit("dialogCancel");
+      }
     }
   }
 };

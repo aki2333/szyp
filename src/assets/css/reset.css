@@ -110,6 +110,10 @@ th {
 .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
     background-color: #b4ddf7!important;
 }
+.el-tree{
+  min-width: 100%;
+  width: fit-content;
+}
 .el-card__header{
   background:#eaf3fc
 }
@@ -125,4 +129,8 @@ input::-webkit-inner-spin-button {
 }
 input[type="number"]{
     -moz-appearance: textfield;
+}
+.el-input--suffix .el-input__inner {
+    /* padding-right: 30px; */
+    padding-right: 0px !important;
 }

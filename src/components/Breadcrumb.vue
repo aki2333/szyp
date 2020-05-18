@@ -22,10 +22,12 @@ export default {
     $route(val) {
       console.log("$route", val, this.$store.state.breadcrumb);
       this.bread = this.$store.state.breadcrumb;
+      this.bread = JSON.parse(JSON.stringify(this.bread));
+      console.log(this.bread);
     }
   },
   mounted() {
-    this.bread = this.$store.state.breadcrumb;
+    //this.bread = this.$store.state.breadcrumb;
   },
   methods: {}
 };

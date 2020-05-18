@@ -4,12 +4,14 @@
       <div
         class="left-nav-item"
         :class="{'left-nav-item-hover':active1==lind}"
-        v-for="(ln,lind) in $store.state.leftMenu"
+        v-for="(ln,lind) in leftMenu"
         :key="lind"
         @click="toChildren(ln,lind)"
       >
-        <img v-if="active1==lind" :src="require('@/assets/images/menu/'+ln.menu_icon+'_1.png')" />
-        <img v-else :src="require('@/assets/images/menu/'+ln.menu_icon+'_0.png')" />
+        <img v-if="active1==lind" :src="require('@/assets/images/menu/yhgngl_1.png')" />
+        <img v-else :src="require('@/assets/images/menu/yhgngl_0.png')" />
+        <!-- <img v-if="active1==lind" :src="require('@/assets/images/menu/'+ln.menu_icon+'_1.png')" />
+        <img v-else :src="require('@/assets/images/menu/'+ln.menu_icon+'_0.png')" />-->
         <div
           class="left-nav-name"
           :class="{'left-nav-name-hover':active1==lind}"
@@ -20,10 +22,11 @@
     </div>
     <div class="chilren-nav-box" v-if="leftWidth=='225px'">
       <div
+        :class="{'children-nav-item-hover':active2==cind}"
         class="children-nav-item"
         v-for="(cn,cind) in chilrenNav"
         :key="cind"
-        @click="toPage(cn)"
+        @click="toPage(cn,cind)"
       >{{cn.menu_name}}</div>
     </div>
   </el-aside>
@@ -36,13 +39,25 @@ export default {
     return {
       leftWidth: "225px",
       active1: 0,
+      active2: 0,
       chilrenNav: [],
       bread: []
     };
   },
+  props: {
+    leftMenu: {
+      type: Array,
+      default: () => []
+    }
+  },
+  watch: {
+    leftMenu(val) {
+      console.log(val);
+      this.toChildren(this.leftMenu[0], 0);
+    }
+  },
   mounted() {
-    console.log("left");
-    this.toChildren(this.$store.state.leftMenu[0], 0);
+    this.toChildren(this.leftMenu[0], 0);
   },
   methods: {
     openLeft() {
@@ -54,10 +69,11 @@ export default {
       this.chilrenNav = item.childrenMenu;
       this.bread = [];
       this.bread.push(item);
-      this.toPage(this.chilrenNav[0]);
+      this.toPage(this.chilrenNav[0], 0);
     },
-    toPage(item) {
+    toPage(item, index) {
       console.log(3, item);
+      this.active2 = index;
       this.bread[1] = item;
       this.$store.dispatch("aGetBread", this.bread);
       this.$router.push({ name: item.menu_url });
@@ -116,10 +132,20 @@ export default {
 .chilren-nav-box {
   color: #b1b8be;
   font-size: 13px;
-  padding: 20px;
+  padding: 20px 10px;
 }
 .children-nav-item {
   height: 50px;
   cursor: pointer;
+}
+.children-nav-item:hover,
+.children-nav-item-hover {
+  color: #4294f7;
+}
+.children-nav-item::before {
+  content: "·";
+  font-size: 30px;
+  vertical-align: sub;
+  margin: 0 5px;
 }
 </style>

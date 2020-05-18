@@ -32,9 +32,9 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column v-if="isSelect" align="center" type="selection" width="50"></el-table-column>
+      <!-- show-overflow-tooltip -->
       <el-table-column
         align="center"
-        show-overflow-tooltip
         v-for="(lb,i) in lbData"
         :key="i"
         :prop="lb.dm"
@@ -136,18 +136,18 @@ export default {
       // order: "serial",
       // direction: 1,
       currentRow: 0,
-      page: 1,
+      page: 1
     };
   },
   watch: {
     selection(val) {
       this.toggleSelection(val);
     },
-    plBtn:{
-      handler(newVal,oldVal){
-        console.log(newVal,oldVal)
+    plBtn: {
+      handler(newVal, oldVal) {
+        console.log(newVal, oldVal);
       },
-      deep:true
+      deep: true
     }
   },
   mounted() {

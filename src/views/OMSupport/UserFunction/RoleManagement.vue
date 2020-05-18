@@ -1,6 +1,6 @@
 <template>
   <div class="page-box page">
-    <el-row type="flex">
+    <el-row type="flex" :gutter="20">
       <el-col :span="8">
         <TreeCard
           cardTitle="单位列表"

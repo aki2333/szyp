@@ -8,7 +8,6 @@ let user = JSON.parse(localStorage.getItem('user'))
 let menu = JSON.parse(localStorage.getItem('menu'))
 let token = localStorage.getItem('token')
 
-
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -17,6 +16,7 @@ export default new Vuex.Store({
     user: user || {},
     menu: menu || cdata.menu,
     leftMenu: [],
+    chilrenNav: [],
     breadcrumb: breadData || [],
     nationality: [],
     gender: [],
@@ -39,6 +39,9 @@ export default new Vuex.Store({
     },
     getLeftMenu(state, data) {
       state.leftMenu = data;
+    },
+    getChilrenNav(state, data) {
+      state.chilrenNav = data;
     },
     getBread(state, data) {
       state.breadcrumb = data;

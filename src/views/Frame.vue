@@ -1,8 +1,8 @@
 <template>
   <div id="frame">
-    <Header></Header>
+    <Header v-if="headData.length>0" :headData="headData"></Header>
     <el-container>
-      <Left v-if="$store.state.leftMenu.length>0"></Left>
+      <Left v-if="$store.state.leftMenu.length>0" :leftMenu="$store.state.leftMenu"></Left>
       <el-main class="main">
         <Breadcrumb></Breadcrumb>
         <router-view />
@@ -27,25 +27,54 @@ export default {
     Breadcrumb
   },
   data() {
-    return {};
+    return {
+      headData: []
+    };
   },
-  mounted(){
+  mounted() {
     // let token = this.getUrlParam('authorization');
     // this.$store.commit('getToken',token);
+    this.getUser();
   },
-  methods:{
+  methods: {
+    getUser() {
+      this.$api.post("userController/getUser", {}, r => {
+        this.$store.dispatch("aGetUser", r).then(data => {
+          console.log(data);
+          this.getNav(data);
+        });
+      });
+    },
+    getNav(data) {
+      this.$api.post(
+        "dept/getPermissionTree",
+        {
+          userId: data.userId,
+          userBmbh: data.bmbh
+        },
+        r => {
+          this.$store.dispatch("aGetMenu", r).then(data => {
+            console.log(data);
+            // this.headData = data.length > 0 ? data : this.$cdata.menu;
+            this.headData = this.$cdata.menu;
+
+            this.$store.commit("getLeftMenu", this.headData[0].childrenMenu);
+          });
+        }
+      );
+    }
     //  getUrlParam(name) {
-        // var url="http://10.0.30.78:8083/#/?authorization=jskdjfkjdslkfjdslkjflks"
-        // var url = window.location.href;
-        // 取得url中?后面的字符
-        // var query = url.split("?")[1];
-        // var query = window.location.search.substring(1);
-        // var pair = query.split("=");
-        // if(pair[0] == name){
-          // return pair[1];
-        // }
+    // var url="http://10.0.30.78:8083/#/?authorization=jskdjfkjdslkfjdslkjflks"
+    // var url = window.location.href;
+    // 取得url中?后面的字符
+    // var query = url.split("?")[1];
+    // var query = window.location.search.substring(1);
+    // var pair = query.split("=");
+    // if(pair[0] == name){
+    // return pair[1];
     // }
-  },
+    // }
+  }
 };
 </script>
 <style scoped>

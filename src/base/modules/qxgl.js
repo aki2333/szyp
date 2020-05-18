@@ -78,10 +78,10 @@ const yhgl = {
             cm: '状态',
             dm: 'valid'
         },
-        {
-            cm: '责任区',
-            dm: 'llcs'
-        },
+        // {
+        //     cm: '责任区',
+        //     dm: 'llcs'
+        // },
         {
             cm: '创建人',
             dm: 'createUser'

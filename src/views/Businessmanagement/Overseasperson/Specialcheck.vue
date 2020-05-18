@@ -188,9 +188,9 @@ export default {
         })
       }else if(data.button_type=='xf'){
         this.dialogData = {};
-        if(this.$store.state.user.jb=='1'){
+        if(this.page==1){
           this.labelData = this.$cdata.zxhc.zxhc.xfSContent;
-        }else if(this.$store.state.user.jb=='2'){
+        }else if(this.page==2){
           this.labelData = this.$cdata.zxhc.zxhc.xfFContent;
         }
         this.isShowDialog = true;

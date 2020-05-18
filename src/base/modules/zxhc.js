@@ -54,21 +54,9 @@ const zxhc = {
             dm: 'policestation'
         },
         {
-            cm: '下发时间',
-            type: 'double',
-            dm: 'xfTime',
-            children: [
-                {
-                    cm: '下发开始时间',
-                    type: 'date',
-                    dm: 'suboffice_issuedateStart'
-                },
-                {
-                    cm: '下发结束时间',
-                    type: 'date',
-                    dm: 'suboffice_issuedateEnd'
-                }
-            ]
+            cm: '下发类别',
+            type: 'select',
+            dm: 'datatype'
         },
         {
             cm: '反馈时间',
@@ -88,12 +76,25 @@ const zxhc = {
             ],
         },
         {
-            cm: '下发类别',
-            type: 'select',
-            dm: 'datatype'
+            cm: '下发时间',
+            type: 'double',
+            dm: 'xfTime',
+            children: [
+                {
+                    cm: '下发开始时间',
+                    type: 'date',
+                    dm: 'suboffice_issuedateStart'
+                },
+                {
+                    cm: '下发结束时间',
+                    type: 'date',
+                    dm: 'suboffice_issuedateEnd'
+                }
+            ]
         },
+        
         {
-            cm: '数据状态',
+            cm: '走访状态',
             type: 'select',
             dm: 'backstatus'
         },
@@ -117,7 +118,7 @@ const zxhc = {
         },
         {
             cm: '证件种类',
-            dm: 'passporttype'
+            dm: 'passportType_desc'
         },
         {
             cm: '证件号码',
@@ -140,8 +141,8 @@ const zxhc = {
             dm: 'datatype_desc'
         },
         {
-            cm: '数据状态',
-            dm: 'status_desc'
+            cm: '走访状态',
+            dm: 'backstatus_desc'
         },
         {
             cm: '下发时间',

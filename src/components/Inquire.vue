@@ -12,7 +12,7 @@
     >
       <el-row :gutter="0" type="flex" align="middle" justify="center">
         <el-col :span="20">
-          <el-col :md="12" :lg="8" v-for="(cx,i) in cxData" :key="i">
+          <el-col :span="cx.type=='double'?16:8" v-for="(cx,i) in cxData" :key="i">
             <el-form-item :label="cx.cm" :prop="cx.dm">
               <template v-if="cx.type=='input'">
                 <el-input v-model="inquire[cx.dm]"></el-input>

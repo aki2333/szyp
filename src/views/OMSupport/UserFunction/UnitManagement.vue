@@ -88,13 +88,16 @@ export default {
     getPermissionTree(deptBmbh) {
       this.$cdata.qxgl.getPermissionTree(deptBmbh).then(r => {
         this.treeData2 = r.menuList;
-        this.defaultChecked2 = r.choose;
+        this.defaultChecked2 = JSON.parse(JSON.stringify(r.choose));
       });
     },
     getDeptTempPermTree(tempId) {
+      //this.defaultChecked2 = [];
+      this.cancel();
       this.$cdata.qxgl.getDeptTempPermTree(tempId).then(r => {
-        this.treeData2 = r.menuList;
-        this.defaultChecked2 = r.choose;
+        // this.treeData2 = r.menuList;
+        this.defaultChecked2 = JSON.parse(JSON.stringify(r.choose));
+        console.log(" this.defaultChecked2", this.defaultChecked2);
       });
     },
     // 获取模板列表

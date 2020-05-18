@@ -459,7 +459,7 @@ function getDeptTempPermTree(tempId) {
             {
                 userId: store.state.user.userId,
                 userBmbh: store.state.user.bmbh,
-                tempId: tempId
+                templateId: tempId
             },
             r => {
                 resolve(r)

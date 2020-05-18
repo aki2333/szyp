@@ -141,3 +141,9 @@ input[type="number"]{
     /* padding-right: 30px; */
     padding-right: 0px !important;
 }
+.el-dialog__header{
+  background: #ebebeb;
+}
+.el-dialog__title{
+  color: #818085!important;
+}

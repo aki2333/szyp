@@ -137,10 +137,6 @@ input::-webkit-inner-spin-button {
 input[type="number"]{
     -moz-appearance: textfield;
 }
-.el-input--suffix .el-input__inner {
-    /* padding-right: 30px; */
-    padding-right: 0px !important;
-}
 .el-dialog__header{
   background: #ebebeb;
 }

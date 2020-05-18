@@ -165,11 +165,13 @@ const zxhc = {
             "button_name": "上报",
             "serial": "201",
             "button_type": "sb",
+            "type":"success"
         },
         {
             "button_name": "下发",
             "serial": "201",
             "button_type": "xf",
+            "type":"primary"
         },
     ],
     lbTab: [
@@ -201,69 +203,7 @@ const zxhc = {
         },
     ],
     //编辑弹窗
-    editcontent:[
-        {
-            cm:'姓名',
-            type:'input',
-            dm:'name',
-        },
-        {
-            cm:'性别',
-            type:'select',
-            dm:'gender',
-        },
-        {
-            cm:'出生日期',
-            type:'datePicker',
-            dm:'birthday',
-        },
-        {
-            cm:'国家地区',
-            type:'select',
-            dm:'nationality',
-        },
-        {
-            cm:'证件种类',
-            type:'select',
-            dm:'passportType',
-        },
-        {
-            cm:'证件号码',
-            type:'input',
-            dm:'passportno',
-        },
-        {
-            cm:'下发类别',
-            type:'select',
-            dm:'datatype',
-        },
-        {
-            cm:'住宿地址',
-            type:'input',
-            dm:'address',
-            dis:true,
-        },
-        {
-            cm:'所属分局',
-            type:'select',
-            dm:'suboffice',
-        },
-        {
-            cm:'所属派出所',
-            type:'select',
-            dm:'policestation',
-        },
-        {
-            cm:'走访状态',
-            type:'radio',
-            dm:'backstatus'
-        },
-        {
-            cm:'备注',
-            type:'input',
-            dm:'remarks'
-        },
-    ],
+    editcontent:[],
     //下发市局弹窗
     xfSContent:[
         {
@@ -291,6 +231,7 @@ function plBtnShow(flag){
                     "button_name": "下发",
                     "serial": "201",
                     "button_type": "xf",
+                    "type":"primary"
                 },
             ]
         }else if(flag==3){
@@ -301,19 +242,98 @@ function plBtnShow(flag){
                     "button_name": "上报",
                     "serial": "201",
                     "button_type": "sb",
+                    "type":"success"
                 },
                 {
                     "button_name": "下发",
                     "serial": "201",
                     "button_type": "xf",
+                    "type":"primary"
                 },
             ]
         }
         resolve(zxhc.plBtn)
     })
-    
+}
+function editShow(jb){
+    return new Promise((resolve) => {
+        zxhc.editcontent=[
+            {
+                cm:'姓名',
+                type:'input',
+                dm:'name',
+                dis:jb=="3"?true:false
+            },
+            {
+                cm:'性别',
+                type:'select',
+                dm:'gender',
+                dis:jb=="3"?true:false
+            },
+            {
+                cm:'出生日期',
+                type:'datePicker',
+                dm:'birthday',
+                dis:jb=="3"?true:false
+            },
+            {
+                cm:'国家地区',
+                type:'select',
+                dm:'nationality',
+                dis:jb=="3"?true:false
+            },
+            {
+                cm:'证件种类',
+                type:'select',
+                dm:'passportType',
+                dis:jb=="3"?true:false
+            },
+            {
+                cm:'证件号码',
+                type:'input',
+                dm:'passportno',
+                dis:jb=="3"?true:false
+            },
+            {
+                cm:'下发类别',
+                type:'select',
+                dm:'datatype',
+                dis:jb=="3"?true:false
+            },
+            {
+                cm:'住宿地址',
+                type:'input',
+                dm:'address',
+                dis:true,
+            },
+            {
+                cm:'所属分局',
+                type:'select',
+                dm:'suboffice',
+                dis:jb=="2"||jb=="3"?true:false
+            },
+            {
+                cm:'所属派出所',
+                type:'select',
+                dm:'policestation',
+                dis:jb=="3"?true:false
+            },
+            {
+                cm:'走访状态',
+                type:'radio',
+                dm:'backstatus'
+            },
+            {
+                cm:'备注',
+                type:'input',
+                dm:'remarks'
+            },
+        ]
+        resolve(zxhc.editcontent)
+    })
 }
 export default {
     zxhc,
-    plBtnShow
+    plBtnShow,
+    editShow
 }

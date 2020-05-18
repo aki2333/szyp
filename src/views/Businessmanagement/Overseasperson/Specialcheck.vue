@@ -200,7 +200,9 @@ export default {
       this.dialogTitle = data.btn.button_name;
       this.dialogType = data.btn.button_type;
       if(data.btn.button_type == 'edit'){
-        this.labelData = this.$cdata.zxhc.zxhc.editcontent;
+        this.$cdata.zxhc.editShow(this.$store.state.user.jb).then(data =>{
+          this.labelData = data;
+        });
         this.$store.dispatch("aGetBackstatus",data.data.datatype)
         this.isShowDialog = true;
         this.dialogData = data.data

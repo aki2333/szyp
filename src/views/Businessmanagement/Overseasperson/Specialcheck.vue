@@ -106,6 +106,7 @@ export default {
       this.$cdata.zxhc.plBtnShow(this.page).then(data => {
         this.plBtn = data
       })
+      this.getTable();
     })
       
   },

@@ -85,7 +85,10 @@ export default {
       console.log("查询用户列表-", this.cx);
       this.$api.post("role/getRoleUser", this.cx, r => {
         this.tableData = r;
-        console.log(r);
+        this.tableData.list.forEach(item => {
+          item.status = this.cx.pd.status;
+        });
+        console.log(this.tableData);
       });
     },
     // 获取分页等信息
@@ -149,12 +152,6 @@ export default {
       this.cx.pd.status = data;
       this.getTable();
     },
-    // save() {
-    //   this.$emit("dialogSave", {
-    //     type: this.dialogType,
-    //     data: { buttonList: this.buttonList, menuList: this.menuList }
-    //   });
-    // },
     cancel() {
       this.$emit("dialogCancel");
     },

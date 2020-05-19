@@ -26,7 +26,7 @@
             @blFnc="blFnc"
           ></Table>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="8" v-if="dwtbShow">
           <Table
             lbType="dwtb"
             :lbData="$cdata.qxgl.yhgl.dwtb"
@@ -38,7 +38,7 @@
             @rowClick="rowClick"
           ></Table>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="10" v-if="jstbShow">
           <Table
             lbType="jstb"
             :isSelect="true"
@@ -54,7 +54,7 @@
             @userRole="userRole"
           ></Table>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="6" v-if="gnlbShow">
           <TreeCard
             :isCheckbox="false"
             treeType="gnlb"
@@ -66,7 +66,7 @@
           ></TreeCard>
         </el-col>
       </el-row>
-      <div class="page-btn-box">
+      <div class="page-btn-box" v-if="jstbShow">
         <el-button size="mini" type="primary" round @click="saveUserRoleInfo">保存</el-button>
       </div>
     </div>
@@ -116,7 +116,7 @@ export default {
         order: "serial",
         direction: 1
       },
-      disPlBtn: true,
+      disPlBtn: false,
       tableData: {
         list: [],
         total: 0,
@@ -139,7 +139,10 @@ export default {
       dialogType: "",
       dialogData: {},
       labelData: [],
-      userRoleData: []
+      userRoleData: [],
+      dwtbShow: false,
+      jstbShow: false,
+      gnlbShow: false
     };
   },
   mounted() {
@@ -152,7 +155,7 @@ export default {
     cxFnc(data) {
       this.cx.pd = data;
       console.log("用户类型", data);
-      this.disPlBtn = data.userType == 0 ? true : false;
+      // this.disPlBtn = data.userType == 0 ? true : false;
       this.getTable();
     },
     // 获取分页等信息
@@ -171,12 +174,18 @@ export default {
         this.tableData = r.resultList;
         this.tableData2 = { list: [] };
         this.tableData3 = { list: [] };
+        this.dwtbShow = false;
+        this.jstbShow = false;
+        this.gnlbShow = false;
       });
     },
     // 查询用户单位列表
     queryUserDept(bmbh) {
       this.$api.post("userController/queryUserDept", { bmbh: bmbh }, r => {
         this.tableData2.list = r.deptList;
+        this.dwtbShow = true;
+        this.jstbShow = false;
+        this.gnlbShow = false;
       });
     },
     // 获取角色列表
@@ -186,6 +195,8 @@ export default {
         { bmbh: bmbh, quanJu: "true", userId: this.dialogData.userId },
         r => {
           this.tableData3.list = r;
+          this.jstbShow = true;
+          this.gnlbShow = false;
           let arr = [...r];
           this.selection = [];
           arr.forEach(item => {
@@ -201,6 +212,7 @@ export default {
     getRolePermissionTree(roleId) {
       this.$cdata.qxgl.getRolePermissionTree(roleId).then(data => {
         this.treeData1 = data;
+        this.gnlbShow = true;
         this.$fnc
           .arrayIndex(data, "choose", "serial", "childrenMenu")
           .then(data => {
@@ -211,6 +223,7 @@ export default {
     getTree(data) {
       console.log(data);
     },
+    // 点击表格行
     rowClick(data) {
       if (data.type == "yhtb") {
         this.queryUserDept(data.data.bmbh);
@@ -233,9 +246,17 @@ export default {
         this.isShowDialog = true;
       } else if (data.button_type == "xg") {
         this.dialogData = this.currentRow;
+
+        console.log(this.dialogData);
         if (JSON.stringify(this.dialogData) == "{}") {
           this.$message({
             message: "请先选择用户",
+            type: "warning"
+          });
+          return false;
+        } else if (this.dialogData.userType == "系统用户") {
+          this.$message({
+            message: "该用户为系统用户，不可修改",
             type: "warning"
           });
           return false;
@@ -248,6 +269,12 @@ export default {
         if (JSON.stringify(this.dialogData) == "{}") {
           this.$message({
             message: "请先选择用户",
+            type: "warning"
+          });
+          return false;
+        } else if (this.dialogData.userType == "系统用户") {
+          this.$message({
+            message: "该用户为系统用户，不可修改",
             type: "warning"
           });
           return false;

@@ -279,13 +279,13 @@ const jsgl = {
         {
             "button_name": "停用",
             "button_type": "ty",
-            "user_ctrl": 0,
+            "user_ctrl": '1',
             "serial": "201",
         },
         {
             "button_name": "启用",
             "button_type": "qy",
-            "user_ctrl": 1,
+            "user_ctrl": '0',
             "serial": "201",
         }
     ],
@@ -369,11 +369,13 @@ const jsgl = {
             "button_name": "添加",
             "button_type": "tj",
             "serial": "201",
+            "user_ctrl": '0',
         },
         {
             "button_name": "删除",
             "button_type": "sc",
             "serial": "201",
+            "user_ctrl": '1',
         }
     ],
 }

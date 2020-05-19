@@ -7,23 +7,70 @@
           treeType="gnlb"
           :treeData="treeData2"
           :treeProps="treeProps2"
-          :defaultChecked="defaultChecked2"
           nodeKey="serial"
           :isExpand="true"
           :isCheckbox="false"
           @getTree="getTree"
-          @getCheckedNodes="getCheckedNodes"
         ></TreeCard>
       </el-col>
       <el-col :span="16">
         <div class="form-box">
-          <Form
-            v-if="formType"
-            :cxData="labelData"
-            :dialogType="formType"
-            :dialogData="formData"
-            @dialogSave="formSave"
-          ></Form>
+          <el-form
+            :model="formData"
+            status-icon
+            :rules="rules"
+            size="small"
+            ref="form"
+            label-width="100px"
+          >
+            <el-row :gutter="30" type="flex" align="middle" justify="center">
+              <el-col :span="16">
+                <el-col :span="24" v-for="(cx,i) in labelData" :key="i">
+                  <el-form-item :label="cx.cm" :prop="cx.dm">
+                    <template v-if="cx.type=='input'">
+                      <el-input v-model="formData[cx.dm]" :disabled="formDisabled"></el-input>
+                    </template>
+                    <template v-else-if="cx.type=='select'">
+                      <el-select
+                        v-model="formData[cx.dm]"
+                        v-if="cx.optype"
+                        clearable
+                        :disabled="true"
+                        placeholder="请选择"
+                      >
+                        <el-option
+                          v-for="item in $cdata.options[cx.dm]"
+                          :key="item.dm"
+                          :label="item.mc"
+                          :value="item.dm"
+                        ></el-option>
+                      </el-select>
+                    </template>
+                  </el-form-item>
+                </el-col>
+              </el-col>
+            </el-row>
+          </el-form>
+          <div class="page-btn-box">
+            <el-button size="mini" type="primary" round @click="addMenu">新建</el-button>
+            <el-button
+              size="mini"
+              type="primary"
+              round
+              @click="updateMenu"
+              v-if="formData.menu_order&&formData.menu_order!='0'"
+            >修改</el-button>
+            <el-button size="mini" type="success" round @click="save('form','add')" v-if="addBc">保存</el-button>
+            <el-button
+              size="mini"
+              type="success"
+              round
+              @click="save('form','update')"
+              v-if="updateBc"
+            >保存</el-button>
+            <el-button size="mini" type="info" round @click="cancel" v-if="addBc||updateBc">取消</el-button>
+            <el-button size="mini" type="info" round @click="delMenu">删除</el-button>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -31,10 +78,10 @@
 </template>
 <script>
 import TreeCard from "@/components/TreeCard.vue";
-import Form from "@/components/Form.vue";
+// import Form from "@/components/Form.vue";
 
 export default {
-  components: { TreeCard, Form },
+  components: { TreeCard },
   data() {
     return {
       treeData2: [],
@@ -42,12 +89,13 @@ export default {
         label: "menu_name",
         children: "childrenMenu"
       },
-      defaultChecked2: [],
-      menuList: [],
-      buttonList: [],
       labelData: this.$cdata.qxgl.cdgl.cd,
-      formData: { menu_url: "" },
-      formType: ""
+      rules: {},
+      formData: { menu_url: "", menu_order: "" },
+      formDisabled: true,
+      formType: "",
+      addBc: false,
+      updateBc: false
     };
   },
   mounted() {
@@ -58,36 +106,44 @@ export default {
     getMenuTree() {
       this.$api.post("menuController/getMenuTree", {}, r => {
         this.treeData2 = r;
-        // this.defaultChecked2 = r.choose;
       });
     },
     getTree(data) {
       console.log("点击树节点-", data);
       this.formType = data.type;
-      // Object.assign(this.formData, data.data);
-      this.formData = data.data;
+      this.formDisabled = true;
+      Object.assign(this.formData, data.data);
+      this.formData = JSON.parse(JSON.stringify(this.formData));
+      this.addBc = false;
+      this.updateBc = false;
     },
     getCheckedKeys(data) {
       if (data.type == "dwlb") {
         this.bmbhList = data.data;
       }
     },
-    getCheckedNodes(data) {
-      if (data.type == "gnlb") {
-        console.log("gnlb", data);
-        this.buttonList = [];
-        this.menuList = [];
-        let arr = [...data.data];
-        arr.forEach(item => {
-          if (item.menu_type == "B") {
-            this.buttonList.push(item.serial);
-          } else {
-            this.menuList.push(item.serial);
-          }
-        });
-      }
-    },
     // 添加
+    addMenu() {
+      if (JSON.stringify(this.formData) == "{}") {
+        this.$message({
+          message: "请先选择菜单",
+          type: "warning"
+        });
+        return false;
+      }
+      this.formDisabled = false;
+      this.addBc = true;
+      if (this.formData.menu_grade == "3") {
+        this.formData.menu_type = "B";
+      } else {
+        this.formData.menu_type = "P";
+      }
+      this.formData.parent_id = this.formData.serial;
+      this.formData.menu_name = "";
+      this.formData.menu_order = "";
+      this.formData.menu_url = "";
+      this.formData.serial = "";
+    },
     addMenuInfo(data) {
       this.$api.post("menuController/addMenuInfo", data, r => {
         this.$message({
@@ -98,6 +154,17 @@ export default {
       });
     },
     // 修改
+    updateMenu() {
+      if (JSON.stringify(this.formData) == "{}") {
+        this.$message({
+          message: "请先选择菜单",
+          type: "warning"
+        });
+        return false;
+      }
+      this.formDisabled = false;
+      this.updateBc = true;
+    },
     updateMenuInfo(data) {
       this.$api.post("menuController/updateMenuInfo", data, r => {
         this.$message({
@@ -107,14 +174,40 @@ export default {
         this.cancel();
       });
     },
+    save(formName, type) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          let _data = this.formData;
+          _data.userId = this.$store.state.user.userId;
+          if (type == "update") {
+            this.updateMenuInfo(_data);
+          } else {
+            this.addMenuInfo(_data);
+          }
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+
     // 删除
-    deleteMenuInfo(data) {
+    delMenu() {
+      if (JSON.stringify(this.formData) == "{}") {
+        this.$message({
+          message: "请先选择菜单",
+          type: "warning"
+        });
+        return false;
+      }
+      let _data = this.formData;
+      _data.userId = this.$store.state.user.userId;
       this.$confirm("是否确认删除?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
-        this.$api.post("menuController/deleteMenuInfo", data, r => {
+        this.$api.post("menuController/deleteMenuInfo", _data, r => {
           this.$message({
             message: r,
             type: "success"
@@ -123,23 +216,12 @@ export default {
         });
       });
     },
-    formSave(data) {
-      console.log("获取表单数据=", data);
-      let _data = data.data;
-      _data.userId = this.$store.state.user.userId;
-      if (data.btnType == "del") {
-        this.deleteMenuInfo(_data);
-      } else if (data.data.serial) {
-        this.updateMenuInfo(_data);
-      } else {
-        this.addMenuInfo(_data);
-      }
-    },
     // 清除
     cancel() {
       this.getMenuTree();
       this.formData = {};
       this.formType = "";
+      this.formDisabled = true;
     }
   }
 };
@@ -149,5 +231,7 @@ export default {
   height: 100%;
   display: flex;
   align-items: center;
+  flex-direction: column;
+  justify-content: center;
 }
 </style>

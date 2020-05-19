@@ -1,10 +1,10 @@
 // 配置API接口地址
-// var root = 'http://192.168.3.131:9404'//任
-var root = 'http://10.0.8.237:9404'
+var root = 'http://192.168.3.131:9404'//任
+// var root = 'http://10.0.8.237:9404'
 
-// var root1 = 'http://192.168.3.131:9405'//石飞
+var root1 = 'http://192.168.3.131:9405'//石飞
 
-var root1 = 'http://10.0.30.43:9405'//石飞
+// var root1 = 'http://10.0.30.43:9405'//石飞
 // 引用axios
 import axios from 'axios';
 import store from '@/store'

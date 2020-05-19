@@ -86,7 +86,7 @@ th {
   background-color: #1a355b!important;
 }
 
-.inquire-ruleForm .el-col-8{
+.inquire-ruleForm .el-col-8,.inquire-ruleForm .el-col-16{
   height: 45px;
 }
 .page>.inquire .el-form-item__label,.page>.inquire input{

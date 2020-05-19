@@ -76,6 +76,11 @@ const zxhc = {
             ],
         },
         {
+            cm: '走访状态',
+            type: 'select',
+            dm: 'backstatus'
+        },
+        {
             cm: '下发时间',
             type: 'double',
             dm: 'xfTime',
@@ -93,11 +98,7 @@ const zxhc = {
             ]
         },
         
-        {
-            cm: '走访状态',
-            type: 'select',
-            dm: 'backstatus'
-        },
+        
     ],
     lb: [
         {

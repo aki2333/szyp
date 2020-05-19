@@ -192,7 +192,7 @@ export default {
     getRole(bmbh) {
       this.$api.post(
         "role/getRole",
-        { bmbh: bmbh, quanJu: "true", userId: this.dialogData.userId },
+        { bmbh: bmbh, quanJu: "true", userId: this.currentRow.userId },
         r => {
           this.tableData3.list = r;
           this.jstbShow = true;
@@ -231,7 +231,6 @@ export default {
       } else if (data.type == "dwtb") {
         this.getRole(data.data.xtyhbmbh);
       } else if (data.type == "jstb") {
-        console.log("guoqu");
         this.getRolePermissionTree(data.data.serial);
       }
     },

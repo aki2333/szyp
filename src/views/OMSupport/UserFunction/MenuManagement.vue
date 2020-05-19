@@ -57,14 +57,16 @@
               type="primary"
               round
               @click="addMenu"
-              v-if="formData.menu_type!='B'"
+              :disabled="xjDis"
+              v-if="formData.menu_type!='B'&&!addBc"
             >新建</el-button>
             <el-button
               size="mini"
               type="primary"
+              :disabled="xgDis"
               round
               @click="updateMenu"
-              v-if="(formData.menu_order&&formData.menu_order!='0')||formData.menu_type=='B'"
+              v-if="((formData.menu_order&&formData.menu_order!='0')||formData.menu_type=='B')&&!updateBc"
             >修改</el-button>
             <el-button size="mini" type="success" round @click="save('form','add')" v-if="addBc">保存</el-button>
             <el-button
@@ -98,10 +100,13 @@ export default {
       labelData: this.$cdata.qxgl.cdgl.cd,
       rules: {},
       formData: { menu_url: "", menu_order: "" },
+      oldformData: {},
       formDisabled: true,
       formType: "",
       addBc: false,
-      updateBc: false
+      updateBc: false,
+      xjDis: false,
+      xgDis: false
     };
   },
   mounted() {
@@ -118,8 +123,11 @@ export default {
       console.log("点击树节点-", data);
       this.formType = data.type;
       this.formDisabled = true;
+      Object.assign(this.oldformData, data.data);
       Object.assign(this.formData, data.data);
       this.formData = JSON.parse(JSON.stringify(this.formData));
+      this.oldformData = JSON.parse(JSON.stringify(this.oldformData));
+
       this.addBc = false;
       this.updateBc = false;
     },
@@ -130,7 +138,7 @@ export default {
     },
     // 添加
     addMenu() {
-      if (this.formData.serial == "") {
+      if (!this.formData.serial) {
         this.$message({
           message: "请先选择菜单",
           type: "warning"
@@ -139,6 +147,7 @@ export default {
       }
       this.formDisabled = false;
       this.addBc = true;
+      this.updateBc = false;
       if (this.formData.menu_grade == "3") {
         this.formData.menu_type = "B";
       } else {
@@ -149,6 +158,7 @@ export default {
       this.formData.menu_order = "";
       this.formData.menu_url = "";
       this.formData.serial = "";
+      //console.log(this.oldformData, this.formData);
     },
     addMenuInfo(data) {
       this.$api.post("menuController/addMenuInfo", data, r => {
@@ -161,7 +171,9 @@ export default {
     },
     // 修改
     updateMenu() {
-      if (this.formData.serial == "") {
+      Object.assign(this.formData, this.oldformData);
+      this.formData = JSON.parse(JSON.stringify(this.formData));
+      if (!this.formData.serial) {
         this.$message({
           message: "请先选择菜单",
           type: "warning"
@@ -170,6 +182,7 @@ export default {
       }
       this.formDisabled = false;
       this.updateBc = true;
+      this.addBc = false;
     },
     updateMenuInfo(data) {
       this.$api.post("menuController/updateMenuInfo", data, r => {
@@ -199,7 +212,7 @@ export default {
 
     // 删除
     delMenu() {
-      if (this.formData.serial == "") {
+      if (!this.formData.serial) {
         this.$message({
           message: "请先选择菜单",
           type: "warning"

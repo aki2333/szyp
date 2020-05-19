@@ -159,7 +159,10 @@ export default {
   },
   watch: {
     selection(val) {
-      this.toggleSelection(val);
+      console.log(val);
+      this.$nextTick(function() {
+        this.toggleSelection(val);
+      });
     },
     plBtn: {
       handler(newVal, oldVal) {
@@ -170,6 +173,9 @@ export default {
   },
   mounted() {
     console.log("表格", this.lbType, this.tableData);
+    this.$nextTick(function() {
+      this.toggleSelection(this.selection);
+    });
   },
   methods: {
     handleSizeChange(val) {
@@ -187,10 +193,11 @@ export default {
       this.$emit("userRole", val);
     },
     toggleSelection(rows) {
+      //this.$refs[this.refName].toggleAllSelection();
       if (rows) {
         rows.forEach(row => {
           console.log("row", row, this.$refs[this.refName], this.refName);
-          this.$refs[this.refName].toggleRowSelection(row);
+          this.$refs[this.refName].toggleRowSelection(row, true);
         });
       } else {
         this.$refs[this.refName].clearSelection();

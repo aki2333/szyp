@@ -18,7 +18,7 @@
           v-if="leftWidth=='225px'"
         >{{ln.menu_name}}</div>
       </div>
-      <img class="left-open" src="@/assets/images/main/left_open.png" @click="openLeft" />
+      <img class="left-open" :src="leftWidth=='225px'?require('@/assets/images/main/left_open.png'):require('@/assets/images/main/left_close.png')" @click="openLeft" />
     </div>
     <div class="chilren-nav-box" v-if="leftWidth=='225px'">
       <div

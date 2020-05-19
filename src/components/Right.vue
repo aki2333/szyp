@@ -1,6 +1,6 @@
 <template>
   <el-aside :width="righttWidth" class="right-box">
-    <img class="right-open" src="@/assets/images/main/right_open.png" @click="openRight" />
+    <img class="right-open" :src="righttWidth=='38px'?require('@/assets/images/main/right_open.png'):require('@/assets/images/main/right_close.png')" @click="openRight" />
   </el-aside>
 </template>
 

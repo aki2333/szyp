@@ -279,6 +279,13 @@ const jsgl = {
         {
             "button_name": "停用",
             "button_type": "ty",
+            "user_ctrl": 0,
+            "serial": "201",
+        },
+        {
+            "button_name": "启用",
+            "button_type": "qy",
+            "user_ctrl": 1,
             "serial": "201",
         }
     ],
@@ -300,15 +307,10 @@ const jsgl = {
 
         {
             cm: '所属单位',
-            type: 'select',
-            dm: 'bmbh',
-        },
-        {
-            cm: '选择状态',
-            type: 'select',
-            dm: 'status',
-            must: true,
-            optype: true
+            type: 'input',
+            col: 24,
+            dis: true,
+            dm: 'bmmc',
         },
         {
             cm: '登录名称',
@@ -324,6 +326,16 @@ const jsgl = {
             cm: '警号',
             type: 'input',
             dm: 'jinghao'
+        }
+    ],
+    yhlbTab: [
+        {
+            "tab_name": '已添加',
+            "page": '1',
+        },
+        {
+            "tab_name": '未添加',
+            "page": '0',
         }
     ],
     yhlb: [
@@ -356,13 +368,11 @@ const jsgl = {
         {
             "button_name": "添加",
             "button_type": "tj",
-            "status": "false",
             "serial": "201",
         },
         {
             "button_name": "删除",
             "button_type": "sc",
-            "status": "true",
             "serial": "201",
         }
     ],

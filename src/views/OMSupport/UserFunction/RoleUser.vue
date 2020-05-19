@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div>
     <div class="tc-cx">
       <Inquire :cxData="$cdata.qxgl.jsgl.yhcx" :pd="cx.pd" @cxFnc="cxFnc"></Inquire>
     </div>
@@ -10,9 +10,12 @@
           :isSelect="false"
           :isPl="false"
           :lbBtn="$cdata.qxgl.jsgl.yhlbBtn"
+          :isTab="true"
+          :lbTab="$cdata.qxgl.jsgl.yhlbTab"
           @blFnc="blFnc"
           @pageSizeFnc="pageSizeFnc"
           @pageNumFnc="pageNumFnc"
+          @tabFnc="tabFnc"
           :tableData="tableData"
         ></Table>
       </el-col>
@@ -44,14 +47,15 @@ export default {
       // 【业务数据】
       cx: {
         pd: {
-          status: "true",
+          status: "1",
           quanJu: "true",
           roleType: this.dialogData.role_type,
           roleId: this.dialogData.serial,
           xm: "",
           loginName: "",
           jinghao: "",
-          bmbh: this.dialogData.create_unitid
+          bmbh: this.dialogData.bmbh,
+          bmmc: this.dialogData.bmmc
         },
         pageSize: 10,
         pageNum: 1,
@@ -140,6 +144,11 @@ export default {
         });
       });
     },
+    tabFnc(data) {
+      console.log("tab切换", data);
+      this.cx.pd.status = data;
+      this.getTable();
+    },
     // save() {
     //   this.$emit("dialogSave", {
     //     type: this.dialogType,
@@ -152,7 +161,7 @@ export default {
     // 开始
     begin() {
       this.getTable();
-      this.$store.dispatch("aGetBmbh", { bmbh: this.$store.state.user.bmbh });
+      //this.$store.dispatch("aGetBmbh", { bmbh: this.$store.state.user.bmbh });
     }
   }
 };

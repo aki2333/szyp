@@ -12,10 +12,10 @@
     >
       <el-row :gutter="0" type="flex" align="middle" justify="center">
         <el-col :span="20">
-          <el-col :span="cx.type=='double'?16:8" v-for="(cx,i) in cxData" :key="i">
+          <el-col :span="cx.type=='double'?16:(cx.col?cx.col:8)" v-for="(cx,i) in cxData" :key="i">
             <el-form-item :label="cx.cm" :prop="cx.dm">
               <template v-if="cx.type=='input'">
-                <el-input v-model="inquire[cx.dm]"></el-input>
+                <el-input v-model="inquire[cx.dm]" :disabled="cx.dis"></el-input>
               </template>
               <template v-else-if="cx.type=='select'">
                 <el-select

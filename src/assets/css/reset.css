@@ -81,7 +81,7 @@ th {
   padding: 0;
   text-align: left;
 }
-.inquire .el-input__inner{
+.page>.inquire .el-input__inner{
   border-color: #1a355b!important;
   background-color: #1a355b!important;
 }
@@ -89,7 +89,7 @@ th {
 .inquire-ruleForm .el-col-8{
   height: 45px;
 }
-.inquire .el-form-item__label,.inquire input{
+.page>.inquire .el-form-item__label,.page>.inquire input{
   color: #dfe6ee!important;
 }
 

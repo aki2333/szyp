@@ -63,6 +63,7 @@ export default {
         children: "children"
       },
       defaultChecked1: [],
+      treeBMXX: {},
       // 【展示数据】
       isSelect: false,
       isEdit: true,
@@ -106,6 +107,7 @@ export default {
     },
     getTree(data) {
       if (data.type == "dwlb") {
+        this.treeBMXX = data.data;
         this.getRole(data.data.bmbh);
       }
     },
@@ -137,9 +139,13 @@ export default {
       if (this.dialogType == "bj") {
         this.isShowDialog = true;
       } else if (this.dialogType == "yh") {
+        this.dialogData.bmbh = this.treeBMXX.bmbh;
+        this.dialogData.bmmc = this.treeBMXX.bmmc;
         this.isShowDialog = true;
       } else if (this.dialogType == "ty") {
         this.deleteRole(data.data);
+      } else if (this.dialogType == "qy") {
+        this.enableRole(data.data);
       }
     },
     // 弹窗返回接口
@@ -194,6 +200,21 @@ export default {
         userId: this.dialogData.create_user_id
       };
       this.$api.post("role/deleteRole", p, r => {
+        this.$message({
+          message: r,
+          type: "success"
+        });
+        this.isShowDialog = false;
+        this.getRole(this.cx.bmbh);
+      });
+    },
+    //启用
+    enableRole() {
+      let p = {
+        roleId: this.dialogData.serial,
+        userId: this.dialogData.create_user_id
+      };
+      this.$api.post("role/enableRole", p, r => {
         this.$message({
           message: r,
           type: "success"

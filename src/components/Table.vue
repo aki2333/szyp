@@ -51,6 +51,7 @@
             @click="handleClick(scope.row,lbt)"
             type="text"
             size="small"
+            :disabled="lbt.user_ctrl&&(lbt.user_ctrl==scope.row.status)"
           >{{lbt.button_name}}</el-button>
         </template>
       </el-table-column>
@@ -158,7 +159,7 @@ export default {
     }
   },
   mounted() {
-    console.log("表格", this.lbType);
+    console.log("表格", this.lbType, this.tableData);
   },
   methods: {
     handleSizeChange(val) {

@@ -95,7 +95,7 @@ export default {
     // 获取角色列表
     selectTemplateList() {
       this.$api.post("templateController/selectTemplateList", this.cx, r => {
-        this.tableData.list = r.list;
+        this.tableData = r;
       });
     },
     // 获取功能列表
@@ -120,16 +120,16 @@ export default {
     getCheckedNodes(data) {
       if (data.type == "gnlb") {
         // console.log("gnlb", data);
-        let buttonList = [];
-        let menuList = [];
+        this.buttonList = [];
+        this.menuList = [];
         let arr = [...data.data];
         arr.forEach(item => {
           if (item.menu_type == "B") {
-            buttonList.push(item.serial);
-            this.buttonList = buttonList;
+            this.buttonList.push(item.serial);
+            //this.buttonList = buttonList;
           } else {
-            menuList.push(item.serial);
-            this.menuList = menuList;
+            this.menuList.push(item.serial);
+            // this.menuList = menuList;
           }
         });
       }
@@ -171,7 +171,7 @@ export default {
           type: "success"
         });
         this.isShowDialog = false;
-        this.selectTemplateList();
+        this.begin();
       });
     },
     // 编辑
@@ -188,27 +188,34 @@ export default {
           message: r,
           type: "success"
         });
-        this.selectTemplateList();
+        this.begin();
       });
     },
 
     // 停用
     deleteTemplate() {
-      let p = {
-        serial: this.checkRow.serial,
-        userId: this.$store.state.user.userId
-      };
-      this.$api.post("templateController/deleteTemplate", p, r => {
-        this.$message({
-          message: r,
-          type: "success"
+      this.$confirm("是否确认删除?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        let p = {
+          serial: this.checkRow.serial,
+          userId: this.$store.state.user.userId
+        };
+        this.$api.post("templateController/deleteTemplate", p, r => {
+          this.$message({
+            message: r,
+            type: "success"
+          });
+          this.begin();
         });
-        this.selectTemplateList();
       });
     },
     // 开始
     begin() {
       this.selectTemplateList();
+      this.treeData2 = [];
     }
   }
 };

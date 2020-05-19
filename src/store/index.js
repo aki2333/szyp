@@ -107,6 +107,12 @@ export default new Vuex.Store({
         resolve(payload)
       })
     },
+    aGetLeftMenu(context, payload) {
+      return new Promise((resolve) => {
+        context.commit('getLeftMenu', payload)
+        resolve(payload)
+      })
+    },
     aGetBread(context, payload) {
       return new Promise((resolve) => {
         context.commit('getBread', payload)

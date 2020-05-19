@@ -55,10 +55,14 @@ export default {
         r => {
           this.$store.dispatch("aGetMenu", r).then(data => {
             console.log(data);
-            // this.headData = data.length > 0 ? data : this.$cdata.menu;
-            this.headData = this.$cdata.menu;
-
-            this.$store.commit("getLeftMenu", this.headData[0].childrenMenu);
+            console.log("aaa", a);
+            this.headData = data[0].childrenMenu;
+            let a = [...this.headData];
+            this.$store
+              .dispatch("aGetLeftMenu", a.childrenMenu[0].childrenMenu)
+              .then(data2 => {
+                console.log(this.$store.state, data2);
+              });
           });
         }
       );

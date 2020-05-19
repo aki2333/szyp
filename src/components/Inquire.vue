@@ -125,16 +125,26 @@ export default {
       default: () => {}
     }
   },
+  watch: {
+    pd(val) {
+      console.log("sssss", val);
+    }
+  },
   data() {
     return {
       inquire: this.pd,
       rules: {},
       queryIsShow: true,
       openImg: require("../assets/images/main/open_query.png"),
-      closeImg: require("../assets/images/main/close_query.png")
+      closeImg: require("../assets/images/main/close_query.png"),
+      mrz: {}
     };
   },
-  mounted() {},
+  mounted() {
+    console.log("pd", this.pd);
+    Object.assign(this.mrz, this.pd);
+    this.mrz = JSON.parse(JSON.stringify(this.mrz));
+  },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
@@ -153,8 +163,10 @@ export default {
     linkChange(key, val) {
       this.$emit("lcFnc", { key: key, data: val });
     },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
+    resetForm() {
+      this.inquire = this.mrz;
+      // this.$emit("getFirstPd", this.mrz);
+      // this.$refs[formName].resetFields();
     }
   }
 };

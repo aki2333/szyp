@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <Inquire :cxData="cxData" :pd="cx.pd" @cxFnc="cxFnc"></Inquire>
+    <Inquire :cxData="cxData" :pd="cx.pd" @cxFnc="cxFnc" @getFirstPd="getFirstPd"></Inquire>
     <div class="t-tab-top">
       <div class="tab-top-item hand">
         <img src="../../../assets/images/main/tab_2_pre.png" alt />
@@ -336,16 +336,22 @@ export default {
     },
     // 删除用户
     delUser(data) {
-      let p = {
-        userId: data.userId,
-        status: "0"
-      };
-      this.$api.post("userController/updateOtherUserInfo", p, r => {
-        this.$message({
-          message: r.message,
-          type: "success"
+      this.$confirm("是否确认删除?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        let p = {
+          userId: data.userId,
+          status: "0"
+        };
+        this.$api.post("userController/updateOtherUserInfo", p, r => {
+          this.$message({
+            message: r.message,
+            type: "success"
+          });
+          this.getTable();
         });
-        this.getTable();
       });
     },
     // 重置密码
@@ -394,6 +400,10 @@ export default {
         this.getTable();
         // this.isShowDialog = false;
       });
+    },
+    getFirstPd(data) {
+      this.cx.pd = data;
+      console.log("fiff", data, this.cx);
     },
     begin() {
       this.getTable();

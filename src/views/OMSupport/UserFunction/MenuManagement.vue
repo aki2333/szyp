@@ -219,9 +219,11 @@ export default {
     // 清除
     cancel() {
       this.getMenuTree();
-      this.formData = {};
+      this.formData = { menu_url: "", menu_order: "" };
       this.formType = "";
       this.formDisabled = true;
+      this.addBc = false;
+      this.updateBc = false;
     }
   }
 };

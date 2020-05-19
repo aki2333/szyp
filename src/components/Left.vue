@@ -101,7 +101,7 @@ export default {
 .left-open {
   position: absolute;
   right: 0;
-  top: 700px;
+  top: 400px;
 }
 .left-nav-item {
   width: 100%;

@@ -30,6 +30,6 @@ export default {
 .right-open {
   position: absolute;
   left: 0;
-  top: 700px;
+  top: 400px;
 }
 </style>

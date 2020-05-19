@@ -163,10 +163,10 @@ export default {
     linkChange(key, val) {
       this.$emit("lcFnc", { key: key, data: val });
     },
-    resetForm() {
-      this.inquire = this.mrz;
+    resetForm(formName) {
+      // this.inquire = this.mrz;
       // this.$emit("getFirstPd", this.mrz);
-      // this.$refs[formName].resetFields();
+      this.$refs[formName].resetFields();
     }
   }
 };

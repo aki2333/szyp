@@ -55,14 +55,7 @@ export default {
         r => {
           this.$store.dispatch("aGetMenu", r).then(data => {
             console.log(data);
-            console.log("aaa", a);
             this.headData = data[0].childrenMenu;
-            let a = [...this.headData];
-            this.$store
-              .dispatch("aGetLeftMenu", a.childrenMenu[0].childrenMenu)
-              .then(data2 => {
-                console.log(this.$store.state, data2);
-              });
           });
         }
       );
@@ -88,6 +81,7 @@ export default {
   min-height: 100vh;
 }
 .main {
+  overflow: hidden !important;
   min-height: 91vh;
 }
 </style>>

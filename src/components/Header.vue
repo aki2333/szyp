@@ -25,7 +25,7 @@
             <i class="el-icon-location"></i>
           </div>
         </div>
-        <div class="user-logout">
+        <div class="user-logout" @click="logout">
           <img src="@/assets/images/main/exit.png" />
         </div>
       </div>
@@ -60,6 +60,14 @@ export default {
       console.log(1, item);
       this.active = index;
       this.$store.commit("getLeftMenu", item.childrenMenu);
+    },
+    logout() {
+      window.localStorage.clear();
+      this.$message({
+        message: "退出成功",
+        type: "success"
+      });
+      this.$router.push({ name: "Login" });
     }
   }
 };

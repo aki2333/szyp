@@ -158,6 +158,9 @@ export default {
         }
       }
       if(data.key.dm == "suboffice") {
+        if(data.data==''){
+          data.obj.policestation = '';
+        }
         this.$store.dispatch("aGetPolice",data.data.slice(0,6));
       }
     },

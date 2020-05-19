@@ -76,6 +76,10 @@ export default {
       if (this.clickFive == 5) {
         this.isLogin = true;
         this.clickFive = 0;
+      }else if(this.clickFive<5){
+        setTimeout(() => {
+          this.clickFive = 0
+        }, 2000);
       }
     },
     keyLogin() {

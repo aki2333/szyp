@@ -16,6 +16,9 @@
               <template v-if="cx.type=='input'">
                 <el-input v-model="dialogData[cx.dm]" :disabled="cx.dis"></el-input>
               </template>
+              <template v-else-if="cx.type=='password'">
+                <el-input type="password" v-model="dialogData[cx.dm]"></el-input>
+              </template>
               <template v-else-if="cx.type=='select'">
                 <!-- 取常量值 optype=true  取store值 optype=!true -->
                 <el-select
@@ -128,9 +131,21 @@ export default {
     }
   },
   data() {
+    var validatePass = (rule, value, callback) => {
+      if (value === "") {
+        callback(new Error("请再次输入密码"));
+      } else if (value !== this.dialogData.xtmm) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
+      }
+    };
     return {
       // form: {},
-      rules: {},
+      rules: {
+        xtmm: [{ required: true, message: "请输入密码", trigger: "blur" }],
+        qrxtmm: [{ validator: validatePass, trigger: "blur" }]
+      },
       isXJ: false,
       newForm: {}
     };

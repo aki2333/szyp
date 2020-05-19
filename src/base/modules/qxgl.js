@@ -245,8 +245,13 @@ const yhgl = {
     plmmcz: [
         {
             cm: '密码',
-            type: 'input',
+            type: 'password',
             dm: 'xtmm'
+        },
+        {
+            cm: '确认密码',
+            type: 'password',
+            dm: 'qrxtmm'
         },
     ]
 }

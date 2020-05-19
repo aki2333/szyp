@@ -293,7 +293,7 @@ export default {
         this.isShowDialog = true;
         this.dialogData = data.data;
       } else if (data.btn.button_type == "scsjmm") {
-        this.isShowDialog = true;
+        // this.isShowDialog = true;
         // this.dialogData = data.data;
         this.batchRandomPassword(data.data);
       }
@@ -369,16 +369,22 @@ export default {
     },
     // 生成随机密码
     batchRandomPassword(rowData) {
-      let p = {};
-      p.userType = this.cx.pd.userType;
-      p.list = rowData ? [{ serial: rowData.userId }] : [];
-      this.$api.post("userController/batchRandomPassword", p, r => {
-        this.$message({
-          message: r.message,
-          type: "success"
+      this.$confirm("是否确认生成随机密码?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        let p = {};
+        p.userType = this.cx.pd.userType;
+        p.list = rowData ? [{ serial: rowData.userId }] : [];
+        this.$api.post("userController/batchRandomPassword", p, r => {
+          this.$message({
+            message: r.message,
+            type: "success"
+          });
+          this.getTable();
+          this.isShowDialog = false;
         });
-        this.getTable();
-        this.isShowDialog = false;
       });
     },
     userRole(data) {

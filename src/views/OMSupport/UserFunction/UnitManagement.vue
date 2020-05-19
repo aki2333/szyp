@@ -93,13 +93,15 @@ export default {
       });
     },
     getDeptTempPermTree(tempId) {
-      //this.defaultChecked2 = [];
-      this.cancel();
+      this.defaultChecked2 = [];
+      //this.cancel();
+      // setTimeout(() => {
       this.$cdata.qxgl.getDeptTempPermTree(tempId).then(r => {
-        // this.treeData2 = r.menuList;
+        this.treeData2 = JSON.parse(JSON.stringify(this.treeData2));
         this.defaultChecked2 = JSON.parse(JSON.stringify(r.choose));
         console.log(" this.defaultChecked2", this.defaultChecked2);
       });
+      // }, 1000);
     },
     // 获取模板列表
     getTemplate() {
@@ -152,6 +154,7 @@ export default {
             message: r,
             type: "success"
           });
+          this.cancel();
         }
       );
     },

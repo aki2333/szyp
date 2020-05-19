@@ -109,12 +109,18 @@ export default {
     },
     // 删除
     deleteMenuInfo(data) {
-      this.$api.post("menuController/deleteMenuInfo", data, r => {
-        this.$message({
-          message: r,
-          type: "success"
+      this.$confirm("是否确认删除?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.$api.post("menuController/deleteMenuInfo", data, r => {
+          this.$message({
+            message: r,
+            type: "success"
+          });
+          this.cancel();
         });
-        this.cancel();
       });
     },
     formSave(data) {

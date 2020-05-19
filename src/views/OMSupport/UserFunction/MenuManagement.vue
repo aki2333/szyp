@@ -124,7 +124,7 @@ export default {
     },
     // 添加
     addMenu() {
-      if (this.formData.menu_order == "") {
+      if (this.formData.serial == "") {
         this.$message({
           message: "请先选择菜单",
           type: "warning"
@@ -155,7 +155,7 @@ export default {
     },
     // 修改
     updateMenu() {
-      if (this.formData.menu_order == "") {
+      if (this.formData.serial == "") {
         this.$message({
           message: "请先选择菜单",
           type: "warning"
@@ -193,7 +193,7 @@ export default {
 
     // 删除
     delMenu() {
-      if (this.formData.menu_order == "") {
+      if (this.formData.serial == "") {
         this.$message({
           message: "请先选择菜单",
           type: "warning"

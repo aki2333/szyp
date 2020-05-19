@@ -2,11 +2,11 @@
   <div class="page">
     <Inquire :cxData="cxData" :pd="cx.pd" @cxFnc="cxFnc" @lcFnc="lcFnc"></Inquire>
     <div class="t-tab-top">
-      <div class="tab-top-item hand" @click="clzt=1;lbTab=$cdata.zxhc.zxhc.lbTab">
+      <div class="tab-top-item hand" @click="clzt=1;page=1;lbTab=$cdata.zxhc.zxhc.lbTab;getTable()">
         <img :src="clzt==1?tabImgActive_1:tabImg_1" alt />
         <span>未处理</span>
       </div>
-      <div class="tab-top-item hand ml--33" @click="clzt=2;lbTab=$cdata.zxhc.zxhc.lbTab1">
+      <div class="tab-top-item hand ml--33" @click="clzt=2;page=1;lbTab=$cdata.zxhc.zxhc.lbTab1;getTable()">
         <img :src="clzt==2?tabImgActive_2:tabImg_2" alt />
         <span class="t-leftT">已处理</span>
       </div>
@@ -102,8 +102,20 @@ export default {
       this.$store.dispatch("aGetNation");
       this.$store.dispatch("aGetGender");
       this.$store.dispatch("aGetPassport");
-      this.$store.dispatch("aGetSuboffice");
-      this.$store.dispatch("aGetPolice");
+      if (this.$store.state.user.jb == '1') {
+        this.$store.dispatch("aGetSuboffice");
+      } else if (this.$store.state.user.jb == '2') {
+        this.$store.dispatch("aGetSuboffice",this.$store.state.user.bmbh.slice(0, 6));
+      } else if (this.$store.state.user.jb == '3') {
+        this.$store.dispatch("aGetSuboffice",this.$store.state.user.bmbh.slice(0, 6) + '000000');
+      }  
+      if (this.$store.state.user.jb == '1') {
+        this.$store.dispatch("aGetPolice");
+      } else if (this.$store.state.user.jb == '2') {
+        this.$store.dispatch("aGetPolice",this.$store.state.user.bmbh.slice(0, 6));
+      } else if (this.$store.state.user.jb == '3') {
+        this.$store.dispatch("aGetPolice",this.$store.state.user.bmbh);
+      }  
       this.$store.dispatch("aGetDatatype");
       this.$store.dispatch("aGetBackstatus");
       this.$cdata.zxhc.plBtnShow(this.page).then(data => {
@@ -122,15 +134,17 @@ export default {
       if (data.key.dm == "datatype") {
         this.$store.dispatch("aGetBackstatus", data.data).then(() => {});
       }
+      if(data.key.dm == "suboffice") {
+        console.log(data.data)
+        this.$store.dispatch("aGetPolice",data.data.slice(0,6));
+      }
     },
+    //弹窗form下拉框联动
     formLcFnc(data) {
       if (data.key.dm == "datatype") {
         this.$store.dispatch("aGetBackstatus", data.data).then(() => {});
       }
     },
-    // queryShowFnc(data){
-    //   // data = !data;
-    // },
     // 获取分页等信息
     pageSizeFnc(data) {
       this.cx.pageSize = data;
@@ -161,8 +175,8 @@ export default {
           this.multipleSelection[i].backstatus
         ]);
       }
-      console.log("this.backstatus==", this.backstatusArr);
-      console.log("this.policeArr==", this.policeArr);
+      // console.log("this.backstatus==", this.backstatusArr);
+      // console.log("this.policeArr==", this.policeArr);
     },
     //判断数组元素是否完全相等
     isAllEqual(array) {
@@ -251,15 +265,16 @@ export default {
             return false;
           }
           if (!this.isArrValue(this.backstatusArr)) {
-            //分局下发 选择数据的分局必须为同一分局
+            //分局下发 选择数据已处理过走访状态不能下发
             this.$message({
               message: "已走访的数据不能再下发！",
               type: "warning"
             });
             return false;
           }
-          console.log(this.isArrEmpty(this.officeArr, this.policeArr));
-          console.log(this.isAllEqual(this.policeArr));
+          this.$store.dispatch("aGetPolice",this.officeArr[0].slice(0, 6));
+          // console.log(this.isArrEmpty(this.officeArr, this.policeArr));
+          // console.log(this.isAllEqual(this.policeArr));
           this.labelData = this.$cdata.zxhc.zxhc.xfFContent;
         }
         this.isShowDialog = true;
@@ -270,19 +285,17 @@ export default {
       this.dialogTitle = data.btn.button_name;
       this.dialogType = data.btn.button_type;
       if (data.btn.button_type == "edit") {
-        this.$cdata.zxhc.editShow(this.$store.state.user.jb).then(data => {
+        this.$cdata.zxhc.editShow(this.$store.state.user.jb).then(data => {//根据级别控制弹窗编辑项禁止与否
           this.labelData = data;
         });
         this.$store.dispatch("aGetBackstatus", data.data.datatype);
         this.isShowDialog = true;
-        this.dialogData = data.data;
+        this.dialogData = Object.assign({},data.data);
       }
     },
     //编辑保存
     editSave(data) {
       let p = data;
-      // delete p.createtime;
-      // delete p.updatetime;
       p.jb = this.$store.state.user.jb;
       p.bmbh = this.$store.state.user.bmbh;
       p.userId = this.$store.state.user.userId;
@@ -311,14 +324,15 @@ export default {
         this.isShowDialog = false;
       });
     },
-    //列表tab切换  data==page 从1开始
+    //列表tab切换  data==page 从1开始 控制按钮是否出现 v-for 和 v-if不能同时使用
     tabFnc(data) {
       this.page = data;
-      this.$cdata.zxhc.plBtnShow(this.page).then(data => {
+      this.$cdata.zxhc.plBtnShow(this.page,this.clzt).then(data => {
         this.plBtn = data;
       });
       this.getTable();
     },
+    //弹窗保存
     dialogSave(data) {
       if (data.type == "edit") {
         this.editSave(data.data);

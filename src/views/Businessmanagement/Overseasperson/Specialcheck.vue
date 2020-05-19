@@ -2,11 +2,11 @@
   <div class="page">
     <Inquire :cxData="cxData" :pd="cx.pd" @cxFnc="cxFnc" @lcFnc="lcFnc"></Inquire>
     <div class="t-tab-top">
-      <div class="tab-top-item hand" @click="clzt=1;page=1;lbTab=$cdata.zxhc.zxhc.lbTab;getTable()">
+      <div class="tab-top-item hand" @click="tabTopClick1">
         <img :src="clzt==1?tabImgActive_1:tabImg_1" alt />
         <span>未处理</span>
       </div>
-      <div class="tab-top-item hand ml--33" @click="clzt=2;page=1;lbTab=$cdata.zxhc.zxhc.lbTab1;getTable()">
+      <div class="tab-top-item hand ml--33" @click="tabTopClick2">
         <img :src="clzt==2?tabImgActive_2:tabImg_2" alt />
         <span class="t-leftT">已处理</span>
       </div>
@@ -117,7 +117,7 @@ export default {
         this.$store.dispatch("aGetPolice",this.$store.state.user.bmbh);
       }  
       this.$store.dispatch("aGetDatatype");
-      this.$store.dispatch("aGetBackstatus");
+      // this.$store.dispatch("aGetBackstatus");
       this.$cdata.zxhc.plBtnShow(this.page).then(data => {
         this.plBtn = data;
       });
@@ -129,13 +129,35 @@ export default {
       this.cx.pd = data;
       this.getTable();
     },
+    tabTopClick1(){
+      this.clzt=1;
+      this.page=1;
+      this.lbTab=this.$cdata.zxhc.zxhc.lbTab;
+      this.$cdata.zxhc.plBtnShow(this.page,this.clzt).then(data => {
+        this.plBtn = data;
+      });
+      this.getTable()
+    },
+    tabTopClick2(){
+      this.clzt=2;
+      this.page=1;
+      this.lbTab=this.$cdata.zxhc.zxhc.lbTab1;
+      this.$cdata.zxhc.plBtnShow(this.page,this.clzt).then(data => {
+        this.plBtn = data;
+      });
+      this.getTable()
+    },
     //下拉框联动
     lcFnc(data) {
       if (data.key.dm == "datatype") {
-        this.$store.dispatch("aGetBackstatus", data.data).then(() => {});
+        if(data.data==''){
+          this.$store.state.backstatus = [];
+          data.obj.backstatus = '';
+        }else{
+          this.$store.dispatch("aGetBackstatus", data.data).then(() => {});
+        }
       }
       if(data.key.dm == "suboffice") {
-        console.log(data.data)
         this.$store.dispatch("aGetPolice",data.data.slice(0,6));
       }
     },
@@ -143,6 +165,9 @@ export default {
     formLcFnc(data) {
       if (data.key.dm == "datatype") {
         this.$store.dispatch("aGetBackstatus", data.data).then(() => {});
+      }
+      if(data.key.dm == "suboffice") {
+        this.$store.dispatch("aGetPolice",data.data.slice(0,6));
       }
     },
     // 获取分页等信息
@@ -246,15 +271,16 @@ export default {
       } else if (data.button_type == "xf") {
         this.dialogData = {};
         if (this.page == 1) {
-          if (!this.isArrEmpty(this.officeArr)) {
-            //市局下发分局 如果选择数据分局有空值 不允许下发
-            this.$message({
-              message: "分局不能为空！",
-              type: "warning"
-            });
-            return false;
-          }
+          // if (!this.isArrEmpty(this.officeArr)) {
+          //   //市局下发分局 如果选择数据分局有空值 不允许下发
+          //   this.$message({
+          //     message: "分局不能为空！",
+          //     type: "warning"
+          //   });
+          //   return false;
+          // }
           this.labelData = this.$cdata.zxhc.zxhc.xfSContent;
+          this.isShowDialog = true;
         } else if (this.page == 2) {
           if (!this.isAllEqual(this.officeArr)) {
             //分局下发 选择数据的分局必须为同一分局
@@ -264,6 +290,7 @@ export default {
             });
             return false;
           }
+
           if (!this.isArrValue(this.backstatusArr)) {
             //分局下发 选择数据已处理过走访状态不能下发
             this.$message({
@@ -272,12 +299,41 @@ export default {
             });
             return false;
           }
-          this.$store.dispatch("aGetPolice",this.officeArr[0].slice(0, 6));
+          if((!this.isArrEmpty(this.policeArr)&&!this.isArrValue(this.policeArr))){
+            //派出所空值和有值同时存在
+            this.$message({
+              message: "不支持多所混发！",
+              type: "warning"
+            });
+            return false;
+          }else if(!this.isArrEmpty(this.policeArr)){
+            //都是空值
+            this.$store.dispatch("aGetPolice",this.officeArr[0].slice(0, 6));
+            this.labelData = this.$cdata.zxhc.zxhc.xfFContent;
+            this.isShowDialog = true;
+          }else if(!this.isArrValue(this.policeArr)){
+            //都有值
+            let p = {
+            // suboffice:this.officeArr[0],
+              serialList:this.multipleArr,
+              jb:this.$store.state.user.jb,
+              bmbh:this.$store.state.user.bmbh,
+              userId:this.$store.state.user.userId
+            };
+            this.$api.post(this.$api.root1 + "/issueData/issueDataTrigger", p, r => {
+              this.$message({
+                message: r.message,
+                type: "success"
+              });
+              this.getTable();
+            });
+          }
+          
           // console.log(this.isArrEmpty(this.officeArr, this.policeArr));
           // console.log(this.isAllEqual(this.policeArr));
-          this.labelData = this.$cdata.zxhc.zxhc.xfFContent;
+          
         }
-        this.isShowDialog = true;
+        
       }
     },
     //列表内按钮

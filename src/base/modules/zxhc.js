@@ -146,8 +146,12 @@ const zxhc = {
             dm: 'backstatus_desc'
         },
         {
-            cm: '下发时间',
+            cm: '市局下发时间',
             dm: 'issuedate'
+        },
+        {
+            cm: '分局下发时间',
+            dm: 'suboffice_issuedate'
         },
         {
             cm: '反馈时间',
@@ -227,7 +231,7 @@ const zxhc = {
 }
 function plBtnShow(flag,clzt){
     return new Promise((resolve) => {
-        if(flag==1){
+        if(flag==1&&clzt==1){
             zxhc.plBtn=[
                 {
                     "button_name": "下发",
@@ -238,7 +242,7 @@ function plBtnShow(flag,clzt){
             ]
         }else if(flag==3||clzt==2){//已处理状态不能上报和下发
             zxhc.plBtn=[]
-        }else if(flag==2){
+        }else if(flag==2&&clzt==1){
             zxhc.plBtn=[
                 {
                     "button_name": "上报",

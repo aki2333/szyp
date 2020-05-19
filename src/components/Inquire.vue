@@ -24,7 +24,7 @@
                   v-if="cx.optype"
                   :clearable="!cx.must"
                   placeholder="请选择"
-                  @change="linkChange(cx,inquire[cx.dm])"
+                  @change="linkChange(cx,inquire[cx.dm],inquire)"
                 >
                   <el-option
                     v-for="(item,ind) in $cdata.options[cx.dm]"
@@ -39,7 +39,7 @@
                   v-else
                   clearable
                   placeholder="请选择"
-                  @change="linkChange(cx,inquire[cx.dm])"
+                  @change="linkChange(cx,inquire[cx.dm],inquire)"
                 >
                   <el-option
                     v-for="(item,ind) in $store.state[cx.dm]"
@@ -161,8 +161,8 @@ export default {
       this.queryIsShow = !this.queryIsShow;
       this.$emit("queryShowFnc", this.queryIsShow);
     },
-    linkChange(key, val) {
-      this.$emit("lcFnc", { key: key, data: val });
+    linkChange(key, val,inquire) {
+      this.$emit("lcFnc", { key: key, data: val ,obj:inquire});
     },
     resetForm() {
       let mrz = {};

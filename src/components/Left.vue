@@ -18,7 +18,7 @@
           v-if="leftWidth=='225px'"
         >{{ln.menu_name}}</div>
       </div>
-      <img class="left-open" :src="leftWidth=='225px'?require('@/assets/images/main/left_open.png'):require('@/assets/images/main/left_close.png')" @click="openLeft" />
+      <img class="left-open" :src="leftWidth=='74px'?require('@/assets/images/main/left_open.png'):require('@/assets/images/main/left_close.png')" @click="openLeft" />
     </div>
     <div class="chilren-nav-box" v-if="leftWidth=='225px'">
       <div
@@ -75,6 +75,7 @@ export default {
       console.log(3, item);
       this.active2 = index;
       this.bread[1] = item;
+      console.log('this.bread',this.bread)
       this.$store.dispatch("aGetBread", this.bread);
       this.$router.push({ name: item.menu_url });
     }

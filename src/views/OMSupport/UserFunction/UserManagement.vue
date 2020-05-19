@@ -242,11 +242,10 @@ export default {
       this.dialogType = data.button_type;
       this.labelData = this.$cdata.qxgl.yhgl[data.button_type];
       if (data.button_type == "xj") {
-        //this.dialogData = {};
+        this.dialogData = {};
         this.isShowDialog = true;
       } else if (data.button_type == "xg") {
         this.dialogData = this.currentRow;
-
         console.log(this.dialogData);
         if (JSON.stringify(this.dialogData) == "{}") {
           this.$message({
@@ -345,9 +344,9 @@ export default {
           userId: data.userId,
           status: "0"
         };
-        this.$api.post("userController/updateOtherUserInfo", p, r => {
+        this.$api.post("userController/updateOtherUserInfo", p, () => {
           this.$message({
-            message: r.message,
+            message: "删除成功",
             type: "success"
           });
           this.getTable();

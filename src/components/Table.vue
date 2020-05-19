@@ -46,13 +46,22 @@
       <el-table-column align="center" label="操作" v-if="isEdit">
         <template slot-scope="scope">
           <template v-for="(lbt,lbi) in lbBtn">
-            <el-button
-              :key="lbi"
-              @click="handleClick(scope.row,lbt)"
-              type="text"
-              size="small"
-              v-if="!lbt.user_ctrl||(lbt.user_ctrl==scope.row.status)"
-            >{{lbt.button_name}}</el-button>
+            <span :key="lbi" class="btn-span">
+              <img
+                class="btn-img"
+                :src="require('@/assets/images/btn/'+lbt.icon+'.png')"
+                @click="handleClick(scope.row,lbt)"
+                :title="lbt.button_name"
+                v-if="lbt.icon"
+              />
+              <el-button
+                style="margin:0 5px"
+                @click="handleClick(scope.row,lbt)"
+                type="text"
+                size="small"
+                v-else-if="!lbt.user_ctrl||(lbt.user_ctrl==scope.row.status)"
+              >{{lbt.button_name}}</el-button>
+            </span>
           </template>
         </template>
       </el-table-column>
@@ -232,5 +241,15 @@ export default {
 .table-btn-box {
   position: absolute;
   right: 0;
+}
+.btn-span {
+  display: inline-block;
+  vertical-align: middle;
+}
+.btn-img {
+  width: 20px;
+  margin: 0 5px;
+  vertical-align: middle;
+  cursor: pointer;
 }
 </style>

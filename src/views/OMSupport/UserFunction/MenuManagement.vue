@@ -52,13 +52,19 @@
             </el-row>
           </el-form>
           <div class="page-btn-box">
-            <el-button size="mini" type="primary" round @click="addMenu">新建</el-button>
+            <el-button
+              size="mini"
+              type="primary"
+              round
+              @click="addMenu"
+              v-if="formData.menu_type!='B'"
+            >新建</el-button>
             <el-button
               size="mini"
               type="primary"
               round
               @click="updateMenu"
-              v-if="formData.menu_order&&formData.menu_order!='0'"
+              v-if="(formData.menu_order&&formData.menu_order!='0')||formData.menu_type=='B'"
             >修改</el-button>
             <el-button size="mini" type="success" round @click="save('form','add')" v-if="addBc">保存</el-button>
             <el-button

@@ -32,7 +32,7 @@ const yhgl = {
         {
             cm: '警号',
             type: 'input',
-            dm: 'jinghao'
+            dm: 'jingHao'
         },
         {
             cm: '创建时间',
@@ -106,11 +106,13 @@ const yhgl = {
         {
             "button_name": "密码重置",
             "button_type": "mmcz",
+            "icon": "mmcz",
             "serial": "201",
         },
         {
             "button_name": "生成随机密码",
             "button_type": "scsjmm",
+            "icon": "scsjmm",
             "serial": "201",
         }
     ],

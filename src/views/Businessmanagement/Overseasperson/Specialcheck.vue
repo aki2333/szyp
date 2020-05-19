@@ -20,12 +20,14 @@
         :isTab="isTab"
         :lbTab="lbTab"
         :tableData="tableData"
+        :selection="selection"
         @plFnc="plFnc"
         @pageSizeFnc="pageSizeFnc"
         @pageNumFnc="pageNumFnc"
         @tabFnc="tabFnc"
         @blFnc="blFnc"
         @userRole="userRole"
+        @rowClick="rowClick"
       ></Table>
     </div>
     <!-- 弹窗 -->
@@ -88,6 +90,7 @@ export default {
       officeArr: [],
       policeArr: [],
       backstatusArr:[],
+      selection:[],
       changeK: "",
       //弹窗数据
       isShowDialog: false,
@@ -147,6 +150,9 @@ export default {
       });
       this.getTable()
     },
+    rowClick(data){
+      this.selection.push(data.data)
+    },
     //下拉框联动
     lcFnc(data) {
       if (data.key.dm == "datatype") {
@@ -203,8 +209,8 @@ export default {
           this.multipleSelection[i].backstatus
         ]);
       }
-      // console.log("this.backstatus==", this.backstatusArr);
-      // console.log("this.policeArr==", this.policeArr);
+      console.log("this.officeArr==", this.officeArr);
+      console.log("this.policeArr==", this.policeArr);
     },
     //判断数组元素是否完全相等
     isAllEqual(array) {

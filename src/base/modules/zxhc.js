@@ -225,7 +225,7 @@ const zxhc = {
         },
     ],
 }
-function plBtnShow(flag){
+function plBtnShow(flag,clzt){
     return new Promise((resolve) => {
         if(flag==1){
             zxhc.plBtn=[
@@ -236,7 +236,7 @@ function plBtnShow(flag){
                     "type":"primary"
                 },
             ]
-        }else if(flag==3){
+        }else if(flag==3||clzt==2){//已处理状态不能上报和下发
             zxhc.plBtn=[]
         }else if(flag==2){
             zxhc.plBtn=[
@@ -300,7 +300,7 @@ function editShow(jb){
                 cm:'下发类别',
                 type:'select',
                 dm:'datatype',
-                dis:jb=="3"?true:false
+                dis:true
             },
             {
                 cm:'住宿地址',

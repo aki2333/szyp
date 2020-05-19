@@ -148,15 +148,7 @@ export default new Vuex.Store({
     },
     aGetSuboffice(context, payload) {
       return new Promise((resolve) => {
-        let p = {}
-        if (user.jb == '1') {
-          p = { tableName: 'dm_pcsb', lvl: '2' }
-        } else if (user.jb == '2') {
-          p = { tableName: 'dm_pcsb', dmNameRightLike: user.bmbh.slice(0, 6), lvl: '2' }
-        } else if (user.jb == '3') {
-          p = { tableName: 'dm_pcsb', dmNameRightLike: user.bmbh.slice(0, 6) + '000000', lvl: '2' }
-        }
-        api.post(api.root1 + '/dm/getDmList', p, r => {
+        api.post(api.root1 + '/dm/getDmList', {tableName: 'dm_pcsb', lvl: '2',dmNameRightLike:payload}, r => {
           context.commit('getSuboffice', fnc.sortByKey(r, 'dm'))
           resolve(payload)
         })
@@ -164,15 +156,7 @@ export default new Vuex.Store({
     },
     aGetPolice(context, payload) {
       return new Promise((resolve) => {
-        let p = {}
-        if (user.jb == '1') {
-          p = { tableName: 'dm_pcsb', lvl: '3' }
-        } else if (user.jb == '2') {
-          p = { tableName: 'dm_pcsb', dmNameRightLike: user.bmbh.slice(0, 6), lvl: '3' }
-        } else if (user.jb == '3') {
-          p = { tableName: 'dm_pcsb', dmNameRightLike: user.bmbh, lvl: '3' }
-        }
-        api.post(api.root1 + '/dm/getDmList', p, r => {
+        api.post(api.root1 + '/dm/getDmList', {tableName: 'dm_pcsb', lvl: '3',dmNameRightLike:payload}, r => {
           context.commit('getPolice', fnc.sortByKey(r, 'dm'))
           resolve(payload)
         })

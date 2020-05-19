@@ -128,6 +128,8 @@ export default {
   watch: {
     pd(val) {
       console.log("sssss", val, this.mrz);
+      //       this.$nextTick(function() {
+      // });
     }
   },
   data() {
@@ -141,7 +143,6 @@ export default {
     };
   },
   mounted() {
-    console.log("pd", this.pd);
     Object.assign(this.mrz, this.pd);
     this.mrz = JSON.parse(JSON.stringify(this.mrz));
   },
@@ -163,11 +164,13 @@ export default {
     linkChange(key, val) {
       this.$emit("lcFnc", { key: key, data: val });
     },
-    resetForm(formName) {
-      // this.inquire = this.mrz;
+    resetForm() {
+      let mrz = {};
+      Object.assign(mrz, this.mrz);
+      this.inquire = mrz;
       // console.log(this.inquire, this.mrz);
       // this.$emit("getFirstPd", this.mrz);
-      this.$refs[formName].resetFields();
+      // this.$refs[formName].resetFields();
     }
   }
 };

@@ -127,7 +127,7 @@ export default {
   },
   watch: {
     pd(val) {
-      console.log("sssss", val);
+      console.log("sssss", val, this.mrz);
     }
   },
   data() {
@@ -165,6 +165,7 @@ export default {
     },
     resetForm(formName) {
       // this.inquire = this.mrz;
+      // console.log(this.inquire, this.mrz);
       // this.$emit("getFirstPd", this.mrz);
       this.$refs[formName].resetFields();
     }

@@ -13,6 +13,7 @@
         :expand-on-click-node="false"
         :default-checked-keys="defaultChecked"
         highlight-current
+        :check-strictly="checkStrictly"
         :data="treeData"
         :props="treeProps"
         :node-key="nodeKey"
@@ -53,6 +54,10 @@ export default {
     isCheckbox: {
       type: Boolean,
       default: true
+    },
+    checkStrictly: {
+      type: Boolean,
+      default: false
     },
     defaultChecked: {
       type: Array,

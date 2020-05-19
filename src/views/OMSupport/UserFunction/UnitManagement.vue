@@ -7,6 +7,7 @@
           treeType="dwlb"
           :treeData="treeData1"
           :treeProps="treeProps1"
+          :checkStrictly="true"
           :isExpand="false"
           nodeKey="bmbh"
           @getTree="getTree"

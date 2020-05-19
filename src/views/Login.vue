@@ -1,8 +1,8 @@
 <template>
   <div class="login">
-    <div class="login_main">
-      <img src="../assets/images/login/pro_tip.png" @click="loginPassword" alt />
-      <img class="mt-30" src="../assets/images/login/login_tip.png" alt />
+    <div class="login_main" @click="aa()">
+      <img src="../assets/images/login/pro_tip.png"  alt />
+      <img class="mt-30" src="../assets/images/login/login_tip.png" @click="loginPassword" alt />
       <img
         class="mt-50"
         src="../assets/images/login/login_btn.png"
@@ -11,7 +11,7 @@
         v-if="!isLogin"
       />
       <div class="login-box" v-if="isLogin">
-        <div class="logintitle">用户登录</div>
+        <div class="logintitle" style="color:#fff">用户登录</div>
         <div class="login-item yzform">
           <el-input placeholder="用户名" v-model="user.name" @keyup.enter.native="keyLogin">
             <i slot="prefix" class="el-input__icon"></i>
@@ -27,7 +27,10 @@
             <i slot="prefix" class="el-input__icon"></i>
           </el-input>
         </div>
-        <div @click="keyLogin" class="hand" style="color:#fff">登录</div>
+        <div class="foot-btn">
+          <button class="login-btn" @click="keyLogin">登录</button>
+          <button class="login-btn" @click="isLogin=false" style="background: #99d8ff;margin-left: 20px;">取消</button>
+        </div>
       </div>
     </div>
   </div>
@@ -47,9 +50,9 @@ export default {
       // let url = 'http://10.0.30.57:9404/login'
       this.$api.post("/login", null, r => {
         if (r.authorization) {
-          // this.$store.commit('getToken',r.authorization);
+          this.$store.commit('getToken',r.authorization);
           //this.getUser();
-          this.$store.commit("getToken", "6DDF3A214DD94F9F9BEEE04973DA397F");
+          // this.$store.commit("getToken", "6DDF3A214DD94F9F9BEEE04973DA397F");
           this.$router.push({ name: "Frame" });
           this.$message({
             message: "登录成功",
@@ -62,6 +65,11 @@ export default {
           });
         }
       });
+    },
+    aa(){
+      // if(this.isLogin==true){
+      //   this.isLogin=false
+      // }
     },
     loginPassword() {
       this.clickFive++;
@@ -105,5 +113,47 @@ export default {
   align-items: center; /*由于flex-direction: column，因此align-items代表的是水平方向*/
   justify-content: center;
   margin-top: 20%;
+}
+.logintitle{
+  font-size: 20px; text-align: center;
+  margin: 45px 0 15px 0;
+}
+.login-item{
+  margin-top: 20px;
+  width: 80%;
+  color: #fff;
+}
+.login-btn{
+  margin-top: 40px;
+  border: none;
+  border-radius: 5px;
+  background: #4186F4;
+  width: 100px;
+  min-height: 35px;
+  height: 48px;
+  cursor:pointer;
+  font-size: 16px;
+  color: #FFFFFF;
+}
+.login-box{
+  width: 25%;
+  height: 40%;
+  position: fixed;
+  top:180px;
+  left:50%;
+  background: #ffffff;
+  border-radius: 10px;
+  margin-left: -12.0%;
+  z-index: 7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 400px;
+  min-height: 360px;
+  /* justify-content:center; */
+}
+.foot-btn{
+  display: flex;
+  justify-content: space-around;
 }
 </style>

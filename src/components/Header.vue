@@ -67,7 +67,10 @@ export default {
         message: "退出成功",
         type: "success"
       });
-      this.$router.push({ name: "Login" });
+
+      let url = location.protocol + "//" + location.host;
+      window.open(url, "_self").close();
+      // this.$router.push({ name: "Login" });
     }
   }
 };

@@ -366,10 +366,10 @@ const jsgl = {
             cm: '部门名称',
             dm: 'xtyhbmmc'
         },
-        {
-            cm: '部门级别',
-            dm: 'jb'
-        }
+        // {
+        //     cm: '部门级别',
+        //     dm: 'jb'
+        // }
     ],
     yhlbBtn: [
         {

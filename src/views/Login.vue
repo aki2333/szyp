@@ -49,6 +49,11 @@ export default {
     };
   },
   mounted() {
+    let url = "http://tyyh.szh.js:9080/cas/login?service=" +
+        this.$api.root +
+        "/login";
+    // let url=this.$api.root+'/login'
+    this.$store.commit("getUrl",url)
     if (window.location.href.includes("authorization")) {
       let token = this.getUrlParam("authorization");
       console.log("toker==", token);
@@ -65,12 +70,12 @@ export default {
   },
   methods: {
     login() {
-      let url =
-        "http://tyyh.szh.js:9080/cas/login?service=" +
-        this.$api.root +
-        "/login";
+      // let url =
+      //   "http://tyyh.szh.js:9080/cas/login?service=" +
+      //   this.$api.root +
+      //   "/login";
       // let url=this.$api.root+'/login'
-      window.location.href = url;
+      window.location.href = this.$store.state.aurl;
 
       // this.$api.post("/login", null, r => {
       //   if (r.authorization) {

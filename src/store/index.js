@@ -7,6 +7,7 @@ let breadData = JSON.parse(localStorage.getItem('bread'))
 let user = JSON.parse(localStorage.getItem('user'))
 let menu = JSON.parse(localStorage.getItem('menu'))
 let token = localStorage.getItem('token')
+let aurl = localStorage.getItem('aurl')
 
 Vue.use(Vuex)
 
@@ -30,7 +31,8 @@ export default new Vuex.Store({
     bmbh: [],
     sjBmbh: [],
     fjBmbh: [],
-    pcsBmbh: []
+    pcsBmbh: [],
+    aurl:aurl||'',
 
   },
   mutations: {
@@ -55,6 +57,10 @@ export default new Vuex.Store({
     getToken(state, data) {
       state.token = data;
       window.localStorage.setItem("token", data)
+    },
+    getUrl(state,data){
+      state.aurl = data;
+      window.localStorage.setItem("aurl",data)
     },
     getNation(state, data) {
       state.nationality = data;

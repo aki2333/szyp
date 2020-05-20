@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="login_main" @click="aa()">
-      <img src="../assets/images/login/pro_tip.png"  alt />
+      <img src="../assets/images/login/pro_tip.png" alt />
       <img class="mt-30" src="../assets/images/login/login_tip.png" @click="loginPassword" alt />
       <img
         class="mt-50"
@@ -29,7 +29,11 @@
         </div>
         <div class="foot-btn">
           <button class="login-btn" @click="keyLogin">登录</button>
-          <button class="login-btn" @click="isLogin=false" style="background: #99d8ff;margin-left: 20px;">取消</button>
+          <button
+            class="login-btn"
+            @click="isLogin=false"
+            style="background: #99d8ff;margin-left: 20px;"
+          >取消</button>
         </div>
       </div>
     </div>
@@ -44,29 +48,58 @@ export default {
       isLogin: false
     };
   },
-  mounted() {},
+  mounted() {
+    if (window.location.href.includes("authorization")) {
+      let token = this.getUrlParam("authorization");
+      console.log("toker==", token);
+      if (token) {
+        this.$store.commit("getToken", token);
+        this.$router.push({ name: "Frame" });
+      } else {
+        this.$message({
+          message: "登录失败！请重新登录",
+          type: "warning"
+        });
+      }
+    }
+  },
   methods: {
     login() {
-      // let url = 'http://10.0.30.57:9404/login'
-      this.$api.post("/login", null, r => {
-        if (r.authorization) {
-          this.$store.commit('getToken',r.authorization);
-          //this.getUser();
-          // this.$store.commit("getToken", "6DDF3A214DD94F9F9BEEE04973DA397F");
-          this.$router.push({ name: "Frame" });
-          this.$message({
-            message: "登录成功",
-            type: "success"
-          });
-        } else {
-          this.$message({
-            message: "登录失败！请重新登录",
-            type: "warning"
-          });
-        }
-      });
+      let url =
+        "http://tyyh.szh.js:9080/cas/login?service=" +
+        this.$api.root +
+        "/login";
+      // let url=this.$api.root+'/login'
+      window.location.href = url;
+
+      // this.$api.post("/login", null, r => {
+      //   if (r.authorization) {
+      //     this.$store.commit('getToken',r.authorization);
+      //     //this.getUser();
+      //     // this.$store.commit("getToken", "6DDF3A214DD94F9F9BEEE04973DA397F");
+      //     this.$router.push({ name: "Frame" });
+      //     this.$message({
+      //       message: "登录成功",
+      //       type: "success"
+      //     });
+      //   } else {
+      //     this.$message({
+      //       message: "登录失败！请重新登录",
+      //       type: "warning"
+      //     });
+      //   }
+      // });
     },
-    aa(){
+    getUrlParam(name) {
+      let url = window.location.href;
+      //取得url中?后面的字符
+      var query = url.split("?")[1];
+      var pair = query.split("=");
+      if (pair[0] == name) {
+        return pair[1];
+      }
+    },
+    aa() {
       // if(this.isLogin==true){
       //   this.isLogin=false
       // }
@@ -76,9 +109,9 @@ export default {
       if (this.clickFive == 5) {
         this.isLogin = true;
         this.clickFive = 0;
-      }else if(this.clickFive<5){
+      } else if (this.clickFive < 5) {
         setTimeout(() => {
-          this.clickFive = 0
+          this.clickFive = 0;
         }, 2000);
       }
     },
@@ -118,36 +151,37 @@ export default {
   justify-content: center;
   margin-top: 20%;
 }
-.logintitle{
-  font-size: 20px; text-align: center;
+.logintitle {
+  font-size: 20px;
+  text-align: center;
   margin: 45px 0 15px 0;
 }
-.login-item{
+.login-item {
   margin-top: 20px;
   width: 80%;
   color: #fff;
 }
-.login-btn{
+.login-btn {
   margin-top: 40px;
   border: none;
   border-radius: 5px;
-  background: #4186F4;
+  background: #4186f4;
   width: 100px;
   min-height: 35px;
   height: 48px;
-  cursor:pointer;
+  cursor: pointer;
   font-size: 16px;
-  color: #FFFFFF;
+  color: #ffffff;
 }
-.login-box{
+.login-box {
   width: 25%;
   height: 40%;
   position: fixed;
-  top:180px;
-  left:50%;
+  top: 180px;
+  left: 50%;
   background: #ffffff;
   border-radius: 10px;
-  margin-left: -12.0%;
+  margin-left: -12%;
   z-index: 7;
   display: flex;
   flex-direction: column;
@@ -156,7 +190,7 @@ export default {
   min-height: 360px;
   /* justify-content:center; */
 }
-.foot-btn{
+.foot-btn {
   display: flex;
   justify-content: space-around;
 }

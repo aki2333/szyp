@@ -1,6 +1,6 @@
 // 配置API接口地址
 var root = 'http://192.168.3.131:9404'//任测试
-// var root = 'http://10.0.8.237:9404'//任本地
+// var root = 'http://10.0.8.18:9404'//任本地
 // var root = "http://50.73.70.26:9404"//任公安
 
 var root1 = 'http://192.168.3.131:9405'//石飞测试
@@ -115,5 +115,6 @@ export default {
   delete: function (url, params, success, failure) {
     return apiAxios('DELETE', url, params, success, failure)
   },
-  root1
+  root1,
+  root
 }

@@ -134,7 +134,7 @@ export default {
     },
     tabTopClick1(){
       this.clzt=1;
-      this.page=1;
+      // this.page=1;
       this.lbTab=this.$cdata.zxhc.zxhc.lbTab;
       this.$cdata.zxhc.plBtnShow(this.page,this.clzt).then(data => {
         this.plBtn = data;
@@ -143,7 +143,7 @@ export default {
     },
     tabTopClick2(){
       this.clzt=2;
-      this.page=1;
+      // this.page=1;
       this.lbTab=this.$cdata.zxhc.zxhc.lbTab1;
       this.$cdata.zxhc.plBtnShow(this.page,this.clzt).then(data => {
         this.plBtn = data;

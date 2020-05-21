@@ -312,7 +312,10 @@ export default {
     },
     // 新增用户
     saveUser(data) {
-      this.$api.post("userController/saveUser", data, r => {
+      let p = data;
+      p.userType = "1";
+      console.log(data);
+      this.$api.post("userController/saveUser", p, r => {
         this.$message({
           message: r.message,
           type: "success"

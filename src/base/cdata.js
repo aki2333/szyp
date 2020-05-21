@@ -98,6 +98,16 @@ const options = {
             mc: "未添加"
         }
     ],
+    zt: [
+        {
+            dm: '1',
+            mc: "有效"
+        },
+        {
+            dm: '0',
+            mc: "无效"
+        }
+    ],
     userType: [
         {
             dm: '0',

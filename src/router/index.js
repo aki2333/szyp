@@ -49,6 +49,11 @@ const routes = [
         name: 'MenuManagement',
         component: () => import(/* webpackChunkName: "OMSupport" */ '../views/OMSupport/UserFunction/MenuManagement.vue')
       },
+      {
+        path: '/ZrqManagement',
+        name: 'ZrqManagement',
+        component: () => import(/* webpackChunkName: "OMSupport" */ '../views/OMSupport/UserFunction/ZrqManagement.vue')
+      },
       // 业务管理
       {
         path: '/Specialcheck',

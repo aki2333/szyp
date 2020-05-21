@@ -255,7 +255,6 @@ const yhgl = {
         },
     ]
 }
-
 // 【角色管理】
 const jsgl = {
     lb: [
@@ -439,6 +438,60 @@ const mbgl = {
         }
     ]
 }
+// 【责任区管理】
+const zrqgl = {
+    cx: [
+        {
+            cm: '所属分局',
+            type: 'select',
+            dm: 'fjBmbh',
+        },
+        {
+            cm: '所属派出所',
+            type: 'select',
+            dm: 'pcsBmbh',
+        },
+        {
+            cm: '责任区名称',
+            type: 'zrqMc',
+            dm: 'xm'
+        },
+        {
+            cm: '责任区代码',
+            type: 'input',
+            dm: 'zrqDm'
+        },
+        {
+            cm: '状态',
+            type: 'select',
+            dm: 'zt',
+            must: true,
+            optype: true
+        },
+    ],
+    lb: [
+        {
+            cm: '代码',
+            dm: 'sfzh'
+        },
+        {
+            cm: '名称',
+            dm: 'xm'
+        },
+        {
+            cm: '上级部门',
+            dm: 'jingHao'
+        },
+        {
+            cm: '创建日期',
+            dm: 'xzsj'
+        },
+        {
+            cm: '状态',
+            dm: 'valid'
+        }
+    ],
+}
 // 获取单位列表
 function getDeptTreeByBmbh() {
     return new Promise((resolve) => {
@@ -539,6 +592,7 @@ export default {
     jsgl,
     cdgl,
     mbgl,
+    zrqgl,
     getDeptTreeByBmbh,
     getPermissionTree,
     getDeptTempPermTree,

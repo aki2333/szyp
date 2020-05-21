@@ -46,8 +46,8 @@
                   @change="linkChange(cx,dialogData[cx.dm])"
                 >
                   <el-option
-                    v-for="item in $store.state[cx.dm]"
-                    :key="item.dm"
+                    v-for="(item,index) in $store.state[cx.dm]"
+                    :key="index"
                     :label="item.dm+' - '+item.mc"
                     :value="item.dm"
                   ></el-option>

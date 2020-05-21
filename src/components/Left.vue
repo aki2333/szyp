@@ -141,15 +141,16 @@ export default {
 .children-nav-item {
   height: 50px;
   cursor: pointer;
+  font-weight: bold;
 }
 .children-nav-item:hover,
 .children-nav-item-hover {
-  color: #4294f7;
+  color: #85bcfc;
 }
 .children-nav-item::before {
   content: "·";
-  font-size: 30px;
+  font-size: 25px;
   vertical-align: sub;
-  margin: 0 5px;
+  margin: 0 2px;
 }
 </style>

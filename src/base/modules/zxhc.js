@@ -157,6 +157,11 @@ const zxhc = {
             cm: '反馈时间',
             dm: 'policestation_backtime'
         },
+        {
+            cm: '任务处理状态',
+            dm: 'statusName'
+        },
+
 
     ],
     lbBtn: [

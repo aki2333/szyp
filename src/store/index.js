@@ -101,6 +101,12 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    aGetToken(context, payload) {
+      return new Promise((resolve) => {
+        context.commit('getToken', payload)
+        resolve(payload)
+      })
+    },
     aGetUrl(context, payload) {
       return new Promise((resolve) => {
         context.commit('getUrl', payload)

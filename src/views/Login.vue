@@ -53,14 +53,16 @@ export default {
       let token = this.getUrlParam("authorization");
       console.log("toker==", token);
       if (token) {
-        this.$store.commit("getToken", token);
-        this.$router.push({ name: "Frame" });
-      } else {
-        this.$message({
-          message: "登录失败！请重新登录",
-          type: "warning"
+        this.$store.dispatch("getToken", token).then(() => {
+          this.$router.push({ name: "Frame" });
         });
       }
+      // else {
+      //   this.$message({
+      //     message: "登录失败！请重新登录",
+      //     type: "warning"
+      //   });
+      // }
     }
   },
   methods: {

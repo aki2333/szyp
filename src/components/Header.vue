@@ -64,15 +64,20 @@ export default {
     logout() {
       let url = this.$store.state.aurl;
       window.localStorage.clear();
-      console.log(url);
+      //console.log(url);
+      // if (url) {
+      //   let url2 =
+      //     "http://tyyh.szh.js:9080/cas/testout.jsp?service=" +
+      //     this.$api.root +
+      //     "/login?logout=1";
+      //   // let url2=this.$api.root+'/login'
+      //   window.location.href = url2;
+      //   // window.location.href = url.replace(/login\?/, "testout?");
+      // } else {
+      //   this.$router.push({ name: "Login" });
+      // }
       if (url) {
-        let url2 =
-          "http://tyyh.szh.js:9080/cas/testout.jsp?service=" +
-          this.$api.root +
-          "/logOut";
-        // let url2=this.$api.root+'/logOut'
-        window.location.href = url2;
-        // window.location.href = url.replace(/login\?/, "testout?");
+        window.location.href = url.replace(/login\?/, "logout?");
       } else {
         this.$router.push({ name: "Login" });
       }

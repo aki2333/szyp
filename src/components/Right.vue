@@ -1,6 +1,10 @@
 <template>
   <el-aside :width="righttWidth" class="right-box">
-    <img class="right-open" :src="righttWidth=='38px'?require('@/assets/images/main/right_open.png'):require('@/assets/images/main/right_close.png')" @click="openRight" />
+    <img
+      class="right-open"
+      :src="righttWidth=='28px'?require('@/assets/images/main/right_open.png'):require('@/assets/images/main/right_close.png')"
+      @click="openRight"
+    />
   </el-aside>
 </template>
 
@@ -9,12 +13,12 @@ export default {
   name: "Right",
   data() {
     return {
-      righttWidth: "38px"
+      righttWidth: "28px"
     };
   },
   methods: {
     openRight() {
-      this.righttWidth = this.righttWidth == "38px" ? "182px" : "38px";
+      this.righttWidth = this.righttWidth == "28px" ? "182px" : "28px";
     }
   }
 };

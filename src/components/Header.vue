@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     getNav() {
-      this.toLeftMenu(this.headData[0], 0);
+      this.toLeftMenu(this.$store.state.menu[0], 0);
     },
     toLeftMenu(item, index) {
       console.log(1, item);
@@ -62,15 +62,35 @@ export default {
       this.$store.commit("getLeftMenu", item.childrenMenu);
     },
     logout() {
+      let url = this.$store.state.aurl;
       window.localStorage.clear();
-      this.$message({
-        message: "退出成功",
-        type: "success"
-      });
+      console.log(url);
+      if (url) {
+        let url2 =
+          "http://tyyh.szh.js:9080/cas/testout.jsp?service=" +
+          this.$api.root +
+          "/logOut";
+        // let url2=this.$api.root+'/logOut'
+        window.location.href = url2;
+        // window.location.href = url.replace(/login\?/, "testout?");
+      } else {
+        this.$router.push({ name: "Login" });
+      }
 
-      let url = location.protocol + "//" + location.host;
-      window.open(url, "_self").close();
-      // this.$router.push({ name: "Login" });
+      // this.$api.post("logout", {}, r => {
+      //   console.log(r);
+      // });
+      // this.$message({
+      //   message: "退出成功",
+      //   type: "success"
+      // });
+
+      // let url =
+      //   "http://tyyh.szh.js:9080/cas/testout.jsp?service=" +
+      //   location.protocol +
+      //   "//" +
+      //   location.host;
+      // window.open(url, "_self").close();
     }
   }
 };

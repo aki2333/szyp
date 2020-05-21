@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '@/store'
 import Frame from '../views/Frame.vue'
 import Login from '../views/Login.vue'
 
@@ -62,4 +63,22 @@ const router = new VueRouter({
   routes
 })
 
+router.beforeEach((to, from, next) => {
+  // const title = to.meta && to.meta.title
+  let islogin = store.state.token
+  // let islogin = true
+  // if (title) {
+  //   document.title = title
+  // }
+  if (to.name === 'Login') {
+    //如果是登录页，则跳过验证
+    next() //必不可少
+    return //以下的代码不执行
+  }
+  if (islogin) {
+    next()
+  } else {
+    next({ name: 'Login' })
+  }
+})
 export default router

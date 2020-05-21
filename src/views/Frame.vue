@@ -1,8 +1,8 @@
 <template>
   <div id="frame">
-    <Header v-if="headData.length>0" :headData="headData"></Header>
+    <Header v-if="$store.state.menu.length>0" :headData="$store.state.menu"></Header>
     <el-container>
-      <Left v-if="$store.state.leftMenu.length>0" :leftMenu="$store.state.leftMenu"></Left>
+      <Left :leftMenu="$store.state.leftMenu"></Left>
       <el-main class="main">
         <Breadcrumb></Breadcrumb>
         <router-view />
@@ -32,9 +32,12 @@ export default {
     };
   },
   mounted() {
+    console.log("store", this.$store.state);
     // let token = this.getUrlParam('authorization');
     // this.$store.commit('getToken',token);
+    // if (!window.localStorage.getItem("user")) {
     this.getUser();
+    // }
   },
   methods: {
     getUser() {
@@ -53,10 +56,11 @@ export default {
           userBmbh: data.bmbh
         },
         r => {
-          this.$store.dispatch("aGetMenu", r).then(data => {
-            console.log(data);
-            this.headData = data[0].childrenMenu;
-          });
+          this.$store.dispatch("aGetMenu", r[0].childrenMenu);
+          // .then(data => {
+          //console.log(data);
+          //this.headData = data[0].childrenMenu;
+          // });
         }
       );
     }

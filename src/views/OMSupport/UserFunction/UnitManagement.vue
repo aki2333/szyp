@@ -5,13 +5,17 @@
         <TreeCard
           cardTitle="单位列表"
           treeType="dwlb"
+          :isGetBmmh="true"
+          :dwlbBmmh="dwlbBmmh"
           :treeData="treeData1"
           :treeProps="treeProps1"
+          :defaultChecked="defaultChecked1"
           :checkStrictly="true"
           :isExpand="false"
           nodeKey="bmbh"
           @getTree="getTree"
           @getCheckedKeys="getCheckedKeys"
+          @getDwlbBmbh="getDwlbBmbh"
         ></TreeCard>
       </el-col>
       <el-col :span="8">
@@ -57,6 +61,7 @@ export default {
         children: "children"
       },
       defaultChecked1: [],
+      dwlbBmmh: "",
       treeData2: [],
       treeProps2: {
         label: "menu_name",
@@ -85,6 +90,19 @@ export default {
         this.treeData1 = r;
       });
     },
+    // 批量选中单位
+    getDwlbBmbh(data) {
+      this.$api.post(
+        "dept/getBmbh",
+        {
+          type: data
+        },
+        r => {
+          this.treeData1 = JSON.parse(JSON.stringify(this.treeData1));
+          this.defaultChecked1 = r;
+        }
+      );
+    },
     // 获取功能列表
     getPermissionTree(deptBmbh) {
       this.$cdata.qxgl.getPermissionTree(deptBmbh).then(r => {
@@ -104,14 +122,15 @@ export default {
       // }, 1000);
     },
     // 获取模板列表
-    getTemplate() {
-      this.$cdata.qxgl.getTemplate().then(r => {
+    getTemplate(deptBmbh) {
+      this.$cdata.qxgl.getTemplate(deptBmbh).then(r => {
         this.treeData3 = r;
       });
     },
     getTree(data) {
       if (data.type == "dwlb") {
         this.getPermissionTree(data.data.bmbh);
+        this.getTemplate(data.data.bmbh);
       } else if (data.type == "mblb") {
         this.templateId = data.data.serial;
         this.getDeptTempPermTree(this.templateId);
@@ -166,6 +185,10 @@ export default {
       this.templateId = "";
       this.bmbhList = [];
       this.menuList = [];
+      this.dwlbBmmh = "";
+      this.defaultChecked1 = [];
+      this.defaultChecked2 = [];
+      this.defaultChecked3 = [];
     }
   }
 };

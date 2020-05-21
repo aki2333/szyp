@@ -18,7 +18,11 @@
           v-if="leftWidth=='225px'"
         >{{ln.menu_name}}</div>
       </div>
-      <img class="left-open" :src="leftWidth=='74px'?require('@/assets/images/main/left_open.png'):require('@/assets/images/main/left_close.png')" @click="openLeft" />
+      <img
+        class="left-open"
+        :src="leftWidth=='36px'?require('@/assets/images/main/left_open.png'):require('@/assets/images/main/left_close.png')"
+        @click="openLeft"
+      />
     </div>
     <div class="chilren-nav-box" v-if="leftWidth=='225px'">
       <div
@@ -51,17 +55,16 @@ export default {
     }
   },
   watch: {
-    leftMenu(val) {
-      console.log(val);
-      this.toChildren(this.leftMenu[0], 0);
+    leftMenu() {
+      this.toChildren(this.$store.state.leftMenu[0], 0);
     }
   },
   mounted() {
-    this.toChildren(this.leftMenu[0], 0);
+    this.toChildren(this.$store.state.leftMenu[0], 0);
   },
   methods: {
     openLeft() {
-      this.leftWidth = this.leftWidth == "74px" ? "225px" : "74px";
+      this.leftWidth = this.leftWidth == "36px" ? "225px" : "36px";
     },
     toChildren(item, index) {
       this.active1 = index;
@@ -75,7 +78,7 @@ export default {
       console.log(3, item);
       this.active2 = index;
       this.bread[1] = item;
-      console.log('this.bread',this.bread)
+      console.log("this.bread", this.bread);
       this.$store.dispatch("aGetBread", this.bread);
       this.$router.push({ name: item.menu_url });
     }
@@ -94,7 +97,7 @@ export default {
   height: 100%;
   background: rgba(10, 22, 49, 0.7);
   position: relative;
-  width: 74px;
+  width: 36px;
 }
 .left-nav-open {
   width: 100px;

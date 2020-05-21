@@ -7,6 +7,13 @@
       <span>{{cardTitle}}</span>
     </div>
     <div>
+      <div v-if="isGetBmmh" class="mb-10">
+        <el-radio-group v-model="dwlbBmmh1" @change="dwlbBmmhChange" size="small">
+          <el-radio-button :label="'sjbm'">市局部门</el-radio-button>
+          <el-radio-button :label="'fj'">分局</el-radio-button>
+          <el-radio-button :label="'pcs'">派出所</el-radio-button>
+        </el-radio-group>
+      </div>
       <el-tree
         ref="tree"
         :default-expand-all="isExpand"
@@ -39,6 +46,14 @@ export default {
       type: String,
       default: ""
     },
+    dwlbBmmh: {
+      type: String,
+      default: ""
+    },
+    isGetBmmh: {
+      type: Boolean,
+      default: false
+    },
     treeProps: {
       type: Object,
       default: () => {}
@@ -66,6 +81,7 @@ export default {
   },
   data() {
     return {
+      dwlbBmmh1: this.dwlbBmmh
       //   treeProps: {
       //     label: "bmmc",
       //     children: "children"
@@ -82,6 +98,10 @@ export default {
       this.$emit("getCheckedKeys", { type: this.treeType, data: data });
       let data2 = this.$refs.tree.getCheckedNodes(false, true);
       this.$emit("getCheckedNodes", { type: this.treeType, data: data2 });
+    },
+    dwlbBmmhChange(data) {
+      console.log(data);
+      this.$emit("getDwlbBmbh", data);
     }
   }
 };

@@ -488,13 +488,14 @@ function getDeptTempPermTree(tempId) {
 
 }
 // 获取模板列表
-function getTemplate() {
+function getTemplate(deptBmbh) {
     return new Promise((resolve) => {
         api.post(
             "dept/getTemplate",
             {
                 userId: store.state.user.userId,
-                bmbh: store.state.user.bmbh
+                deptBmbh: deptBmbh
+                // bmbh: store.state.user.bmbh
             },
             r => {
                 resolve(r)

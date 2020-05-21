@@ -150,6 +150,7 @@ export default {
     tabFnc(data) {
       console.log("tab切换", data);
       this.cx.pd.status = data;
+      this.cx.pageNum = 1;
       this.getTable();
     },
     cancel() {

@@ -32,7 +32,7 @@ export default new Vuex.Store({
     sjBmbh: [],
     fjBmbh: [],
     pcsBmbh: [],
-    aurl:aurl||'',
+    aurl: aurl || '',
 
   },
   mutations: {
@@ -58,9 +58,9 @@ export default new Vuex.Store({
       state.token = data;
       window.localStorage.setItem("token", data)
     },
-    getUrl(state,data){
+    getUrl(state, data) {
       state.aurl = data;
-      window.localStorage.setItem("aurl",data)
+      window.localStorage.setItem("aurl", data)
     },
     getNation(state, data) {
       state.nationality = data;
@@ -101,6 +101,12 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    aGetUrl(context, payload) {
+      return new Promise((resolve) => {
+        context.commit('getUrl', payload)
+        resolve(payload)
+      })
+    },
     aGetUser(context, payload) {
       return new Promise((resolve) => {
         context.commit('getUser', payload)
@@ -160,7 +166,7 @@ export default new Vuex.Store({
     },
     aGetSuboffice(context, payload) {
       return new Promise((resolve) => {
-        api.post(api.root1 + '/dm/getDmList', {tableName: 'dm_pcsb', lvl: '2',dmNameRightLike:payload}, r => {
+        api.post(api.root1 + '/dm/getDmList', { tableName: 'dm_pcsb', lvl: '2', dmNameRightLike: payload }, r => {
           context.commit('getSuboffice', fnc.sortByKey(r, 'dm'))
           resolve(payload)
         })
@@ -168,7 +174,7 @@ export default new Vuex.Store({
     },
     aGetPolice(context, payload) {
       return new Promise((resolve) => {
-        api.post(api.root1 + '/dm/getDmList', {tableName: 'dm_pcsb', lvl: '3',dmNameRightLike:payload}, r => {
+        api.post(api.root1 + '/dm/getDmList', { tableName: 'dm_pcsb', lvl: '3', dmNameRightLike: payload }, r => {
           context.commit('getPolice', fnc.sortByKey(r, 'dm'))
           resolve(payload)
         })

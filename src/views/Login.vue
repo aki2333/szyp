@@ -49,11 +49,6 @@ export default {
     };
   },
   mounted() {
-    let url = "http://tyyh.szh.js:9080/cas/login?service=" +
-        this.$api.root +
-        "/login";
-    // let url=this.$api.root+'/login'
-    this.$store.commit("getUrl",url)
     if (window.location.href.includes("authorization")) {
       let token = this.getUrlParam("authorization");
       console.log("toker==", token);
@@ -70,12 +65,14 @@ export default {
   },
   methods: {
     login() {
-      // let url =
-      //   "http://tyyh.szh.js:9080/cas/login?service=" +
-      //   this.$api.root +
-      //   "/login";
+      let url =
+        "http://tyyh.szh.js:9080/cas/login?service=" +
+        this.$api.root +
+        "/login";
       // let url=this.$api.root+'/login'
-      window.location.href = this.$store.state.aurl;
+      this.$store.dispatch("aGetUrl", url).then(data => {
+        window.location.href = data;
+      });
 
       // this.$api.post("/login", null, r => {
       //   if (r.authorization) {
@@ -110,6 +107,8 @@ export default {
       // }
     },
     loginPassword() {
+      // this.isLogin = true;
+      this.$store.dispatch("aGetUrl", "");
       this.clickFive++;
       if (this.clickFive == 5) {
         this.isLogin = true;

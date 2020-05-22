@@ -43,7 +43,7 @@
                   clearable
                   :disabled="cx.dis"
                   placeholder="请选择"
-                  @change="linkChange(cx,dialogData[cx.dm])"
+                  @change="linkChange(cx,dialogData[cx.dm],dialogData)"
                 >
                   <el-option
                     v-for="(item,index) in $store.state[cx.dm]"
@@ -201,8 +201,8 @@ export default {
         }
       });
     },
-    linkChange(key, val) {
-      this.$emit("formLcFnc", { key: key, data: val });
+    linkChange(key, val,dialogData) {
+      this.$emit("formLcFnc", { key: key, data: val ,obj:dialogData});
     },
     cancel() {
       if (this.isXJ) {

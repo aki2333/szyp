@@ -167,6 +167,9 @@ export default {
         if(data.data==''){
           data.obj.policestation = '';
         }
+        if(data.obj.policestation){
+          data.obj.policestation = '';
+        }
         this.$store.dispatch("aGetPolice",data.data.slice(0,6));
       }
     },
@@ -176,6 +179,12 @@ export default {
         this.$store.dispatch("aGetBackstatus", data.data).then(() => {});
       }
       if(data.key.dm == "suboffice") {
+        if(data.data==''){
+          data.obj.policestation = '';
+        }
+        if(data.obj.policestation){
+          data.obj.policestation = '';
+        }
         this.$store.dispatch("aGetPolice",data.data.slice(0,6));
       }
     },

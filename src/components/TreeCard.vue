@@ -18,7 +18,7 @@
         ref="tree"
         :default-expand-all="isExpand"
         :expand-on-click-node="false"
-        :default-checked-keys="defaultChecked"
+        :default-expanded-keys="defaultExpanded"
         highlight-current
         :check-strictly="checkStrictly"
         :data="treeData"
@@ -77,23 +77,37 @@ export default {
     defaultChecked: {
       type: Array,
       default: () => []
+    },
+    defaultExpanded: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
     return {
       dwlbBmmh1: this.dwlbBmmh
-      //   treeProps: {
-      //     label: "bmmc",
-      //     children: "children"
-      //   }
     };
+  },
+  watch: {
+    defaultChecked(val) {
+      // console.log("defaultChecked", val);
+      this.$refs.tree.setCheckedKeys(val);
+    }
   },
   methods: {
     nodeClick(a) {
       // console.log(a, b, c);
       this.$emit("getTree", { type: this.treeType, data: a });
     },
-    handleCheckChange() {
+    handleCheckChange(a, b, c) {
+      console.log(a, b, c);
+      if (this.dwlbBmmh1 == "pcs") {
+        this.$refs.tree.store.nodesMap[a.bmbh].expanded = true;
+        a.unfold = true;
+      } else {
+        this.$refs.tree.store.nodesMap[a.sjbmbh].expanded = true;
+        // a.unfold = true;
+      }
       let data = this.$refs.tree.getCheckedKeys(false);
       this.$emit("getCheckedKeys", { type: this.treeType, data: data });
       let data2 = this.$refs.tree.getCheckedNodes(false, true);

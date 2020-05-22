@@ -10,6 +10,7 @@
           :treeData="treeData1"
           :treeProps="treeProps1"
           :defaultChecked="defaultChecked1"
+          :defaultExpanded="[$store.state.user.bmbh]"
           :checkStrictly="true"
           :isExpand="false"
           nodeKey="bmbh"
@@ -61,6 +62,7 @@ export default {
         children: "children"
       },
       defaultChecked1: [],
+      defaultExpanded1: [],
       dwlbBmmh: "",
       treeData2: [],
       treeProps2: {
@@ -98,7 +100,6 @@ export default {
           type: data
         },
         r => {
-          this.treeData1 = JSON.parse(JSON.stringify(this.treeData1));
           this.defaultChecked1 = r;
         }
       );
@@ -112,14 +113,10 @@ export default {
     },
     getDeptTempPermTree(tempId) {
       this.defaultChecked2 = [];
-      //this.cancel();
-      // setTimeout(() => {
       this.$cdata.qxgl.getDeptTempPermTree(tempId).then(r => {
-        this.treeData2 = JSON.parse(JSON.stringify(this.treeData2));
-        this.defaultChecked2 = JSON.parse(JSON.stringify(r.choose));
-        console.log(" this.defaultChecked2", this.defaultChecked2);
+        // this.treeData2 = JSON.parse(JSON.stringify(this.treeData2));
+        this.defaultChecked2 = r.choose;
       });
-      // }, 1000);
     },
     // 获取模板列表
     getTemplate(deptBmbh) {
@@ -143,11 +140,10 @@ export default {
     },
     getCheckedNodes(data) {
       if (data.type == "gnlb") {
-        console.log("gnlb", data);
+        // console.log("gnlb", data);
         this.buttonList = [];
         this.menuList = [];
         let arr = [...data.data];
-
         arr.forEach(item => {
           if (item.menu_type == "B") {
             this.buttonList.push(item.serial);

@@ -144,7 +144,33 @@ export default {
       // form: {},
       rules: {
         xtmm: [{ required: true, message: "请输入密码", trigger: "blur" }],
-        qrxtmm: [{ validator: validatePass, trigger: "blur" }]
+        qrxtmm: [{ validator: validatePass, trigger: "blur" }],
+        xm: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+        yddh: [
+          { required: true, message: "请输入电话号码", trigger: "blur" },
+          { max: 11, message: "长度不可超过11位", trigger: "blur" },
+          {
+            required: true,
+            pattern: /^-?[1-9]\d*$/,
+            message: "请输入正确的电话号码",
+            trigger: "blur"
+          }
+        ],
+        sfzh: [
+          { required: true, message: "请输入身份证号", trigger: "blur" },
+          { min: 15, max: 18, message: "请如实填写18位号码", trigger: "blur" },
+          {
+            required: true,
+            pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,
+            message: "请输入正确的身份证号码",
+            trigger: "blur"
+          }
+        ],
+        jingHao: [
+          { required: true, message: "请输入警号", trigger: "blur" },
+          { max: 20, message: "长度不可超过20位", trigger: "blur" }
+        ],
+        bmbh: [{ required: true, message: "请选择单位", trigger: "blur" }]
       },
       isXJ: false,
       newForm: {}

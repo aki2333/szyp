@@ -58,8 +58,8 @@
                     <el-date-picker
                       v-model="inquire[cx.children[0].dm]"
                       :type="cx.children[0].type"
-                      placeholder="选择开始日期"
-                      value-format="yyyy-MM-dd"
+                      placeholder="选择开始时间"
+                      :value-format="cx.children[0].type=='date'?'yyyy-MM-dd':'yyyy-MM-dd HH:mm:ss'"
                     ></el-date-picker>
                   </div>
                   <div>-</div>
@@ -67,8 +67,8 @@
                     <el-date-picker
                       v-model="inquire[cx.children[1].dm]"
                       :type="cx.children[1].type"
-                      placeholder="选择结束日期"
-                      value-format="yyyy-MM-dd"
+                      placeholder="选择结束时间"
+                      :value-format="cx.children[0].type=='date'?'yyyy-MM-dd':'yyyy-MM-dd HH:mm:ss'"
                     ></el-date-picker>
                   </div>
                   <!-- <div class="double" v-for="(c,chi) in cx.children" :key="chi">
@@ -161,8 +161,8 @@ export default {
       this.queryIsShow = !this.queryIsShow;
       this.$emit("queryShowFnc", this.queryIsShow);
     },
-    linkChange(key, val,inquire) {
-      this.$emit("lcFnc", { key: key, data: val ,obj:inquire});
+    linkChange(key, val, inquire) {
+      this.$emit("lcFnc", { key: key, data: val, obj: inquire });
     },
     resetForm() {
       let mrz = {};

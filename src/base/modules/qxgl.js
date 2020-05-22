@@ -166,12 +166,12 @@ const yhgl = {
         {
             cm: '姓名',
             type: 'input',
-            dm: 'xm'
+            dm: 'xm' //必填
         },
         {
             cm: '电话号码',
             type: 'input',
-            dm: 'yddh'
+            dm: 'yddh'//必填
         },
         {
             cm: '警号',
@@ -181,12 +181,12 @@ const yhgl = {
         {
             cm: '证件号码',
             type: 'input',
-            dm: 'sfzh'
+            dm: 'sfzh'//必填
         },
         {
             cm: '所属单位',
             type: 'select',
-            dm: 'bmbh',
+            dm: 'bmbh',//必填
         },
         // {
         //     cm: '市局单位',
@@ -206,7 +206,7 @@ const yhgl = {
         {
             cm: '密码',
             type: 'input',
-            dm: 'xtmm'
+            dm: 'xtmm'//必填
         },
         // {
         //     cm: '用户类型',

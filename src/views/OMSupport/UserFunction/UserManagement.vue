@@ -110,7 +110,7 @@ export default {
       plBtn: this.$cdata.qxgl.yhgl.plBtn,
       // 【业务数据】
       cx: {
-        pd: { userType: "0" },
+        pd: { userType: "0", valid: "1" },
         pageSize: 10,
         pageNum: 1,
         order: "serial",

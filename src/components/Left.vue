@@ -1,6 +1,6 @@
 <template>
   <el-aside :width="leftWidth" class="left-box">
-    <div class="left-nav-box" :class="{'left-nav-open':leftWidth=='225px'}">
+    <div class="left-nav-box" :class="{'left-nav-open':leftWidth=='auto'}">
       <div
         class="left-nav-item"
         :class="{'left-nav-item-hover':active1==lind}"
@@ -15,7 +15,7 @@
         <div
           class="left-nav-name"
           :class="{'left-nav-name-hover':active1==lind}"
-          v-if="leftWidth=='225px'"
+          v-if="leftWidth=='auto'"
         >{{ln.menu_name}}</div>
       </div>
       <img
@@ -24,7 +24,7 @@
         @click="openLeft"
       />
     </div>
-    <div class="chilren-nav-box" v-if="leftWidth=='225px'">
+    <div class="chilren-nav-box" v-if="leftWidth=='auto'">
       <div
         :class="{'children-nav-item-hover':active2==cind}"
         class="children-nav-item"
@@ -41,7 +41,7 @@ export default {
   name: "Left",
   data() {
     return {
-      leftWidth: "225px",
+      leftWidth: "auto",
       active1: 0,
       active2: 0,
       chilrenNav: [],
@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     openLeft() {
-      this.leftWidth = this.leftWidth == "36px" ? "225px" : "36px";
+      this.leftWidth = this.leftWidth == "36px" ? "auto" : "36px";
     },
     toChildren(item, index) {
       this.active1 = index;
@@ -136,7 +136,7 @@ export default {
 .chilren-nav-box {
   color: #b1b8be;
   font-size: 13px;
-  padding: 20px 10px;
+  padding: 20px 15px 20px 10px;
 }
 .children-nav-item {
   height: 50px;

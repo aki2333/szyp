@@ -104,10 +104,11 @@ export default {
       if (this.dwlbBmmh1 == "pcs") {
         this.$refs.tree.store.nodesMap[a.bmbh].expanded = true;
         a.unfold = true;
-      } else {
-        this.$refs.tree.store.nodesMap[a.sjbmbh].expanded = true;
-        // a.unfold = true;
       }
+      // else {
+      //   this.$refs.tree.store.nodesMap[a.sjbmbh].expanded = true;
+      //   // a.unfold = true;
+      // }
       let data = this.$refs.tree.getCheckedKeys(false);
       this.$emit("getCheckedKeys", { type: this.treeType, data: data });
       let data2 = this.$refs.tree.getCheckedNodes(false, true);

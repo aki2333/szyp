@@ -52,7 +52,7 @@ export default {
     if (window.location.href.includes("authorization")) {
       let token = this.getUrlParam("authorization");
       if (token) {
-        this.$store.dispatch("getToken", token).then(() => {
+        this.$store.dispatch("aGetToken", token).then(() => {
           this.$router.push({ name: "Frame" });
         });
       }

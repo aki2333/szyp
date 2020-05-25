@@ -78,8 +78,10 @@ export default {
       // }
       if (url) {
         window.location.href = url.replace(/login\?/, "logout?");
+         console.log('window.location.href',window.location.href)
       } else {
         this.$router.push({ name: "Login" });
+         console.log('Login','111')
       }
 
       // this.$api.post("logout", {}, r => {

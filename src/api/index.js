@@ -1,13 +1,14 @@
 // 配置API接口地址
 
 var root = 'http://192.168.3.131:1101/'//测试
-// var root = 'http://50.73.70.26:9404:1101/'//公安
+// var root = 'http://50.73.70.26:1101/'//公安
+
+// var root = 'http://10.0.30.43:1101'//石本地
+// var root = 'http://10.0.30.57:1101/'//任本地
 
 var aport1 = 'permission'//任
-// var aport1 = 'http://10.0.8.55:9404'//任本地
-
 var aport2 = 'datarelease'//石
-// var aport2 = 'http://10.0.30.43:9405'//石本地
+
 
 // 引用axios
 import axios from 'axios';

@@ -1,11 +1,14 @@
 // 配置API接口地址
-var root = 'http://192.168.3.131:9404'//任测试
-// var root = 'http://10.0.8.55:9404'//任本地
-// var root = "http://50.73.70.26:9404"//任公安
 
-var root1 = 'http://192.168.3.131:9405'//石飞测试
-// var root1 = 'http://10.0.30.43:9405'//石飞本地
-// var root1 = 'http://50.73.70.26:9405'//石飞公安
+var root = 'http://192.168.3.131:1101/'//测试
+// var root = 'http://50.73.70.26:9404:1101/'//公安
+
+var aport1 = 'permission'//任
+// var aport1 = 'http://10.0.8.55:9404'//任本地
+
+var aport2 = 'datarelease'//石
+// var aport2 = 'http://10.0.30.43:9405'//石本地
+
 // 引用axios
 import axios from 'axios';
 import store from '@/store'
@@ -115,6 +118,7 @@ export default {
   delete: function (url, params, success, failure) {
     return apiAxios('DELETE', url, params, success, failure)
   },
-  root1,
-  root
+  root,
+  aport1,
+  aport2,
 }

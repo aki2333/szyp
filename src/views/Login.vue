@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <div class="login_main" @click="aa()">
+    <div class="login_main">
       <img src="../assets/images/login/pro_tip.png" alt />
       <img class="mt-30" src="../assets/images/login/login_tip.png" @click="loginPassword" alt />
       <img
@@ -51,7 +51,6 @@ export default {
   mounted() {
     if (window.location.href.includes("authorization")) {
       let token = this.getUrlParam("authorization");
-      console.log("toker==", token);
       if (token) {
         this.$store.dispatch("getToken", token).then(() => {
           this.$router.push({ name: "Frame" });
@@ -66,33 +65,15 @@ export default {
     }
   },
   methods: {
+    //证书登陆
     login() {
       let url =
         "http://tyyh.szh.js:9080/cas/login?service=" +
-        this.$api.root +
+        this.$api.root + this.$api.aport1
         "/login";
-      // let url=this.$api.root+'/login'
       this.$store.dispatch("aGetUrl", url).then(data => {
         window.location.href = data;
       });
-
-      // this.$api.post("/login", null, r => {
-      //   if (r.authorization) {
-      //     this.$store.commit('getToken',r.authorization);
-      //     //this.getUser();
-      //     // this.$store.commit("getToken", "6DDF3A214DD94F9F9BEEE04973DA397F");
-      //     this.$router.push({ name: "Frame" });
-      //     this.$message({
-      //       message: "登录成功",
-      //       type: "success"
-      //     });
-      //   } else {
-      //     this.$message({
-      //       message: "登录失败！请重新登录",
-      //       type: "warning"
-      //     });
-      //   }
-      // });
     },
     getUrlParam(name) {
       let url = window.location.href;
@@ -103,13 +84,8 @@ export default {
         return pair[1];
       }
     },
-    aa() {
-      // if(this.isLogin==true){
-      //   this.isLogin=false
-      // }
-    },
+    //用户名密码登陆
     loginPassword() {
-      // this.isLogin = true;
       this.$store.dispatch("aGetUrl", "");
       this.clickFive++;
       if (this.clickFive == 5) {
@@ -132,7 +108,7 @@ export default {
         return;
       }
       if (this.user.name && this.user.password) {
-        this.$api.post("/accountLogin", this.user, r => {
+        this.$api.post(this.$api.aport1+"/accountLogin", this.user, r => {
           if (r.authorization) {
             this.$store.commit("getToken", r.authorization);
             this.$router.push({ name: "Frame" });

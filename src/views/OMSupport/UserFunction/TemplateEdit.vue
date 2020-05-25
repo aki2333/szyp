@@ -78,7 +78,7 @@ export default {
   methods: {
     // 获取功能列表
     getMenuTree() {
-      this.$api.post("menuController/getMenuTree", {}, r => {
+      this.$api.post(this.$api.aport1+"/menuController/getMenuTree", {}, r => {
         this.treeData1 = r;
       });
     },

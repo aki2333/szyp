@@ -95,7 +95,7 @@ export default {
     // 批量选中单位
     getDwlbBmbh(data) {
       this.$api.post(
-        "dept/getBmbh",
+        this.$api.aport1+"/dept/getBmbh",
         {
           type: data
         },
@@ -156,7 +156,7 @@ export default {
     // 部门赋权
     addPermissionToDept() {
       this.$api.post(
-        "dept/addPermissionToDept",
+        this.$api.aport1+"/dept/addPermissionToDept",
         {
           userId: this.$store.state.user.userId,
           bmbhList: this.bmbhList,

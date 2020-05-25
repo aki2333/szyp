@@ -170,7 +170,7 @@ export default {
     // 查询用户列表
     getTable() {
       console.log(this.cx);
-      this.$api.post("userController/queryUserInfo", this.cx, r => {
+      this.$api.post(this.$api.aport1+"/userController/queryUserInfo", this.cx, r => {
         this.tableData = r.resultList;
         this.tableData2 = { list: [] };
         this.tableData3 = { list: [] };
@@ -181,7 +181,7 @@ export default {
     },
     // 查询用户单位列表
     queryUserDept(bmbh) {
-      this.$api.post("userController/queryUserDept", { bmbh: bmbh }, r => {
+      this.$api.post(this.$api.aport1+"/userController/queryUserDept", { bmbh: bmbh }, r => {
         this.tableData2.list = r.deptList;
         this.dwtbShow = true;
         this.jstbShow = false;
@@ -191,7 +191,7 @@ export default {
     // 获取角色列表
     getRole(bmbh) {
       this.$api.post(
-        "role/getRole",
+        this.$api.aport1+"/role/getRole",
         { bmbh: bmbh, quanJu: "true", userId: this.currentRow.userId },
         r => {
           this.tableData3.list = r;
@@ -315,7 +315,7 @@ export default {
       let p = data;
       p.userType = "1";
       console.log(data);
-      this.$api.post("userController/saveUser", p, r => {
+      this.$api.post(this.$api.aport1+"/userController/saveUser", p, r => {
         this.$message({
           message: r.message,
           type: "success"
@@ -326,7 +326,7 @@ export default {
     },
     // 修改用户
     updateOtherUserInfo(data) {
-      this.$api.post("userController/updateOtherUserInfo", data, r => {
+      this.$api.post(this.$api.aport1+"/userController/updateOtherUserInfo", data, r => {
         this.$message({
           message: r.message,
           type: "success"
@@ -346,7 +346,7 @@ export default {
           userId: data.userId,
           status: "0"
         };
-        this.$api.post("userController/updateOtherUserInfo", p, () => {
+        this.$api.post(this.$api.aport1+"/userController/updateOtherUserInfo", p, () => {
           this.$message({
             message: "删除成功",
             type: "success"
@@ -361,7 +361,7 @@ export default {
       let p = data;
       p.userType = this.cx.pd.userType;
       p.list = rowData ? [{ serial: rowData.userId }] : [];
-      this.$api.post("userController/batchUpdateUserPassword", p, r => {
+      this.$api.post(this.$api.aport1+"/userController/batchUpdateUserPassword", p, r => {
         this.$message({
           message: r.message,
           type: "success"
@@ -380,7 +380,7 @@ export default {
         let p = {};
         p.userType = this.cx.pd.userType;
         p.list = rowData ? [{ serial: rowData.userId }] : [];
-        this.$api.post("userController/batchRandomPassword", p, r => {
+        this.$api.post(this.$api.aport1+"/userController/batchRandomPassword", p, r => {
           this.$message({
             message: r.message,
             type: "success"
@@ -399,7 +399,7 @@ export default {
         list: this.userRoleData,
         userId: this.currentRow.userId
       };
-      this.$api.post("userRoleController/saveUserRoleInfo", p, r => {
+      this.$api.post(this.$api.aport1+"/userRoleController/saveUserRoleInfo", p, r => {
         this.$message({
           message: r.message,
           type: "success"

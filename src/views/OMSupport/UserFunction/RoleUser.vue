@@ -83,7 +83,7 @@ export default {
     // 查询用户列表
     getTable() {
       console.log("查询用户列表-", this.cx);
-      this.$api.post("role/getRoleUser", this.cx, r => {
+      this.$api.post(this.$api.aport1+"/role/getRoleUser", this.cx, r => {
         this.tableData = r;
         this.tableData.list.forEach(item => {
           item.status = this.cx.pd.status;
@@ -123,7 +123,7 @@ export default {
     },
     // 添加
     addRoleUser(data) {
-      this.$api.post("role/addRoleUser", data, r => {
+      this.$api.post(this.$api.aport1+"/role/addRoleUser", data, r => {
         this.$message({
           message: r,
           type: "success"
@@ -138,7 +138,7 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
-        this.$api.post("role/delRoleUser", data, r => {
+        this.$api.post(this.$api.aport1+"/role/delRoleUser", data, r => {
           this.$message({
             message: r,
             type: "success"

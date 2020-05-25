@@ -32,16 +32,12 @@ export default {
     };
   },
   mounted() {
-    console.log("store", this.$store.state);
-    // let token = this.getUrlParam('authorization');
-    // this.$store.commit('getToken',token);
-    // if (!window.localStorage.getItem("user")) {
+    console.log("store", this.$store.state); 
     this.getUser();
-    // }
   },
   methods: {
     getUser() {
-      this.$api.post("userController/getUser", {}, r => {
+      this.$api.post(this.$api.aport1+"/userController/getUser", {}, r => {
         this.$store.dispatch("aGetUser", r).then(data => {
           console.log(data);
           this.getNav(data);
@@ -50,7 +46,7 @@ export default {
     },
     getNav(data) {
       this.$api.post(
-        "dept/getPermissionTree",
+        this.$api.aport1+"/dept/getPermissionTree",
         {
           userId: data.userId,
           userBmbh: data.bmbh
@@ -64,17 +60,6 @@ export default {
         }
       );
     }
-    //  getUrlParam(name) {
-    // var url="http://10.0.30.78:8083/#/?authorization=jskdjfkjdslkfjdslkjflks"
-    // var url = window.location.href;
-    // 取得url中?后面的字符
-    // var query = url.split("?")[1];
-    // var query = window.location.search.substring(1);
-    // var pair = query.split("=");
-    // if(pair[0] == name){
-    // return pair[1];
-    // }
-    // }
   }
 };
 </script>

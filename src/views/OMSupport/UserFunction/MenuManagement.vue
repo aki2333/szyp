@@ -115,7 +115,7 @@ export default {
   methods: {
     // 获取功能列表
     getMenuTree() {
-      this.$api.post("menuController/getMenuTree", {}, r => {
+      this.$api.post(this.$api.aport1+"/menuController/getMenuTree", {}, r => {
         this.treeData2 = r;
       });
     },
@@ -161,7 +161,7 @@ export default {
       //console.log(this.oldformData, this.formData);
     },
     addMenuInfo(data) {
-      this.$api.post("menuController/addMenuInfo", data, r => {
+      this.$api.post(this.$api.aport1+"/menuController/addMenuInfo", data, r => {
         this.$message({
           message: r,
           type: "success"
@@ -185,7 +185,7 @@ export default {
       this.addBc = false;
     },
     updateMenuInfo(data) {
-      this.$api.post("menuController/updateMenuInfo", data, r => {
+      this.$api.post(this.$api.aport1+"/menuController/updateMenuInfo", data, r => {
         this.$message({
           message: r,
           type: "success"
@@ -226,7 +226,7 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
-        this.$api.post("menuController/deleteMenuInfo", _data, r => {
+        this.$api.post(this.$api.aport1+"/menuController/deleteMenuInfo", _data, r => {
           this.$message({
             message: r,
             type: "success"

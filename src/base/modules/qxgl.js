@@ -496,7 +496,7 @@ const zrqgl = {
 function getDeptTreeByBmbh() {
     return new Promise((resolve) => {
         api.post(
-            "dept/getDeptTreeByBmbh",
+            api.aport1+"/dept/getDeptTreeByBmbh",
             { bmbh: store.state.user.bmbh },
             // { bmbh: this.$store.state.user.bmbh },
             r => {
@@ -510,7 +510,7 @@ function getDeptTreeByBmbh() {
 function getPermissionTree(deptBmbh) {
     return new Promise((resolve) => {
         api.post(
-            "dept/getDeptPermissionTree",
+            api.aport1+"/dept/getDeptPermissionTree",
             {
                 userId: store.state.user.userId,
                 userBmbh: store.state.user.bmbh,
@@ -527,7 +527,7 @@ function getPermissionTree(deptBmbh) {
 function getDeptTempPermTree(tempId) {
     return new Promise((resolve) => {
         api.post(
-            "dept/getDeptTempPermTree",
+            api.aport1+"/dept/getDeptTempPermTree",
             {
                 userId: store.state.user.userId,
                 userBmbh: store.state.user.bmbh,
@@ -544,7 +544,7 @@ function getDeptTempPermTree(tempId) {
 function getTemplate(deptBmbh) {
     return new Promise((resolve) => {
         api.post(
-            "dept/getTemplate",
+            api.aport1+"/dept/getTemplate",
             {
                 userId: store.state.user.userId,
                 deptBmbh: deptBmbh
@@ -561,7 +561,7 @@ function getTemplate(deptBmbh) {
 function getRolePermissionTree(roleId) {
     return new Promise((resolve) => {
         api.post(
-            "role/getRolePermissionTree",
+            api.aport1+"/role/getRolePermissionTree",
             {
                 roleId: roleId,
             },
@@ -575,7 +575,7 @@ function getRolePermissionTree(roleId) {
 function getDeptRolePermTree(deptBmbh, roleId) {
     return new Promise((resolve) => {
         api.post(
-            "role/getDeptRolePermTree",
+            api.aport1+"/role/getDeptRolePermTree",
             {
                 deptBmbh: deptBmbh,
                 roleId: roleId,

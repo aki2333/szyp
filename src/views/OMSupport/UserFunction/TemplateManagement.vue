@@ -94,13 +94,13 @@ export default {
   methods: {
     // 获取角色列表
     selectTemplateList() {
-      this.$api.post("templateController/selectTemplateList", this.cx, r => {
+      this.$api.post(this.$api.aport1+"/templateController/selectTemplateList", this.cx, r => {
         this.tableData = r;
       });
     },
     // 获取功能列表
     getMenuTree(data) {
-      this.$api.post("menuController/getMenuTree", {}, r => {
+      this.$api.post(this.$api.aport1+"/menuController/getMenuTree", {}, r => {
         this.treeData2 = r;
         console.log(data.data.menuList);
         this.defaultChecked2 = data.data.menuList;
@@ -165,7 +165,7 @@ export default {
     // 新建
     addTemplate(data) {
       console.log("新建弹窗获得数据-", data);
-      this.$api.post("templateController/addTemplate", data, r => {
+      this.$api.post(this.$api.aport1+"/templateController/addTemplate", data, r => {
         this.$message({
           message: r,
           type: "success"
@@ -183,7 +183,7 @@ export default {
         menuList: this.menuList,
         buttonList: this.buttonList
       };
-      this.$api.post("templateController/updateTemplate", p, r => {
+      this.$api.post(this.$api.aport1+"/templateController/updateTemplate", p, r => {
         this.$message({
           message: r,
           type: "success"
@@ -203,7 +203,7 @@ export default {
           serial: this.checkRow.serial,
           userId: this.$store.state.user.userId
         };
-        this.$api.post("templateController/deleteTemplate", p, r => {
+        this.$api.post(this.$api.aport1+"/templateController/deleteTemplate", p, r => {
           this.$message({
             message: r,
             type: "success"

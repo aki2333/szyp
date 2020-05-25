@@ -139,7 +139,7 @@ export default new Vuex.Store({
     },
     aGetNation(context, payload) {
       return new Promise((resolve) => {
-        api.post('/DmController/getDMInfo', { tableName: 'dm_gjdqb' }, r => {
+        api.post(api.aport1+'/DmController/getDMInfo', { tableName: 'dm_gjdqb' }, r => {
           context.commit('getNation', fnc.ToArray(r.list))
           resolve(payload)
         })
@@ -147,7 +147,7 @@ export default new Vuex.Store({
     },
     aGetGender(context, payload) {
       return new Promise((resolve) => {
-        api.post('/DmController/getDMInfo', { tableName: 'dm_xbb' }, r => {
+        api.post(api.aport1+'/DmController/getDMInfo', { tableName: 'dm_xbb' }, r => {
           context.commit('getGender', fnc.ToArray(r.list))
           resolve(payload)
         })
@@ -156,7 +156,7 @@ export default new Vuex.Store({
     aGetGrade(context, payload) {
       console.log("payload", context)
       return new Promise((resolve) => {
-        api.post('/templateController/getGrade', { template_grade: payload }, r => {
+        api.post(api.aport1+'/templateController/getGrade', { template_grade: payload }, r => {
           context.commit('getGrade', r)
           resolve(r)
         })
@@ -164,7 +164,7 @@ export default new Vuex.Store({
     },
     aGetPassport(context, payload) {
       return new Promise((resolve) => {
-        api.post('/DmController/getDMInfo', { tableName: 'dm_zjzlb' }, r => {
+        api.post(api.aport1+'/DmController/getDMInfo', { tableName: 'dm_zjzlb' }, r => {
           context.commit('getPassport', fnc.ToArray(r.list))
           resolve(payload)
         })
@@ -172,7 +172,7 @@ export default new Vuex.Store({
     },
     aGetSuboffice(context, payload) {
       return new Promise((resolve) => {
-        api.post(api.root1 + '/dm/getDmList', { tableName: 'dm_pcsb', lvl: '2', dmNameRightLike: payload }, r => {
+        api.post(api.aport2 + '/dm/getDmList', { tableName: 'dm_pcsb', lvl: '2', dmNameRightLike: payload }, r => {
           context.commit('getSuboffice', fnc.sortByKey(r, 'dm'))
           resolve(payload)
         })
@@ -180,7 +180,7 @@ export default new Vuex.Store({
     },
     aGetPolice(context, payload) {
       return new Promise((resolve) => {
-        api.post(api.root1 + '/dm/getDmList', { tableName: 'dm_pcsb', lvl: '3', dmNameRightLike: payload }, r => {
+        api.post(api.aport2 + '/dm/getDmList', { tableName: 'dm_pcsb', lvl: '3', dmNameRightLike: payload }, r => {
           context.commit('getPolice', fnc.sortByKey(r, 'dm'))
           resolve(payload)
         })
@@ -188,7 +188,7 @@ export default new Vuex.Store({
     },
     aGetDatatype(context, payload) {
       return new Promise((resolve) => {
-        api.post(api.root1 + '/dm/getDmList', { tableName: 'dm_issue_data' }, r => {
+        api.post(api.aport2 + '/dm/getDmList', { tableName: 'dm_issue_data' }, r => {
           context.commit('getDatatype', fnc.sortByKey(r, 'dm'))
           resolve(payload)
         })
@@ -196,7 +196,7 @@ export default new Vuex.Store({
     },
     aGetBackstatus(context, payload) {
       return new Promise((resolve) => {
-        api.post(api.root1 + '/dm/getDmList', { tableName: 'dm_zfztb', sjly: payload }, r => {
+        api.post(api.aport2 + '/dm/getDmList', { tableName: 'dm_zfztb', sjly: payload }, r => {
           context.commit('getBackstatus', fnc.sortByKey(r, 'dm'))
           resolve(payload)
         })
@@ -204,7 +204,7 @@ export default new Vuex.Store({
     },
     aGetBmbh(context, payload) {
       return new Promise((resolve) => {
-        api.post('dept/getAllSubDept', payload, r => {
+        api.post(api.aport1+'/dept/getAllSubDept', payload, r => {
           context.commit('getBmbh', r)
           resolve(r)
         })

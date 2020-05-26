@@ -3,6 +3,7 @@ node_modules
 /dist
 /beifen
 dist.zip
+wg3q.zip
 
 # local env files
 .env.local

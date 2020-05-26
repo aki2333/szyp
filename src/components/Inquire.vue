@@ -125,13 +125,13 @@ export default {
       default: () => {}
     }
   },
-  watch: {
-    pd(val) {
-      console.log("sssss", val, this.mrz);
-      //       this.$nextTick(function() {
-      // });
-    }
-  },
+  // watch: {
+  //   pd(val) {
+  //     console.log("sssss", val, this.mrz);
+  //     //       this.$nextTick(function() {
+  //     // });
+  //   }
+  // },
   data() {
     return {
       inquire: this.pd,

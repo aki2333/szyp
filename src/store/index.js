@@ -30,8 +30,8 @@ export default new Vuex.Store({
     backstatus: [],//数据状态
     bmbh: [],
     sjBmbh: [],
-    fjBmbh: [],
-    pcsBmbh: [],
+    ssfj: [],
+    sspcs: [],
     aurl: aurl || '',
 
   },
@@ -92,12 +92,11 @@ export default new Vuex.Store({
     getSjBmbh(state, data) {
       state.sjBmbh = data
     },
-    getFjBmbh(state, data) {
-      console.log("getFjBmbh", data)
-      state.fjBmbh = data
+    getssfj(state, data) {
+      state.ssfj = data
     },
-    getPcsBmbh(state, data) {
-      state.pcsBmbh = data
+    getsspcs(state, data) {
+      state.sspcs = data
     }
   },
   actions: {
@@ -139,7 +138,7 @@ export default new Vuex.Store({
     },
     aGetNation(context, payload) {
       return new Promise((resolve) => {
-        api.post(api.aport1+'/DmController/getDMInfo', { tableName: 'dm_gjdqb' }, r => {
+        api.post(api.aport1 + '/DmController/getDMInfo', { tableName: 'dm_gjdqb' }, r => {
           context.commit('getNation', fnc.ToArray(r.list))
           resolve(payload)
         })
@@ -147,7 +146,7 @@ export default new Vuex.Store({
     },
     aGetGender(context, payload) {
       return new Promise((resolve) => {
-        api.post(api.aport1+'/DmController/getDMInfo', { tableName: 'dm_xbb' }, r => {
+        api.post(api.aport1 + '/DmController/getDMInfo', { tableName: 'dm_xbb' }, r => {
           context.commit('getGender', fnc.ToArray(r.list))
           resolve(payload)
         })
@@ -156,7 +155,7 @@ export default new Vuex.Store({
     aGetGrade(context, payload) {
       console.log("payload", context)
       return new Promise((resolve) => {
-        api.post(api.aport1+'/templateController/getGrade', { template_grade: payload }, r => {
+        api.post(api.aport1 + '/templateController/getGrade', { template_grade: payload }, r => {
           context.commit('getGrade', r)
           resolve(r)
         })
@@ -164,7 +163,7 @@ export default new Vuex.Store({
     },
     aGetPassport(context, payload) {
       return new Promise((resolve) => {
-        api.post(api.aport1+'/DmController/getDMInfo', { tableName: 'dm_zjzlb' }, r => {
+        api.post(api.aport1 + '/DmController/getDMInfo', { tableName: 'dm_zjzlb' }, r => {
           context.commit('getPassport', fnc.ToArray(r.list))
           resolve(payload)
         })
@@ -204,28 +203,24 @@ export default new Vuex.Store({
     },
     aGetBmbh(context, payload) {
       return new Promise((resolve) => {
-        api.post(api.aport1+'/dept/getAllSubDept', payload, r => {
+        api.post(api.aport1 + '/dept/getAllSubDept', payload, r => {
           context.commit('getBmbh', r)
           resolve(r)
         })
       })
+    },
+    aGetssdw(context, payload) {
+      return new Promise((resolve) => {
+        api.post(api.aport1 + '/dept/getSubDeptBmMc', payload, r => {
+          if (payload.type == "ssfj") {
+            context.commit('getssfj', r)
+          } else if (payload.type == "sspcs") {
+            context.commit('getsspcs', r)
+          }
+          resolve(r)
+        })
+      })
     }
-    // aGetBmbh(context, payload) {
-    //   return new Promise((resolve) => {
-    //     api.post('dept/getSubDeptBmMc', payload, r => {
-    //       console.log(payload.type, 'payload.type == "fjBmbh"', payload.type == "fjBmbh")
-    //       if (payload.type == "sjBmbh") {
-    //         context.commit('getSjBmbh', r)
-    //       } else if (payload.type == "fjBmbh") {
-    //         console.log(payload.type, "进入")
-    //         context.commit('getFjBmbh', r)
-    //       } else if (payload.type == "pcsBmbh") {
-    //         context.commit('getPcsBmbh', r)
-    //       }
-    //       resolve(r)
-    //     })
-    //   })
-    // }
   },
   modules: {
   }

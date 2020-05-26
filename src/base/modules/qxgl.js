@@ -444,17 +444,18 @@ const zrqgl = {
         {
             cm: '所属分局',
             type: 'select',
-            dm: 'fjBmbh',
+            must: true,
+            dm: 'ssfj',
         },
         {
             cm: '所属派出所',
             type: 'select',
-            dm: 'pcsBmbh',
+            dm: 'sspcs',
         },
         {
             cm: '责任区名称',
-            type: 'zrqMc',
-            dm: 'xm'
+            type: 'input',
+            dm: 'zrqMc'
         },
         {
             cm: '责任区代码',
@@ -471,24 +472,127 @@ const zrqgl = {
     ],
     lb: [
         {
-            cm: '代码',
-            dm: 'sfzh'
+            cm: '责任区编号',
+            dm: 'zrqDm'
         },
         {
-            cm: '名称',
-            dm: 'xm'
+            cm: '责任区名称',
+            dm: 'zrqMc'
         },
         {
             cm: '上级部门',
+            dm: 'pcs_desc'
+        },
+        {
+            cm: '是否有效',
+            dm: 'sfyx_desc'
+        }
+    ],
+    lbBtn: [
+        {
+            "button_name": "关联用户",
+            "button_type": "glyh",
+            // "icon": "mmcz",
+            "serial": "201",
+        },
+        {
+            "button_name": "编辑",
+            "button_type": "bj",
+            // "icon": "scsjmm",
+            "serial": "201",
+        }
+    ],
+    plBtn: [
+        {
+            "button_name": "新建",
+            "button_type": "xj",
+            "serial": "201",
+            "type": "success"
+        },
+        {
+            "button_name": "启用",
+            "button_type": "qy",
+            "serial": "201",
+            "type": "primary"
+        },
+        {
+            "button_name": "停用",
+            "button_type": "ty",
+            "serial": "201",
+            "type": "info"
+        }
+    ],
+    xj: [
+        {
+            cm: '所属分局',
+            type: 'select',
+            must: true,
+            dm: 'ssfj',
+        },
+        {
+            cm: '所属派出所',
+            type: 'select',
+            dm: 'sspcs',//必填
+        },
+        {
+            cm: '责任区代码',
+            type: 'input',
+            dm: 'zrqDm' //必填
+        },
+        {
+            cm: '责任区名称',
+            type: 'input',
+            dm: 'zrqMc'//必填
+        }
+
+    ],
+    bj: [
+        {
+            cm: '责任区代码',
+            type: 'input',
+            dis: true,
+            dm: 'zrqDm' //必填
+        },
+        {
+            cm: '责任区名称',
+            type: 'input',
+            dm: 'zrqMc'//必填
+        }
+
+    ],
+    yhcx: [
+        {
+            cm: '身份证号',
+            type: 'input',
+            dm: 'sfzh'
+        },
+        {
+            cm: '姓名',
+            type: 'input',
+            dm: 'xm'
+        },
+        {
+            cm: '警号',
+            type: 'input',
+            dm: 'jinghao'
+        }
+    ],
+    yhlb: [
+        {
+            cm: '姓名',
+            dm: 'xm'
+        },
+        {
+            cm: '警号',
             dm: 'jingHao'
         },
         {
-            cm: '创建日期',
-            dm: 'xzsj'
+            cm: '身份证号',
+            dm: 'sfzh'
         },
         {
-            cm: '状态',
-            dm: 'valid'
+            cm: '部门名称',
+            dm: 'xtyhbmmc'
         }
     ],
 }
@@ -496,7 +600,7 @@ const zrqgl = {
 function getDeptTreeByBmbh() {
     return new Promise((resolve) => {
         api.post(
-            api.aport1+"/dept/getDeptTreeByBmbh",
+            api.aport1 + "/dept/getDeptTreeByBmbh",
             { bmbh: store.state.user.bmbh },
             // { bmbh: this.$store.state.user.bmbh },
             r => {
@@ -510,7 +614,7 @@ function getDeptTreeByBmbh() {
 function getPermissionTree(deptBmbh) {
     return new Promise((resolve) => {
         api.post(
-            api.aport1+"/dept/getDeptPermissionTree",
+            api.aport1 + "/dept/getDeptPermissionTree",
             {
                 userId: store.state.user.userId,
                 userBmbh: store.state.user.bmbh,
@@ -527,7 +631,7 @@ function getPermissionTree(deptBmbh) {
 function getDeptTempPermTree(tempId) {
     return new Promise((resolve) => {
         api.post(
-            api.aport1+"/dept/getDeptTempPermTree",
+            api.aport1 + "/dept/getDeptTempPermTree",
             {
                 userId: store.state.user.userId,
                 userBmbh: store.state.user.bmbh,
@@ -544,7 +648,7 @@ function getDeptTempPermTree(tempId) {
 function getTemplate(deptBmbh) {
     return new Promise((resolve) => {
         api.post(
-            api.aport1+"/dept/getTemplate",
+            api.aport1 + "/dept/getTemplate",
             {
                 userId: store.state.user.userId,
                 deptBmbh: deptBmbh
@@ -561,7 +665,7 @@ function getTemplate(deptBmbh) {
 function getRolePermissionTree(roleId) {
     return new Promise((resolve) => {
         api.post(
-            api.aport1+"/role/getRolePermissionTree",
+            api.aport1 + "/role/getRolePermissionTree",
             {
                 roleId: roleId,
             },
@@ -575,7 +679,7 @@ function getRolePermissionTree(roleId) {
 function getDeptRolePermTree(deptBmbh, roleId) {
     return new Promise((resolve) => {
         api.post(
-            api.aport1+"/role/getDeptRolePermTree",
+            api.aport1 + "/role/getDeptRolePermTree",
             {
                 deptBmbh: deptBmbh,
                 roleId: roleId,

@@ -64,40 +64,11 @@ export default {
     logout() {
       let url = this.$store.state.aurl;
       window.localStorage.clear();
-      //console.log(url);
-      // if (url) {
-      //   let url2 =
-      //     "http://tyyh.szh.js:9080/cas/testout.jsp?service=" +
-      //     this.$api.root +
-      //     "/login?logout=1";
-      //   // let url2=this.$api.root+'/login'
-      //   window.location.href = url2;
-      //   // window.location.href = url.replace(/login\?/, "testout?");
-      // } else {
-      //   this.$router.push({ name: "Login" });
-      // }
       if (url) {
         window.location.href = url.replace(/login\?/, "logout?");
-         console.log('window.location.href',window.location.href)
       } else {
         this.$router.push({ name: "Login" });
-         console.log('Login','111')
       }
-
-      // this.$api.post("logout", {}, r => {
-      //   console.log(r);
-      // });
-      // this.$message({
-      //   message: "退出成功",
-      //   type: "success"
-      // });
-
-      // let url =
-      //   "http://tyyh.szh.js:9080/cas/testout.jsp?service=" +
-      //   location.protocol +
-      //   "//" +
-      //   location.host;
-      // window.open(url, "_self").close();
     }
   }
 };

@@ -69,7 +69,8 @@ export default {
     login() {
       let url =
         "http://tyyh.szh.js:9080/cas/login?service=" +
-        this.$api.root + this.$api.aport1
+        this.$api.root +
+        this.$api.aport1 +
         "/login";
       this.$store.dispatch("aGetUrl", url).then(data => {
         window.location.href = data;
@@ -91,8 +92,7 @@ export default {
       if (this.clickFive == 5) {
         this.isLogin = true;
         this.clickFive = 0;
-      } 
-      else if (this.clickFive < 5) {
+      } else if (this.clickFive < 5) {
         setTimeout(() => {
           this.clickFive = 0;
         }, 2000);
@@ -108,7 +108,7 @@ export default {
         return;
       }
       if (this.user.name && this.user.password) {
-        this.$api.post(this.$api.aport1+"/accountLogin", this.user, r => {
+        this.$api.post(this.$api.aport1 + "/accountLogin", this.user, r => {
           if (r.authorization) {
             this.$store.commit("getToken", r.authorization);
             this.$router.push({ name: "Frame" });

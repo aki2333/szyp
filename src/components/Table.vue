@@ -189,8 +189,8 @@ export default {
       this.$emit("pageNumFnc", this.pageNum);
     },
     handleSelectionChange(val) {
-      console.log(val);
-      this.$emit("userRole", val);
+      // console.log(val);
+      this.$emit("SelectionChange", val);
     },
     toggleSelection(rows) {
       //this.$refs[this.refName].toggleAllSelection();

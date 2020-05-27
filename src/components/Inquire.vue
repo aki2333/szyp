@@ -179,7 +179,7 @@ export default {
 .inquire {
   padding: 15px 15px 50x;
   border-bottom: 1px solid #295287;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   color: #e1e8ee;
   position: relative;
 }

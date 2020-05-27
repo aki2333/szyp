@@ -59,6 +59,11 @@ const routes = [
         path: '/Specialcheck',
         name: 'Specialcheck',
         component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/Specialcheck.vue')
+      },
+      {
+        path: '/Temporary',
+        name: 'Temporary',
+        component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/Temporary.vue')
       }
     ]
   }

@@ -22,13 +22,6 @@
     </div>
     <!-- 弹窗 -->
     <Dialog :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
-      <ZrqUser
-        v-if="dialogType=='glyh'&&isShowDialog"
-        :dialogType="dialogType"
-        :dialogData="dialogData"
-        @dialogCancel="isShowDialog=false"
-        @dialogSave="dialogSave"
-      ></ZrqUser>
       <Form
         v-if="(dialogType=='bj'||dialogType=='xj')&&isShowDialog"
         :cxData="labelData"
@@ -46,10 +39,9 @@ import Inquire from "@/components/Inquire.vue";
 import Table from "@/components/Table.vue";
 import Dialog from "@/components/Dialog.vue";
 import Form from "@/components/Form.vue";
-import ZrqUser from "./ZrqUser.vue";
 
 export default {
-  components: { Inquire, Table, Dialog, Form, ZrqUser },
+  components: { Inquire, Table, Dialog, Form },
   data() {
     return {
       cx: {

@@ -691,6 +691,19 @@ function getDeptRolePermTree(deptBmbh, roleId) {
         );
     })
 }
+function getSjBm(bmbh) {
+    return new Promise((resolve) => {
+        api.post(
+            api.aport1 + "/dept/getSjBm",
+            {
+                bmbh: bmbh
+            },
+            r => {
+                resolve(r)
+            }
+        );
+    })
+}
 export default {
     yhgl,
     jsgl,
@@ -702,5 +715,6 @@ export default {
     getDeptTempPermTree,
     getTemplate,
     getRolePermissionTree,
-    getDeptRolePermTree
+    getDeptRolePermTree,
+    getSjBm
 }

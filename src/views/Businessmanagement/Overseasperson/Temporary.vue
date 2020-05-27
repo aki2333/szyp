@@ -1,20 +1,33 @@
 <template>
   <div class="page">
-    <Inquire :cxData="$cdata.qxgl.zrqgl.cx" :pd="cx.pd" @cxFnc="cxFnc" @lcFnc="lcFnc"></Inquire>
+    <Inquire :cxData="$cdata.lzsb.lzsb.cx" :pd="cx.pd" @cxFnc="cxFnc" @lcFnc="lcFnc"></Inquire>
+    <div class="t-tab-top">
+      <div class="tab-top-item hand" @click="tabTopClick(1)">
+        <img :src="clzt==1?tabImgActive_1:tabImg_1" alt />
+        <span>未处理</span>
+      </div>
+      <div class="tab-top-item hand ml--33" @click="tabTopClick(2)">
+        <img :src="clzt==2?tabImgActive_2:tabImg_2" alt />
+        <span class="t-leftT">上报成功</span>
+      </div>
+      <div class="tab-top-item hand" style="margin-left: -14px;" @click="tabTopClick(3)">
+        <img :src="clzt==3?tabImgActive_2:tabImg_2" alt />
+        <span class="t-leftT">上报失败</span>
+      </div>
+    </div>
     <div class="page-box">
       <el-row :gutter="20">
         <el-col :span="24">
           <Table
-            :lbData="$cdata.qxgl.zrqgl.lb"
+            :lbData="$cdata.lzsb.lzsb.lb"
             :isSelect="false"
             :isEdit="true"
-            :lbBtn="$cdata.qxgl.zrqgl.lbBtn"
-            :plBtn="$cdata.qxgl.zrqgl.plBtn"
+            :isPl="false"
+            :lbBtn="$cdata.lzsb.lzsb.lbBtn"
             :tableData="tableData"
             @rowClick="rowClick"
             @pageSizeFnc="pageSizeFnc"
             @pageNumFnc="pageNumFnc"
-            @plFnc="plFnc"
             @blFnc="blFnc"
           ></Table>
         </el-col>
@@ -44,8 +57,13 @@ export default {
   components: { Inquire, Table, Dialog, Form },
   data() {
     return {
+      clzt: 1,
+      tabImg_1: require("../../../assets/images/main/tab_2.png"),
+      tabImgActive_1: require("../../../assets/images/main/tab_2_pre.png"),
+      tabImg_2: require("../../../assets/images/main/tab_1.png"),
+      tabImgActive_2: require("../../../assets/images/main/tab_1_pre.png"),
       cx: {
-        pd: { zt: "1" },
+        pd: {},
         pageSize: 10,
         pageNum: 1,
         order: "serial",
@@ -70,6 +88,9 @@ export default {
     this.dwxx();
   },
   methods: {
+    tabTopClick(index) {
+      this.clzt = index;
+    },
     // 单位信息
     dwxx() {
       this.$cdata.qxgl.getSjBm(this.$store.state.user.bmbh).then(data => {
@@ -101,8 +122,7 @@ export default {
     },
     // 查询列表
     getTable() {
-      this.$api.post(this.$api.aport1 + "/zrq/getZrq", this.cx, r => {
-        // this.tableData = r.resultList;
+      this.$api.post(this.$api.aport1 + "/api/dm/getLzsb", this.cx, r => {
         this.tableData = r;
       });
     },

@@ -284,6 +284,7 @@ export default {
               type: "success"
             });
             this.getTable();
+            this.selection=[];
           }
         );
       } else if (data.button_type == "xf") {
@@ -344,6 +345,7 @@ export default {
                 type: "success"
               });
               this.getTable();
+              this.selection=[];
             });
           }
           
@@ -396,11 +398,13 @@ export default {
         });
         this.getTable();
         this.isShowDialog = false;
+        this.selection = [];
       });
     },
     //列表tab切换  data==page 从1开始 控制按钮是否出现 v-for 和 v-if不能同时使用
     tabFnc(data) {
       this.page = data;
+      this.selection = [];
       this.$cdata.zxhc.plBtnShow(this.page,this.clzt).then(data => {
         this.plBtn = data;
       });

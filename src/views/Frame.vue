@@ -32,12 +32,14 @@ export default {
     };
   },
   mounted() {
-    console.log("store", this.$store.state); 
-    this.getUser();
+    console.log("store", this.$store.state);
+    if (!localStorage.getItem("user")) {
+      this.getUser();
+    }
   },
   methods: {
     getUser() {
-      this.$api.post(this.$api.aport1+"/userController/getUser", {}, r => {
+      this.$api.post(this.$api.aport1 + "/userController/getUser", {}, r => {
         this.$store.dispatch("aGetUser", r).then(data => {
           console.log(data);
           this.getNav(data);
@@ -46,7 +48,7 @@ export default {
     },
     getNav(data) {
       this.$api.post(
-        this.$api.aport1+"/dept/getPermissionTree",
+        this.$api.aport1 + "/dept/getPermissionTree",
         {
           userId: data.userId,
           userBmbh: data.bmbh

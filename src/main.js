@@ -10,12 +10,12 @@ import fnc from './base/fnc.js'
 import cdata from './base/cdata.js'
 
 Vue.config.productionTip = false
+document.title = "苏州市公安局·涉外综合分析研判系统"
 Vue.prototype.$api = api
 Vue.prototype.$http = http
 Vue.prototype.$fnc = fnc
 Vue.prototype.$cdata = cdata
 Vue.use(ElementUI)
-
 new Vue({
   router,
   store,

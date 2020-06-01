@@ -76,3 +76,10 @@
 .t-leftT{
     left: 34px!important;
 }
+.table-header{
+    white-space: nowrap;
+}
+.table-header-cell>.cell{
+    white-space: nowrap!important;
+    /* width: auto!important; */
+}

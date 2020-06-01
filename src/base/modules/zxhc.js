@@ -15,16 +15,16 @@ const zxhc = {
             cm: '年龄段',
             type: 'ageDouble',
             dm: 'age',
-            children:[
+            children: [
                 {
-                    cm:'开始年龄',
-                    type:'number',
-                    dm:'birthdayStart'
+                    cm: '开始年龄',
+                    type: 'number',
+                    dm: 'birthdayStart'
                 },
                 {
-                    cm:'结束年龄',
-                    type:'number',
-                    dm:'birthdayEnd'
+                    cm: '结束年龄',
+                    type: 'number',
+                    dm: 'birthdayEnd'
                 },
             ],
         },
@@ -97,8 +97,8 @@ const zxhc = {
                 }
             ]
         },
-        
-        
+
+
     ],
     lb: [
         {
@@ -167,7 +167,7 @@ const zxhc = {
     lbBtn: [
         {
             "button_name": "编辑",
-            "button_type":'edit',
+            "button_type": 'edit',
             "serial": "201",
         },
     ],
@@ -176,168 +176,168 @@ const zxhc = {
             "button_name": "上报",
             "serial": "201",
             "button_type": "sb",
-            "type":"success"
+            "type": "success"
         },
         {
             "button_name": "下发",
             "serial": "201",
             "button_type": "xf",
-            "type":"primary"
+            "type": "primary"
         },
     ],
     lbTab: [
         {
-            "tab_name": '市局未处理',
-            "page": 1,
+            "mc": '市局未处理',
+            "dm": 1,
         },
         {
-            "tab_name": '分局未处理',
-            "page": 2,
+            "mc": '分局未处理',
+            "dm": 2,
         },
         {
-            "tab_name": '派出所未处理',
-            "page": 3,
+            "mc": '派出所未处理',
+            "dm": 3,
         },
     ],
     lbTab1: [
         {
-            "tab_name": '市局已处理',
-            "page": 1,
+            "mc": '市局已处理',
+            "dm": 1,
         },
         {
-            "tab_name": '分局已处理',
-            "page": 2,
+            "mc": '分局已处理',
+            "dm": 2,
         },
         {
-            "tab_name": '派出所已处理',
-            "page": 3,
+            "mc": '派出所已处理',
+            "dm": 3,
         },
     ],
     //编辑弹窗
-    editcontent:[],
+    editcontent: [],
     //下发市局弹窗
-    xfSContent:[
+    xfSContent: [
         {
-            cm:'所属分局',
-            type:'select',
-            dm:'suboffice',
-            dis:false,
+            cm: '所属分局',
+            type: 'select',
+            dm: 'suboffice',
+            dis: false,
         },
     ],
     //下发分局弹窗
-    xfFContent:[
+    xfFContent: [
         {
-            cm:'所属派出所',
-            type:'select',
-            dm:'policestation',
-            dis:false,
+            cm: '所属派出所',
+            type: 'select',
+            dm: 'policestation',
+            dis: false,
         },
     ],
 }
-function plBtnShow(flag,clzt){
+function plBtnShow(flag, clzt) {
     return new Promise((resolve) => {
-        if(flag==1&&clzt==1){
-            zxhc.plBtn=[
+        if (flag == 1 && clzt == 1) {
+            zxhc.plBtn = [
                 {
                     "button_name": "下发",
                     "serial": "201",
                     "button_type": "xf",
-                    "type":"primary"
+                    "type": "primary"
                 },
             ]
-        }else if(flag==3||clzt==2){//已处理状态不能上报和下发
-            zxhc.plBtn=[]
-        }else if(flag==2&&clzt==1){
-            zxhc.plBtn=[
+        } else if (flag == 3 || clzt == 2) {//已处理状态不能上报和下发
+            zxhc.plBtn = []
+        } else if (flag == 2 && clzt == 1) {
+            zxhc.plBtn = [
                 {
                     "button_name": "上报",
                     "serial": "201",
                     "button_type": "sb",
-                    "type":"success"
+                    "type": "success"
                 },
                 {
                     "button_name": "下发",
                     "serial": "201",
                     "button_type": "xf",
-                    "type":"primary"
+                    "type": "primary"
                 },
             ]
         }
         resolve(zxhc.plBtn)
     })
 }
-function editShow(jb){
+function editShow(jb) {
     return new Promise((resolve) => {
-        zxhc.editcontent=[
+        zxhc.editcontent = [
             {
-                cm:'姓名',
-                type:'input',
-                dm:'name',
-                dis:jb=="3"?true:false
+                cm: '姓名',
+                type: 'input',
+                dm: 'name',
+                dis: jb == "3" ? true : false
             },
             {
-                cm:'性别',
-                type:'select',
-                dm:'gender',
-                dis:jb=="3"?true:false
+                cm: '性别',
+                type: 'select',
+                dm: 'gender',
+                dis: jb == "3" ? true : false
             },
             {
-                cm:'出生日期',
-                type:'datePicker',
-                dm:'birthday',
-                dis:jb=="3"?true:false
+                cm: '出生日期',
+                type: 'datePicker',
+                dm: 'birthday',
+                dis: jb == "3" ? true : false
             },
             {
-                cm:'国家地区',
-                type:'select',
-                dm:'nationality',
-                dis:jb=="3"?true:false
+                cm: '国家地区',
+                type: 'select',
+                dm: 'nationality',
+                dis: jb == "3" ? true : false
             },
             {
-                cm:'证件种类',
-                type:'select',
-                dm:'passportType',
-                dis:jb=="3"?true:false
+                cm: '证件种类',
+                type: 'select',
+                dm: 'passportType',
+                dis: jb == "3" ? true : false
             },
             {
-                cm:'证件号码',
-                type:'input',
-                dm:'passportno',
-                dis:jb=="3"?true:false
+                cm: '证件号码',
+                type: 'input',
+                dm: 'passportno',
+                dis: jb == "3" ? true : false
             },
             {
-                cm:'下发类别',
-                type:'select',
-                dm:'datatype',
-                dis:true
+                cm: '下发类别',
+                type: 'select',
+                dm: 'datatype',
+                dis: true
             },
             {
-                cm:'住宿地址',
-                type:'input',
-                dm:'address',
-                dis:true,
+                cm: '住宿地址',
+                type: 'input',
+                dm: 'address',
+                dis: true,
             },
             {
-                cm:'所属分局',
-                type:'select',
-                dm:'suboffice',
-                dis:jb=="2"||jb=="3"?true:false
+                cm: '所属分局',
+                type: 'select',
+                dm: 'suboffice',
+                dis: jb == "2" || jb == "3" ? true : false
             },
             {
-                cm:'所属派出所',
-                type:'select',
-                dm:'policestation',
-                dis:jb=="3"?true:false
+                cm: '所属派出所',
+                type: 'select',
+                dm: 'policestation',
+                dis: jb == "3" ? true : false
             },
             {
-                cm:'走访状态',
-                type:'radio',
-                dm:'backstatus'
+                cm: '走访状态',
+                type: 'radio',
+                dm: 'backstatus'
             },
             {
-                cm:'备注',
-                type:'input',
-                dm:'remarks'
+                cm: '备注',
+                type: 'input',
+                dm: 'remarks'
             },
         ]
         resolve(zxhc.editcontent)

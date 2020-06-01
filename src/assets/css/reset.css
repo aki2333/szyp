@@ -143,3 +143,6 @@ input[type="number"]{
 .el-dialog__title{
   color: #818085!important;
 }
+.el-icon-circle-close:before {
+    color: #fff;
+}

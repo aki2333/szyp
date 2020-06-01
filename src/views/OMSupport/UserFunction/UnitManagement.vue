@@ -94,8 +94,9 @@ export default {
     },
     // 批量选中单位
     getDwlbBmbh(data) {
+      this.getTemplate("", data);
       this.$api.post(
-        this.$api.aport1+"/dept/getBmbh",
+        this.$api.aport1 + "/dept/getBmbh",
         {
           type: data
         },
@@ -119,8 +120,8 @@ export default {
       });
     },
     // 获取模板列表
-    getTemplate(deptBmbh) {
-      this.$cdata.qxgl.getTemplate(deptBmbh).then(r => {
+    getTemplate(deptBmbh, type) {
+      this.$cdata.qxgl.getTemplate(deptBmbh, type).then(r => {
         this.treeData3 = r;
       });
     },
@@ -156,10 +157,11 @@ export default {
     // 部门赋权
     addPermissionToDept() {
       this.$api.post(
-        this.$api.aport1+"/dept/addPermissionToDept",
+        this.$api.aport1 + "/dept/addPermissionToDept",
         {
           userId: this.$store.state.user.userId,
-          bmbhList: this.bmbhList,
+          bmbhList:
+            this.bmbhList.length == 0 ? this.defaultChecked1 : this.bmbhList,
           menuList: this.menuList,
           buttonList: this.buttonList,
           templateId: this.templateId

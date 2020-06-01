@@ -50,7 +50,12 @@
                 </el-select>
               </template>
               <template v-else-if="cx.type=='datePicker'">
-                <el-date-picker v-model="inquire[cx.dm]" type="date" placeholder="选择日期"></el-date-picker>
+                <el-date-picker
+                  v-model="inquire[cx.dm]"
+                  type="date"
+                  placeholder="选择日期"
+                  value-format="yyyy-MM-dd"
+                ></el-date-picker>
               </template>
               <template v-else-if="cx.type=='double'">
                 <div class="double-box">

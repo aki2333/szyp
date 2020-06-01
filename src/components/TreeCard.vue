@@ -89,25 +89,25 @@ export default {
     };
   },
   watch: {
+    dwlbBmmh(val) {
+      this.dwlbBmmh1 = val;
+    },
     defaultChecked(val) {
-      // console.log("defaultChecked", val);
+      console.log("defaultChecked", val);
       this.$refs.tree.setCheckedKeys(val);
     }
   },
   methods: {
     nodeClick(a) {
-      // console.log(a, b, c);
       this.$emit("getTree", { type: this.treeType, data: a });
     },
-    handleCheckChange(a, b, c) {
-      console.log(a, b, c);
-      if (this.dwlbBmmh1 == "pcs") {
-        this.$refs.tree.store.nodesMap[a.bmbh].expanded = true;
-        a.unfold = true;
-      }
-      // else {
-      //   this.$refs.tree.store.nodesMap[a.sjbmbh].expanded = true;
-      //   // a.unfold = true;
+    handleCheckChange(a) {
+      console.log(this.dwlbBmmh1, a);
+      // if (this.dwlbBmmh1 == "pcs") {
+      //   // setTimeout(() => {
+      //   this.$refs.tree.store.nodesMap[a.bmbh].expanded = true;
+      //   a.unfold = true;
+      //   // }, 400);
       // }
       let data = this.$refs.tree.getCheckedKeys(false);
       this.$emit("getCheckedKeys", { type: this.treeType, data: data });

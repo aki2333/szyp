@@ -4,11 +4,11 @@
       <div class="table-tab-box" v-if="isTab">
         <span
           class="hand"
-          :class="{'tab_active':page==lt.page}"
+          :class="{'tab_active':page==lt.dm}"
           v-for="(lt,lti) in lbTab"
           :key="lti"
-          @click="lbTabFun(lt.page)"
-        >{{lt.tab_name}}</span>
+          @click="lbTabFun(lt.dm)"
+        >{{lt.mc}}</span>
       </div>
       <div class="table-btn-box" v-if="isPl">
         <el-button
@@ -28,6 +28,8 @@
       border
       stripe
       highlight-current-row
+      header-row-class-name="table-header"
+      header-cell-class-name="table-header-cell"
       :data="tableData.list"
       style="width: 100%"
       @row-click="rowClick"
@@ -154,7 +156,7 @@ export default {
       // order: "serial",
       // direction: 1,
       currentRow: 0,
-      page: 1
+      page: this.lbTab.length > 0 ? this.lbTab[0].dm : "0"
     };
   },
   watch: {
@@ -163,6 +165,9 @@ export default {
       this.$nextTick(function() {
         this.toggleSelection(val);
       });
+    },
+    lbTab(val) {
+      this.page = val[0].dm;
     },
     plBtn: {
       handler(newVal, oldVal) {

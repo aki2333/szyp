@@ -25,7 +25,7 @@ const yhgl = {
         //     dm: 'pcsBmbh',
         // },
         {
-            cm: '用户名称',
+            cm: '姓名',
             type: 'input',
             dm: 'xm'
         },
@@ -33,6 +33,11 @@ const yhgl = {
             cm: '警号',
             type: 'input',
             dm: 'jingHao'
+        },
+        {
+            cm: '身份证号',
+            type: 'input',
+            dm: 'sfzh'
         },
         {
             cm: '创建时间',
@@ -66,7 +71,7 @@ const yhgl = {
     ],
     lb: [
         {
-            cm: '登录名称',
+            cm: '身份证号(登录名)',
             dm: 'sfzh'
         },
         {
@@ -336,12 +341,12 @@ const jsgl = {
     ],
     yhlbTab: [
         {
-            "tab_name": '已添加',
-            "page": '1',
+            "mc": '已添加',
+            "dm": '1',
         },
         {
-            "tab_name": '未添加',
-            "page": '0',
+            "mc": '未添加',
+            "dm": '0',
         }
     ],
     yhlb: [
@@ -399,11 +404,11 @@ const cdgl = {
             dm: 'menu_type',
             optype: true
         },
-        {
-            cm: '序号',
-            type: 'input',
-            dm: 'menu_order'
-        },
+        // {
+        //     cm: '序号',
+        //     type: 'input',
+        //     dm: 'menu_order'
+        // },
         {
             cm: 'URL',
             type: 'input',
@@ -645,14 +650,14 @@ function getDeptTempPermTree(tempId) {
 
 }
 // 获取模板列表
-function getTemplate(deptBmbh) {
+function getTemplate(deptBmbh, type) {
     return new Promise((resolve) => {
         api.post(
             api.aport1 + "/dept/getTemplate",
             {
                 userId: store.state.user.userId,
-                deptBmbh: deptBmbh
-                // bmbh: store.state.user.bmbh
+                deptBmbh: deptBmbh,
+                type: type
             },
             r => {
                 resolve(r)

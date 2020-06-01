@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import cdata from '@/base/cdata.js'
+// import cdata from '@/base/cdata.js'
 import api from '@/api/index.js'
 import fnc from '@/base/fnc.js'
 let breadData = JSON.parse(localStorage.getItem('bread'))
@@ -15,7 +15,7 @@ export default new Vuex.Store({
   state: {
     token: token || '',
     user: user || {},
-    menu: menu || cdata.menu,
+    menu: menu || [],
     leftMenu: [],
     chilrenNav: [],
     breadcrumb: breadData || [],
@@ -25,6 +25,14 @@ export default new Vuex.Store({
     passportType: [],//证件种类
     suboffice: [],//所属分局
     policestation: [],//派出所
+    shzt: [],//审核状态
+    rylb: [],
+    zfzl: [],
+    zsxz: [],
+    visaType: [],
+    rjka: [],
+    rjsy: [],
+    qfjg: [],
     // 【非大众】
     datatype: [],//下发类别
     backstatus: [],//数据状态
@@ -74,6 +82,32 @@ export default new Vuex.Store({
     getPassport(state, data) {
       state.passportType = data;
     },
+    getDM(state, data) {
+
+      if (data.type == 'qzzl') {
+        state.visaType = data.data
+      } else if (data.type == 'lz_zfzl') {
+        state.zfzl = data.data
+      } else if (data.type == 'lz_zsxz') {
+        state.zsxz = data.data
+      } else if (data.type == 'rydylb') {
+        state.rylb = data.data
+      } else if (data.type == "xzqh") {
+        state.suboffice = data.data
+      } else if (data.type == "pcs") {
+        state.policestation = data.data
+      } else if (data.type == "bjjgka") {
+        state.rjka = data.data
+      } else if (data.type == "wgr_sqsy") {
+        state.rjsy = data.data
+      } else if (data.type == "spqfd") {
+        state.qfjg = data.data
+      } else {
+        state[data.type] = data.data;
+      }
+
+    },
+
     getSuboffice(state, data) {
       state.suboffice = data;
     },
@@ -157,6 +191,14 @@ export default new Vuex.Store({
       return new Promise((resolve) => {
         api.post(api.aport1 + '/templateController/getGrade', { template_grade: payload }, r => {
           context.commit('getGrade', r)
+          resolve(r)
+        })
+      })
+    },
+    aGetDM(context, payload) {
+      return new Promise((resolve) => {
+        api.get(api.aport3 + '/api/dm/getDm', { tab: 'dm_' + payload + 'b' }, r => {
+          context.commit('getDM', { type: payload, data: r })
           resolve(r)
         })
       })

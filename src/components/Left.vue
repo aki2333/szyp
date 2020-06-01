@@ -75,12 +75,16 @@ export default {
       this.toPage(this.chilrenNav[0], 0);
     },
     toPage(item, index) {
-      console.log(3, item);
-      this.active2 = index;
-      this.bread[1] = item;
-      console.log("this.bread", this.bread);
-      this.$store.dispatch("aGetBread", this.bread);
-      this.$router.push({ name: item.menu_url });
+      if (item.menu_url.indexOf("http") > -1) {
+        window.open(item.menu_url, "_blank");
+      } else {
+        console.log(3, item);
+        this.active2 = index;
+        this.bread[1] = item;
+        console.log("this.bread", this.bread);
+        this.$store.dispatch("aGetBread", this.bread);
+        this.$router.push({ name: item.menu_url });
+      }
     }
   }
 };

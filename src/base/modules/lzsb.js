@@ -13,7 +13,7 @@ const lzsb = {
         },
         {
             cm: '出生日期',
-            type: 'input',
+            type: 'datePicker',
             dm: 'birthday'
         },
         {
@@ -46,12 +46,6 @@ const lzsb = {
             type: 'select',
             dm: 'suboffice',
         },
-
-        {
-            cm: '审核状态',
-            type: 'select',
-            dm: 'shzt',
-        },
         {
             cm: '住宿时间',
             type: 'double',
@@ -70,10 +64,15 @@ const lzsb = {
             ]
         },
         {
-            cm: '上报状态',
+            cm: '所属派出所',
             type: 'select',
-            dm: 'sbzt',
+            dm: 'policestation',
         },
+        // {
+        //     cm: '上报状态',
+        //     type: 'select',
+        //     dm: 'sbzt',
+        // },
         {
             cm: '上报时间',
             type: 'double',
@@ -95,8 +94,12 @@ const lzsb = {
     ],
     lb: [
         {
-            cm: '姓名',
+            cm: '中文姓名',
             dm: 'name'
+        },
+        {
+            cm: '英文姓名',
+            dm: 'givenname'
         },
         {
             cm: '性别',
@@ -112,11 +115,11 @@ const lzsb = {
         },
         {
             cm: '证件种类',
-            dm: 'passportTypeMc'
+            dm: 'passporttypeMc'
         },
         {
             cm: '证件号码',
-            dm: 'passportNo'
+            dm: 'passportno'
         },
         {
             cm: '签证种类',
@@ -138,19 +141,30 @@ const lzsb = {
             cm: '上报日期',
             dm: 'sbsj'
         },
+        // {
+        //     cm: '审核状态',
+        //     dm: 'shztMc'
+        // }
+    ],
+    lbTab: [
         {
-            cm: '上报状态',
-            dm: 'sbztMc'
+            "mc": '审核成功',
+            "dm": 1,
         },
         {
-            cm: '审核状态',
-            dm: 'shztMc'
+            "mc": '审核失败',
+            "dm": 2,
         }
     ],
     lbBtn: [
         {
             "button_name": "编辑",
             "button_type": "bj",
+            "serial": "201",
+        },
+        {
+            "button_name": "下载记录",
+            "button_type": "xzjl",
             "serial": "201",
         }
     ],
@@ -189,108 +203,188 @@ const lzsb = {
             "type": "primary"
         }
     ],
-    // 【单位列表】
-    dwtb: [
+    bj: [
         {
-            cm: '单位名称',
-            dm: 'xtyhbmmc'
-        },
-        // {
-        //     cm: '单位类型',
-        //     dm: 'xtyhbmcj'
-        // },
-    ],
-    xj: [
-        {
-            cm: '姓名',
+            cm: '中文姓名',
             type: 'input',
-            dm: 'xm' //必填
+            dm: 'name'
         },
         {
-            cm: '电话号码',
+            cm: '英文姓名',
             type: 'input',
-            dm: 'yddh'//必填
+            dm: 'givenname'
         },
         {
-            cm: '警号',
+            cm: '性别',
+            type: 'select',
+            dm: 'gender',
+        },
+        {
+            cm: '出生日期',
+            type: 'datePicker',
+            dm: 'birthday'
+        },
+        {
+            cm: '国家地区',
+            type: 'select',
+            dm: 'nationality',
+        },
+        {
+            cm: '人员类别',
+            type: 'select',
+            dm: 'rylb',
+        },
+        {
+            cm: '本人联系电话',
             type: 'input',
-            dm: 'jingHao'
+            dm: 'sjhm'
+        },
+        {
+            cm: '证件种类',
+            type: 'select',
+            dm: 'passportType',
         },
         {
             cm: '证件号码',
             type: 'input',
-            dm: 'sfzh'//必填
+            dm: 'passportNo'
         },
         {
-            cm: '所属单位',
+            cm: '签证种类',
             type: 'select',
-            dm: 'bmbh',//必填
+            dm: 'visaType',
         },
-        // {
-        //     cm: '市局单位',
-        //     type: 'select',
-        //     dm: 'sjBmbh',
-        // },
-        // {
-        //     cm: '分局单位',
-        //     type: 'select',
-        //     dm: 'fjBmbh',
-        // },
-        // {
-        //     cm: '派出所单位',
-        //     type: 'select',
-        //     dm: 'pcsBmbh',
-        // },
         {
-            cm: '密码',
+            cm: '签证号码',
             type: 'input',
-            dm: 'xtmm'//必填
-        },
-        // {
-        //     cm: '用户类型',
-        //     type: 'select',
-        //     dm: 'userType',
-        //     optype: true
-        // },
-    ],
-    xg: [
-        {
-            cm: '姓名',
-            type: 'input',
-            dm: 'xm'
+            dm: 'visaNo'
         },
         {
-            cm: '电话号码',
-            type: 'input',
-            dm: 'yddh'
+            cm: '签证有效期至',
+            type: 'datePicker',
+            dm: 'tlyxqz'
         },
         {
-            cm: '警号',
-            type: 'input',
-            dm: 'jingHao'
-        },
-        {
-            cm: '证件号码',
-            type: 'input',
-            dm: 'sfzh'
-        },
-        {
-            cm: '所属单位',
+            cm: '签发机构',
             type: 'select',
-            dm: 'bmbh'
+            dm: 'qfjg'
+        },
+        {
+            cm: '所属分局',
+            type: 'select',
+            dm: 'suboffice',
+        },
+        {
+            cm: '所属派出所',
+            type: 'select',
+            dm: 'policestation',
+        },
+        {
+            cm: '住宿日期',
+            type: 'datePicker',
+            dm: 'zssj'
+        },
+        {
+            cm: '上报时间',
+            type: 'datePicker',
+            dm: 'sbsj'
+        },
+        {
+            cm: '入境日期',
+            type: 'datePicker',
+            dm: 'rjrq'
+        },
+        {
+            cm: '入境口岸',
+            type: 'select',
+            dm: 'rjka'
+        },
+        {
+            cm: '入境事由',
+            type: 'select',
+            dm: 'rjsy'
+        },
+        {
+            cm: '住所性质',
+            type: 'select',
+            dm: 'zsxz'
+        },
+        {
+            cm: '住房种类',
+            type: 'select',
+            dm: 'zfzl'
+        },
+        {
+            cm: '紧急联系人',
+            type: 'input',
+            dm: 'jjlxr'
+        },
+        {
+            cm: '紧急联系人电话',
+            type: 'input',
+            dm: 'jjlxrdh'
+        },
+        {
+            cm: '审核状态',
+            type: 'select',
+            dm: 'shzt',
+            dis: true
+        },
+        {
+            cm: '上报状态',
+            type: 'select',
+            dm: 'sbzt',
+            optype: true,
+            dis: true
+        },
+        {
+            cm: '核查结果',
+            type: 'input',
+            dm: 'yq_hcjg'
+        },
+        {
+            cm: '不通过原因',
+            type: 'input',
+            col: 24,
+            dm: 'shsm'
+        },
+        {
+            cm: '备注',
+            type: 'input',
+            col: 24,
+            dm: 'bz'
+        },
+        {
+            cm: '操作人',
+            type: 'input',
+            dm: 'spr'
+        },
+        {
+            cm: '操作人单位',
+            type: 'input',
+            dm: 'sprdm'
+        },
+        {
+            cm: '操作时间',
+            type: 'datePicker',
+            dm: 'spsj'
         }
-    ],
-    plmmcz: [
-        {
-            cm: '密码',
-            type: 'password',
-            dm: 'xtmm'
-        },
-        {
-            cm: '确认密码',
-            type: 'password',
-            dm: 'qrxtmm'
-        },
+        // {
+        //     cm: '修改人',
+        //     type: 'input',
+        //     dm: 'xgr'
+        // },
+        // {
+        //     cm: '修改人单位',
+        //     type: 'input',
+        //     dm: 'xgrdm'
+        // },
+        // {
+        //     cm: '修改时间',
+        //     type: 'datePicker',
+        //     dm: 'xgsj'
+        // }
+
     ]
 }
 export default {

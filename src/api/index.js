@@ -8,6 +8,7 @@ var root = 'http://192.168.3.131:1101/'//测试
 
 var aport1 = 'permission'//任
 var aport2 = 'datarelease'//石
+var aport3 = 'lzsb'
 // var aport2 = 'http://10.0.30.43:9405'//石本地
 
 
@@ -53,7 +54,7 @@ axios.interceptors.request.use(
   }
 )
 
-function apiAxios(method, url, params, success, failure) {
+function apiAxios(method, url, params, success, failure, isDownload) {
   let loadingInstance1 = null;
   loadingInstance1 = Loading.service({ fullscreen: true, spinner: 'el-icon-loading', text: '正在加载中', background: 'rgba(0,0,0,0.6)', customClass: 'loadingClass' });
   if (params) {
@@ -66,6 +67,7 @@ function apiAxios(method, url, params, success, failure) {
     params: method === 'GET' || method === 'DELETE' ? params : null,
     baseURL: root,
     headers: { 'Content-Type': 'application/json' },
+    responseType: isDownload || 'json',
     withCredentials: false
   })
     .then(function (res) {
@@ -83,11 +85,25 @@ function apiAxios(method, url, params, success, failure) {
           if (failure) {
             failure(res.data.data)
           } else {
-            Message({
-              message: res.data.message,
-              type: 'warning'
-            });
-            console.log("er:", res.data)
+            if (res.data.message) {
+              Message({
+                message: res.data.message,
+                type: 'warning'
+              });
+            }
+            // console.log("er:", res)
+            if (isDownload) {
+              let url = window.URL.createObjectURL(new Blob([res.data]));
+              // 生成一个a标签
+              let link = document.createElement("a");
+              link.style.display = "none";
+              link.href = url;
+              // 生成时间戳
+              let timestamp = new Date().getTime();
+              link.download = timestamp + ".pdf";
+              document.body.appendChild(link);
+              link.click();
+            }
           }
         }
       } else {
@@ -111,8 +127,8 @@ export default {
   get: function (url, params, success, failure) {
     return apiAxios('GET', url, params, success, failure)
   },
-  post: function (url, params, success, failure) {
-    return apiAxios('POST', url, params, success, failure)
+  post: function (url, params, success, failure, isDownload) {
+    return apiAxios('POST', url, params, success, failure, isDownload)
   },
   put: function (url, params, success, failure) {
     return apiAxios('PUT', url, params, success, failure)
@@ -123,4 +139,5 @@ export default {
   root,
   aport1,
   aport2,
+  aport3
 }

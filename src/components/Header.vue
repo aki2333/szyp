@@ -5,7 +5,7 @@
       <div
         class="head-nav-item"
         :class="{'head-nav-item-hover':active==nind}"
-        v-for="(nn,nind) in headData"
+        v-for="(nn,nind) in $store.state.menu"
         :key="nind"
         @click="toLeftMenu(nn,nind)"
       >
@@ -54,6 +54,7 @@ export default {
   },
   methods: {
     getNav() {
+      console.log(this.$store.state.menu, this.$store.state.menu[0], 0);
       this.toLeftMenu(this.$store.state.menu[0], 0);
     },
     toLeftMenu(item, index) {

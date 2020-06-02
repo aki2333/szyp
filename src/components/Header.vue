@@ -49,7 +49,7 @@ export default {
       active: "0"
     };
   },
-  mounted() {
+  created() {
     this.getNav();
   },
   methods: {
@@ -65,10 +65,16 @@ export default {
     logout() {
       let url = this.$store.state.aurl;
       window.localStorage.clear();
+      this.$store.state.user = {};
+      this.$store.state.menu = [];
+      this.$store.state.token = "";
+      this.$store.state.leftMenu = [];
+
       if (url) {
         window.location.href = url.replace(/login\?/, "logout?");
       } else {
         this.$router.push({ name: "Login" });
+        // location.reload();
       }
     }
   }

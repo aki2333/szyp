@@ -110,12 +110,37 @@ export default {
       if (this.user.name && this.user.password) {
         this.$api.post(this.$api.aport1 + "/accountLogin", this.user, r => {
           if (r.authorization) {
-            this.$store.commit("getToken", r.authorization);
-            this.$router.push({ name: "Frame" });
-            this.isLogin = false;
+            this.$store.dispatch("aGetToken", r.authorization).then(data => {
+              console.log("登陆成功", data);
+              this.getUser();
+            });
           }
         });
       }
+    },
+    getUser() {
+      this.$api.post(this.$api.aport1 + "/userController/getUser", {}, r => {
+        this.$store.dispatch("aGetUser", r).then(data => {
+          console.log("获取用户信息成功", data);
+          this.getNav(data);
+        });
+      });
+    },
+    getNav(data) {
+      this.$api.post(
+        this.$api.aport1 + "/dept/getPermissionTree",
+        {
+          userId: data.userId,
+          userBmbh: data.bmbh
+        },
+        r => {
+          this.$store.dispatch("aGetMenu", r[0].childrenMenu).then(data2 => {
+            console.log("获取菜单成功", data2);
+            this.$router.push({ name: "Frame" });
+            this.isLogin = false;
+          });
+        }
+      );
     }
   }
 };

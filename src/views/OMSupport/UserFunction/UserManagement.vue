@@ -376,7 +376,7 @@ export default {
       console.log("重置密码", data, rowData);
       let p = data;
       p.userType = this.cx.pd.userType;
-      p.list = rowData ? [{ serial: rowData.userId }] : [];
+      p.list = rowData ? [{ serial: rowData.userId, type: rowData.type }] : [];
       this.$api.post(
         this.$api.aport1 + "/userController/batchUpdateUserPassword",
         p,
@@ -399,7 +399,9 @@ export default {
       }).then(() => {
         let p = {};
         p.userType = this.cx.pd.userType;
-        p.list = rowData ? [{ serial: rowData.userId }] : [];
+        p.list = rowData
+          ? [{ serial: rowData.userId, type: rowData.type }]
+          : [];
         this.$api.post(
           this.$api.aport1 + "/userController/batchRandomPassword",
           p,

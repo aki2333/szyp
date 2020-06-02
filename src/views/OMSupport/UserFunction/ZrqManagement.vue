@@ -109,6 +109,7 @@ export default {
     },
     // 查询列表
     getTable() {
+      this.currentRow = {};
       this.$api.post(this.$api.aport1 + "/zrq/getZrq", this.cx, r => {
         // this.tableData = r.resultList;
         this.tableData = r;

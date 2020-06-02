@@ -198,7 +198,7 @@ export default new Vuex.Store({
     aGetDM(context, payload) {
       return new Promise((resolve) => {
         api.get(api.aport3 + '/api/dm/getDm', { tab: 'dm_' + payload + 'b' }, r => {
-          context.commit('getDM', { type: payload, data: r })
+          context.commit('getDM', { type: payload, data: fnc.sortByKey(r, 'dm') })
           resolve(r)
         })
       })

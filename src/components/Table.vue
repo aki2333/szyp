@@ -167,7 +167,9 @@ export default {
       });
     },
     lbTab(val) {
-      this.page = val[0].dm;
+      if (val.length > 0) {
+        this.page = val[0].dm;
+      }
     },
     plBtn: {
       handler(newVal, oldVal) {

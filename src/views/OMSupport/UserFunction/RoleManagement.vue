@@ -101,7 +101,7 @@ export default {
     // 获取角色列表
     getRole(bmbh) {
       this.cx.bmbh = bmbh;
-      this.$api.post(this.$api.aport1+"/role/getRole", this.cx, r => {
+      this.$api.post(this.$api.aport1 + "/role/getRole", this.cx, r => {
         this.tableData.list = r;
       });
     },
@@ -152,6 +152,7 @@ export default {
     dialogSave(data) {
       // data.type操作类型 data.data操作数据
       if (data.type == "bj") {
+        console.log("bj", data);
         this.editRole(data.data);
       } else if (data.type == "yh") {
         this.getRoleUser(data.data);
@@ -168,7 +169,7 @@ export default {
     // 新建
     addRole(data) {
       console.log("新建弹窗获得数据-", data);
-      this.$api.post(this.$api.aport1+"/role/addRole", data, r => {
+      this.$api.post(this.$api.aport1 + "/role/addRole", data, r => {
         this.$message({
           message: r,
           type: "success"
@@ -182,7 +183,7 @@ export default {
       let p = data;
       p.roleId = this.dialogData.serial;
       p.userId = this.dialogData.create_user_id;
-      this.$api.post(this.$api.aport1+"/role/editRole", p, r => {
+      this.$api.post(this.$api.aport1 + "/role/editRole", p, r => {
         this.$message({
           message: r,
           type: "success"
@@ -199,7 +200,7 @@ export default {
         roleId: this.dialogData.serial,
         userId: this.dialogData.create_user_id
       };
-      this.$api.post(this.$api.aport1+"/role/deleteRole", p, r => {
+      this.$api.post(this.$api.aport1 + "/role/deleteRole", p, r => {
         this.$message({
           message: r,
           type: "success"
@@ -214,7 +215,7 @@ export default {
         roleId: this.dialogData.serial,
         userId: this.dialogData.create_user_id
       };
-      this.$api.post(this.$api.aport1+"/role/enableRole", p, r => {
+      this.$api.post(this.$api.aport1 + "/role/enableRole", p, r => {
         this.$message({
           message: r,
           type: "success"

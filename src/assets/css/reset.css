@@ -49,6 +49,7 @@ textarea {
 
 html {
   box-sizing: border-box;
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
 }
 
 * {
@@ -138,11 +139,33 @@ input[type="number"]{
     -moz-appearance: textfield;
 }
 .el-dialog__header{
-  background: #ebebeb;
+  background-color: #edf3ff;
+  background-image: url(../images/dialog/title.png);
+  background-repeat: no-repeat;
+  text-align: left;
+  padding-top:10px!important;
 }
 .el-dialog__title{
-  color: #818085!important;
+  color: #3f80d4!important;
+}
+.el-dialog__headerbtn{
+  width: 30px!important;
+  height: 30px!important;
+  background: url(../images/dialog/close.png)!important;
+  top:-6px!important;
+  right:-6px!important;
 }
 .el-icon-circle-close:before {
     color: #fff;
+}
+.tc-form .el-form-item__label{
+  color: #666666!important;
+  font-weight: bold;
+}
+.tc-form .el-form-item{
+  margin-bottom: 8px!important;
+}
+.el-carousel__button{
+  width: 7px!important;
+  height:7px!important;
 }

@@ -3,16 +3,16 @@
     <Inquire :cxData="$cdata.lzsb.lzsb.cx" :pd="cx.pd" @cxFnc="cxFnc" @lcFnc="lcFnc"></Inquire>
     <div class="t-tab-top">
       <div class="tab-top-item hand" @click="tabTopClick(0)">
-        <img :src="cx.pd.sbzt==0?tabImgActive_1:tabImg_1" alt />
-        <span>待上报</span>
+        <img :src="cx.pd.shzt=='shzt_0'?tabImgActive_1:tabImg_1" alt />
+        <span>待审核</span>
       </div>
       <div class="tab-top-item hand ml--33" @click="tabTopClick(1)">
-        <img :src="cx.pd.sbzt==1?tabImgActive_2:tabImg_2" alt />
-        <span class="t-leftT">上报成功</span>
+        <img :src="cx.pd.shzt=='shzt_1'?tabImgActive_2:tabImg_2" alt />
+        <span class="t-leftT">审核通过</span>
       </div>
       <div class="tab-top-item hand" style="margin-left: -14px;" @click="tabTopClick(2)">
-        <img :src="cx.pd.sbzt==2?tabImgActive_2:tabImg_2" alt />
-        <span class="t-leftT">上报失败</span>
+        <img :src="cx.pd.shzt=='shzt_2'?tabImgActive_2:tabImg_2" alt />
+        <span class="t-leftT">审核未通过</span>
       </div>
     </div>
     <div class="page-box">
@@ -23,9 +23,9 @@
             :isSelect="false"
             :isEdit="true"
             :isPl="false"
-            :isTab="true"
+            :isTab="isTab"
             :lbTab="lbTab"
-            :lbBtn="$cdata.lzsb.lzsb.lbBtn"
+            :lbBtn="lbBtn"
             :tableData="tableData"
             @tabFnc="tabFnc"
             @rowClick="rowClick"
@@ -37,9 +37,24 @@
       </el-row>
     </div>
     <!-- 弹窗 -->
-    <Dialog :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
+    <Dialog
+      width="1200px"
+      :isShowDialog="isShowDialog"
+      :title="dialogTitle"
+      @hideDialog="isShowDialog=false"
+    >
+      <el-dialog width="50%" :visible.sync="innerVisible" append-to-body>
+        <el-form :model="innerForm" ref="innerForm" label-width="100px" class="tc-form">
+          <el-form-item label="不通过原因" prop="hcsm">
+            <el-input v-model="innerForm.hcsm" autocomplete="off"></el-input>
+          </el-form-item>
+          <div class="page-btn-box">
+            <el-button type="primary" @click="shwtg">提交</el-button>
+          </div>
+        </el-form>
+      </el-dialog>
       <TemporaryXQ
-        v-if="dialogType=='bj'&&isShowDialog"
+        v-if="(dialogType=='bj'||dialogType=='ck')&&isShowDialog"
         :dialogType="dialogType"
         :dialogData="dialogData"
         :dialogImgData="dialogImgData"
@@ -61,13 +76,15 @@ export default {
   components: { Inquire, Table, Dialog, TemporaryXQ },
   data() {
     return {
-      lbTab: this.$store.state.shzt,
+      isTab: false,
+      lbTab: [],
+      lbBtn: this.$cdata.lzsb.lzsb.lbBtn1,
       tabImg_1: require("../../../assets/images/main/tab_2.png"),
       tabImgActive_1: require("../../../assets/images/main/tab_2_pre.png"),
       tabImg_2: require("../../../assets/images/main/tab_1.png"),
       tabImgActive_2: require("../../../assets/images/main/tab_1_pre.png"),
       cx: {
-        pd: { sbzt: 0, shzt: "shzt_0" },
+        pd: { shzt: "shzt_0", hczt: "hczt_0" },
         pageSize: 10,
         pageNum: 1,
         order: "id",
@@ -82,30 +99,29 @@ export default {
       currentRow: {},
       // 弹窗数据,
       isShowDialog: false,
+      innerVisible: false,
       dialogTitle: "",
       dialogType: "",
       dialogData: {},
       dialogImgData: [],
-      labelData: []
+      labelData: [],
+      innerForm: {
+        hcsm: ""
+      }
     };
   },
   mounted() {
     this.$store.dispatch("aGetNation");
     this.$store.dispatch("aGetGender");
     this.$store.dispatch("aGetPassport");
-    this.$store.dispatch("aGetDM", "shzt").then(data => {
-      this.lbTab = data;
-      this.tabTopClick(0);
-    });
     this.$store.dispatch("aGetDM", "qzzl");
     this.$store.dispatch("aGetDM", "lz_zfzl");
     this.$store.dispatch("aGetDM", "lz_zsxz");
     this.$store.dispatch("aGetDM", "rydylb");
-    // this.$store.dispatch("aGetDM", "xzqh");
-    // this.$store.dispatch("aGetDM", "pcs");
     this.$store.dispatch("aGetDM", "bjjgka");
     this.$store.dispatch("aGetDM", "wgr_sqsy");
     this.$store.dispatch("aGetDM", "spqfd");
+
     if (this.$store.state.user.jb == "1") {
       this.$store.dispatch("aGetSuboffice");
     } else if (this.$store.state.user.jb == "2") {
@@ -129,22 +145,32 @@ export default {
     } else if (this.$store.state.user.jb == "3") {
       this.$store.dispatch("aGetPolice", this.$store.state.user.bmbh);
     }
+    this.tabTopClick(0);
   },
   methods: {
     tabTopClick(index) {
-      this.cx.pd.sbzt = index;
-      let tab = [...this.$store.state.shzt];
+      this.cx.pd.shzt = "shzt_" + index;
       if (index == 1) {
-        this.lbTab = this.$store.state.shzt;
-      } else {
-        this.lbTab = [tab[index]];
+        this.isTab = true;
+        this.cx.pd.hczt = "hczt_0";
+        this.lbTab = this.$cdata.lzsb.lzsb.lbTab;
+        this.lbBtn = this.$cdata.lzsb.lzsb.lbBtn2;
+      } else if (index == 0) {
+        this.isTab = false;
+        this.lbTab = [];
+        this.cx.pd.hczt = "hczt_0";
+        this.lbBtn = this.$cdata.lzsb.lzsb.lbBtn1;
+      } else if (index == 2) {
+        this.isTab = false;
+        this.lbTab = [];
+        this.cx.pd.hczt = "hczt_2";
+        this.lbBtn = this.$cdata.lzsb.lzsb.lbBtn2;
       }
-      this.cx.pd.shzt = this.lbTab[0].dm;
       this.getTable();
     },
     tabFnc(data) {
       //   console.log("shangbaozhuangtai", data);
-      this.cx.pd.shzt = data;
+      this.cx.pd.hczt = data;
       this.cx.pageNum = 1;
       this.getTable();
     },
@@ -195,6 +221,9 @@ export default {
       } else if (data.btn.button_type == "bj") {
         this.getDetailLzsb(data.data.id);
         this.getDetailLzsbTp(data.data.id);
+      } else if (data.btn.button_type == "ck") {
+        this.getDetailLzsb(data.data.id);
+        this.getDetailLzsbTp(data.data.id);
       }
     },
     // 获取详情
@@ -228,9 +257,21 @@ export default {
       );
     },
     dialogSave(data) {
+      console.log(data);
       if (data.type == "bj") {
-        this.updateLzsb(data.data);
+        if (data.btnType == 1) {
+          let p = data.data;
+          p.hczt = "hczt_1";
+          this.updateLzsb(data.data);
+        } else if (data.btnType == 0) {
+          this.innerForm = data.data;
+          this.innerForm.hczt = "hczt_2";
+          this.innerVisible = true;
+        }
       }
+    },
+    shwtg() {
+      this.updateLzsb(this.innerForm);
     },
     updateLzsb(data) {
       this.$api.post(this.$api.aport3 + "/api/lzsb/updateLzsb", data, () => {
@@ -240,6 +281,7 @@ export default {
         });
         this.getTable();
         this.isShowDialog = false;
+        this.innerVisible = false;
       });
     }
   }

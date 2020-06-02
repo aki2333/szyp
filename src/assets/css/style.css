@@ -36,6 +36,9 @@
 .ml--33{
     margin-left: -33px;
 }
+.no-padding{
+    padding: 0!important;
+}
 /* 元素样式 */
 .page{
     min-height: 96%;

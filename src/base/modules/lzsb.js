@@ -353,6 +353,7 @@ const lzsb = {
             {
                 cm: '住宿地址',
                 type: 'input',
+                col: 16,
                 dm: 'zsdz'
             },
             {

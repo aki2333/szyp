@@ -252,7 +252,7 @@ export default {
       rules: {
         nationality: [{ required: true, message: "此项必填", trigger: "blur" }],
         passportType: [
-          { required: true, message: "此项必填", trigger: "blur" }
+          { required: false, message: "此项必填", trigger: "blur" }
         ],
         passportno: [{ required: true, message: "此项必填", trigger: "blur" }],
         givenname: [{ required: true, message: "此项必填", trigger: "blur" }],

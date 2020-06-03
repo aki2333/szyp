@@ -195,14 +195,14 @@ input[type="number"]{
 .el-icon-circle-close:before {
     color: #fff;
 }
-.tc-form .el-form-item__label{
+.el-form-item__label{
   color: #666666!important;
   font-weight: bold;
 }
-.tc-form .el-form-item{
+ .el-form-item{
   margin-bottom: 8px!important;
 }
-.tc-form .el-form-item__error {
+ .el-form-item__error {
     top: -6px!important;
     left: auto!important;
     right: -10px!important;

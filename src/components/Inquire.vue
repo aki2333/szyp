@@ -12,7 +12,7 @@
     >
       <el-row :gutter="0" type="flex" align="middle" justify="center">
         <el-col :span="20">
-          <el-col :span="cx.type=='double'?16:(cx.col?cx.col:8)" v-for="(cx,i) in cxData" :key="i">
+          <el-col :span="cx.type=='double'?12:(cx.col?cx.col:6)" v-for="(cx,i) in cxData" :key="i">
             <el-form-item :label="cx.cm" :prop="cx.dm">
               <template v-if="cx.type=='input'">
                 <el-input v-model="inquire[cx.dm]" :disabled="cx.dis"></el-input>
@@ -204,7 +204,7 @@ export default {
   box-sizing: border-box;
   /* border-bottom: 1px solid #295287; */
   margin-bottom: 11px;
-  color: #A09FA7;
+  color: #a09fa7;
   position: relative;
 }
 .changeBtn {

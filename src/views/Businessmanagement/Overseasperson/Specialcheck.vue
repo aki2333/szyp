@@ -84,7 +84,7 @@ export default {
         pageSize: 10,
         pageNum: 1
       },
-      page: 1,
+      page: '1',
       clzt: 1,
       multipleSelection: [],
       multipleArr: [],
@@ -106,8 +106,9 @@ export default {
 
     // },
     page(val){
+      this.page = val;
       if(this.clzt==1){//未处理
-        if(val == 1){
+        if(val == '1'){
           this.plBtn = this.$store.state.plBtn
           let arr = [];
           for(var i=0;i<this.plBtn.length;i++){
@@ -116,9 +117,9 @@ export default {
               }
             }
           this.plBtn = arr
-        }else if(val==2){
+        }else if(val=='2'){
           this.plBtn = this.$store.state.plBtn
-        }else if(val==3){
+        }else if(val=='3'){
           this.plBtn = this.$store.state.plBtn
           let arr = [];
           for(var j=0;j<this.plBtn.length;j++){
@@ -180,7 +181,7 @@ export default {
     },
     tabTopClick1(){
       this.clzt=1;
-      this.page=1;
+      // this.page='1';
       this.lbTab=this.$cdata.zxhc.zxhc.lbTab;
       // this.$cdata.zxhc.plBtnShow(this.page,this.clzt).then(data => {
       //   this.plBtn = data;
@@ -189,7 +190,7 @@ export default {
     },
     tabTopClick2(){
       this.clzt=2;
-      this.page=1;
+      // this.page='1';
       this.lbTab=this.$cdata.zxhc.zxhc.lbTab1;
 
       for(var i=0;i<this.plBtn.length;i++){
@@ -458,7 +459,6 @@ export default {
     tabFnc(data) {
       this.page = data;
       this.selection = [];
-      
       this.getTable();
     },
     //弹窗保存

@@ -179,7 +179,7 @@ export default {
     },
     lbTab(val) {
       if (val.length > 0) {
-        this.page = val[0].dm;
+        this.page1 = val[0].dm;
       }
     },
     plBtn: {
@@ -187,6 +187,9 @@ export default {
         console.log(newVal, oldVal);
       },
       deep: true
+    },
+    page(val){
+     this.page1 = val
     }
   },
   mounted() {
@@ -231,8 +234,8 @@ export default {
       this.$emit("blFnc", { btn: btn, data: row });
     },
     lbTabFun(val) {
-      this.page = val;
-      this.$emit("tabFnc", this.page);
+    
+      this.$emit("tabFnc", val);
     },
     plBtnFun(val) {
       this.$emit("plFnc", val);

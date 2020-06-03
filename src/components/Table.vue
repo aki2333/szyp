@@ -91,6 +91,10 @@ export default {
       type: String,
       default: ""
     },
+    page: {
+      type: String,
+      default: this.lbTab.length > 0 ? this.lbTab[0].dm : "0"
+    },
     isTab: {
       type: Boolean,
       default: false

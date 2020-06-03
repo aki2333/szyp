@@ -200,15 +200,16 @@ export default {
 </script>
 <style scoped>
 .inquire {
-  padding: 15px 15px 50x;
-  border-bottom: 1px solid #295287;
-  margin-bottom: 30px;
-  color: #e1e8ee;
+  padding: 18px 15px 0;
+  box-sizing: border-box;
+  /* border-bottom: 1px solid #295287; */
+  margin-bottom: 11px;
+  color: #A09FA7;
   position: relative;
 }
 .changeBtn {
   position: absolute;
-  bottom: -23px;
+  bottom: -10px;
   right: 0px;
 }
 .cx-btn {

@@ -26,7 +26,7 @@
         @pageNumFnc="pageNumFnc"
         @tabFnc="tabFnc"
         @blFnc="blFnc"
-        @userRole="userRole"
+        @SelectionChange="SelectionChange"
         @rowClick="rowClick"
       ></Table>
     </div>
@@ -198,7 +198,8 @@ export default {
       this.getTable();
     },
     //表格复选框选择
-    userRole(data) {
+    SelectionChange(data) {
+      console.log('this.multipleSelection',this.multipleSelection)
       this.multipleSelection = data;
       this.multipleArr = [];
       this.officeArr = [];

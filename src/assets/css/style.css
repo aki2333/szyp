@@ -5,7 +5,10 @@
   }
 /* 间距样式 */
 .ml-10{
-    margin-left: 10px;
+    margin-left: 10px!important;
+}
+.ml-5{
+    margin-left: 5px!important;
 }
 .mr-10{
     margin-right: 10px;
@@ -21,6 +24,12 @@
 }
 .mb-10{
     margin-bottom: 10px;
+}
+.mb-12{
+    margin-bottom: 12px;
+}
+.pb-5{
+    padding-bottom: 5px;
 }
 .mlr-10{
     margin-left: 10px;
@@ -39,9 +48,19 @@
 .no-padding{
     padding: 0!important;
 }
+.red{
+    color: red;
+}
+.border-b{
+    border-bottom: 1px solid #DEE6E8;
+}
+.hand{
+    cursor: pointer;
+}
 /* 元素样式 */
 .page{
     min-height: 96%;
+    background-color: #ffffff;
 }
 .page-box{
     background: #ffffff;
@@ -60,18 +79,20 @@
 .t-tab-top{
     display: flex;
     justify-content: flex-start;
+    /* padding: 0 20px; */
+    background-color: #E7EAEF;
 }
 .tab-top-item{
     position: relative;
     width: 124px;
-    height: 30px;
+    height: 28px;
 }
 .tab-top-item img{
     height: 100%;
 }
 .tab-top-item span{
     position: absolute;
-    top: 6px;
+    top: 4px;
     left: 24px;
     color:#ffffff;
     font-size:14px

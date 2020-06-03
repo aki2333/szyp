@@ -8,9 +8,8 @@ var root = 'http://192.168.3.131:1101/'//测试
 
 var aport1 = 'permission'//任
 var aport2 = 'datarelease'//石
+// var aport2 = 'http://10.0.30.53:9405'//石本地
 var aport3 = 'lzsb'
-// var aport2 = 'http://10.0.30.43:9405'//石本地
-
 
 // 引用axios
 import axios from 'axios';

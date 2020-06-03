@@ -92,6 +92,9 @@
                   >{{item.mc}}</el-radio>
                 </el-radio-group>
               </template>
+              <template v-else-if="cx.type=='line'">
+                <el-divider></el-divider>
+              </template>
             </el-form-item>
           </el-col>
         </el-col>
@@ -100,7 +103,16 @@
 
     <div class="page-btn-box">
       <!-- <el-button v-if="dialogType=='gnlb'" size="mini" type="primary" round @click="xj()">新建</el-button> -->
-
+      <div style="display:inline-block;" v-if="isDb">
+        <el-button
+          size="mini"
+          :type="db.type"
+          round
+          v-for="(db,dbi) in dbBtn"
+          @click="dbBtnFun(db)"
+          :key="dbi"
+        >{{db.button_name}}</el-button>
+      </div>
       <el-button size="mini" type="primary" round @click="save('form')">保存</el-button>
       <el-button size="mini" type="info" round @click="cancel">取消</el-button>
 
@@ -128,6 +140,14 @@ export default {
     dialogData: {
       type: Object,
       default: () => {}
+    },
+    dbBtn: {
+      type: Array,
+      default: () => {}
+    },
+    isDb: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -200,6 +220,9 @@ export default {
           return false;
         }
       });
+    },
+    dbBtnFun(val){
+      this.$emit("dbFnc",val)
     },
     linkChange(key, val,dialogData) {
       this.$emit("formLcFnc", { key: key, data: val ,obj:dialogData});

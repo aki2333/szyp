@@ -34,6 +34,7 @@ export default new Vuex.Store({
     rjka: [],
     rjsy: [],
     qfjg: [],
+    turnoutarea:[],//责任区
     // 【非大众】
     datatype: [],//下发类别
     backstatus: [],//数据状态
@@ -117,7 +118,10 @@ export default new Vuex.Store({
       state.suboffice = data;
     },
     getPolice(state, data) {
-      state.policestation = data;
+      state.zrq = data;
+    },
+    getZrq(state, data){
+      state.turnoutarea = data;
     },
     getDatatype(state, data) {
       state.datatype = data;
@@ -234,6 +238,14 @@ export default new Vuex.Store({
       return new Promise((resolve) => {
         api.post(api.aport2 + '/dm/getDmList', { tableName: 'dm_pcsb', lvl: '3', dmNameRightLike: payload }, r => {
           context.commit('getPolice', fnc.sortByKey(r, 'dm'))
+          resolve(payload)
+        })
+      })
+    },
+    aGetZrq(context, payload){
+      return new Promise((resolve) => {
+        api.post(api.aport2 + '/dm/getDmList', { tableName: 'dm_zrqb',dmNameRightLike:payload}, r => {
+          context.commit('getZrq', fnc.sortByKey(r, 'dm'))
           resolve(payload)
         })
       })

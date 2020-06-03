@@ -1,4 +1,5 @@
 // import store from '@/store'
+//核查走访
 const zxhc = {
     cx: [
         {
@@ -234,7 +235,174 @@ const zxhc = {
         },
     ],
 }
-function plBtnShow(flag, clzt) {
+//责任区走访
+const zrqzf = {
+    cx: [
+        {
+            cm: '姓名',
+            type: 'input',
+            dm: 'name'
+        },
+        {
+            cm: '性别',
+            type: 'select',
+            dm: 'gender',
+        },
+        {
+            cm: '年龄段',
+            type: 'ageDouble',
+            dm: 'age',
+            children:[
+                {
+                    cm:'开始年龄',
+                    type:'number',
+                    dm:'birthdayStart'
+                },
+                {
+                    cm:'结束年龄',
+                    type:'number',
+                    dm:'birthdayEnd'
+                },
+            ],
+        },
+        {
+            cm: '国家地区',
+            type: 'select',
+            dm: 'nationality'
+        },
+        // {
+        //     cm: '证件种类',
+        //     type: 'select',
+        //     dm: 'passportType'
+        // },
+        {
+            cm: '证件号码',
+            type: 'input',
+            dm: 'passportno'
+        },
+        {
+            cm: '接收责任区',
+            type: 'select',
+            dm: 'turnoutarea'
+        },
+        {
+            cm: '接收人',
+            type: 'input',
+            dm: 'backstatus'
+        },
+        {
+            cm: '接收时间',
+            type: 'double',
+            dm: 'fkTime',
+            children: [
+                {
+                    cm: '反馈开始时间',
+                    type: 'date',
+                    dm: 'policestation_backtimeStar'
+                },
+                {
+                    cm: '反馈结束时间',
+                    type: 'date',
+                    dm: 'policestation_backtimeEnd'
+                },
+            ],
+        },
+        
+        {
+            cm: '住宿地址',
+            type: 'input',
+            dm: 'adress'
+        },          
+    ],
+    lb: [
+        {
+            cm: '姓名',
+            dm: 'name'
+        },
+        {
+            cm: '性别',
+            dm: 'gender_desc'
+        },
+        {
+            cm: '出生日期',
+            dm: 'birthday'
+        },
+        {
+            cm: '国家地区',
+            dm: 'nationality_desc'
+        },
+        // {
+        //     cm: '证件种类',
+        //     dm: 'passportType_desc'
+        // },
+        {
+            cm: '证件号码',
+            dm: 'passportno'
+        },
+        {
+            cm: '住宿地址',
+            dm: 'address'
+        },
+        {
+            cm: '接收责任区',
+            dm: 'turnoutarea_desc'
+        },
+        {
+            cm: '接收人',
+            dm: 'datatype_desc'
+        },
+        // {
+        //     cm: '下发类别',
+        //     dm: 'datatype_desc'
+        // },
+        // {
+        //     cm: '走访状态',
+        //     dm: 'backstatus_desc'
+        // },
+        {
+            cm: '接收时间',
+            dm: 'issuedate'
+        },      
+        {
+            cm: '反馈时间',
+            dm: 'policestation_backtime'
+        },
+    ],
+    lbBtn: [
+        {
+            "button_name": "回退",
+            "button_type":'back',
+            "serial": "201",
+        },
+    ],
+    plBtn: [
+        {
+            "button_name": "处理",
+            "serial": "201",
+            "button_type": "cl",
+            "type":"success",
+
+        },
+    ],
+    clDia:[
+        
+    ],
+    dbBtn:[
+        {
+            "button_name": "上一页",
+            "serial": "201",
+            "button_type": "upPage",
+            "type":"info",
+        },
+        {
+            "button_name": "下一页",
+            "serial": "201",
+            "button_type": "nextPage",
+            "type":"info",
+        },
+    ],
+}
+function plBtnShow(flag,clzt){
     return new Promise((resolve) => {
         if (flag == 1 && clzt == 1) {
             zxhc.plBtn = [
@@ -330,9 +498,15 @@ function editShow(jb) {
                 dis: jb == "3" ? true : false
             },
             {
-                cm: '走访状态',
-                type: 'radio',
-                dm: 'backstatus'
+                cm:'所属责任区',
+                type:'select',
+                dm:'turnoutarea',
+                dis:jb=="3"?true:false
+            },
+            {
+                cm:'走访状态',
+                type:'radio',
+                dm:'backstatus'
             },
             {
                 cm: '备注',
@@ -343,8 +517,112 @@ function editShow(jb) {
         resolve(zxhc.editcontent)
     })
 }
+function handShow(jb){
+    return new Promise((resolve) => {
+        zrqzf.clDia=[
+            {
+                cm:'姓名',
+                type:'input',
+                dm:'name',
+                
+            },
+            {
+                cm:'性别',
+                type:'select',
+                dm:'gender',
+               
+            },
+            {
+                cm:'出生日期',
+                type:'datePicker',
+                dm:'birthday',
+               
+            },
+            {
+                cm:'国家地区',
+                type:'select',
+                dm:'nationality',
+                
+            },
+            {
+                cm:'证件种类',
+                type:'select',
+                dm:'passportType',
+               
+            },
+            {
+                cm:'证件号码',
+                type:'input',
+                dm:'passportno',
+               
+            },
+            {
+                cm:'下发类别',
+                type:'select',
+                dm:'datatype',
+                dis:true
+            },
+            {
+                cm:'住宿地址',
+                type:'input',
+                dm:'address',
+                dis:true,
+            },
+            {
+                cm:'所属分局',
+                type:'select',
+                dm:'suboffice',
+                dis:jb=="2"||jb=="3"?true:false
+            },
+            {
+                cm:'所属派出所',
+                type:'select',
+                dm:'policestation',
+                dis:jb=="3"?true:false
+            },
+            // {
+            //     cm:'所属责任区',
+            //     type:'select',
+            //     dm:'policestation',
+            //     dis:jb=="3"?true:false
+            // },
+
+            {
+                cm:'走访状态',
+                type:'radio',
+                dm:'backstatus'
+            },
+            {
+                cm:'备注',
+                type:'input',
+                dm:'remarks'
+            },
+            {
+                cm:'接收人',
+                type:'input',
+                dm:'remarks',
+                dis:true
+            },
+            {
+                cm:'接收责任区',
+                type:'input',
+                dm:'turnoutarea_desc',
+                dis:true
+            },
+            {
+                cm:'接收时间',
+                type:'input',
+                dm:'remarks',
+                dis:true
+            },
+        ]
+        resolve(zrqzf.clDia)
+    })
+}
 export default {
     zxhc,
+    zrqzf,
     plBtnShow,
-    editShow
+    editShow,
+    handShow
 }

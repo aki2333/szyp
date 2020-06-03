@@ -239,7 +239,9 @@ export default {
 <style scoped>
 .table-other {
   position: relative;
-  height: 36px;
+  height: 34px;
+  border-bottom: 1px solid #E2E7ED;
+  margin-bottom: 12px;
   /* display: flex;
   justify-content: space-between; */
 }

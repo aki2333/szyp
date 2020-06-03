@@ -64,7 +64,12 @@ const routes = [
         path: '/Temporary',
         name: 'Temporary',
         component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/Temporary.vue')
-      }
+      },
+      {
+        path: '/ZrqVistManage',
+        name: 'ZrqVistManage',
+        component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/ZrqVistManage.vue')
+      },
     ]
   }
 ]

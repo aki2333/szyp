@@ -84,7 +84,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .head {
-  height: 79px;
+  height: 69px;
   width: 100%;
   display: flex;
   align-items: center;

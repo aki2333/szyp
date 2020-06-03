@@ -128,7 +128,7 @@ export default {
       cxData: this.$cdata.zxhc.zrqzf.cx,
       lbData: this.$cdata.zxhc.zrqzf.lb,
       lbBtn: this.$cdata.zxhc.zrqzf.lbBtn,
-      plBtn: this.$cdata.zxhc.zrqzf.plBtn,
+      plBtn: this.$store.state.plBtn,
       dbBtn: this.$cdata.zxhc.zrqzf.dbBtn,
       //业务数据
       cx: {
@@ -447,7 +447,7 @@ export default {
 }
 .item-item,.page-content{
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
 }
 .value-item{
     width: 67%;

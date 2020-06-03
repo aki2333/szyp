@@ -118,7 +118,7 @@ export default new Vuex.Store({
       state.suboffice = data;
     },
     getPolice(state, data) {
-      state.zrq = data;
+      state.policestation = data;
     },
     getZrq(state, data){
       state.turnoutarea = data;

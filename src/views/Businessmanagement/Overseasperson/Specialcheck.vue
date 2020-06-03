@@ -13,6 +13,7 @@
     </div>
     <div class="page-box">
       <Table
+        :page="page"
         :lbData="lbData"
         :isSelect="isSelect"
         :lbBtn="lbBtn"
@@ -69,7 +70,7 @@ export default {
       cxData: this.$cdata.zxhc.zxhc.cx,
       lbData: this.$cdata.zxhc.zxhc.lb,
       lbBtn: this.$cdata.zxhc.zxhc.lbBtn,
-      plBtn: this.$cdata.zxhc.zxhc.plBtn,
+      plBtn: [],
       lbTab: this.$cdata.zxhc.zxhc.lbTab,
       //业务数据
       cx: {
@@ -100,8 +101,48 @@ export default {
       labelData: []
     };
   },
+  watch:{
+    // clzt(val){
+
+    // },
+    page(val){
+      if(this.clzt==1){//未处理
+        if(val == 1){
+          this.plBtn = this.$store.state.plBtn
+          let arr = [];
+          for(var i=0;i<this.plBtn.length;i++){
+              if(this.plBtn[i].py!='sb'){
+                arr.push(this.plBtn[i])
+              }
+            }
+          this.plBtn = arr
+        }else if(val==2){
+          this.plBtn = this.$store.state.plBtn
+        }else if(val==3){
+          this.plBtn = this.$store.state.plBtn
+          let arr = [];
+          for(var j=0;j<this.plBtn.length;j++){
+              if(this.plBtn[j].py=='cx'||this.plBtn[j].py=='qc'){
+                arr.push(this.plBtn[j])
+              }
+            }
+          this.plBtn = arr
+        }
+      }else if(this.clzt==2){
+        this.plBtn = this.$store.state.plBtn
+          let arr = [];
+          for(var k=0;i<this.plBtn.length;k++){
+              if(this.plBtn[k].py!='sb'||this.plBtn[k].py!='xf'){
+                arr.push(this.plBtn[k])
+              }
+            }
+          this.plBtn = arr
+      }
+    },
+  },
   mounted() {
     this.$nextTick(() => {
+      console.log(this.plBtn)
       this.$store.dispatch("aGetNation");
       this.$store.dispatch("aGetGender");
       this.$store.dispatch("aGetPassport");
@@ -120,10 +161,15 @@ export default {
         this.$store.dispatch("aGetPolice",this.$store.state.user.bmbh);
       }  
       this.$store.dispatch("aGetDatatype");
+      let arr = [];
+      this.plBtn = this.$store.state.plBtn
+      for(var i=0;i<this.plBtn.length;i++){
+          if(this.plBtn[i].py!='sb'){
+            arr.push(this.plBtn[i])
+          }
+        }
+      this.plBtn = arr
       // this.$store.dispatch("aGetBackstatus");
-      this.$cdata.zxhc.plBtnShow(this.page).then(data => {
-        this.plBtn = data;
-      });
       this.getTable();
     });
   },
@@ -134,20 +180,26 @@ export default {
     },
     tabTopClick1(){
       this.clzt=1;
-      // this.page=1;
+      this.page=1;
       this.lbTab=this.$cdata.zxhc.zxhc.lbTab;
-      this.$cdata.zxhc.plBtnShow(this.page,this.clzt).then(data => {
-        this.plBtn = data;
-      });
+      // this.$cdata.zxhc.plBtnShow(this.page,this.clzt).then(data => {
+      //   this.plBtn = data;
+      // });
       this.getTable()
     },
     tabTopClick2(){
       this.clzt=2;
-      // this.page=1;
+      this.page=1;
       this.lbTab=this.$cdata.zxhc.zxhc.lbTab1;
-      this.$cdata.zxhc.plBtnShow(this.page,this.clzt).then(data => {
-        this.plBtn = data;
-      });
+
+      for(var i=0;i<this.plBtn.length;i++){
+        if(this.plBtn[i].py=='sb'){
+          this.plBtn.splice(i,1)
+        }
+        if(this.plBtn[i].py=='xf'){
+          this.plBtn.splice(i,1)
+        }
+      }
       this.getTable()
     },
     rowClick(data){
@@ -267,9 +319,9 @@ export default {
         });
         return false;
       }
-      this.dialogTitle = data.button_name;
-      this.dialogType = data.button_type;
-      if (data.button_type == "sb") {
+      this.dialogTitle = data.menu_name;
+      this.dialogType = data.py;
+      if (data.py == "sb") {
         let p = {
           serialList: this.multipleArr,
           bmbh: this.$store.state.user.bmbh,
@@ -288,7 +340,7 @@ export default {
             this.selection=[];
           }
         );
-      } else if (data.button_type == "xf") {
+      } else if (data.py == "xf") {
         this.dialogData = {};
         if (this.page == 1) {
           // if (!this.isArrEmpty(this.officeArr)) {
@@ -406,9 +458,7 @@ export default {
     tabFnc(data) {
       this.page = data;
       this.selection = [];
-      this.$cdata.zxhc.plBtnShow(this.page,this.clzt).then(data => {
-        this.plBtn = data;
-      });
+      
       this.getTable();
     },
     //弹窗保存

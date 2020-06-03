@@ -243,12 +243,12 @@ const lzsb = {
             {
                 cm: '英文姓',
                 type: 'input',
-                dm: 'givenname'
+                dm: 'surname'
             },
             {
                 cm: '英文名',
                 type: 'input',
-                dm: 'givenname'
+                dm: 'firstname'
             },
             {
                 cm: '中文姓名',

@@ -4,7 +4,7 @@
       <div class="table-tab-box" v-if="isTab">
         <span
           class="hand"
-          :class="{'tab_active':page==lt.dm}"
+          :class="{'tab_active':page1==lt.dm}"
           v-for="(lt,lti) in lbTab"
           :key="lti"
           @click="lbTabFun(lt.dm)"
@@ -93,7 +93,7 @@ export default {
     },
     page: {
       type: String,
-      default: this.lbTab.length > 0 ? this.lbTab[0].dm : "0"
+      default: ""
     },
     isTab: {
       type: Boolean,
@@ -167,7 +167,7 @@ export default {
       // order: "serial",
       // direction: 1,
       currentRow: 0,
-      page: this.lbTab.length > 0 ? this.lbTab[0].dm : "0"
+      page1: this.lbTab.length > 0 ? this.lbTab[0].dm : this.page
     };
   },
   watch: {
@@ -244,7 +244,7 @@ export default {
 .table-other {
   position: relative;
   height: 34px;
-  border-bottom: 1px solid #E2E7ED;
+  border-bottom: 1px solid #e2e7ed;
   margin-bottom: 12px;
   /* display: flex;
   justify-content: space-between; */

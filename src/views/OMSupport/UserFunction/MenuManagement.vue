@@ -22,13 +22,14 @@
             size="small"
             ref="form"
             label-width="100px"
+            :disabled="formDisabled"
           >
             <el-row :gutter="30" type="flex" align="middle" justify="center">
               <el-col :span="16">
                 <el-col :span="24" v-for="(cx,i) in labelData" :key="i">
                   <el-form-item :label="cx.cm" :prop="cx.dm">
                     <template v-if="cx.type=='input'">
-                      <el-input v-model="formData[cx.dm]" :disabled="formDisabled"></el-input>
+                      <el-input v-model="formData[cx.dm]"></el-input>
                     </template>
                     <template v-else-if="cx.type=='select'">
                       <el-select
@@ -46,6 +47,18 @@
                         ></el-option>
                       </el-select>
                     </template>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="24" v-if="formData.menu_type=='B'">
+                  <el-form-item label="按钮类型" prop="button_type">
+                    <el-select v-model="formData.button_type" placeholder="请选择">
+                      <el-option
+                        v-for="item in $cdata.options.button_type"
+                        :key="item.dm"
+                        :label="item.mc"
+                        :value="item.dm"
+                      ></el-option>
+                    </el-select>
                   </el-form-item>
                 </el-col>
               </el-col>
@@ -115,17 +128,22 @@ export default {
   methods: {
     // 获取功能列表
     getMenuTree() {
-      this.$api.post(this.$api.aport1+"/menuController/getMenuTree", {}, r => {
-        this.treeData2 = r;
-      });
+      this.$api.post(
+        this.$api.aport1 + "/menuController/getMenuTree",
+        {},
+        r => {
+          this.treeData2 = r;
+        }
+      );
     },
     getTree(data) {
       console.log("点击树节点-", data);
       this.formType = data.type;
       this.formDisabled = true;
-      Object.assign(this.oldformData, data.data);
-      Object.assign(this.formData, data.data);
+      this.oldformData = data.data;
+      this.formData = data.data;
       this.formData = JSON.parse(JSON.stringify(this.formData));
+      console.log("formData", this.formData);
       this.oldformData = JSON.parse(JSON.stringify(this.oldformData));
 
       this.addBc = false;
@@ -161,13 +179,17 @@ export default {
       //console.log(this.oldformData, this.formData);
     },
     addMenuInfo(data) {
-      this.$api.post(this.$api.aport1+"/menuController/addMenuInfo", data, r => {
-        this.$message({
-          message: r,
-          type: "success"
-        });
-        this.cancel();
-      });
+      this.$api.post(
+        this.$api.aport1 + "/menuController/addMenuInfo",
+        data,
+        r => {
+          this.$message({
+            message: r,
+            type: "success"
+          });
+          this.cancel();
+        }
+      );
     },
     // 修改
     updateMenu() {
@@ -185,13 +207,17 @@ export default {
       this.addBc = false;
     },
     updateMenuInfo(data) {
-      this.$api.post(this.$api.aport1+"/menuController/updateMenuInfo", data, r => {
-        this.$message({
-          message: r,
-          type: "success"
-        });
-        this.cancel();
-      });
+      this.$api.post(
+        this.$api.aport1 + "/menuController/updateMenuInfo",
+        data,
+        r => {
+          this.$message({
+            message: r,
+            type: "success"
+          });
+          this.cancel();
+        }
+      );
     },
     save(formName, type) {
       this.$refs[formName].validate(valid => {
@@ -226,13 +252,17 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
-        this.$api.post(this.$api.aport1+"/menuController/deleteMenuInfo", _data, r => {
-          this.$message({
-            message: r,
-            type: "success"
-          });
-          this.cancel();
-        });
+        this.$api.post(
+          this.$api.aport1 + "/menuController/deleteMenuInfo",
+          _data,
+          r => {
+            this.$message({
+              message: r,
+              type: "success"
+            });
+            this.cancel();
+          }
+        );
       });
     },
     // 清除

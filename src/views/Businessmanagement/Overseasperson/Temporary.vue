@@ -26,6 +26,7 @@
             :isTab="isTab"
             :lbTab="lbTab"
             :lbBtn="lbBtn"
+            czWidth="130px"
             :tableData="tableData"
             @tabFnc="tabFnc"
             @rowClick="rowClick"
@@ -46,7 +47,7 @@
       <el-dialog width="50%" :visible.sync="innerVisible" append-to-body>
         <el-form :model="innerForm" ref="innerForm" label-width="100px" class="tc-form">
           <el-form-item label="不通过原因" prop="hcsm">
-            <el-input v-model="innerForm.hcsm" autocomplete="off"></el-input>
+            <el-input v-model="innerForm.shsm" autocomplete="off"></el-input>
           </el-form-item>
           <div class="page-btn-box">
             <el-button type="primary" @click="shwtg">提交</el-button>
@@ -106,7 +107,7 @@ export default {
       dialogImgData: [],
       labelData: [],
       innerForm: {
-        hcsm: ""
+        shsm: ""
       }
     };
   },
@@ -261,11 +262,11 @@ export default {
       if (data.type == "bj") {
         if (data.btnType == 1) {
           let p = data.data;
-          p.hczt = "hczt_1";
+          p.shzt = "shzt_1";
           this.updateLzsb(data.data);
         } else if (data.btnType == 0) {
           this.innerForm = data.data;
-          this.innerForm.hczt = "hczt_2";
+          this.innerForm.shzt = "shzt_2";
           this.innerVisible = true;
         }
       }

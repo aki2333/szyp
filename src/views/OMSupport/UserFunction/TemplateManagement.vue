@@ -61,7 +61,7 @@ export default {
       // 【展示数据】
       isSelect: false,
       lbData: this.$cdata.qxgl.mbgl.lb,
-      plBtn: this.$cdata.qxgl.mbgl.plBtn,
+      plBtn: this.$store.state.plBtn,
       // 【业务数据】
       cx: {
         pd: {
@@ -94,17 +94,25 @@ export default {
   methods: {
     // 获取角色列表
     selectTemplateList() {
-      this.$api.post(this.$api.aport1+"/templateController/selectTemplateList", this.cx, r => {
-        this.tableData = r;
-      });
+      this.$api.post(
+        this.$api.aport1 + "/templateController/selectTemplateList",
+        this.cx,
+        r => {
+          this.tableData = r;
+        }
+      );
     },
     // 获取功能列表
     getMenuTree(data) {
-      this.$api.post(this.$api.aport1+"/menuController/getMenuTree", {}, r => {
-        this.treeData2 = r;
-        console.log(data.data.menuList);
-        this.defaultChecked2 = data.data.menuList;
-      });
+      this.$api.post(
+        this.$api.aport1 + "/menuController/getMenuTree",
+        {},
+        r => {
+          this.treeData2 = r;
+          console.log(data.data.menuList);
+          this.defaultChecked2 = data.data.menuList;
+        }
+      );
     },
     rowClick(data) {
       console.log("点击表格-", data);
@@ -137,21 +145,22 @@ export default {
 
     // 批量操作
     plFnc(data) {
-      console.log("点击批量按钮-", data);
-      if (data.button_type == "xj") {
+      console.log("点击批量按钮-", data, this.checkRow);
+      if (data.py == "xj") {
         // data.btn按钮信息
         this.dialogTitle = data.button_name;
-        this.dialogType = data.button_type;
+        this.dialogType = data.py;
         this.isShowDialog = true;
       } else {
-        if (this.checkRow.serial == "") {
+        if (!this.checkRow.serial) {
           this.$message({
             message: "请先选择部门",
             type: "warning"
           });
           return false;
+        } else {
+          this.deleteTemplate();
         }
-        this.deleteTemplate();
       }
     },
 
@@ -165,14 +174,18 @@ export default {
     // 新建
     addTemplate(data) {
       console.log("新建弹窗获得数据-", data);
-      this.$api.post(this.$api.aport1+"/templateController/addTemplate", data, r => {
-        this.$message({
-          message: r,
-          type: "success"
-        });
-        this.isShowDialog = false;
-        this.begin();
-      });
+      this.$api.post(
+        this.$api.aport1 + "/templateController/addTemplate",
+        data,
+        r => {
+          this.$message({
+            message: r,
+            type: "success"
+          });
+          this.isShowDialog = false;
+          this.begin();
+        }
+      );
     },
     // 编辑
     updateTemplate() {
@@ -183,13 +196,17 @@ export default {
         menuList: this.menuList,
         buttonList: this.buttonList
       };
-      this.$api.post(this.$api.aport1+"/templateController/updateTemplate", p, r => {
-        this.$message({
-          message: r,
-          type: "success"
-        });
-        this.begin();
-      });
+      this.$api.post(
+        this.$api.aport1 + "/templateController/updateTemplate",
+        p,
+        r => {
+          this.$message({
+            message: r,
+            type: "success"
+          });
+          this.begin();
+        }
+      );
     },
 
     // 停用
@@ -203,13 +220,17 @@ export default {
           serial: this.checkRow.serial,
           userId: this.$store.state.user.userId
         };
-        this.$api.post(this.$api.aport1+"/templateController/deleteTemplate", p, r => {
-          this.$message({
-            message: r,
-            type: "success"
-          });
-          this.begin();
-        });
+        this.$api.post(
+          this.$api.aport1 + "/templateController/deleteTemplate",
+          p,
+          r => {
+            this.$message({
+              message: r,
+              type: "success"
+            });
+            this.begin();
+          }
+        );
       });
     },
     // 开始

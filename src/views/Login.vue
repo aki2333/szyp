@@ -136,8 +136,17 @@ export default {
         r => {
           this.$store.dispatch("aGetMenu", r[0].childrenMenu).then(data2 => {
             console.log("获取菜单成功", data2);
-            this.$router.push({ name: "Frame" });
-            this.isLogin = false;
+
+            if (data2.length == 0) {
+              this.$confirm(" 没有功能权限，请联系管理员", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning"
+              }).then(() => {});
+            } else {
+              this.$router.push({ name: "Frame" });
+              this.isLogin = false;
+            }
           });
         }
       );

@@ -107,7 +107,7 @@ export default {
       cxData: this.$cdata.qxgl.yhgl.cx,
       lbData: this.$cdata.qxgl.yhgl.lb,
       lbBtn: this.$cdata.qxgl.yhgl.lbBtn,
-      plBtn: this.$cdata.qxgl.yhgl.plBtn,
+      plBtn: this.$store.state.plBtn,
       // 【业务数据】
       cx: {
         pd: { userType: "0", valid: "1" },
@@ -245,13 +245,13 @@ export default {
     // 批量操作
     plFnc(data) {
       console.log("批量处理", data);
-      this.dialogTitle = data.button_name;
-      this.dialogType = data.button_type;
-      this.labelData = this.$cdata.qxgl.yhgl[data.button_type];
-      if (data.button_type == "xj") {
+      this.dialogTitle = data.menu_name;
+      this.dialogType = data.py;
+      this.labelData = this.$cdata.qxgl.yhgl[data.py];
+      if (data.py == "xj") {
         this.dialogData = {};
         this.isShowDialog = true;
-      } else if (data.button_type == "xg") {
+      } else if (data.py == "xg") {
         this.dialogData = this.currentRow;
         console.log(this.dialogData);
         if (JSON.stringify(this.dialogData) == "{}") {
@@ -269,7 +269,7 @@ export default {
         }
         this.isShowDialog = true;
         // this.dialogData = data.data;
-      } else if (data.button_type == "sc") {
+      } else if (data.py == "sc") {
         this.dialogData = this.currentRow;
 
         if (JSON.stringify(this.dialogData) == "{}") {
@@ -286,9 +286,9 @@ export default {
           return false;
         }
         this.delUser(this.dialogData);
-      } else if (data.button_type == "plmmcz") {
+      } else if (data.py == "plmmcz") {
         this.isShowDialog = true;
-      } else if (data.button_type == "plscsjmm") {
+      } else if (data.py == "plscsjmm") {
         this.batchRandomPassword();
       }
     },

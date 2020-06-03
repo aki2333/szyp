@@ -95,6 +95,9 @@ export default {
     defaultChecked(val) {
       console.log("defaultChecked", val);
       this.$refs.tree.setCheckedKeys(val);
+      setTimeout(() => {
+        this.getTree();
+      }, 400);
     }
   },
   methods: {
@@ -109,6 +112,9 @@ export default {
       //   a.unfold = true;
       //   // }, 400);
       // }
+      this.getTree();
+    },
+    getTree() {
       let data = this.$refs.tree.getCheckedKeys(false);
       this.$emit("getCheckedKeys", { type: this.treeType, data: data });
       let data2 = this.$refs.tree.getCheckedNodes(false, true);

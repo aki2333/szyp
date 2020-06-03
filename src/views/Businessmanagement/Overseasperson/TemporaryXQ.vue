@@ -6,9 +6,10 @@
       :rules="rules"
       size="small"
       ref="form"
-      label-width="125px"
+      label-width="130px"
       label-position="left"
       class="tc-form"
+      :disabled="dialogType=='ck'"
     >
       <el-row :gutter="30">
         <el-col :span="16" class="no-padding">
@@ -58,6 +59,7 @@
                   v-model="dialogData[cx.dm]"
                   :disabled="cx.dis"
                   type="date"
+                  value-format="yyyy-MM-dd"
                   placeholder="选择日期"
                 ></el-date-picker>
               </template>
@@ -68,6 +70,7 @@
                       v-model="dialogData[cx.children[0].dm]"
                       :type="cx.children[0].type"
                       placeholder="选择开始日期"
+                      value-format="yyyy-MM-dd"
                     ></el-date-picker>
                   </div>
                   <div>-</div>
@@ -75,6 +78,7 @@
                     <el-date-picker
                       v-model="dialogData[cx.children[1].dm]"
                       :type="cx.children[1].type"
+                      value-format="yyyy-MM-dd"
                       placeholder="选择结束日期"
                     ></el-date-picker>
                   </div>
@@ -165,6 +169,16 @@
                   v-model="dialogData[cx.dm]"
                   :disabled="cx.dis"
                   type="date"
+                  value-format="yyyy-MM-dd"
+                  placeholder="选择日期"
+                ></el-date-picker>
+              </template>
+              <template v-else-if="cx.type=='datetimePicker'">
+                <el-date-picker
+                  v-model="dialogData[cx.dm]"
+                  :disabled="cx.dis"
+                  type="datetime"
+                  value-format="yyyy-MM-dd HH:mm:ss"
                   placeholder="选择日期"
                 ></el-date-picker>
               </template>
@@ -174,6 +188,7 @@
                     <el-date-picker
                       v-model="dialogData[cx.children[0].dm]"
                       :type="cx.children[0].type"
+                      value-format="yyyy-MM-dd"
                       placeholder="选择开始日期"
                     ></el-date-picker>
                   </div>
@@ -183,6 +198,7 @@
                       v-model="dialogData[cx.children[1].dm]"
                       :type="cx.children[1].type"
                       placeholder="选择结束日期"
+                      value-format="yyyy-MM-dd"
                     ></el-date-picker>
                   </div>
                 </div>
@@ -203,22 +219,10 @@
     </el-form>
 
     <div class="page-btn-box">
-      <el-button
-        size="mini"
-        type="primary"
-        round
-        @click="save('form',1)"
-        v-if="dialogType=='bj'"
-      >核查通过</el-button>
-      <el-button
-        size="mini"
-        type="primary"
-        round
-        @click="save('form',0)"
-        v-if="dialogType=='bj'"
-      >核查未通过</el-button>
+      <el-button size="mini" type="primary" @click="save('form',1)" v-if="dialogType=='bj'">审核通过</el-button>
+      <el-button size="mini" type="primary" @click="save('form',0)" v-if="dialogType=='bj'">审核未通过</el-button>
 
-      <el-button size="mini" type="info" round @click="cancel">取消</el-button>
+      <el-button size="mini" @click="cancel">取消</el-button>
     </div>
   </div>
 </template>

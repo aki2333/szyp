@@ -69,7 +69,7 @@ export default {
       isEdit: true,
       lbData: this.$cdata.qxgl.jsgl.lb,
       lbBtn: this.$cdata.qxgl.jsgl.lbBtn,
-      plBtn: this.$cdata.qxgl.jsgl.plBtn,
+      plBtn: this.$store.state.plBtn,
       // 【业务数据】
       cx: {
         bmbh: "",
@@ -122,8 +122,8 @@ export default {
         return false;
       }
       // data.btn按钮信息
-      this.dialogTitle = data.button_name;
-      this.dialogType = data.button_type;
+      this.dialogTitle = data.menu_name;
+      this.dialogType = data.py;
       // data.data行内信息
       this.dialogData = this.cx;
       this.isShowDialog = true;

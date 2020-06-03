@@ -96,14 +96,25 @@
           </el-col>
         </el-col>
         <el-col :span="4" align="center">
-          <el-button
+          <template v-for="(pb,pbi) in $store.state.plBtn">
+            <el-button
+              class="cx-btn"
+              size="small"
+              :type="pb.py=='cx'?'primary':'info'"
+              round
+              v-if="pb.button_type==1"
+              :key="pbi"
+              @click="btnClick(pb.py)"
+            >{{pb.button_name||pb.menu_name}}</el-button>
+          </template>
+          <!-- <el-button
             class="cx-btn"
             round
             size="small"
             type="primary"
             @click="submitForm('inquire')"
           >查询</el-button>
-          <el-button size="small" type="info" round @click="resetForm('inquire')">清除</el-button>
+          <el-button size="small" type="info" round @click="resetForm('inquire')">清除</el-button>-->
         </el-col>
       </el-row>
     </el-form>
@@ -152,6 +163,13 @@ export default {
     this.mrz = JSON.parse(JSON.stringify(this.mrz));
   },
   methods: {
+    btnClick(py) {
+      if (py == "cx") {
+        this.submitForm("inquire");
+      } else if (py == "qc") {
+        this.resetForm("inquire");
+      }
+    },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {

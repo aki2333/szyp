@@ -10,16 +10,19 @@
           @click="lbTabFun(lt.dm)"
         >{{lt.mc}}</span>
       </div>
+      <!-- :type="pb.type" -->
+      <!--           :disabled="pb.user_ctrl==1&&disPlBtn" -->
       <div class="table-btn-box" v-if="isPl">
-        <el-button
-          size="mini"
-          :type="pb.type"
-          :disabled="pb.user_ctrl==1&&disPlBtn"
-          round
-          v-for="(pb,pbi) in plBtn"
-          @click="plBtnFun(pb)"
-          :key="pbi"
-        >{{pb.button_name}}</el-button>
+        <template v-for="(pb,pbi) in plBtn">
+          <el-button
+            size="mini"
+            :type="pbi==0?'success':'primary'"
+            round
+            v-if="pb.button_type==2"
+            @click="plBtnFun(pb)"
+            :key="pbi"
+          >{{pb.button_name||pb.menu_name}}</el-button>
+        </template>
       </div>
     </div>
     <el-table
@@ -45,7 +48,7 @@
         :prop="lb.dm"
         :label="lb.cm"
       ></el-table-column>
-      <el-table-column align="center" label="操作" v-if="isEdit">
+      <el-table-column :width="czWidth" align="center" label="操作" v-if="isEdit">
         <template slot-scope="scope">
           <template v-for="(lbt,lbi) in lbBtn">
             <span :key="lbi" class="btn-span">
@@ -147,6 +150,10 @@ export default {
     selection: {
       type: Array,
       default: () => []
+    },
+    czWidth: {
+      type: String,
+      default: "auto"
     }
   },
   data() {

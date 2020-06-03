@@ -33,9 +33,6 @@ export default {
   },
   mounted() {
     console.log("store", this.$store.state);
-    // if (!localStorage.getItem("user")) {
-    // this.getUser();
-    // }
   },
   methods: {}
 };

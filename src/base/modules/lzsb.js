@@ -138,7 +138,7 @@ const lzsb = {
             dm: 'zsdz'
         },
         {
-            cm: '日期',
+            cm: '住宿日期',
             dm: 'zssj'
         },
         {
@@ -324,15 +324,15 @@ const lzsb = {
             //     type: 'select',
             //     dm: 'rylb',
             // },
-            {
-                cm: '接待单位',
-                type: 'input',
-                dm: 'jddw',
-            },
+            // {
+            //     cm: '接待单位',
+            //     type: 'input',
+            //     dm: 'jddw',
+            // },
             {
                 cm: '在华工作机构名称',
                 type: 'input',
-                dm: 'zhgzjgmc',
+                dm: 'gzjg',
             },
             {
                 cm: '住宿日期',
@@ -383,7 +383,7 @@ const lzsb = {
 
             {
                 cm: '上报时间',
-                type: 'datePicker',
+                type: 'datetimePicker',
                 dm: 'sbsj'
             },
             {
@@ -407,17 +407,17 @@ const lzsb = {
                 cshow: true
             },
             {
-                cm: '录入人',
+                cm: '审核人',
                 type: 'input',
                 dm: 'spr'
             },
             {
-                cm: '录入单位',
+                cm: '审核单位',
                 type: 'input',
                 dm: 'sprdm'
             },
             {
-                cm: '录入时间',
+                cm: '审核时间',
                 type: 'datePicker',
                 dm: 'spsj'
             }

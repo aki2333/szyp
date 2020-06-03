@@ -134,6 +134,16 @@ const options = {
             mc: "外部用户"
         }
     ],
+    button_type: [
+        {
+            dm: '1',
+            mc: '系统按钮'
+        },
+        {
+            dm: '2',
+            mc: '表格按钮'
+        }
+    ],
     menu_type: [
         {
             dm: 'P',

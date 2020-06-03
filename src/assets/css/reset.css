@@ -165,6 +165,12 @@ input[type="number"]{
 .tc-form .el-form-item{
   margin-bottom: 8px!important;
 }
+.tc-form .el-form-item__error {
+    top: -6px!important;
+    left: auto!important;
+    right: -10px!important;
+    background: #fff!important;
+}
 .el-carousel__button{
   width: 7px!important;
   height:7px!important;

@@ -9,7 +9,7 @@
             :isSelect="false"
             :isEdit="true"
             :lbBtn="$cdata.qxgl.zrqgl.lbBtn"
-            :plBtn="$cdata.qxgl.zrqgl.plBtn"
+            :plBtn="$store.state.plBtn"
             :tableData="tableData"
             @rowClick="rowClick"
             @pageSizeFnc="pageSizeFnc"
@@ -142,14 +142,14 @@ export default {
 
     // 批量操作
     plFnc(data) {
-      console.log("批量处理" + data.button_name, data);
-      this.dialogTitle = data.button_name;
-      this.dialogType = data.button_type;
-      this.labelData = this.$cdata.qxgl.zrqgl[data.button_type];
-      if (data.button_type == "xj") {
+      console.log("批量处理" + data.menu_name, data);
+      this.dialogTitle = data.menu_name;
+      this.dialogType = data.py;
+      this.labelData = this.$cdata.qxgl.zrqgl[data.py];
+      if (data.py == "xj") {
         this.dialogData = { zrqDm: "" };
         this.isShowDialog = true;
-      } else if (data.button_type == "qy") {
+      } else if (data.py == "qy") {
         this.dialogData = this.currentRow;
         if (JSON.stringify(this.dialogData) == "{}") {
           this.$message({
@@ -163,7 +163,7 @@ export default {
           zt: "1"
         };
         this.disEnableZrq(qydata);
-      } else if (data.button_type == "ty") {
+      } else if (data.py == "ty") {
         this.dialogData = this.currentRow;
         if (JSON.stringify(this.dialogData) == "{}") {
           this.$message({

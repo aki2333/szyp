@@ -83,7 +83,15 @@ export default {
         this.bread[1] = item;
         console.log("this.bread", this.bread);
         this.$store.dispatch("aGetBread", this.bread);
-        this.$router.push({ name: item.menu_url });
+        if (item.childrenMenu) {
+          this.$store.dispatch("aGetPlBtn", item.childrenMenu).then(() => {
+            this.$router.push({ name: item.menu_url });
+          });
+        } else {
+          this.$store.dispatch("aGetPlBtn", []).then(() => {
+            this.$router.push({ name: item.menu_url });
+          });
+        }
       }
     }
   }

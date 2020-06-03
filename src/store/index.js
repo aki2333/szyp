@@ -18,6 +18,7 @@ export default new Vuex.Store({
     menu: menu || [],
     leftMenu: [],
     chilrenNav: [],
+    plBtn: [],
     breadcrumb: breadData || [],
     nationality: [],
     gender: [],
@@ -61,6 +62,10 @@ export default new Vuex.Store({
     getBread(state, data) {
       state.breadcrumb = data;
       window.localStorage.setItem("bread", JSON.stringify(data));
+    },
+    getPlBtn(state, data) {
+      state.plBtn = data;
+      window.localStorage.setItem("plBtn", JSON.stringify(data));
     },
     getToken(state, data) {
       state.token = data;
@@ -167,6 +172,12 @@ export default new Vuex.Store({
     aGetBread(context, payload) {
       return new Promise((resolve) => {
         context.commit('getBread', payload)
+        resolve(payload)
+      })
+    },
+    aGetPlBtn(context, payload) {
+      return new Promise((resolve) => {
+        context.commit('getPlBtn', payload)
         resolve(payload)
       })
     },

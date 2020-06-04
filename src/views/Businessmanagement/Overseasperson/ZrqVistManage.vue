@@ -42,8 +42,19 @@
                 </el-checkbox-group>
            </div>
            <div class="page-btn-box">
-               <el-button size="mini" type="primary" round @click="receiveFun">接收</el-button>
-              <el-button size="mini" type="info" round @click="handOutFun">派发</el-button>
+             <template v-for="(pb,pbi) in $store.state.plBtn">
+             <el-button
+              class="cx-btn"
+              size="small"
+              :type="pb.py=='js'?'primary':'info'"
+              round
+              v-if="pb.button_type==3"
+              :key="pbi"
+              @click="btnClick(pb.py)"
+            >{{pb.button_name||pb.menu_name}}</el-button>
+          </template>
+               <!-- <el-button size="mini" type="primary" round @click="receiveFun">接收</el-button>
+               <el-button size="mini" type="info" round @click="handOutFun">派发</el-button> -->
            </div>
       </el-aside>
       <el-main style="padding:0">
@@ -191,6 +202,13 @@ export default {
     });
   },
   methods: {
+      btnClick(py){
+        if(py == "js"){
+          this.receiveFun();
+        }else if(py == 'pf'){
+          this.handOutFun();
+        }
+      },
       handChangeFun(value){
           let checkedCount = value.length;
           this.checkAll = checkedCount === this.handData.length;
@@ -411,6 +429,7 @@ export default {
       let pdAdd = {
         bmbh: this.$store.state.user.bmbh,
         jb:this.$store.state.user.jb,
+        zrqList:this.$store.state.user.jb=='3'?this.$store.state.user.zrqList:[],
         // zrqList:this.$store.state.user.zrqList,
         clzt: this.clzt,
         cljg: 4

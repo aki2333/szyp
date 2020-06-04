@@ -14,7 +14,7 @@
                 </div>
                 <div class="base-flex mb-12">
                     <div class="text-tip">待接收</div>
-                    <div class="num-tip">共<span class="red">1029</span>条待接收信息</div>
+                    <div class="num-tip">共<span class="red">{{handData.length}}</span>条待接收信息</div>
                 </div>
                 <div class="base-flex pb-5 border-b">
                     <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
@@ -503,7 +503,7 @@ export default {
     padding: 0 0 30px;
 }
 .text-tip{
-    font-size: 16px;
+    font-size: 15px;
     font-weight: bold;
 }
 .num-tip{

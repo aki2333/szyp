@@ -22,6 +22,7 @@
         :lbTab="lbTab"
         :tableData="tableData"
         :selection="selection"
+        :pageSizeArr="pageSizeArr"
         @plFnc="plFnc"
         @pageSizeFnc="pageSizeFnc"
         @pageNumFnc="pageNumFnc"
@@ -72,6 +73,7 @@ export default {
       lbBtn: this.$cdata.zxhc.zxhc.lbBtn,
       plBtn: [],
       lbTab: this.$cdata.zxhc.zxhc.lbTab,
+      pageSizeArr:[15,100,500],
       //业务数据
       cx: {
         pd: {},
@@ -145,10 +147,13 @@ export default {
       }  
       if (this.$store.state.user.jb == '1') {
         this.$store.dispatch("aGetPolice");
+        this.$store.dispatch("aGetZrq");
       } else if (this.$store.state.user.jb == '2') {
         this.$store.dispatch("aGetPolice",this.$store.state.user.bmbh.slice(0, 6));
+        this.$store.dispatch("aGetZrq",this.$store.state.user.bmbh.slice(0, 6));
       } else if (this.$store.state.user.jb == '3') {
         this.$store.dispatch("aGetPolice",this.$store.state.user.bmbh);
+        this.$store.dispatch("aGetZrq",this.$store.state.user.bmbh);
       }  
       this.$store.dispatch("aGetDatatype");
       let arr = [];

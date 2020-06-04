@@ -3,9 +3,14 @@
 const zxhc = {
     cx: [
         {
-            cm: '姓名',
+            cm: '中文姓名',
             type: 'input',
             dm: 'name'
+        },
+        {
+            cm: '英文姓名',
+            type: 'input',
+            dm: 'gavenname'
         },
         {
             cm: '性别',
@@ -54,11 +59,7 @@ const zxhc = {
             type: 'select',
             dm: 'policestation'
         },
-        {
-            cm: '下发类别',
-            type: 'select',
-            dm: 'datatype'
-        },
+        
         {
             cm: '反馈时间',
             type: 'double',
@@ -75,6 +76,11 @@ const zxhc = {
                     dm: 'policestation_backtimeEnd'
                 },
             ],
+        },
+        {
+            cm: '下发类别',
+            type: 'select',
+            dm: 'datatype'
         },
         {
             cm: '走访状态',
@@ -103,8 +109,12 @@ const zxhc = {
     ],
     lb: [
         {
-            cm: '姓名',
+            cm: '中文姓名',
             dm: 'name'
+        },
+        {
+            cm: '英文姓名',
+            dm: 'givenname'
         },
         {
             cm: '性别',
@@ -461,6 +471,9 @@ function editShow(jb) {
                 dm: 'nationality',
                 dis: jb == "3" ? true : false
             },
+            {  
+                type:'line',   
+            },
             {
                 cm: '证件种类',
                 type: 'select',
@@ -501,7 +514,9 @@ function editShow(jb) {
                 cm:'所属责任区',
                 type:'select',
                 dm:'turnoutarea',
-                dis:jb=="3"?true:false
+            },
+            {  
+                type:'line',   
             },
             {
                 cm:'走访状态',
@@ -512,6 +527,9 @@ function editShow(jb) {
                 cm: '备注',
                 type: 'input',
                 dm: 'remarks'
+            },
+            {  
+                type:'line',   
             },
         ]
         resolve(zxhc.editcontent)

@@ -76,7 +76,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="tableData.pageNum"
-        :page-sizes="[10, 20, 30, 40]"
+        :page-sizes="pageSizeArr"
         :page-size="tableData.pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="tableData.total"
@@ -127,6 +127,10 @@ export default {
       type: Boolean,
       default: true
     },
+    pageSizeArr: {
+      type: Array,
+      default: () => [10, 20, 30, 40]
+    },
     cxData: {
       type: Array,
       default: () => []
@@ -163,7 +167,7 @@ export default {
   data() {
     return {
       pageNum: "1",
-      pageSize: "10",
+      pageSize: this.pageSizeArr[0],
       // order: "serial",
       // direction: 1,
       currentRow: 0,

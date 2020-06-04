@@ -4,7 +4,7 @@
       :model="dialogData"
       status-icon
       :rules="rules"
-      size="small"
+      size="mini"
       ref="form"
       label-width="130px"
       label-position="left"
@@ -98,7 +98,7 @@
         </el-col>
         <el-col :span="8">
           <div class="imgbox">
-            <el-carousel :autoplay="false" arrow="always" @change="imgChange">
+            <el-carousel height="280px" :autoplay="false" arrow="always" @change="imgChange">
               <el-carousel-item
                 v-for="(item,index) in dialogImgData"
                 :key="index"
@@ -247,15 +247,30 @@ export default {
     }
   },
   data() {
+    var validatesurname = (rule, value, callback) => {
+      if (this.dialogData.nationality != "CHN" && value == "") {
+        callback(new Error("此项必填"));
+      } else {
+        callback();
+      }
+    };
+    var validatename = (rule, value, callback) => {
+      if (this.dialogData.nationality == "CHN" && value == "") {
+        callback(new Error("此项必填"));
+      } else {
+        callback();
+      }
+    };
     return {
-      // form: {},
       rules: {
         nationality: [{ required: true, message: "此项必填", trigger: "blur" }],
         passportType: [
-          { required: false, message: "此项必填", trigger: "blur" }
+          { required: true, message: "此项必填", trigger: "blur" }
         ],
         passportno: [{ required: true, message: "此项必填", trigger: "blur" }],
-        givenname: [{ required: true, message: "此项必填", trigger: "blur" }],
+        surname: [{ validator: validatesurname, trigger: "blur" }],
+        firstname: [{ validator: validatesurname, trigger: "blur" }],
+        name: [{ validator: validatename, trigger: "blur" }],
         gender: [{ required: true, message: "此项必填", trigger: "blur" }],
         birthday: [{ required: true, message: "此项必填", trigger: "blur" }],
         visaType: [{ required: true, message: "此项必填", trigger: "blur" }],

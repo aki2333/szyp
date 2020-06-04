@@ -4,7 +4,7 @@
       :model="dialogData"
       status-icon
       :rules="rules"
-      size="small"
+      size="mini"
       ref="form"
       label-width="100px"
       class="form-ruleForm"
@@ -221,11 +221,11 @@ export default {
         }
       });
     },
-    dbBtnFun(val){
-      this.$emit("dbFnc",val)
+    dbBtnFun(val) {
+      this.$emit("dbFnc", val);
     },
-    linkChange(key, val,dialogData) {
-      this.$emit("formLcFnc", { key: key, data: val ,obj:dialogData});
+    linkChange(key, val, dialogData) {
+      this.$emit("formLcFnc", { key: key, data: val, obj: dialogData });
     },
     cancel() {
       if (this.isXJ) {

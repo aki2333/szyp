@@ -198,6 +198,7 @@ input[type="number"]{
 .el-form-item__label{
   color: #666666!important;
   font-weight: bold;
+  font-size: 12px!important;
 }
  .el-form-item{
   margin-bottom: 8px!important;

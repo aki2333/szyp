@@ -4,7 +4,7 @@
       :model="inquire"
       status-icon
       :rules="rules"
-      size="small"
+      size="mini"
       ref="inquire"
       label-width="100px"
       class="inquire-ruleForm"

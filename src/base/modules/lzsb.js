@@ -47,6 +47,11 @@ const lzsb = {
             dm: 'suboffice',
         },
         {
+            cm: '所属派出所',
+            type: 'select',
+            dm: 'policestation',
+        },
+        {
             cm: '住宿时间',
             type: 'double',
             dm: 'xfTime',
@@ -63,11 +68,7 @@ const lzsb = {
                 }
             ]
         },
-        {
-            cm: '所属派出所',
-            type: 'select',
-            dm: 'policestation',
-        },
+
         // {
         //     cm: '上报状态',
         //     type: 'select',

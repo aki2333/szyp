@@ -106,7 +106,6 @@ export default {
 
     // },
     page(val){
-      this.page = val;
       if(this.clzt==1){//未处理
         if(val == '1'){
           this.plBtn = this.$store.state.plBtn
@@ -129,21 +128,11 @@ export default {
             }
           this.plBtn = arr
         }
-      }else if(this.clzt==2){
-        this.plBtn = this.$store.state.plBtn
-          let arr = [];
-          for(var k=0;i<this.plBtn.length;k++){
-              if(this.plBtn[k].py!='sb'||this.plBtn[k].py!='xf'){
-                arr.push(this.plBtn[k])
-              }
-            }
-          this.plBtn = arr
       }
     },
   },
   mounted() {
     this.$nextTick(() => {
-      console.log(this.plBtn)
       this.$store.dispatch("aGetNation");
       this.$store.dispatch("aGetGender");
       this.$store.dispatch("aGetPassport");
@@ -181,26 +170,29 @@ export default {
     },
     tabTopClick1(){
       this.clzt=1;
-      // this.page='1';
+      this.page='1';
       this.lbTab=this.$cdata.zxhc.zxhc.lbTab;
-      // this.$cdata.zxhc.plBtnShow(this.page,this.clzt).then(data => {
-      //   this.plBtn = data;
-      // });
+      this.plBtn = this.$store.state.plBtn
+          let arr = [];
+          for(var i=0;i<this.plBtn.length;i++){
+              if(this.plBtn[i].py!='sb'){
+                arr.push(this.plBtn[i])
+              }
+            }
+          this.plBtn = arr
       this.getTable()
     },
     tabTopClick2(){
       this.clzt=2;
-      // this.page='1';
+      this.page='1';
       this.lbTab=this.$cdata.zxhc.zxhc.lbTab1;
-
-      for(var i=0;i<this.plBtn.length;i++){
-        if(this.plBtn[i].py=='sb'){
-          this.plBtn.splice(i,1)
-        }
-        if(this.plBtn[i].py=='xf'){
-          this.plBtn.splice(i,1)
-        }
-      }
+      let arr = [];
+          for(var k=0;k<this.plBtn.length;k++){
+              if(this.plBtn[k].py=='cx'||this.plBtn[k].py=='qc'){
+                arr.push(this.plBtn[k])
+              }
+            }
+          this.plBtn = arr
       this.getTable()
     },
     rowClick(data){
@@ -343,7 +335,7 @@ export default {
         );
       } else if (data.py == "xf") {
         this.dialogData = {};
-        if (this.page == 1) {
+        if (this.page == '1') {
           // if (!this.isArrEmpty(this.officeArr)) {
           //   //市局下发分局 如果选择数据分局有空值 不允许下发
           //   this.$message({
@@ -354,7 +346,7 @@ export default {
           // }
           this.labelData = this.$cdata.zxhc.zxhc.xfSContent;
           this.isShowDialog = true;
-        } else if (this.page == 2) {
+        } else if (this.page == '2') {
           if (!this.isAllEqual(this.officeArr)) {
             //分局下发 选择数据的分局必须为同一分局
             this.$message({

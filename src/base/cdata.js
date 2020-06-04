@@ -1,6 +1,8 @@
 import qxgl from './modules/qxgl.js'
 import zxhc from './modules/zxhc.js'
 import lzsb from './modules/lzsb.js'
+import api from '@/api/index.js'
+import store from '@/store'
 
 // 【菜单】
 const menu = [
@@ -153,12 +155,26 @@ const options = {
             dm: 'B',
             mc: "按钮"
         }
-    ]
+    ],
+    turnoutarea:[],
+}
+
+function zrqReciData(list) {
+      return new Promise((resolve) => {
+        api.post(api.aport2 + '/dm/getZrqListByZrqDmList',{zrqList:list},r=>{
+            options.turnoutarea = r
+            console.log('options.turnoutarea',options.turnoutarea)
+            resolve(r)
+        })
+      })  
 }
 export default {
     menu,
     options,
     qxgl,
     zxhc,
-    lzsb
+    lzsb,
+    api,
+    store,
+    zrqReciData
 }

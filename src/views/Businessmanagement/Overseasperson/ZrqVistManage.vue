@@ -10,7 +10,7 @@
                         v-model="adressQuery"
                         size="small">
                     </el-input>
-                    <el-button type="primary" size="small" class="ml-5">查询</el-button>
+                    <el-button type="primary" size="small" class="ml-5" @click="getHandData()">查询</el-button>
                 </div>
                 <div class="base-flex mb-12">
                     <div class="text-tip">待接收</div>
@@ -18,7 +18,7 @@
                 </div>
                 <div class="base-flex pb-5 border-b">
                     <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-                    <div class="query-record"><i class="el-icon-time"></i>搜索记录</div>
+                    <!-- <div class="query-record"><i class="el-icon-time"></i>搜索记录</div> -->
                 </div>
            </div>
            <div class="left-content">
@@ -65,6 +65,7 @@
                 :lbBtn="lbBtn"
                 :plBtn="plBtn"
                 :isTab="isTab"
+                :isEdit="isEdit"
                 :tableData="tableData"
                 :selection="selection"
                 @plFnc="plFnc"
@@ -112,6 +113,7 @@ export default {
         //左栏
         adressQuery:'',
         checkedList:[],
+        checkedListAll:[],
         isIndeterminate:false,
         checkAll:false,
         handData:[],
@@ -123,7 +125,9 @@ export default {
       tabImgActive_2: require("../../../assets/images/main/tab_1_pre.png"),
       //数据展示
       isSelect: true,
+      isEdit:true,
       isTab: false,
+      isPageS:true,
       isDb:true,
       cxData: this.$cdata.zxhc.zrqzf.cx,
       lbData: this.$cdata.zxhc.zrqzf.lb,
@@ -147,7 +151,7 @@ export default {
       multipleSelection: [],
       multipleArr: [],
       selection:[],
-      diaPage:0,
+      diaPage:1,
       //弹窗数据
       isShowDialog: false,
       dialogTitle: "",
@@ -161,6 +165,7 @@ export default {
       this.$store.dispatch("aGetNation");
       this.$store.dispatch("aGetGender");
       this.$store.dispatch("aGetPassport");
+      this.$cdata.zrqReciData(this.$store.state.user.zrqList).then();
       if (this.$store.state.user.jb == '1') {
         this.$store.dispatch("aGetSuboffice");
       } else if (this.$store.state.user.jb == '2') {
@@ -192,20 +197,80 @@ export default {
           this.isIndeterminate = checkedCount > 0 && checkedCount < this.handData.length;
       },
       handleCheckAllChange(val){
-        this.checkedList = val ? this.checkedList : [];
-        this.isIndeterminate = false;
+        if(val){
+          this.checkedList = this.checkedListAll
+        }else{
+          this.checkedList = [];
+        }
       },
-      receiveFun(){
-
+      receiveFun(){//接收
+      if(this.checkedList.length==0){
+          this.$message({
+            message: '请先选择数据！',
+            type: "warning"
+          });
+          return
+        }
+        this.dialogTitle = '责任区';
+        this.dialogType = 'js';
+        this.labelData = this.$cdata.zxhc.zrqzf.zrqJs;
+        this.isShowDialog = true;
+        this.dialogData={};
+        this.isDb = false;
+        this.$cdata.zrqReciData(this.$store.state.user.zrqList).then();
       },
-      handOutFun(){
-
+      receiveSave(data){
+        let p={
+          serialList:this.checkedList,
+          idcard:this.$store.state.user.sfzh,
+          ZRQDM:data.turnoutarea
+        }
+        this.$api.post(this.$api.aport2+'/issueData/turnoutareaReceiptIssueData',p,r=>{
+          this.$message({
+            message: r.message,
+            type: "success"
+          });
+          this.isShowDialog = false;
+          this.getHandData();
+          this.getTable();
+        })
+      },
+      handOutFun(){//派发
+        if(this.checkedList.length==0){
+          this.$message({
+            message: '请先选择数据！',
+            type: "warning"
+          });
+          return
+        }
+        this.dialogTitle = '责任区';
+        this.dialogType = 'pf';
+        this.isShowDialog = true;
+        this.labelData = this.$cdata.zxhc.zrqzf.zrqDia
+        this.dialogData={};
+        this.isDb = false;
+      },
+      handOutSave(data){
+        let p={
+          serialList:this.checkedList,
+          idcard:this.$store.state.user.sfzh,
+          ZRQDM:data.turnoutarea
+        }
+        this.$api.post(this.$api.aport2+'/issueData/turnoutareaReceiptIssueData',p,r=>{
+          this.$message({
+            message: r.message,
+            type: "success"
+          });
+           this.isShowDialog = false;
+          this.getHandData();
+          this.getTable();
+        })
       },
     //左栏待接收数据
     getHandData(){
         let p={
             pd:{
-                adress:this.adressQuery,
+                address:this.adressQuery,
                 jb:this.$store.state.user.jb,
                 bmbh: this.$store.state.user.bmbh,
                 clzt:1,
@@ -213,8 +278,11 @@ export default {
             }
         }
         this.$api.post(this.$api.aport2+'/issueData/getIssueDataPage',p,r=>{
-            console.log(r)
             this.handData = r.list
+            this.checkedListAll = [];
+            for(var i=0;i<this.handData.length;i++){
+              this.checkedListAll.push(this.handData[i].serial)
+            }
         })
     },
 
@@ -224,10 +292,21 @@ export default {
     },
     tabTopClick1(){
       this.clzt=1;
+      this.isEdit = true;
+      this.plBtn = this.$store.state.plBtn
       this.getTable()
     },
     tabTopClick2(){
-      this.clzt=2; 
+      this.clzt=2;
+      this.isEdit = false; 
+      this.plBtn = this.$store.state.plBtn
+          let arr = [];
+          for(var i=0;i<this.plBtn.length;i++){
+              if(this.plBtn[i].py!='cl'){
+                arr.push(this.plBtn[i])
+              }
+            }
+          this.plBtn = arr
       this.getTable()
     },
     rowClick(data){
@@ -269,19 +348,26 @@ export default {
       }
     },
     dbFnc(data){
+      console.log(this.multipleSelection.length,this.diaPage)
       if(data.button_type == 'upPage'){
-        if(this.diaPage == 0) return
+        if(this.diaPage == 1){
+          return
+        }
         this.diaPage--
-        this.dialogData = Object.assign({},this.multipleSelection[this.diaPage]);
-        this.$store.dispatch("aGetBackstatus", this.multipleSelection[this.diaPage].datatype);
+        this.dialogData = Object.assign({},this.multipleSelection[this.diaPage-1]);
+        this.$store.dispatch("aGetBackstatus", this.multipleSelection[this.diaPage-1].datatype);
       }
       if(data.button_type == 'nextPage'){
-        this.diaPage++
         if(this.diaPage == this.multipleSelection.length)return
-        this.dialogData = Object.assign({},this.multipleSelection[this.diaPage]);
-        this.$store.dispatch("aGetBackstatus", this.multipleSelection[this.diaPage].datatype);
+        this.diaPage++
+        this.dialogData = Object.assign({},this.multipleSelection[this.diaPage-1]);
+        this.$store.dispatch("aGetBackstatus", this.multipleSelection[this.diaPage-1].datatype);
       }
-      
+      if(data.button_type == 'sure'){
+        this.getTable();
+        this.isShowDialog = false;
+        this.selection = [];
+      }
     },
     // 获取分页等信息
     pageSizeFnc(data) {
@@ -301,7 +387,6 @@ export default {
           this.multipleSelection[i].serial
         ]);
       }
-      console.log("this.multipleArr==", this.multipleArr);
     },
     //判断数组元素是否完全相等
     isAllEqual(array) {
@@ -324,18 +409,18 @@ export default {
     // 查询列表
     getTable() {
       let pdAdd = {
-        // bmbh: this.$store.state.user.bmbh,
-        // bmbh:'32050551001Z',
-        zrqList:this.$store.state.user.zrqList,
-        // clzt: this.clzt,
-        // cljg: 4
+        bmbh: this.$store.state.user.bmbh,
+        jb:this.$store.state.user.jb,
+        // zrqList:this.$store.state.user.zrqList,
+        clzt: this.clzt,
+        cljg: 4
       };
       this.cx.pd = Object.assign({}, this.cx.pd, pdAdd);
       this.$api.post(
         this.$api.aport2 + "/issueData/getIssueDataPage",
         this.cx,
         r => {
-          // this.tableData.list = r.list;
+          this.tableData.list = r.list;
           this.tableData.total = r.total;
         }
       );
@@ -349,34 +434,36 @@ export default {
         });
         return false;
       }
-      this.dialogTitle = data.button_name;
-      this.dialogType = data.button_type;
-      if (data.button_type == "cl") {
+      this.isDb = true;
+      this.dialogTitle = data.menu_name;
+      this.dialogType = data.py;
+      if (data.py == "cl") {
           // this.dialogData = {};
           this.$cdata.zxhc.handShow(this.$store.state.user.jb).then(data => {//根据级别控制弹窗编辑项禁止与否
             this.labelData = data;
           });
           this.isShowDialog = true;
-          this.diaPage = 0;
-          this.dialogData = Object.assign({},this.multipleSelection[this.diaPage]);
+          this.diaPage = 1;
+          this.dialogData = Object.assign({},this.multipleSelection[this.diaPage-1]);
+          this.$store.dispatch("aGetBackstatus", this.multipleSelection[this.diaPage-1].datatype);
       }
     },
-    //列表内按钮
+    //列表内按钮（回退）
     blFnc(data) {
-      this.dialogTitle = data.btn.button_name;
-      this.dialogType = data.btn.button_type;
       if (data.btn.button_type == "back") {
-        this.$cdata.zxhc.editShow(this.$store.state.user.jb).then(data => {//根据级别控制弹窗编辑项禁止与否
-          this.labelData = data;
-        });
-        this.$store.dispatch("aGetBackstatus", data.data.datatype);
-        this.isShowDialog = true;
-        // this.dialogData = Object.assign({},this.multipleSelection[0]);
+        this.$api.post(this.$api.aport2 + '/issueData/turnoutareaRollbackIssueData',{SERIAL:data.data.serial},r=>{
+          this.$message({
+            message: r.message,
+            type: "success"
+          });
+          this.getTable();
+          this.getHandData();
+        })
       }
     },
-    //回退保存
-    backSave(data) {
-      let p = data;
+    //处理保存
+    handSave() {
+      let p = this.dialogData;
       p.jb = this.$store.state.user.jb;
       p.bmbh = this.$store.state.user.bmbh;
       p.userId = this.$store.state.user.userId;
@@ -385,34 +472,20 @@ export default {
           message: r.message,
           type: "success"
         });
-        this.getTable();
-        this.isShowDialog = false;
-      });
-    },
-    //下发保存
-    handSave(data) {
-      let p = data;
-      p.serialList = this.multipleArr;
-      p.jb = this.$store.state.user.jb;
-      p.bmbh = this.$store.state.user.bmbh;
-      p.userId = this.$store.state.user.userId;
-      this.$api.post(this.$api.aport2 + "/issueData/issueDataTrigger", p, r => {
-        this.$message({
-          message: r.message,
-          type: "success"
-        });
-        this.getTable();
-        this.isShowDialog = false;
-        this.selection = [];
+        console.log('jin',this.multipleSelection[this.diaPage-1],this.dialogData)
+        this.multipleSelection[this.diaPage-1] = Object.assign({},this.dialogData)
+        console.log('chu',this.multipleSelection[this.diaPage-1],this.dialogData)
       });
     },
     
     //弹窗保存
     dialogSave(data) {
       if (data.type == "cl") {
-        this.handSave(data.data);
-      } else if (data.type == "back") {
-        this.backSave(data.data);
+        this.handSave();
+      }else if(this.dialogType == 'pf'){//派发
+        this.handOutSave(data.data)
+      }else if(this.dialogType == 'js'){//接收
+        this.receiveSave(data.data)
       }
     }
   }

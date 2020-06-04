@@ -92,10 +92,10 @@
                   >{{item.mc}}</el-radio>
                 </el-radio-group>
               </template>
-              <template v-else-if="cx.type=='line'">
-                <el-divider></el-divider>
-              </template>
             </el-form-item>
+            <template v-if="cx.type=='line'">
+                <el-divider></el-divider>
+            </template>
           </el-col>
         </el-col>
       </el-row>
@@ -103,7 +103,7 @@
 
     <div class="page-btn-box">
       <!-- <el-button v-if="dialogType=='gnlb'" size="mini" type="primary" round @click="xj()">新建</el-button> -->
-      <div style="display:inline-block;" v-if="isDb">
+      <div style="display:inline-block;margin-right:10px" v-if="isDb">
         <el-button
           size="mini"
           :type="db.type"
@@ -148,7 +148,8 @@ export default {
     isDb: {
       type: Boolean,
       default: false
-    }
+    },
+    
   },
   data() {
     var validatePass = (rule, value, callback) => {
@@ -193,14 +194,15 @@ export default {
         bmbh: [{ required: true, message: "请选择单位", trigger: "blur" }]
       },
       isXJ: false,
-      newForm: {}
+      newForm: {},
+      isPS:true,
     };
   },
   watch: {
     dialogType(val) {
       console.log(val);
       this.isXJ = false;
-    }
+    },
   },
   mounted() {
     // this.form = this.dialogData;

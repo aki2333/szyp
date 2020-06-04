@@ -189,29 +189,29 @@ const zxhc = {
     lbTab: [
         {
             "mc": '市局未处理',
-            "dm": 1,
+            "dm": '1',
         },
         {
             "mc": '分局未处理',
-            "dm": 2,
+            "dm": '2',
         },
         {
             "mc": '派出所未处理',
-            "dm": 3,
+            "dm": '3',
         },
     ],
     lbTab1: [
         {
             "mc": '市局已处理',
-            "dm": 1,
+            "dm": '1',
         },
         {
             "mc": '分局已处理',
-            "dm": 2,
+            "dm": '2',
         },
         {
             "mc": '派出所已处理',
-            "dm": 3,
+            "dm": '3',
         },
     ],
     //编辑弹窗
@@ -270,11 +270,6 @@ const zrqzf = {
             type: 'select',
             dm: 'nationality'
         },
-        // {
-        //     cm: '证件种类',
-        //     type: 'select',
-        //     dm: 'passportType'
-        // },
         {
             cm: '证件号码',
             type: 'input',
@@ -288,31 +283,30 @@ const zrqzf = {
         {
             cm: '接收人',
             type: 'input',
-            dm: 'backstatus'
+            dm: 'turnoutarea_receive_user'
         },
-        {
-            cm: '接收时间',
-            type: 'double',
-            dm: 'fkTime',
-            children: [
-                {
-                    cm: '反馈开始时间',
-                    type: 'date',
-                    dm: 'policestation_backtimeStar'
-                },
-                {
-                    cm: '反馈结束时间',
-                    type: 'date',
-                    dm: 'policestation_backtimeEnd'
-                },
-            ],
-        },
-        
         {
             cm: '住宿地址',
             type: 'input',
             dm: 'adress'
-        },          
+        },     
+        {
+            cm: '接收时间',
+            type: 'double',
+            dm: 'jsTime',
+            children: [
+                {
+                    cm: '反馈开始时间',
+                    type: 'date',
+                    dm: 'turnoutarea_receivedateStart'
+                },
+                {
+                    cm: '反馈结束时间',
+                    type: 'date',
+                    dm: 'turnoutarea_receivedateEnd'
+                },
+            ],
+        },     
     ],
     lb: [
         {
@@ -331,10 +325,6 @@ const zrqzf = {
             cm: '国家地区',
             dm: 'nationality_desc'
         },
-        // {
-        //     cm: '证件种类',
-        //     dm: 'passportType_desc'
-        // },
         {
             cm: '证件号码',
             dm: 'passportno'
@@ -351,22 +341,11 @@ const zrqzf = {
             cm: '接收人',
             dm: 'datatype_desc'
         },
-        // {
-        //     cm: '下发类别',
-        //     dm: 'datatype_desc'
-        // },
-        // {
-        //     cm: '走访状态',
-        //     dm: 'backstatus_desc'
-        // },
+        
         {
             cm: '接收时间',
             dm: 'issuedate'
         },      
-        {
-            cm: '反馈时间',
-            dm: 'policestation_backtime'
-        },
     ],
     lbBtn: [
         {
@@ -387,6 +366,21 @@ const zrqzf = {
     clDia:[
         
     ],
+    zrqDia:[
+        {
+            cm: '责任区',
+            type: 'select',
+            dm: 'turnoutarea',
+        },
+    ],
+    zrqJs:[
+        {
+            cm: '责任区',
+            type: 'select',
+            dm: 'turnoutarea',
+            optype: true
+        },
+    ],
     dbBtn:[
         {
             "button_name": "上一页",
@@ -398,6 +392,12 @@ const zrqzf = {
             "button_name": "下一页",
             "serial": "201",
             "button_type": "nextPage",
+            "type":"info",
+        },
+        {
+            "button_name": "确定",
+            "serial": "201",
+            "button_type": "sure",
             "type":"info",
         },
     ],
@@ -544,6 +544,9 @@ function handShow(jb){
                 dm:'nationality',
                 
             },
+            {  
+                type:'line',   
+            },
             {
                 cm:'证件种类',
                 type:'select',
@@ -586,7 +589,9 @@ function handShow(jb){
             //     dm:'policestation',
             //     dis:jb=="3"?true:false
             // },
-
+            {  
+                type:'line',   
+            },
             {
                 cm:'走访状态',
                 type:'radio',
@@ -600,7 +605,7 @@ function handShow(jb){
             {
                 cm:'接收人',
                 type:'input',
-                dm:'remarks',
+                dm:'turnoutarea_receive_user',
                 dis:true
             },
             {
@@ -612,8 +617,11 @@ function handShow(jb){
             {
                 cm:'接收时间',
                 type:'input',
-                dm:'remarks',
+                dm:'turnoutarea_receivedate',
                 dis:true
+            },
+            {  
+                type:'line',   
             },
         ]
         resolve(zrqzf.clDia)

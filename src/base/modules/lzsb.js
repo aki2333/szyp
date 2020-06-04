@@ -171,13 +171,25 @@ const lzsb = {
             "button_type": "bj",
             "serial": "201",
         },
-        {
-            "button_name": "下载登记表",
-            "button_type": "xzjl",
-            "serial": "201",
-        }
+        // {
+        //     "button_name": "下载登记表",
+        //     "button_type": "xzjl",
+        //     "serial": "201",
+        // }
     ],
     lbBtn2: [
+        {
+            "button_name": "查看",
+            "button_type": "ck",
+            "serial": "201",
+        },
+        // {
+        //     "button_name": "下载登记表",
+        //     "button_type": "xzjl",
+        //     "serial": "201",
+        // }
+    ],
+    lbBtn3: [
         {
             "button_name": "查看",
             "button_type": "ck",

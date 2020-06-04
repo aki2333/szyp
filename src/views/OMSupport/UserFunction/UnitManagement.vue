@@ -44,8 +44,17 @@
       </el-col>
     </el-row>
     <div class="page-btn-box">
-      <el-button size="mini" type="primary" round @click="addPermissionToDept">保存</el-button>
-      <el-button size="mini" type="info" round @click="cancel">清除</el-button>
+      <template v-for="(pb,pbi) in $store.state.plBtn">
+        <el-button
+          class="cx-btn"
+          size="small"
+          :type="pb.py=='bc'?'primary':'info'"
+          round
+          v-if="pb.button_type==3"
+          :key="pbi"
+          @click="btnClick(pb.py)"
+        >{{pb.button_name||pb.menu_name}}</el-button>
+      </template>
     </div>
   </div>
 </template>
@@ -86,6 +95,13 @@ export default {
     this.cancel();
   },
   methods: {
+    btnClick(py) {
+      if (py == "bc") {
+        this.addPermissionToDept();
+      } else if (py == "qc") {
+        this.cancel();
+      }
+    },
     // 获取单位列表
     getDeptTreeByBmbh() {
       this.$cdata.qxgl.getDeptTreeByBmbh().then(r => {

@@ -27,7 +27,18 @@
           @getCheckedNodes="getCheckedNodes"
         ></TreeCard>
         <div class="page-btn-box">
-          <el-button size="mini" type="primary" round @click="updateTemplate">保存</el-button>
+          <template v-for="(pb,pbi) in $store.state.plBtn">
+            <el-button
+              class="cx-btn"
+              size="small"
+              :type="pb.py=='bc'?'primary':'info'"
+              round
+              v-if="pb.button_type==3"
+              :key="pbi"
+              @click="btnClick(pb.py)"
+            >{{pb.button_name||pb.menu_name}}</el-button>
+          </template>
+          <!-- <el-button size="mini" type="primary" round @click="updateTemplate">保存</el-button> -->
         </div>
       </el-col>
     </el-row>
@@ -92,6 +103,13 @@ export default {
     this.begin();
   },
   methods: {
+    btnClick(py) {
+      if (py == "bc") {
+        this.updateTemplate();
+      } else if (py == "qc") {
+        this.cancel();
+      }
+    },
     // 获取角色列表
     selectTemplateList() {
       this.$api.post(

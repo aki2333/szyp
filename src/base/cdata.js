@@ -142,6 +142,10 @@ const options = {
         {
             dm: '2',
             mc: '表格按钮'
+        },
+        {
+            dm: '3',
+            mc: '操作按钮'
         }
     ],
     menu_type: [

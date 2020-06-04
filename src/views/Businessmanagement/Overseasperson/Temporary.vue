@@ -24,6 +24,7 @@
             :isEdit="true"
             :isPl="false"
             :isTab="isTab"
+            :page="tabPage"
             :lbTab="lbTab"
             :lbBtn="lbBtn"
             czWidth="130px"
@@ -84,6 +85,7 @@ export default {
       tabImgActive_1: require("../../../assets/images/main/tab_2_pre.png"),
       tabImg_2: require("../../../assets/images/main/tab_1.png"),
       tabImgActive_2: require("../../../assets/images/main/tab_1_pre.png"),
+      tabPage: "",
       cx: {
         pd: { shzt: "shzt_0", hczt: "hczt_0" },
         pageSize: 10,
@@ -170,9 +172,15 @@ export default {
       this.getTable();
     },
     tabFnc(data) {
-      //   console.log("shangbaozhuangtai", data);
+      console.log("shangbaozhuangtai", data);
       this.cx.pd.hczt = data;
+      this.tabPage = data;
       this.cx.pageNum = 1;
+      if (data == "hczt_1") {
+        this.lbBtn = this.$cdata.lzsb.lzsb.lbBtn3;
+      } else {
+        this.lbBtn = this.$cdata.lzsb.lzsb.lbBtn2;
+      }
       this.getTable();
     },
     // 获取查询参数

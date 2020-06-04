@@ -11,6 +11,7 @@
           :isPl="false"
           :lbBtn="$cdata.qxgl.jsgl.yhlbBtn"
           :isTab="true"
+          :page="tabPage"
           :lbTab="$cdata.qxgl.jsgl.yhlbTab"
           @blFnc="blFnc"
           @pageSizeFnc="pageSizeFnc"
@@ -62,6 +63,7 @@ export default {
         order: "serial",
         direction: 1
       },
+      tabPage: "",
       tableData: {
         list: [],
         total: 0,
@@ -83,7 +85,7 @@ export default {
     // 查询用户列表
     getTable() {
       console.log("查询用户列表-", this.cx);
-      this.$api.post(this.$api.aport1+"/role/getRoleUser", this.cx, r => {
+      this.$api.post(this.$api.aport1 + "/role/getRoleUser", this.cx, r => {
         this.tableData = r;
         this.tableData.list.forEach(item => {
           item.status = this.cx.pd.status;
@@ -123,7 +125,7 @@ export default {
     },
     // 添加
     addRoleUser(data) {
-      this.$api.post(this.$api.aport1+"/role/addRoleUser", data, r => {
+      this.$api.post(this.$api.aport1 + "/role/addRoleUser", data, r => {
         this.$message({
           message: r,
           type: "success"
@@ -138,7 +140,7 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
-        this.$api.post(this.$api.aport1+"/role/delRoleUser", data, r => {
+        this.$api.post(this.$api.aport1 + "/role/delRoleUser", data, r => {
           this.$message({
             message: r,
             type: "success"
@@ -150,6 +152,7 @@ export default {
     tabFnc(data) {
       console.log("tab切换", data);
       this.cx.pd.status = data;
+      this.tabPage = data;
       this.cx.pageNum = 1;
       this.getTable();
     },

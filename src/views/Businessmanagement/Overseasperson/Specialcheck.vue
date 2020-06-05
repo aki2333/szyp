@@ -156,6 +156,11 @@ export default {
         this.$store.dispatch("aGetZrq",this.$store.state.user.bmbh);
       }  
       this.$store.dispatch("aGetDatatype");
+      this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data =>{
+        this.lbTab=data.lbTab
+        this.page = this.lbTab[0].dm
+      });
+      
       let arr = [];
       this.plBtn = this.$store.state.plBtn
       for(var i=0;i<this.plBtn.length;i++){
@@ -176,7 +181,9 @@ export default {
     tabTopClick1(){
       this.clzt=1;
       this.page='1';
-      this.lbTab=this.$cdata.zxhc.zxhc.lbTab;
+      this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data =>{
+        this.lbTab=data.lbTab
+      });
       this.plBtn = this.$store.state.plBtn
           let arr = [];
           for(var i=0;i<this.plBtn.length;i++){
@@ -190,7 +197,9 @@ export default {
     tabTopClick2(){
       this.clzt=2;
       this.page='1';
-      this.lbTab=this.$cdata.zxhc.zxhc.lbTab1;
+      this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data =>{
+        this.lbTab=data.lbTab1
+      });
       let arr = [];
           for(var k=0;k<this.plBtn.length;k++){
               if(this.plBtn[k].py=='cx'||this.plBtn[k].py=='qc'){
@@ -201,6 +210,7 @@ export default {
       this.getTable()
     },
     rowClick(data){
+      this.selection = [];
       this.selection.push(data.data)
     },
     //下拉框联动
@@ -236,6 +246,15 @@ export default {
           data.obj.policestation = '';
         }
         this.$store.dispatch("aGetPolice",data.data.slice(0,6));
+      }
+      if(data.key.dm == "policestation"){
+        if(data.data==''){
+          data.obj.turnoutarea = '';
+        }
+        if(data.obj.turnoutarea){
+          data.obj.turnoutarea = '';
+        }
+        this.$store.dispatch("aGetZrq",data.data);
       }
     },
     // 获取分页等信息
@@ -422,6 +441,28 @@ export default {
     },
     //编辑保存
     editSave(data) {
+      console.log()
+      if((data.backstatus)&&(data.suboffice==''||data.suboffice==undefined)){
+        this.$message({
+          message: '走访状态有值的状态下，所属分局不能为空！',
+          type: "warning"
+        });
+        return false
+      }
+      if((data.backstatus)&&(data.policestation==''||data.policestation==undefined)){
+        this.$message({
+          message: '走访状态有值的状态下，所属派出所不能为空！',
+          type: "warning"
+        });
+        return false
+      }
+      if((data.backstatus)&&(data.turnoutarea==''||data.turnoutarea==undefined)){
+        this.$message({
+          message: '走访状态有值的状态下，所属责任区不能为空！',
+          type: "warning"
+        });
+        return false
+      }
       let p = data;
       p.jb = this.$store.state.user.jb;
       p.bmbh = this.$store.state.user.bmbh;

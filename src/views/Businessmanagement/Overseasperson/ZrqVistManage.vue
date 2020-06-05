@@ -99,7 +99,7 @@
         :dialogData="dialogData"
         :dbBtn="dbBtn"
         :isDb="isDb"
-        @dialogCancel="isShowDialog=false"
+        @dialogCancel="dialogCancel"
         @dialogSave="dialogSave"
         @formLcFnc="formLcFnc"
         @dbFnc="dbFnc"
@@ -328,6 +328,7 @@ export default {
       this.getTable()
     },
     rowClick(data){
+      this.selection=[];
       this.selection.push(data.data)
     },
     //下拉框联动
@@ -381,11 +382,12 @@ export default {
         this.dialogData = Object.assign({},this.multipleSelection[this.diaPage-1]);
         this.$store.dispatch("aGetBackstatus", this.multipleSelection[this.diaPage-1].datatype);
       }
-      if(data.button_type == 'sure'){
-        this.getTable();
-        this.isShowDialog = false;
-        this.selection = [];
-      }
+    },
+    dialogCancel(){
+      this.getTable();
+      this.isShowDialog = false;
+      this.selection = [];
+      this.multipleSelection = [];
     },
     // 获取分页等信息
     pageSizeFnc(data) {
@@ -446,6 +448,7 @@ export default {
     },
     //批量操作按钮  data==按钮名字
     plFnc(data) {
+       console.log(this.multipleSelection.length,this.diaPage)
       if (this.multipleArr.length == 0) {
         this.$message({
           message: "请先选择数据！",
@@ -491,9 +494,7 @@ export default {
           message: r.message,
           type: "success"
         });
-        console.log('jin',this.multipleSelection[this.diaPage-1],this.dialogData)
         this.multipleSelection[this.diaPage-1] = Object.assign({},this.dialogData)
-        console.log('chu',this.multipleSelection[this.diaPage-1],this.dialogData)
       });
     },
     

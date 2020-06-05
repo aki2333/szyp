@@ -178,6 +178,15 @@ export default {
     selection(val) {
       console.log(val);
       this.$nextTick(function() {
+      var arrAfter=[];
+      var arrReal=[];
+        for(var h=0;h<val.length;h++){
+        if(arrAfter.indexOf(val[h].serial)==-1){
+          arrAfter.push(val[h].serial);
+          arrReal.push(val[h]);
+        }
+      }
+      val=arrReal;
         this.toggleSelection(val);
       });
     },
@@ -187,8 +196,8 @@ export default {
       }
     },
     plBtn: {
-      handler(newVal, oldVal) {
-        console.log(newVal, oldVal);
+      handler() {
+       
       },
       deep: true
     },

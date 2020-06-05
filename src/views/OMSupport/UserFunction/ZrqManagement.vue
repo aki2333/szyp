@@ -87,15 +87,19 @@ export default {
     // 单位信息
     dwxx() {
       this.$cdata.qxgl.getSjBm(this.$store.state.user.bmbh).then(data => {
-        this.$store.dispatch("aGetssdw", { bmbh: data.bmbh, type: "ssfj" });
-        if (data.fj) {
+        this.$store.dispatch("aGetssdw", {
+          bmbh: "320500000000",
+          type: "ssfj"
+        });
+        if (this.$store.state.user.jb == 2) {
+          this.cx.pd.ssfj = data.bmbh;
+          this.dialogData.ssfj = data.bmbh;
+          this.$store.dispatch("aGetssdw", { bmbh: data.bmbh, type: "sspcs" });
+        } else if (this.$store.state.user.jb == 3) {
           this.cx.pd.ssfj = data.fj;
+          this.cx.pd.sspcs = data.bmbh;
           this.dialogData.ssfj = data.fj;
-        } else if (data.pcs) {
-          this.cx.pd.ssfj = data.fj;
-          this.cx.pd.sspcs = data.pcs;
-          this.dialogData.ssfj = data.fj;
-          this.dialogData.sspcs = data.pcs;
+          this.dialogData.sspcs = data.bmbh;
         }
       });
     },

@@ -269,7 +269,7 @@ export default new Vuex.Store({
     aGetBmbh(context, payload) {
       return new Promise((resolve) => {
         api.post(api.aport1 + '/dept/getAllSubDept', payload, r => {
-          context.commit('getBmbh', r)
+          context.commit('getBmbh', fnc.sortByKey(r, 'dm'))
           resolve(r)
         })
       })
@@ -278,9 +278,9 @@ export default new Vuex.Store({
       return new Promise((resolve) => {
         api.post(api.aport1 + '/dept/getSubDeptBmMc', payload, r => {
           if (payload.type == "ssfj") {
-            context.commit('getssfj', r)
+            context.commit('getssfj', fnc.sortByKey(r, 'dm'))
           } else if (payload.type == "sspcs") {
-            context.commit('getsspcs', r)
+            context.commit('getsspcs', fnc.sortByKey(r, 'dm'))
           }
           resolve(r)
         })

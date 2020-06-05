@@ -67,7 +67,18 @@
         </el-col>
       </el-row>
       <div class="page-btn-box" v-if="jstbShow">
-        <el-button size="mini" type="primary" round @click="saveUserRoleInfo">保存</el-button>
+        <template v-for="(pb,pbi) in $store.state.plBtn">
+          <el-button
+            class="cx-btn"
+            size="small"
+            :type="pb.py=='bc'?'primary':'info'"
+            round
+            v-if="pb.button_type==3"
+            :key="pbi"
+            @click="btnClick(pb.py)"
+          >{{pb.button_name||pb.menu_name}}</el-button>
+        </template>
+        <!-- <el-button size="mini" type="primary" round @click="saveUserRoleInfo">保存</el-button> -->
       </div>
     </div>
 
@@ -110,7 +121,7 @@ export default {
       plBtn: this.$store.state.plBtn,
       // 【业务数据】
       cx: {
-        pd: { userType: "0", valid: "1" },
+        pd: { userType: "0", valid: "1", bmbh: this.$store.state.user.bmbh },
         pageSize: 10,
         pageNum: 1,
         order: "serial",
@@ -147,10 +158,19 @@ export default {
   },
   mounted() {
     this.getTable();
-    this.$store.dispatch("aGetBmbh", { bmbh: this.$store.state.user.bmbh });
+    this.$store
+      .dispatch("aGetBmbh", { bmbh: this.$store.state.user.bmbh })
+      .then(() => {});
   },
 
   methods: {
+    btnClick(py) {
+      if (py == "bc") {
+        this.saveUserRoleInfo();
+      } else if (py == "qc") {
+        this.cancel();
+      }
+    },
     // 获取查询参数
     cxFnc(data) {
       this.cx.pd = data;

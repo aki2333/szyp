@@ -37,8 +37,8 @@
                   v-model="inquire[cx.dm]"
                   filterable
                   v-else
-                  clearable
                   placeholder="请选择"
+                  :clearable="!cx.must"
                   @change="linkChange(cx,inquire[cx.dm],inquire)"
                 >
                   <el-option
@@ -102,19 +102,21 @@
               size="small"
               :type="pb.py=='cx'?'primary':'info'"
               round
-              v-if="pb.button_type==1"
+              v-if="cxType!='noCbtn'&&pb.button_type==1"
               :key="pbi"
               @click="btnClick(pb.py)"
             >{{pb.button_name||pb.menu_name}}</el-button>
           </template>
-          <!-- <el-button
-            class="cx-btn"
-            round
-            size="small"
-            type="primary"
-            @click="submitForm('inquire')"
-          >查询</el-button>
-          <el-button size="small" type="info" round @click="resetForm('inquire')">清除</el-button>-->
+          <template v-if="cxType=='noCbtn'">
+            <el-button
+              class="cx-btn"
+              round
+              size="small"
+              type="primary"
+              @click="submitForm('inquire')"
+            >查询</el-button>
+            <el-button size="small" type="info" round @click="resetForm('inquire')">清除</el-button>
+          </template>
         </el-col>
       </el-row>
     </el-form>
@@ -161,6 +163,7 @@ export default {
   mounted() {
     Object.assign(this.mrz, this.pd);
     this.mrz = JSON.parse(JSON.stringify(this.mrz));
+    console.log(this.cxType);
   },
   methods: {
     btnClick(py) {

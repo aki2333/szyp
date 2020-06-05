@@ -121,7 +121,7 @@ export default {
       plBtn: this.$store.state.plBtn,
       // 【业务数据】
       cx: {
-        pd: { userType: "0", valid: "1", bmbh: this.$store.state.user.bmbh },
+        pd: { userType: "0", valid: "1" },
         pageSize: 10,
         pageNum: 1,
         order: "serial",
@@ -157,7 +157,7 @@ export default {
     };
   },
   mounted() {
-    this.getTable();
+    // this.getTable();
     this.$store
       .dispatch("aGetBmbh", { bmbh: this.$store.state.user.bmbh })
       .then(() => {});
@@ -194,6 +194,7 @@ export default {
         this.$api.aport1 + "/userController/queryUserInfo",
         this.cx,
         r => {
+          console.log(r);
           this.tableData = r.resultList;
           this.tableData2 = { list: [] };
           this.tableData3 = { list: [] };

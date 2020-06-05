@@ -8,7 +8,7 @@ const yhgl = {
             cm: '所属单位',
             type: 'select',
             dm: 'bmbh',
-            must: true
+            // must: true
         },
         // {
         //     cm: '市局单位',

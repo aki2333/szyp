@@ -95,11 +95,15 @@ export default {
           this.cx.pd.ssfj = data.bmbh;
           this.dialogData.ssfj = data.bmbh;
           this.$store.dispatch("aGetssdw", { bmbh: data.bmbh, type: "sspcs" });
+          this.cx.pd.ssfjdis = true;
         } else if (this.$store.state.user.jb == 3) {
+          this.$store.dispatch("aGetssdw", { bmbh: data.fj, type: "sspcs" });
           this.cx.pd.ssfj = data.fj;
           this.cx.pd.sspcs = data.bmbh;
           this.dialogData.ssfj = data.fj;
           this.dialogData.sspcs = data.bmbh;
+          this.cx.pd.ssfjdis = true;
+          this.cx.pd.sspcsdis = true;
         }
       });
     },

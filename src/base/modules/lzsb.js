@@ -326,11 +326,11 @@ const lzsb = {
                 type: 'select',
                 dm: 'rjsy'
             },
-            {
-                cm: '职业',
-                type: 'select',
-                dm: 'zy',
-            },
+            // {
+            //     cm: '职业',
+            //     type: 'select',
+            //     dm: 'zy',
+            // },
 
             // {
             //     cm: '人员类别',
@@ -364,20 +364,27 @@ const lzsb = {
                 dm: 'policestation',
             },
             {
-                cm: '住宿地址',
-                type: 'input',
-                col: 16,
-                dm: 'zsdz'
-            },
-            {
                 cm: '本人联系电话',
                 type: 'input',
                 dm: 'sjhm'
             },
             {
+                cm: '住宿地址',
+                type: 'input',
+                col: 16,
+                dm: 'zsdz'
+            },
+
+            {
                 cm: '紧急联系人',
                 type: 'input',
                 dm: 'jjlxr'
+            },
+            {
+                cm: '定位地址',
+                type: 'input',
+                col: 16,
+                dm: 'dwdz'
             },
             {
                 cm: '紧急联系人电话',
@@ -423,17 +430,20 @@ const lzsb = {
             {
                 cm: '审核人',
                 type: 'input',
-                dm: 'spr'
+                dm: 'sprMc',
+                dis: true
             },
             {
                 cm: '审核单位',
                 type: 'input',
-                dm: 'sprdm'
+                dm: 'sprdwMc',
+                dis: true
             },
             {
                 cm: '审核时间',
-                type: 'datePicker',
+                type: 'datetimePicker',
                 dm: 'spsj'
+
             }
 
         ]

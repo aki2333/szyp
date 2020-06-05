@@ -6,6 +6,16 @@ let test = str => {
 function sortNumber(a, b) {
   return a - b
 }
+function cxSort(arr) {
+
+  arr.forEach((item, index) => {
+    if (item.py == 'cx') {
+      arr.splice(index, 1);
+      arr.unshift(item);
+    }
+  })
+  return arr
+}
 //数组对象方法排序:
 function sortByKey(array, key) {
   return array.sort(function (a, b) {
@@ -33,16 +43,17 @@ function arrayIndex(arr, sx1, sx2, arrsx) {
   })
 }
 function ToArray(data) {
-    var returnValue = new Array();
-    for (var key in data) {
-        returnValue.push({dm: key, mc: data[key]});
-    }
-    return sortByKey(returnValue,'dm')
+  var returnValue = new Array();
+  for (var key in data) {
+    returnValue.push({ dm: key, mc: data[key] });
+  }
+  return sortByKey(returnValue, 'dm')
 }
 export default {
   test,
   sortNumber,
   sortByKey,
   arrayIndex,
-  ToArray
+  ToArray,
+  cxSort
 }

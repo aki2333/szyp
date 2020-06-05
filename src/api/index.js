@@ -14,9 +14,11 @@ var aport3 = 'lzsb'
 // 引用axios
 import axios from 'axios';
 import store from '@/store'
+import router from '@/router'
+
 import { Message } from 'element-ui';
 import { Loading } from 'element-ui';
-
+// import { MessageBox } from 'element-ui';
 // 自定义判断元素类型JS
 function toType(obj) {
   return {}.toString
@@ -39,6 +41,21 @@ function filterNull(o) {
     }
   }
   return o
+}
+function logout() {
+  let url = store.state.aurl;
+  window.localStorage.clear();
+  store.state.user = {};
+  store.state.menu = [];
+  store.state.token = "";
+  store.state.leftMenu = [];
+
+  if (url) {
+    window.location.href = url.replace(/login\?/, "logout?");
+  } else {
+    router.push({ name: "Login" });
+    // location.reload();
+  }
 }
 //使用token作为请求头2，拦截请求，将token插入Authorization
 axios.interceptors.request.use(
@@ -84,11 +101,23 @@ function apiAxios(method, url, params, success, failure, isDownload) {
           if (failure) {
             failure(res.data.data)
           } else {
+
             if (res.data.message) {
-              Message({
-                message: res.data.message,
-                type: 'warning'
-              });
+
+              if (res.data.message == "登录过期，请重新登录") {
+                logout()
+                // MessageBox.confirm('登录过期，请重新登录!', '提示', {
+                //   confirmButtonText: '确定',
+                //   type: 'warning'
+                // }).then(() => {
+                //   logout()
+                // })
+              } else {
+                Message({
+                  message: res.data.message,
+                  type: 'warning'
+                });
+              }
             }
             // console.log("er:", res)
             if (isDownload) {

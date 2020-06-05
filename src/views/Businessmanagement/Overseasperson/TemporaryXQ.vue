@@ -277,8 +277,26 @@ export default {
         visaNo: [{ required: true, message: "此项必填", trigger: "blur" }],
         tlyxqz: [{ required: true, message: "此项必填", trigger: "blur" }],
         rjsy: [{ required: true, message: "此项必填", trigger: "blur" }],
-        sjhm: [{ required: true, message: "此项必填", trigger: "blur" }],
-        jjlxrdh: [{ required: true, message: "此项必填", trigger: "blur" }],
+        sjhm: [
+          { required: true, message: "此项必填", trigger: "blur" },
+          { max: 11, message: "长度不可超过11位", trigger: "blur" },
+          {
+            required: true,
+            pattern: /^-?[1-9]\d*$/,
+            message: "请输入正确的电话号码",
+            trigger: "blur"
+          }
+        ],
+        jjlxrdh: [
+          { required: true, message: "此项必填", trigger: "blur" },
+          { max: 11, message: "长度不可超过11位", trigger: "blur" },
+          {
+            required: true,
+            pattern: /^-?[1-9]\d*$/,
+            message: "请输入正确的电话号码",
+            trigger: "blur"
+          }
+        ],
         suboffice: [{ required: true, message: "此项必填", trigger: "blur" }],
         policestation: [
           { required: true, message: "此项必填", trigger: "blur" }

@@ -138,6 +138,7 @@ export default {
         this.$store.state.user.bmbh.slice(0, 6) + "000000"
       );
     }
+
     if (this.$store.state.user.jb == "1") {
       this.$store.dispatch("aGetPolice");
     } else if (this.$store.state.user.jb == "2") {
@@ -153,6 +154,7 @@ export default {
   methods: {
     tabTopClick(index) {
       this.cx.pd.shzt = "shzt_" + index;
+      this.cx.pageNum = 1;
       if (index == 1) {
         this.isTab = true;
         this.cx.pd.hczt = "hczt_0";
@@ -228,23 +230,28 @@ export default {
       if (data.btn.button_type == "xzjl") {
         this.downZsdjd(data.data.id);
       } else if (data.btn.button_type == "bj") {
-        this.getDetailLzsb(data.data.id);
+        let p = {
+          id: data.data.id,
+          spr: this.$store.state.user.userId,
+          sprdw: this.$store.state.user.bmbh
+        };
+        this.getDetailLzsb(p);
         this.getDetailLzsbTp(data.data.id);
       } else if (data.btn.button_type == "ck") {
-        this.getDetailLzsb(data.data.id);
+        let p = {
+          id: data.data.id
+        };
+        this.getDetailLzsb(p);
         this.getDetailLzsbTp(data.data.id);
       }
     },
     // 获取详情
-    getDetailLzsb(id) {
-      this.$api.post(
-        this.$api.aport3 + "/api/lzsb/getDetailLzsb",
-        { id: id },
-        r => {
-          this.dialogData = r;
-          this.isShowDialog = true;
-        }
-      );
+    getDetailLzsb(p) {
+      this.$api.post(this.$api.aport3 + "/api/lzsb/getDetailLzsb", p, r => {
+        this.dialogData = r;
+        this.$store.dispatch("aGetPolice", r.suboffice.slice(0, 6));
+        this.isShowDialog = true;
+      });
     },
     // 获取图片
     getDetailLzsbTp(id) {

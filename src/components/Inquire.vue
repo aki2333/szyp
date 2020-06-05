@@ -39,6 +39,7 @@
                   v-else
                   placeholder="请选择"
                   :clearable="!cx.must"
+                  :disabled="inquire[cx.dm+'dis']"
                   @change="linkChange(cx,inquire[cx.dm],inquire)"
                 >
                   <el-option

@@ -273,7 +273,7 @@ const jsgl = {
             dm: 'role_name'
         },
         {
-            cm: '所属单位',
+            cm: '创建单位',
             dm: 'create_unitid_desc'
         }
     ],

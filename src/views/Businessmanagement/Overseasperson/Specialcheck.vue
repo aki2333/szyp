@@ -485,6 +485,9 @@ export default {
       p.jb = this.$store.state.user.jb;
       p.bmbh = this.$store.state.user.bmbh;
       p.userId = this.$store.state.user.userId;
+      p.pageData ={
+        clzt:this.page,
+      }
       this.$api.post(this.$api.aport2 + "/issueData/updateIssueData", p, r => {
         this.$message({
           message: r.message,

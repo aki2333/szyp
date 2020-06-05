@@ -39,9 +39,11 @@
         :cxData="labelData"
         :dialogType="dialogType"
         :dialogData="dialogData"
+        :joinFlag="joinFlag"
         @dialogCancel="isShowDialog=false"
         @dialogSave="dialogSave"
         @formLcFnc="formLcFnc"
+        @radioChange="radioChange"
       ></Form>
     </Dialog>
   </div>
@@ -97,6 +99,7 @@ export default {
       changeK: "",
       //弹窗数据
       isShowDialog: false,
+      joinFlag:false,
       dialogTitle: "",
       dialogType: "",
       dialogData: {},
@@ -181,6 +184,7 @@ export default {
     tabTopClick1(){
       this.clzt=1;
       this.page='1';
+      this.cx.pageNum = 1;
       this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data =>{
         this.lbTab=data.lbTab
       });
@@ -197,6 +201,7 @@ export default {
     tabTopClick2(){
       this.clzt=2;
       this.page='1';
+      this.cx.pageNum = 1;
       this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data =>{
         this.lbTab=data.lbTab1
       });
@@ -255,6 +260,14 @@ export default {
           data.obj.turnoutarea = '';
         }
         this.$store.dispatch("aGetZrq",data.data);
+      }
+    },
+    radioChange(val){
+      console.log(val)
+      if(val){
+        if(this.joinFlag == true){
+          this.joinFlag = false
+        }
       }
     },
     // 获取分页等信息
@@ -436,6 +449,11 @@ export default {
         });
         this.$store.dispatch("aGetBackstatus", data.data.datatype);
         this.isShowDialog = true;
+        if(data.data.backstatus){
+          this.joinFlag = false
+        }else{
+          this.joinFlag = true
+        }
         this.dialogData = Object.assign({},data.data);
       }
     },
@@ -496,6 +514,7 @@ export default {
     //列表tab切换  data==page 从1开始 控制按钮是否出现 v-for 和 v-if不能同时使用
     tabFnc(data) {
       this.page = data;
+      this.cx.pageNum = 1;
       this.selection = [];
       this.getTable();
     },

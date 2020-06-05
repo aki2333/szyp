@@ -581,7 +581,7 @@ function editShow(jb) {
             },
             {
                 cm: '备注',
-                type: 'input',
+                type: 'joinInput',
                 dm: 'remarks'
             },
             {

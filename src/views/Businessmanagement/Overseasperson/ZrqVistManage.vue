@@ -3,7 +3,7 @@
     <el-container>
       <el-aside width="270px" style="border-right:1px solid #DEE6E8">
          <div class="left-top">
-               <div class="base-flex left-query">
+               <div class="base-flex" :class="{'mb-12':$store.state.user.jb!='3','left-query':$store.state.user.jb=='3'}">
                     <el-input
                         placeholder="请输入地址"
                         prefix-icon="el-icon-search"
@@ -11,6 +11,16 @@
                         size="small">
                     </el-input>
                     <el-button type="primary" size="small" class="ml-5" @click="getHandData()">查询</el-button>
+                </div>
+                <div class="base-flex left-query" v-if="$store.state.user.jb!='3'">
+                    <el-select v-model="pcsQuery" filterable placeholder="请选择" size="small" @change="getHandData()">
+                      <el-option
+                        v-for="item in pcsArr"
+                        :key="item.dm"
+                        :label="item.dm+' - '+item.mc"
+                        :value="item.dm">
+                      </el-option>
+                    </el-select>
                 </div>
                 <div class="base-flex mb-12">
                     <div class="text-tip">待接收</div>
@@ -21,9 +31,10 @@
                     <!-- <div class="query-record"><i class="el-icon-time"></i>搜索记录</div> -->
                 </div>
            </div>
-           <div class="left-content">
-               <el-checkbox-group v-model="checkedList" @change="handChangeFun">
-                    <el-checkbox v-for="(item,ind) in handData" :label="item.serial" :key="ind">
+           <div class="left-content" ref="tree">
+               <el-checkbox-group v-model="checkedList" @change="handChangeFun" v-infinite-scroll="load"
+                     infinite-scroll-distance="10">
+                    <el-checkbox v-for="(item,ind) in handShowData" :label="item.serial" :key="ind">
                         <template>
                             <div class="item-item">
                                 <span class="label-item">姓名：</span>
@@ -123,11 +134,17 @@ export default {
     return {
         //左栏
         adressQuery:'',
+        pcsQuery:'',
         checkedList:[],
         checkedListAll:[],
         isIndeterminate:false,
         checkAll:false,
         handData:[],
+        handShowData:[],
+        allArr:[],
+        xzCount:0,
+        scrollW:0,
+        pcsArr:[],
 
       // 查询项
       tabImg_1: require("../../../assets/images/main/tab_2.png"),
@@ -196,12 +213,61 @@ export default {
       } 
 
       this.$store.dispatch("aGetDatatype");
+      this.getPcsQueryData();
+      // this.$set(this.pcsQuery,this.$store.state.user.bmbh)
+      this.pcsQuery = this.$store.state.user.bmbh
       // this.$store.dispatch("aGetBackstatus");
       this.getTable();
       this.getHandData();
     });
   },
   methods: {
+      load(){
+        // if(this.hazyFlag==true){//模糊查询 有值 懒加载
+        //   let aa=[];
+        //   if(this.filArr.length-this.filCount>20){
+        //     this.filCount+=20;
+        //     aa = (this.filArr).slice(this.filCount,this.filCount+20)
+        //   }else if(0<=Math.abs(this.filArr.length-this.filCount)<=20){
+        //     this.filCount+=20;
+        //     aa = (this.filArr).slice(this.filCount,this.filCount+Math.abs(this.filArr.length-this.filCount))
+        //   }else{
+        //     return
+        //   }
+        //   for(var i in aa){
+        //     this.menudata.push(aa[i])
+        //   }
+        // }else{
+          let aa=[];
+          console.log(this.handData.length-this.xzCount)
+          if(this.handData.length-this.xzCount>20){
+            this.xzCount+=20;
+            aa=(this.handData).slice(this.xzCount,this.xzCount+20)
+          }else if(0<=Math.abs(this.handData.length-this.xzCount)<=20){
+            // this.xzCount+=20;
+            console.log(this.xzCount,this.xzCount+Math.abs(this.handData.length-this.xzCount),aa)
+            aa=(this.handData).slice(this.xzCount,this.xzCount+Math.abs(this.handData.length-this.xzCount))
+            return
+          }else{
+            return
+          }
+          for(var i in aa){
+            this.allArr.push(aa[i])
+          }
+          this.handShowData = this.allArr;
+          // console.log('this.$refs.tree.$el',this.handShowData,this.handShowData.length)
+          // this.scrollW = this.$refs.tree.$el.scrollTop;
+        // }
+      },
+      getPcsQueryData(){
+        let p={
+          jb:this.$store.state.user.jb,
+          bmbh:this.$store.state.user.bmbh
+        }
+        this.$api.post(this.$api.aport2+'/dm/getPcsListByUserJbAndBmbh',p,r=>{
+          this.pcsArr = r
+        })
+      },
       btnClick(py){
         if(py == "js"){
           this.receiveFun();
@@ -241,9 +307,11 @@ export default {
         let p={
           serialList:this.checkedList,
           idcard:this.$store.state.user.sfzh,
-          ZRQDM:data.turnoutarea
+          ZRQDM:data.turnoutarea,
+          PCS:this.pcsQuery,
+          receivingOrDispatchingType:'1'
         }
-        this.$api.post(this.$api.aport2+'/issueData/turnoutareaReceiptIssueData',p,r=>{
+        this.$api.post(this.$api.aport2+'/issueData/requestOrDistributionIssueData',p,r=>{
           this.$message({
             message: r.message,
             type: "success"
@@ -272,9 +340,11 @@ export default {
         let p={
           serialList:this.checkedList,
           idcard:this.$store.state.user.sfzh,
-          ZRQDM:data.turnoutarea
+          ZRQDM:data.turnoutarea,
+          PCS:this.pcsQuery,
+          receivingOrDispatchingType:'2'
         }
-        this.$api.post(this.$api.aport2+'/issueData/turnoutareaReceiptIssueData',p,r=>{
+        this.$api.post(this.$api.aport2+'/issueData/requestOrDistributionIssueData',p,r=>{
           this.$message({
             message: r.message,
             type: "success"
@@ -289,14 +359,23 @@ export default {
         let p={
             pd:{
                 address:this.adressQuery,
-                jb:this.$store.state.user.jb,
-                bmbh: this.$store.state.user.bmbh,
+                jb:(this.$store.state.user.jb!='3'&&this.pcsQuery == this.$store.state.user.bmbh)?this.$store.state.user.jb:'3',
+                bmbh: this.pcsQuery,
                 clzt:1,
                 cljg:3
             }
         }
         this.$api.post(this.$api.aport2+'/issueData/getIssueDataPage',p,r=>{
             this.handData = r.list
+            this.allArr = [];
+            this.xzCount = 0;
+            if(this.handData.length<20){
+              this.allArr=(this.handData).slice(0,this.handData.length);
+            }else{
+              this.allArr=(this.handData).slice(0,20);
+            }
+            this.handShowData = this.allArr;
+            console.log('this.handShowData',this.handShowData,this.handShowData.length)
             this.checkedListAll = [];
             for(var i=0;i<this.handData.length;i++){
               this.checkedListAll.push(this.handData[i].serial)
@@ -512,6 +591,9 @@ export default {
 };
 </script>
 <style scoped>
+.left-content{
+  
+}
 .left-top{
     padding: 18px 10px 0;
 }

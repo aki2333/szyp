@@ -16,6 +16,9 @@
               <template v-if="cx.type=='input'">
                 <el-input v-model="dialogData[cx.dm]" :disabled="cx.dis"></el-input>
               </template>
+              <template v-if="cx.type=='joinInput'">
+                <el-input v-model="dialogData[cx.dm]" :disabled="joinFlag"></el-input>
+              </template>
               <template v-else-if="cx.type=='password'">
                 <el-input type="password" v-model="dialogData[cx.dm]"></el-input>
               </template>
@@ -84,7 +87,7 @@
                 </div>
               </template>
               <template v-else-if="cx.type=='radio'">
-                <el-radio-group v-model="dialogData[cx.dm]">
+                <el-radio-group v-model="dialogData[cx.dm]" @change="radioChange">
                   <el-radio
                     :label="item.dm"
                     v-for="(item,ind) in $store.state[cx.dm]"
@@ -149,7 +152,10 @@ export default {
       type: Boolean,
       default: false
     },
-    
+    joinFlag: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     var validatePass = (rule, value, callback) => {
@@ -196,12 +202,16 @@ export default {
       isXJ: false,
       newForm: {},
       isPS:true,
+      isJoinFlag:false,
     };
   },
   watch: {
     dialogType(val) {
-      console.log(val);
+      console.log(val)
       this.isXJ = false;
+    },
+    joinFlag(val){
+      this.isJoinFlag = val;
     },
   },
   mounted() {
@@ -225,6 +235,9 @@ export default {
     },
     dbBtnFun(val) {
       this.$emit("dbFnc", val);
+    },
+    radioChange(val){
+      this.$emit("radioChange",val);
     },
     linkChange(key, val, dialogData) {
       this.$emit("formLcFnc", { key: key, data: val, obj: dialogData });

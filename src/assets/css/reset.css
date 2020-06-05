@@ -125,7 +125,11 @@ th {
   text-align: justify;
   text-align-last: justify;
     /* display: inline-block; */
-  width: 70px;
+  min-width: 70px;
+}
+.left-content .el-checkbox-group{
+  max-height: 500px;
+  overflow-y: auto;
 }
 .el-date-editor.el-input, 
 .el-date-editor.el-input__inner,

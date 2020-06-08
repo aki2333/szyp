@@ -245,7 +245,7 @@ export default new Vuex.Store({
     },
     aGetZrq(context, payload) {
       return new Promise((resolve) => {
-        api.post(api.aport2 + '/dm/getDmList', { tableName: 'dm_zrqb', pcs: payload }, r => {
+        api.post(api.aport2 + '/dm/getDmList', { tableName: 'dm_zrqb', dmNameRightLike: payload }, r => {
           context.commit('getZrq', fnc.sortByKey(r, 'dm'))
           resolve(payload)
         })

@@ -156,13 +156,9 @@ export default {
         this.$store.dispatch("aGetZrq",this.$store.state.user.bmbh.slice(0, 6));
       } else if (this.$store.state.user.jb == '3') {
         this.$store.dispatch("aGetPolice",this.$store.state.user.bmbh);
-        this.$store.dispatch("aGetZrq",this.$store.state.user.bmbh);
+        this.$store.dispatch("aGetZrq",this.$store.state.user.bmbh.slice(0, 8));
       }  
       this.$store.dispatch("aGetDatatype");
-      this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data =>{
-        this.lbTab=data.lbTab
-        this.page = this.lbTab[0].dm
-      });
       
       let arr = [];
       this.plBtn = this.$store.state.plBtn
@@ -173,7 +169,12 @@ export default {
         }
       this.plBtn = arr
       // this.$store.dispatch("aGetBackstatus");
-      this.getTable();
+      this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data =>{
+        this.lbTab=data.lbTab
+        this.page = this.lbTab[0].dm
+        this.getTable();
+      });
+      
     });
   },
   methods: {
@@ -259,7 +260,7 @@ export default {
         if(data.obj.turnoutarea){
           data.obj.turnoutarea = '';
         }
-        this.$store.dispatch("aGetZrq",data.data);
+        this.$store.dispatch("aGetZrq",data.data.slice(0, 8));
       }
     },
     radioChange(val){
@@ -393,14 +394,14 @@ export default {
             return false;
           }
 
-          if (!this.isArrValue(this.backstatusArr)) {
-            //分局下发 选择数据已处理过走访状态不能下发
-            this.$message({
-              message: "已走访的数据不能再下发！",
-              type: "warning"
-            });
-            return false;
-          }
+          // if (!this.isArrValue(this.backstatusArr)) {
+          //   //分局下发 选择数据已处理过走访状态不能下发
+          //   this.$message({
+          //     message: "已走访的数据不能再下发！",
+          //     type: "warning"
+          //   });
+          //   return false;
+          // }
           if((!this.isArrEmpty(this.policeArr)&&!this.isArrValue(this.policeArr))){
             //派出所空值和有值同时存在
             this.$message({

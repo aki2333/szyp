@@ -13,7 +13,7 @@
                     <el-button type="primary" size="small" class="ml-5" @click="getHandData()">查询</el-button>
                 </div>
                 <div class="base-flex left-query" v-if="$store.state.user.jb!='3'">
-                    <el-select v-model="pcsQuery" filterable placeholder="请选择" size="small" @change="getHandData()">
+                    <el-select v-model="pcsQuery" filterable placeholder="请选择" size="mini" @change="getHandData()">
                       <el-option
                         v-for="item in pcsArr"
                         :key="item.dm"
@@ -209,7 +209,7 @@ export default {
         this.$store.dispatch("aGetZrq",this.$store.state.user.bmbh.slice(0, 6));
       } else if (this.$store.state.user.jb == '3') {
         this.$store.dispatch("aGetPolice",this.$store.state.user.bmbh);
-        this.$store.dispatch("aGetZrq",this.$store.state.user.bmbh);
+        this.$store.dispatch("aGetZrq",this.$store.state.user.bmbh.slice(0, 8));
       } 
 
       this.$store.dispatch("aGetDatatype");
@@ -319,6 +319,8 @@ export default {
           this.isShowDialog = false;
           this.getHandData();
           this.getTable();
+          this.checkedList = [];
+          this.handChangeFun(this.checkedList)
         })
       },
       handOutFun(){//派发
@@ -352,6 +354,8 @@ export default {
            this.isShowDialog = false;
           this.getHandData();
           this.getTable();
+          this.checkedList = [];
+          this.handChangeFun(this.checkedList)
         })
       },
     //左栏待接收数据

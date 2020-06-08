@@ -74,9 +74,7 @@ export default {
       this.$store.state.token = "";
       this.$store.state.leftMenu = [];
       if (url) {
-        this.$router.push({ name: "Login" });
-
-        // window.location.href = url.replace(/login\?/, "logout?");
+        window.location.href = url.replace(/login\?/, "logout?");
       } else {
         this.$router.push({ name: "Login" });
       }

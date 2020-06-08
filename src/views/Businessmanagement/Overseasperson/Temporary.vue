@@ -118,6 +118,8 @@ export default {
     this.$store.dispatch("aGetGender");
     this.$store.dispatch("aGetPassport");
     this.$store.dispatch("aGetDM", "qzzl");
+    this.$store.dispatch("aGetDM", "xzqh");
+
     this.$store.dispatch("aGetDM", "lz_zfzl");
     this.$store.dispatch("aGetDM", "lz_zsxz");
     this.$store.dispatch("aGetDM", "rydylb");

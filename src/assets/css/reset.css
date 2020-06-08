@@ -92,7 +92,11 @@ th {
 .page>.inquire .el-form-item__label,.page>.inquire input{
   color: #A09FA7!important;
 }
-.el-input{
+
+.el-form-item--mini .el-form-item__content, .el-form-item--mini .el-form-item__label {
+  line-height: 26px!important;
+}
+.el-input,.el-select{
   height: 28px!important;
 }
 .left-content .el-checkbox, .el-checkbox__input{

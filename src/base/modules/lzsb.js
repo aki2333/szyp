@@ -352,7 +352,11 @@ const lzsb = {
                 type: 'datePicker',
                 dm: 'zssj'
             },
-
+            {
+                cm: '行政区划',
+                type: 'select',
+                dm: 'xzqh',
+            },
             {
                 cm: '所属分局',
                 type: 'select',
@@ -406,6 +410,12 @@ const lzsb = {
                 cm: '上报时间',
                 type: 'datetimePicker',
                 dm: 'sbsj'
+            },
+            {
+                cm: '数据比对结果',
+                type: 'input',
+                col: 16,
+                dm: 'yq_hcjg'
             },
             {
                 cm: '备注',

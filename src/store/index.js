@@ -26,6 +26,7 @@ export default new Vuex.Store({
     passportType: [],//证件种类
     suboffice: [],//所属分局
     policestation: [],//派出所
+    xzqh: [],
     shzt: [],//审核状态
     rylb: [],
     zfzl: [],
@@ -99,7 +100,7 @@ export default new Vuex.Store({
       } else if (data.type == 'rydylb') {
         state.rylb = data.data
       } else if (data.type == "xzqh") {
-        state.suboffice = data.data
+        state.xzqh = data.data
       } else if (data.type == "pcs") {
         state.policestation = data.data
       } else if (data.type == "bjjgka") {

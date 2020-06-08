@@ -17,7 +17,7 @@
                       <el-option
                         v-for="item in pcsArr"
                         :key="item.dm"
-                        :label="item.dm+' - '+item.mc"
+                        :label="item.mc"
                         :value="item.dm">
                       </el-option>
                     </el-select>

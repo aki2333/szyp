@@ -327,16 +327,19 @@ const jsgl = {
         {
             cm: '登录名称',
             type: 'input',
+            col: 8,
             dm: 'loginName'
         },
         {
             cm: '用户名称',
             type: 'input',
+            col: 8,
             dm: 'xm'
         },
         {
             cm: '警号',
             type: 'input',
+            col: 8,
             dm: 'jinghao'
         }
     ],
@@ -570,16 +573,19 @@ const zrqgl = {
         {
             cm: '身份证号',
             type: 'input',
+            col: 8,
             dm: 'sfzh'
         },
         {
             cm: '姓名',
             type: 'input',
+            col: 8,
             dm: 'xm'
         },
         {
             cm: '警号',
             type: 'input',
+            col: 8,
             dm: 'jinghao'
         }
     ],

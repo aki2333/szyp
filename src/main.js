@@ -8,6 +8,7 @@ import api from './api/index.js'
 import http from './request/api.js'
 import fnc from './base/fnc.js'
 import cdata from './base/cdata.js'
+import echarts from "echarts";
 
 Vue.config.productionTip = false
 document.title = "苏州市公安局·涉外综合分析研判系统"
@@ -15,6 +16,8 @@ Vue.prototype.$api = api
 Vue.prototype.$http = http
 Vue.prototype.$fnc = fnc
 Vue.prototype.$cdata = cdata
+Vue.prototype.$echarts = echarts;
+
 Vue.use(ElementUI)
 new Vue({
   router,

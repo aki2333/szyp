@@ -67,6 +67,13 @@ export default {
   methods: {
     //证书登陆
     login() {
+      window.localStorage.clear();
+      this.$store.state.user = {};
+      this.$store.state.menu = [];
+      this.$store.state.token = "";
+      this.$store.state.leftMenu = [];
+      // window.location.href = url.replace(/login\?/, "logout?");
+
       let url =
         "http://tyyh.szh.js:9080/cas/login?service=" +
         this.$api.root +
@@ -87,6 +94,7 @@ export default {
     },
     //用户名密码登陆
     loginPassword() {
+      window.localStorage.clear();
       this.$store.dispatch("aGetUrl", "");
       this.clickFive++;
       if (this.clickFive == 5) {

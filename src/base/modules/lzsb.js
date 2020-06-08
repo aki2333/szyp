@@ -59,12 +59,12 @@ const lzsb = {
                 {
                     cm: '开始日期',
                     type: 'date',
-                    dm: 'zssjUp'
+                    dm: 'zssjLow'
                 },
                 {
                     cm: '结束日期',
                     type: 'date',
-                    dm: 'zssjLow'
+                    dm: 'zssjUp'
                 }
             ]
         },
@@ -82,12 +82,12 @@ const lzsb = {
                 {
                     cm: '开始日期',
                     type: 'date',
-                    dm: 'sbsjUp'
+                    dm: 'sbsjLow'
                 },
                 {
                     cm: '结束日期',
                     type: 'date',
-                    dm: 'sbsjLow'
+                    dm: 'sbsjUp'
                 }
             ]
         },

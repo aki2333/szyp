@@ -108,11 +108,23 @@
                 <!-- :preview-src-list="['data:image/jpg;base64,'+item.zp]" -->
               </el-carousel-item>
             </el-carousel>
-            <el-image
+            <!-- <el-image
+              @click="imgclick(isimgclick)"
+              :style="{'z-index':isimgclick?10:9}"
               class="dt"
               :src="require('@/assets/images/main/wmask.png')"
               :preview-src-list="imgList"
-            ></el-image>
+            ></el-image>-->
+            <img
+              @click="imgclick(isimgclick)"
+              class="dt"
+              :src="require('@/assets/images/main/wmask.png')"
+            />
+            <el-image-viewer
+              v-if="isimgclick"
+              :on-close="()=>{isimgclick=false}"
+              :url-list="imgList"
+            />
           </div>
         </el-col>
         <el-col :span="24" class="no-padding">
@@ -228,6 +240,10 @@
 </template>
 <script>
 export default {
+  components: {
+    "el-image-viewer": () =>
+      import("element-ui/packages/image/src/image-viewer")
+  },
   props: {
     cxData: {
       type: Object,
@@ -304,6 +320,7 @@ export default {
       },
       isXJ: false,
       newForm: {},
+      isimgclick: false,
       imgList:
         this.dialogImgData.length > 0
           ? ["data:image/jpg;base64," + this.dialogImgData[0].zp]
@@ -336,6 +353,10 @@ export default {
     },
     getSrcList(url) {
       return ["data:image/jpg;base64," + url];
+    },
+    imgclick(data) {
+      console.log(data);
+      this.isimgclick = true;
     },
     imgChange(data) {
       // console.log("imgChange", data);

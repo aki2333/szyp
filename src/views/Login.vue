@@ -73,6 +73,7 @@ export default {
       this.$store.state.menu = [];
       this.$store.state.token = "";
       this.$store.state.leftMenu = [];
+      console.log("url:", url);
       if (url) {
         window.location.href = url.replace(/login\?/, "logout?");
       } else {
@@ -81,6 +82,7 @@ export default {
     },
     //证书登陆
     login() {
+      console.log(this.$store.state);
       this.logout();
       console.log(this.$store.state);
 

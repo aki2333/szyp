@@ -61,6 +61,7 @@
               />
               <el-button
                 style="margin:0 5px"
+                :style="{'color':lbt.color_type=='1'?'#d78df5':'#7FCEFF'}"
                 @click="handleClick(scope.row,lbt)"
                 type="text"
                 size="small"
@@ -178,15 +179,15 @@ export default {
     selection(val) {
       console.log(val);
       this.$nextTick(function() {
-      var arrAfter=[];
-      var arrReal=[];
-        for(var h=0;h<val.length;h++){
-        if(arrAfter.indexOf(val[h].serial)==-1){
-          arrAfter.push(val[h].serial);
-          arrReal.push(val[h]);
+        var arrAfter = [];
+        var arrReal = [];
+        for (var h = 0; h < val.length; h++) {
+          if (arrAfter.indexOf(val[h].serial) == -1) {
+            arrAfter.push(val[h].serial);
+            arrReal.push(val[h]);
+          }
         }
-      }
-      val=arrReal;
+        val = arrReal;
         this.toggleSelection(val);
       });
     },
@@ -196,13 +197,11 @@ export default {
       }
     },
     plBtn: {
-      handler() {
-       
-      },
+      handler() {},
       deep: true
     },
-    page(val){
-     this.page1 = val
+    page(val) {
+      this.page1 = val;
     }
   },
   mounted() {
@@ -247,7 +246,6 @@ export default {
       this.$emit("blFnc", { btn: btn, data: row });
     },
     lbTabFun(val) {
-    
       this.$emit("tabFnc", val);
     },
     plBtnFun(val) {

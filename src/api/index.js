@@ -44,7 +44,7 @@ function filterNull(o) {
 }
 function logout() {
   let url = store.state.aurl;
-  window.localStorage.clear();
+  window.sessionStorage.clear();
   store.state.user = {};
   store.state.menu = [];
   store.state.token = "";

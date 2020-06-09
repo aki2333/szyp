@@ -64,7 +64,7 @@ export default {
     },
     logout() {
       let url = this.$store.state.aurl;
-      window.localStorage.clear();
+      window.sessionStorage.clear();
       this.$store.state.user = {};
       this.$store.state.menu = [];
       this.$store.state.token = "";

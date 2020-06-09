@@ -220,7 +220,8 @@ export default {
     // 获取角色列表
     getRole(bmbh) {
       this.$api.post(
-        this.$api.aport1 + "/role/getRole",
+        this.$api.aport1 + "/role/getUserRole",
+        // this.$api.aport1 + "/role/getRole",
         { bmbh: bmbh, quanJu: "true", userId: this.currentRow.userId },
         r => {
           this.tableData3.list = r;

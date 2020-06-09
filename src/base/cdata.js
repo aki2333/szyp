@@ -160,17 +160,21 @@ const options = {
             mc: "按钮"
         }
     ],
-    turnoutarea:[],
+    turnoutarea: [],
 }
+const tabImg_1 = require("../assets/images/main/tab_2.png");
+const tabImgActive_1 = require("../assets/images/main/tab_2_pre.png");
+const tabImg_2 = require("../assets/images/main/tab_1.png");
+const tabImgActive_2 = require("../assets/images/main/tab_1_pre.png");
 
 function zrqReciData(list) {
-      return new Promise((resolve) => {
-        api.post(api.aport2 + '/dm/getZrqListByZrqDmList',{zrqList:list},r=>{
+    return new Promise((resolve) => {
+        api.post(api.aport2 + '/dm/getZrqListByZrqDmList', { zrqList: list }, r => {
             options.turnoutarea = r
-            console.log('options.turnoutarea',options.turnoutarea)
+            console.log('options.turnoutarea', options.turnoutarea)
             resolve(r)
         })
-      })  
+    })
 }
 export default {
     menu,
@@ -180,5 +184,9 @@ export default {
     lzsb,
     api,
     store,
+    tabImg_1,
+    tabImgActive_1,
+    tabImg_2,
+    tabImgActive_2,
     zrqReciData
 }

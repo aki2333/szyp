@@ -291,6 +291,7 @@ const jsgl = {
         {
             "button_name": "停用",
             "button_type": "ty",
+            "color_type": '1',
             "user_ctrl": '1',
             "serial": "201",
         },

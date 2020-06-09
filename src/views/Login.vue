@@ -49,6 +49,7 @@ export default {
     };
   },
   mounted() {
+    console.log("store:", this.$store.state.token);
     if (window.location.href.includes("authorization")) {
       let token = this.getUrlParam("authorization");
       if (token) {
@@ -63,29 +64,13 @@ export default {
       //     type: "warning"
       //   });
       // }
+    } else if (this.$store.state.token) {
+      this.getUser();
     }
   },
   methods: {
-    logout() {
-      let url = this.$store.state.aurl;
-      window.localStorage.clear();
-      this.$store.state.user = {};
-      this.$store.state.menu = [];
-      this.$store.state.token = "";
-      this.$store.state.leftMenu = [];
-      console.log("url:", url);
-      if (url) {
-        window.location.href = url.replace(/login\?/, "logout?");
-      } else {
-        this.$router.push({ name: "Login" });
-      }
-    },
     //证书登陆
     login() {
-      console.log(this.$store.state);
-      this.logout();
-      console.log(this.$store.state);
-
       let url =
         "http://tyyh.szh.js:9080/cas/login?service=" +
         this.$api.root +
@@ -106,7 +91,7 @@ export default {
     },
     //用户名密码登陆
     loginPassword() {
-      window.localStorage.clear();
+      window.sessionStorage.clear();
       this.$store.dispatch("aGetUrl", "");
       this.clickFive++;
       if (this.clickFive == 5) {

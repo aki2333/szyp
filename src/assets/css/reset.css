@@ -82,22 +82,24 @@ th {
   padding: 0;
   text-align: left;
 }
-.page>.inquire .el-input__inner{
-  /* border-color: #1a355b!important;
-  background-color: #1a355b!important; */
-}
+
 .inquire-ruleForm .el-col-8,.inquire-ruleForm .el-col-16{
   height: 38px;
 }
 .page>.inquire .el-form-item__label,.page>.inquire input{
-  color: #A09FA7!important;
+  color: #666!important;
 }
-
+.el-input.is-disabled .el-input__inner {
+  color: #8a8a8a!important;
+}
 .el-form-item--mini .el-form-item__content, .el-form-item--mini .el-form-item__label {
   line-height: 26px!important;
 }
 .el-input,.el-select{
   height: 28px!important;
+}
+.el-input__inner{
+  padding: 0 10px!important;
 }
 .left-content .el-checkbox, .el-checkbox__input{
   white-space: normal;

@@ -70,8 +70,19 @@ const routes = [
         name: 'ZrqVistManage',
         component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/ZrqVistManage.vue')
       },
+      {
+        path: '/ResidentAnalyze',
+        name: 'ResidentAnalyze',
+        component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/ResidentAnalyze.vue')
+      },
     ]
-  }
+  },
+  {
+    path: '/OtherPage',
+    name: 'OtherPage',
+    component: () => import(/* webpackChunkName: "OtherPage" */ '../views/OtherPage.vue')
+
+  },
 ]
 
 const router = new VueRouter({
@@ -79,12 +90,8 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  // const title = to.meta && to.meta.title
+
   let islogin = store.state.token
-  // let islogin = true
-  // if (title) {
-  //   document.title = title
-  // }
   if (to.name === 'Login') {
     //如果是登录页，则跳过验证
     next() //必不可少

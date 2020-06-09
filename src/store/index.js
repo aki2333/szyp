@@ -3,11 +3,11 @@ import Vuex from 'vuex'
 // import cdata from '@/base/cdata.js'
 import api from '@/api/index.js'
 import fnc from '@/base/fnc.js'
-let breadData = JSON.parse(localStorage.getItem('bread'))
-let user = JSON.parse(localStorage.getItem('user'))
-let menu = JSON.parse(localStorage.getItem('menu'))
-let token = localStorage.getItem('token')
-let aurl = localStorage.getItem('aurl')
+let breadData = JSON.parse(sessionStorage.getItem('bread'))
+let user = JSON.parse(sessionStorage.getItem('user'))
+let menu = JSON.parse(sessionStorage.getItem('menu'))
+let token = sessionStorage.getItem('token')
+let aurl = sessionStorage.getItem('aurl')
 
 Vue.use(Vuex)
 
@@ -49,11 +49,11 @@ export default new Vuex.Store({
   mutations: {
     getUser(state, data) {
       state.user = data;
-      window.localStorage.setItem("user", JSON.stringify(data));
+      window.sessionStorage.setItem("user", JSON.stringify(data));
     },
     getMenu(state, data) {
       state.menu = data;
-      window.localStorage.setItem("menu", JSON.stringify(data));
+      window.sessionStorage.setItem("menu", JSON.stringify(data));
     },
     getLeftMenu(state, data) {
       state.leftMenu = data;
@@ -63,19 +63,19 @@ export default new Vuex.Store({
     },
     getBread(state, data) {
       state.breadcrumb = data;
-      window.localStorage.setItem("bread", JSON.stringify(data));
+      window.sessionStorage.setItem("bread", JSON.stringify(data));
     },
     getPlBtn(state, data) {
       state.plBtn = data;
-      window.localStorage.setItem("plBtn", JSON.stringify(data));
+      window.sessionStorage.setItem("plBtn", JSON.stringify(data));
     },
     getToken(state, data) {
       state.token = data;
-      window.localStorage.setItem("token", data)
+      window.sessionStorage.setItem("token", data)
     },
     getUrl(state, data) {
       state.aurl = data;
-      window.localStorage.setItem("aurl", data)
+      window.sessionStorage.setItem("aurl", data)
     },
     getNation(state, data) {
       state.nationality = data;

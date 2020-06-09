@@ -36,9 +36,15 @@
                      infinite-scroll-distance="10">
                     <el-checkbox v-for="(item,ind) in handShowData" :label="item.serial" :key="ind">
                         <template>
+                          <div class="item-item">
+                                <span class="label-item">英文姓名：</span>
+                                <el-tooltip class="item" effect="dark" :content="item.givenname" placement="top" :disabled="false">
+                                  <span class="value-item eles">{{item.givenname}}</span>  
+                                </el-tooltip>                                                              
+                            </div>
                             <div class="item-item">
-                                <span class="label-item">姓名：</span>
-                                <span class="value-item">{{item.name}}</span>
+                                <span class="label-item">中文姓名：</span>
+                                <span class="value-item">{{item.name}}</span>                         
                             </div>
                             <div class="item-item">
                                 <span class="label-item">国家地区：</span>
@@ -395,6 +401,7 @@ export default {
       this.clzt=1;
       this.isEdit = true;
       this.plBtn = this.$store.state.plBtn
+      this.cx.pageNum = 1;
       this.getTable()
     },
     tabTopClick2(){
@@ -408,6 +415,7 @@ export default {
               }
             }
           this.plBtn = arr
+      this.cx.pageNum = 1;
       this.getTable()
     },
     rowClick(data){
@@ -467,6 +475,7 @@ export default {
       }
     },
     dialogCancel(){
+      this.cx.pageNum = 1;
       this.getTable();
       this.isShowDialog = false;
       this.selection = [];
@@ -519,6 +528,7 @@ export default {
         clzt: this.clzt,
         cljg: 4
       };
+      console.log('===',this.cx.pageNum)
       this.cx.pd = Object.assign({}, this.cx.pd, pdAdd);
       this.$api.post(
         this.$api.aport2 + "/issueData/getIssueDataPage",
@@ -526,6 +536,10 @@ export default {
         r => {
           this.tableData.list = r.list;
           this.tableData.total = r.total;
+          if(r.list.length==0&&this.cx.pageNum!=1){
+            this.cx.pageNum = 1;
+            this.getTable()
+          }
         }
       );
     },
@@ -563,6 +577,15 @@ export default {
           });
           this.getTable();
           this.getHandData();
+          // this.$nextTick(() => {
+          //   if(this.tableData.list.length==0){
+          //     console.log('jin==')
+          //   this.cx.pageNum = 1;
+          //   this.getTable();
+          // }else{
+          //   this.getTable();
+          // }
+          // })
         })
       }
     },
@@ -595,9 +618,9 @@ export default {
 };
 </script>
 <style scoped>
-.left-content{
+/* .left-content{
   
-}
+} */
 .left-top{
     padding: 18px 10px 0;
 }
@@ -629,7 +652,11 @@ export default {
     justify-content: flex-start;
 }
 .value-item{
-    width: 67%;
+    max-width: 144px;
 }
-
+.eles{
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}
 </style>

@@ -79,7 +79,7 @@ export default {
       //业务数据
       cx: {
         pd: {},
-        pageSize: 10,
+        pageSize: 15,
         pageNum: 1
       },
       tableData: {

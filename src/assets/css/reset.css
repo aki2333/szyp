@@ -82,7 +82,10 @@ th {
   padding: 0;
   text-align: left;
 }
-
+/* .page>.inquire .el-input__inner{
+  border-color: #1a355b!important;
+  background-color: #1a355b!important;
+} */
 .inquire-ruleForm .el-col-8,.inquire-ruleForm .el-col-16{
   height: 38px;
 }

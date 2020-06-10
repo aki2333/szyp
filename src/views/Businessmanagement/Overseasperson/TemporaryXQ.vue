@@ -14,7 +14,19 @@
       <el-row :gutter="30">
         <el-col :span="16" class="no-padding">
           <el-col :span="cx.col?cx.col:12" v-for="(cx,i) in cxData.a" :key="i">
-            <el-form-item :label="cx.cm" :prop="cx.dm">
+            <el-popover
+              :ref="'popover'+i"
+              placement="top-end"
+              trigger="hover"
+              v-if="dialogData.xgMap[cx.dm]"
+              :content="dialogData.xgMap[cx.dm]"
+            ></el-popover>
+            <el-form-item
+              :class="{'yxg-form-item':dialogData.xgMap[cx.dm]}"
+              v-popover="'popover'+i"
+              :label="cx.cm"
+              :prop="cx.dm"
+            >
               <template v-if="cx.type=='input'">
                 <el-input v-model="dialogData[cx.dm]" :disabled="cx.dis"></el-input>
               </template>
@@ -120,11 +132,9 @@
               class="dt"
               :src="require('@/assets/images/main/wmask.png')"
             />
-            <el-image-viewer
-              v-if="isimgclick"
-              :on-close="()=>{isimgclick=false}"
-              :url-list="imgList"
-            />
+            <div id="big-img-box" v-drag v-if="isimgclick">
+              <el-image-viewer :on-close="()=>{isimgclick=false}" :url-list="imgList" />
+            </div>
           </div>
         </el-col>
         <el-col :span="24" class="no-padding">
@@ -335,6 +345,37 @@ export default {
   mounted() {
     // this.form = this.dialogData;
     // console.log(this.form);
+  },
+  directives: {
+    drag: {
+      // 指令的定义
+      bind: function(el) {
+        let odiv = el; //获取当前元素
+        let left = "";
+        let top = "";
+        el.onmousedown = e => {
+          //算出鼠标相对元素的位置
+          let disX = e.clientX - odiv.offsetLeft;
+          let disY = e.clientY - odiv.offsetTop;
+
+          document.onmousemove = e => {
+            //用鼠标的位置减去鼠标相对元素的位置，得到元素的位置
+            left = e.clientX - disX;
+            top = e.clientY - disY;
+            //绑定元素位置到positionX和positionY上面
+            //移动当前元素
+            odiv.style.left = left + "px";
+            odiv.style.top = top + "px";
+            odiv.style.right = "auto";
+            odiv.style.bottom = "auto";
+          };
+          document.onmouseup = () => {
+            document.onmousemove = null;
+            document.onmouseup = null;
+          };
+        };
+      }
+    }
   },
   methods: {
     save(formName, type) {

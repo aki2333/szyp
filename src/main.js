@@ -17,9 +17,14 @@ Vue.prototype.$http = http
 Vue.prototype.$fnc = fnc
 Vue.prototype.$cdata = cdata
 Vue.prototype.$echarts = echarts;
-console.log("navigator", fnc.getBroswerAndVersion(), fnc.getBroswerAndVersion().indexOf('Chrome'))
-if (fnc.getBroswerAndVersion().indexOf('Chrome') < 0) {
+var bv = fnc.getBroswerAndVersion()
+console.log("navigator", fnc.getBroswerAndVersion(), fnc.getBroswerAndVersion().indexOf('Chrome'), bv.substring(6))
+if (bv.indexOf('Chrome') < 0) {
   window.location.href = "#/OtherPage"
+}
+else if (parseInt(bv.substring(6)) < 79) {
+  window.location.href = "#/OtherPage"
+
 }
 Vue.use(ElementUI)
 new Vue({

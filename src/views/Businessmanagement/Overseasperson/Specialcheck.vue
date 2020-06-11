@@ -180,6 +180,7 @@ export default {
   methods: {
     cxFnc(data) {
       this.cx.pd = data;
+      this.cx.pageNum = 1;
       this.getTable();
     },
     tabTopClick1(){

@@ -39,7 +39,7 @@
                           <div class="item-item">
                                 <span class="label-item">英文姓名：</span>
                                 <el-tooltip class="item" effect="dark" :content="item.givenname" placement="top" :disabled="false">
-                                  <span class="value-item eles">{{item.givenname}}</span>  
+                                  <span class="value-item eles" @click="aaa(item.givenname)">{{item.givenname}}</span>  
                                 </el-tooltip>                                                              
                             </div>
                             <div class="item-item">
@@ -228,6 +228,9 @@ export default {
     });
   },
   methods: {
+      aaa(val){
+        console.log(val.length)
+      },
       load(){
         // if(this.hazyFlag==true){//模糊查询 有值 懒加载
         //   let aa=[];
@@ -395,6 +398,7 @@ export default {
 
     cxFnc(data) {
       this.cx.pd = data;
+      this.cx.pageNum = 1;
       this.getTable();
     },
     tabTopClick1(){

@@ -91,8 +91,9 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
 
-  let islogin = store.state.token
-  if (to.name === 'Login') {
+  let islogin = store.state.token;
+  if (to.name === 'Login'
+    || to.name === 'OtherPage') {
     //如果是登录页，则跳过验证
     next() //必不可少
     return //以下的代码不执行
@@ -100,7 +101,7 @@ router.beforeEach((to, from, next) => {
   if (islogin) {
     next()
   } else {
-    next({ name: 'Login' })
+    next({ name: 'Login', query: to.query })
   }
 })
 export default router

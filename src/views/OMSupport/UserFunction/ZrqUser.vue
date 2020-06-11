@@ -74,6 +74,7 @@ export default {
   methods: {
     cxFnc(data) {
       this.cx.pd = data;
+      this.cx.pageNum = 1;
       this.getTable();
     },
     // 查询用户列表

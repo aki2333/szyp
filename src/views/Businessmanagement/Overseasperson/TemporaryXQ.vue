@@ -7,7 +7,7 @@
       size="mini"
       ref="form"
       label-width="130px"
-      label-position="left"
+      label-position="right"
       class="tc-form"
       :disabled="dialogType=='ck'"
     >
@@ -18,11 +18,11 @@
               :ref="'popover'+i"
               placement="top-end"
               trigger="hover"
-              v-if="dialogData.xgMap[cx.dm]"
+              v-if="dialogData.xgMap&&dialogData.xgMap[cx.dm]"
               :content="dialogData.xgMap[cx.dm]"
             ></el-popover>
             <el-form-item
-              :class="{'yxg-form-item':dialogData.xgMap[cx.dm]}"
+              :class="{'yxg-form-item':dialogData.xgMap&&dialogData.xgMap[cx.dm]}"
               v-popover="'popover'+i"
               :label="cx.cm"
               :prop="cx.dm"
@@ -139,7 +139,16 @@
         </el-col>
         <el-col :span="24" class="no-padding">
           <el-col :span="cx.col?cx.col:8" v-for="(cx,i) in cxData.b" :key="i">
+            <el-popover
+              :ref="'popover2'+i"
+              placement="top-end"
+              trigger="hover"
+              v-if="dialogData.xgMap&&dialogData.xgMap[cx.dm]"
+              :content="dialogData.xgMap[cx.dm]"
+            ></el-popover>
             <el-form-item
+              :class="{'yxg-form-item':dialogData.xgMap&&dialogData.xgMap[cx.dm]}"
+              v-popover="'popover2'+i"
               :label="cx.cm"
               :prop="cx.dm"
               v-if="!cx.cshow||(cx.cshow&&dialogData[cx.dm])"

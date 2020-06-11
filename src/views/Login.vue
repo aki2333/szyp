@@ -91,6 +91,8 @@ export default {
     },
     //用户名密码登陆
     loginPassword() {
+      // this.isLogin = true;
+
       window.sessionStorage.clear();
       this.$store.dispatch("aGetUrl", "");
       this.clickFive++;

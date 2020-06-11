@@ -190,6 +190,7 @@ export default {
     // 获取查询参数
     cxFnc(data) {
       this.cx.pd = data;
+      this.cx.pageNum = 1;
       this.getTable();
     },
     // 获取分页等信息

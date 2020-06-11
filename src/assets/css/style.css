@@ -109,11 +109,13 @@
 }
 #big-img-box{
     position: fixed;
-    height: fit-content;
-    width: fit-content;
-    max-width: 50%;
+    /* height: fit-content; */
+    /* width: fit-content; */
+    /* max-width: 50%;
     max-height: 500px;
-    min-height: 200px;
+    min-height: 200px; */
+    height: 800px;
+    width: 800px;
     z-index: 2020;
     margin:auto;
     left:0;
@@ -139,6 +141,9 @@
     left: 0;
     width: 100% ;
     height: 100%;
+}
+#big-img-box .el-image-viewer__wrapper:focus{
+    outline: none!important;
 }
 #big-img-box .el-image-viewer__canvas img{
     margin: 0!important;

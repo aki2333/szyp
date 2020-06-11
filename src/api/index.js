@@ -1,10 +1,10 @@
 // 配置API接口地址
 
 var root = 'http://192.168.3.131:1101/'//测试
-// var root = 'http://50.73.70.26:1101/'//公安
+// var root = 'http://50.73.70.116:1101/'//公安
 
 // var root = 'http://10.0.30.43:1101'//石本地
-// var root = 'http://10.0.8.207:1101/'//任本地
+// var root = 'http://10.0.8.68:1101/'//任本地
 
 var aport1 = 'permission'//任
 var aport2 = 'datarelease'//石

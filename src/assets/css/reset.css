@@ -101,9 +101,9 @@ th {
 .el-input,.el-select{
   height: 28px!important;
 }
-.el-input__inner{
+/* .el-input__inner{
   padding: 0 10px!important;
-}
+} */
 .left-content .el-checkbox, .el-checkbox__input{
   white-space: normal;
 }

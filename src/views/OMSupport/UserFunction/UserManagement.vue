@@ -174,6 +174,7 @@ export default {
     // 获取查询参数
     cxFnc(data) {
       this.cx.pd = data;
+      this.cx.pageNum = 1;
       console.log("用户类型", data);
       // this.disPlBtn = data.userType == 0 ? true : false;
       this.getTable();

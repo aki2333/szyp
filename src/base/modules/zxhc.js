@@ -277,7 +277,7 @@ const zrqzf = {
         {
             cm: '住宿地址',
             type: 'input',
-            dm: 'adress'
+            dm: 'address'
         },
         {
             cm: '接收时间',

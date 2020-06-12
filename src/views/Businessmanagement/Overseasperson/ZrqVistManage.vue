@@ -38,7 +38,7 @@
                         <template>
                           <div class="item-item">
                                 <span class="label-item">英文姓名：</span>
-                                <el-tooltip class="item" effect="dark" :content="item.givenname" placement="top" :disabled="false">
+                                <el-tooltip class="item" effect="dark" :content="item.givenname" placement="top" :disabled="true">
                                   <span class="value-item eles" @click="aaa(item.givenname)">{{item.givenname}}</span>  
                                 </el-tooltip>                                                              
                             </div>
@@ -574,7 +574,9 @@ export default {
     //列表内按钮（回退）
     blFnc(data) {
       if (data.btn.button_type == "back") {
-        this.$api.post(this.$api.aport2 + '/issueData/turnoutareaRollbackIssueData',{SERIAL:data.data.serial},r=>{
+        let formData = new FormData();
+        formData.append('SERIAL',data.data.serial)
+        this.$api.post(this.$api.aport2 + '/issueData/turnoutareaRollbackIssueData',formData,r=>{
           this.$message({
             message: r.message,
             type: "success"
@@ -599,6 +601,7 @@ export default {
       p.jb = this.$store.state.user.jb;
       p.bmbh = this.$store.state.user.bmbh;
       p.userId = this.$store.state.user.userId;
+      p.pageData={clzt:'3'}
       this.$api.post(this.$api.aport2 + "/issueData/updateIssueData", p, r => {
         this.$message({
           message: r.message,

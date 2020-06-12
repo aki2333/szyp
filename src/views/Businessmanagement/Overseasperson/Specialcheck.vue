@@ -185,10 +185,10 @@ export default {
     },
     tabTopClick1(){
       this.clzt=1;
-      this.page='1';
       this.cx.pageNum = 1;
       this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data =>{
         this.lbTab=data.lbTab
+        this.page = this.lbTab[0].dm
       });
       this.plBtn = this.$store.state.plBtn
           let arr = [];
@@ -202,10 +202,10 @@ export default {
     },
     tabTopClick2(){
       this.clzt=2;
-      this.page='1';
       this.cx.pageNum = 1;
       this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data =>{
         this.lbTab=data.lbTab1
+        this.page = this.lbTab[0].dm
       });
       let arr = [];
           for(var k=0;k<this.plBtn.length;k++){
@@ -462,23 +462,23 @@ export default {
     //编辑保存
     editSave(data) {
       console.log()
-      if((data.backstatus)&&(data.suboffice==''||data.suboffice==undefined)){
+      if((data.datatype=='1'&&(data.backstatus=='zfzt_1'||data.backstatus=='zfzt_2')||(data.datatype=='2'&&(data.backstatus=='zfzt_1')))&&(data.suboffice==''||data.suboffice==undefined)){
         this.$message({
-          message: '走访状态有值的状态下，所属分局不能为空！',
+          message: '此走访状态下，所属分局不能为空！',
           type: "warning"
         });
         return false
       }
-      if((data.backstatus)&&(data.policestation==''||data.policestation==undefined)){
+      if((data.datatype=='1'&&(data.backstatus=='zfzt_1'||data.backstatus=='zfzt_2')||(data.datatype=='2'&&(data.backstatus=='zfzt_1')))&&(data.policestation==''||data.policestation==undefined)){
         this.$message({
-          message: '走访状态有值的状态下，所属派出所不能为空！',
+          message: '此走访状态下，所属派出所不能为空！',
           type: "warning"
         });
         return false
       }
-      if((data.backstatus)&&(data.turnoutarea==''||data.turnoutarea==undefined)){
+      if((data.datatype=='1'&&(data.backstatus=='zfzt_1'||data.backstatus=='zfzt_2')||(data.datatype=='2'&&(data.backstatus=='zfzt_1')))&&(data.turnoutarea==''||data.turnoutarea==undefined)){
         this.$message({
-          message: '走访状态有值的状态下，所属责任区不能为空！',
+          message: '此走访状态下，所属责任区不能为空！',
           type: "warning"
         });
         return false

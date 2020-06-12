@@ -52,6 +52,10 @@ export default {
     console.log("store:", this.$store.state.token);
     if (window.location.href.includes("authorization")) {
       let token = this.getUrlParam("authorization");
+      // if (token == 1) {
+      //   let url = this.$store.state.aurl;
+      //   window.location.href = url.replace(/login\?/, "logout?");
+      // } else
       if (token) {
         this.$store.dispatch("aGetToken", token).then(() => {
           // this.$router.push({ name: "Frame" });

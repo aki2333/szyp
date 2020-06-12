@@ -272,9 +272,14 @@ const jsgl = {
             cm: '角色名称',
             dm: 'role_name'
         },
+
         {
             cm: '创建单位',
             dm: 'create_unitid_desc'
+        },
+        {
+            cm: '状态',
+            dm: 'status_desc'
         }
     ],
     lbBtn: [
@@ -326,7 +331,7 @@ const jsgl = {
             dm: 'bmmc',
         },
         {
-            cm: '登录名称',
+            cm: '身份证号',
             type: 'input',
             col: 8,
             dm: 'loginName'

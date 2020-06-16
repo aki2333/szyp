@@ -116,7 +116,7 @@
           :key="dbi"
         >{{db.button_name}}</el-button>
       </div>
-      <el-button size="mini" type="primary" round @click="save('form')">保存</el-button>
+      <el-button size="mini" type="primary" round v-if="isEditBtn" @click="save('form')">保存</el-button>
       <el-button size="mini" type="info" round @click="cancel">取消</el-button>
 
       <!-- <el-button
@@ -155,6 +155,10 @@ export default {
     joinFlag: {
       type: Boolean,
       default: false
+    },
+    isEditBtn: {
+      type: Boolean,
+      default: true
     }
   },
   data() {

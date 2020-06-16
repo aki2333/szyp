@@ -3,6 +3,11 @@
       width: 1200px;
     }
   }
+  @media(max-width: 1400px){
+    #big-img-box{    
+        top:114%!important;
+    }
+  }  
 /* 间距样式 */
 .ml-10{
     margin-left: 10px!important;
@@ -120,7 +125,7 @@
     margin:auto;
     left:0;
     right:0;
-    top:0;
+    top:46%;
     bottom:0;
     padding: 40px;
     /* top:50%;

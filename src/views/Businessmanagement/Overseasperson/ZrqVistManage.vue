@@ -79,11 +79,11 @@
             <div class="t-tab-top">
             <div class="tab-top-item hand" @click="tabTopClick1">
                 <img :src="clzt==1?tabImgActive_1:tabImg_1" alt />
-                <span>未处理</span>
+                <span>未走访</span>
             </div>
             <div class="tab-top-item hand ml--33" @click="tabTopClick2">
                 <img :src="clzt==2?tabImgActive_2:tabImg_2" alt />
-                <span class="t-leftT">已处理</span>
+                <span class="t-leftT">已走访</span>
             </div>
             </div>
             <div class="page-box">

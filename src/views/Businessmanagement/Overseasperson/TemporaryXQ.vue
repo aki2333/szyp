@@ -6,7 +6,7 @@
       :rules="rules"
       size="mini"
       ref="form"
-      label-width="130px"
+      label-width="137px"
       label-position="right"
       class="tc-form"
       :disabled="dialogType=='ck'"

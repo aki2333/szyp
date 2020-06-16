@@ -208,6 +208,10 @@ input[type="number"]{
   font-weight: bold;
   font-size: 12px!important;
 }
+.el-dialog .el-form-item__label{
+  font-size: 15px!important;
+  font-weight:normal!important;
+}
  .el-form-item{
   margin-bottom: 8px!important;
 }

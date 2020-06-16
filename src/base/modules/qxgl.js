@@ -505,7 +505,7 @@ const zrqgl = {
     ],
     lbBtn: [
         {
-            "button_name": "关联用户",
+            "button_name": "责任民警分配",
             "button_type": "glyh",
             // "icon": "mmcz",
             "serial": "201",

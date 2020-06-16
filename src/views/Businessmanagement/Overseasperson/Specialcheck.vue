@@ -4,11 +4,11 @@
     <div class="t-tab-top">
       <div class="tab-top-item hand" @click="tabTopClick1">
         <img :src="clzt==1?tabImgActive_1:tabImg_1" alt />
-        <span>未处理</span>
+        <span>未走访</span>
       </div>
       <div class="tab-top-item hand ml--33" @click="tabTopClick2">
         <img :src="clzt==2?tabImgActive_2:tabImg_2" alt />
-        <span class="t-leftT">已处理</span>
+        <span class="t-leftT">已走访</span>
       </div>
     </div>
     <div class="page-box">
@@ -40,6 +40,7 @@
         :dialogType="dialogType"
         :dialogData="dialogData"
         :joinFlag="joinFlag"
+        :isEditBtn="isEditBtn"
         @dialogCancel="isShowDialog=false"
         @dialogSave="dialogSave"
         @formLcFnc="formLcFnc"
@@ -103,7 +104,8 @@ export default {
       dialogTitle: "",
       dialogType: "",
       dialogData: {},
-      labelData: []
+      labelData: [],
+      isEditBtn:true,
     };
   },
   watch:{
@@ -351,6 +353,7 @@ export default {
         });
         return false;
       }
+      this.isEditBtn=true;
       this.dialogTitle = data.menu_name;
       this.dialogType = data.py;
       if (data.py == "sb") {
@@ -450,6 +453,17 @@ export default {
           this.labelData = data;
         });
         this.$store.dispatch("aGetBackstatus", data.data.datatype);
+        if(data.data.suboffice){
+          this.$store.dispatch("aGetPolice",data.data.suboffice.slice(0,6));
+        }
+        if(data.data.policestation){
+          this.$store.dispatch("aGetZrq",data.data.policestation.slice(0, 8));
+        }
+        if(this.clzt == 2){
+          this.isEditBtn = false
+        }else{
+          this.isEditBtn = true
+        }
         this.isShowDialog = true;
         if(data.data.backstatus){
           this.joinFlag = false

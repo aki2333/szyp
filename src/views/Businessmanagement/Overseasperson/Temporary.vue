@@ -40,10 +40,11 @@
     </div>
     <!-- 弹窗 -->
     <Dialog
-      width="1200px"
+      width="1300px"
       :isShowDialog="isShowDialog"
       :title="dialogTitle"
       @hideDialog="isShowDialog=false"
+      style="margin-top: -9vh;"
     >
       <el-dialog width="50%" :visible.sync="innerVisible" append-to-body>
         <el-form :model="innerForm" ref="innerForm" label-width="100px" class="tc-form">

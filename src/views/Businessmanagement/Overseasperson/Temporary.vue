@@ -310,6 +310,8 @@ export default {
       this.$api.post(this.$api.aport3 + "/api/lzsb/updateLzsb", data, () => {
         this.$message({
           message: "修改成功",
+          duration:8000,
+          showClose: true,
           type: "success"
         });
         this.getTable();

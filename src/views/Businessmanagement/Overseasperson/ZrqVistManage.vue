@@ -13,7 +13,7 @@
                     <el-button type="primary" size="small" class="ml-5" @click="getHandData()">查询</el-button>
                 </div>
                 <div class="base-flex left-query" v-if="$store.state.user.jb!='3'">
-                    <el-tooltip content="请选择派出所" placement="bottom-start" :value="pcsQuery==$store.state.user.bmbh" manual="true" :offset="50">
+                    <el-tooltip content="请选择派出所" placement="bottom-start" :value="pcsQuery==$store.state.user.bmbh" :manual="true" :offset="50">
                       <el-select v-model="pcsQuery" filterable placeholder="请选择" size="mini" @change="getHandData()">
                         <el-option
                           v-for="item in pcsArr"
@@ -302,6 +302,8 @@ export default {
       if(this.checkedList.length==0){
           this.$message({
             message: '请先选择数据！',
+            duration:13000,
+            showClose: true,
             type: "warning"
           });
           return
@@ -325,6 +327,8 @@ export default {
         this.$api.post(this.$api.aport2+'/issueData/requestOrDistributionIssueData',p,r=>{
           this.$message({
             message: r.message,
+            duration:8000,
+            showClose: true,
             type: "success"
           });
           this.isShowDialog = false;
@@ -339,6 +343,8 @@ export default {
           if(this.pcsQuery == this.$store.state.user.bmbh){
               this.$message({
               message: '请先选择派出所！',
+              duration:13000,
+              showClose: true,
               type: "warning"
             });
             return
@@ -347,12 +353,15 @@ export default {
         if(this.checkedList.length==0){
           this.$message({
             message: '请先选择数据！',
+            duration:13000,
+            showClose: true,
             type: "warning"
           });
           return
         }
         this.dialogTitle = '责任区';
         this.dialogType = 'pf';
+        this.$store.dispatch("aGetZrq",this.pcsQuery.slice(0, 8));
         this.isShowDialog = true;
         this.labelData = this.$cdata.zxhc.zrqzf.zrqDia
         this.dialogData={};
@@ -369,6 +378,8 @@ export default {
         this.$api.post(this.$api.aport2+'/issueData/requestOrDistributionIssueData',p,r=>{
           this.$message({
             message: r.message,
+            duration:8000,
+            showClose: true,
             type: "success"
           });
            this.isShowDialog = false;
@@ -564,6 +575,8 @@ export default {
       if (this.multipleArr.length == 0) {
         this.$message({
           message: "请先选择数据！",
+          duration:13000,
+          showClose: true,
           type: "warning"
         });
         return false;
@@ -590,6 +603,8 @@ export default {
         this.$api.post(this.$api.aport2 + '/issueData/turnoutareaRollbackIssueData',formData,r=>{
           this.$message({
             message: r.message,
+            duration:8000,
+            showClose: true,
             type: "success"
           });
           this.getTable();
@@ -616,6 +631,8 @@ export default {
       this.$api.post(this.$api.aport2 + "/issueData/updateReportData", p, r => {
         this.$message({
           message: r.message,
+          duration:8000,
+          showClose: true,
           type: "success"
         });
         this.multipleSelection[this.diaPage-1] = Object.assign({},this.dialogData)

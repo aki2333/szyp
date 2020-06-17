@@ -526,11 +526,11 @@ export default {
             this.isEditBtn = false
             this.commonBtn = true
             this.isDb = false
-          }else{
+          }else{//已走访 可处理
             this.isEditBtn = false
             this.commonBtn = true
             this.isDb = true
-            this.$cdata.zxhc.innerBtn(data.data.whetherUpdateState).then(data => {
+            this.$cdata.zxhc.innerBtn(data.data.whetherUpdateState,this.page).then(data => {
               this.dbBtn = data;
             });
           }
@@ -538,7 +538,7 @@ export default {
           this.isEditBtn = true
           this.commonBtn = false
           this.isDb = true
-          this.$cdata.zxhc.innerBtn().then(data => {
+          this.$cdata.zxhc.innerBtn('2',this.page).then(data => {
               this.dbBtn = data;
           });
         }
@@ -625,7 +625,18 @@ export default {
           clzt:this.page,
         }
          console.log('上报保存',p)
-        this.$api.post(
+        if(((this.dialogData.datatype=='1'&&(this.dialogData.backstatus=='zfzt_1'||this.dialogData.backstatus=='zfzt_2')||(this.dialogData.datatype=='2'&&(this.dialogData.backstatus=='zfzt_1')))&&(this.dialogData.suboffice==''||this.dialogData.suboffice==undefined))
+        ||((this.dialogData.datatype=='1'&&(this.dialogData.backstatus=='zfzt_1'||this.dialogData.backstatus=='zfzt_2')||(this.dialogData.datatype=='2'&&(this.dialogData.backstatus=='zfzt_1')))&&(this.dialogData.policestation==''||this.dialogData.policestation==undefined))
+        ||((this.dialogData.datatype=='1'&&(this.dialogData.backstatus=='zfzt_1'||this.dialogData.backstatus=='zfzt_2')||(this.dialogData.datatype=='2'&&(this.dialogData.backstatus=='zfzt_1')))&&(this.dialogData.turnoutarea==''||this.dialogData.turnoutarea==undefined))){
+          this.indialogData = {};
+          this.indialogTitle = data.button_name;
+          this.indialogType = data.button_type
+          this.$cdata.zxhc.innerSbDia(this.dialogData).then(data =>{
+            this.inlabelData=data
+          });
+          this.innerVisible =true;
+        }else{
+          this.$api.post(
           this.$api.aport2 + "/issueData/updateReportData",
           p,
           r => {
@@ -641,6 +652,7 @@ export default {
             this.selection=[];
           }
         );
+        } 
       }
     },
     singXfSave(data){
@@ -672,7 +684,60 @@ export default {
         this.selection = [];
       })
     },
+    singSbSave(data){
+      let p = Object.assign({},this.dialogData,data)
+      p.jb = this.$store.state.user.jb;
+         p.bmbh = this.$store.state.user.bmbh;
+         p.userId = this.$store.state.user.userId;
+         p.pageData ={
+          clzt:this.page,
+      }
+     
+        // if(!p.suboffice){this.$message({
+        //   message: '此走访状态下，所属分局不能为空！',
+        //   duration:13000,
+        //   showClose: true,
+        //   type: "warning"
+        // });
+        // return false
+        // }
+        // if(!p.policestation){
+        //   this.$message({
+        //   message: '此走访状态下，所属派出所不能为空！',
+        //   duration:13000,
+        //   showClose: true,
+        //   type: "warning"
+        // });
+        // return false
+        // }
+        // if(!p.turnoutarea){
+        //   this.$message({
+        //   message: '此走访状态下，所属责任区不能为空！',
+        //   duration:13000,
+        //   showClose: true,
+        //   type: "warning"
+        // });
+        // return false
+        // }
+     
+      this.$api.post(
+          this.$api.aport2 + "/issueData/updateReportData",
+          p,
+          r => {
+            this.$message({
+              message: r.message,
+              duration:8000,
+              showClose: true,
+              type: "success"
+            });
+            this.getTable();
+            this.isShowDialog = false;
+            this.innerVisible = false;
+            this.selection=[];
+          }
+        );
 
+    },
     //下发保存
     xfSave(data) {
       let p = data;
@@ -709,7 +774,11 @@ export default {
     },
     // 内联弹窗保存
     indialogSave(data){
-      this.singXfSave(data.data)
+      if(data.type == 'singXf'){
+        this.singXfSave(data.data)
+      }else if(data.type == 'singSb'){
+        this.singSbSave(data.data)
+      }
       console.log(data)
     },
   }

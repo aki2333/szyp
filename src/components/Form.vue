@@ -17,7 +17,7 @@
                 <el-input v-model="dialogData[cx.dm]" :disabled="cx.dis"></el-input>
               </template>
               <template v-if="cx.type=='joinInput'">
-                <el-input v-model="dialogData[cx.dm]" :disabled="joinFlag||cx.dis"></el-input>
+                <el-input v-model="dialogData[cx.dm]" :disabled="joinFlag"></el-input>
               </template>
               <template v-else-if="cx.type=='password'">
                 <el-input type="password" v-model="dialogData[cx.dm]"></el-input>
@@ -62,7 +62,6 @@
                   :disabled="cx.dis"
                   type="date"
                   placeholder="选择日期"
-                  value-format="yyyy-MM-dd"
                 ></el-date-picker>
               </template>
               <template v-else-if="cx.type=='double'">
@@ -88,7 +87,7 @@
                 </div>
               </template>
               <template v-else-if="cx.type=='radio'">
-                <el-radio-group v-model="dialogData[cx.dm]" @change="radioChange" :disabled="cx.dis">
+                <el-radio-group v-model="dialogData[cx.dm]" @change="radioChange">
                   <el-radio
                     :label="item.dm"
                     v-for="(item,ind) in $store.state[cx.dm]"
@@ -97,11 +96,7 @@
                 </el-radio-group>
               </template>
             </el-form-item>
-            <!-- <template v-if="cx.type=='line'">
-                <el-divider></el-divider>
-            </template> -->
             <template v-if="cx.type=='line'">
-                <span class="divider-text">{{cx.title}}</span>
                 <el-divider></el-divider>
             </template>
           </el-col>
@@ -121,11 +116,8 @@
           :key="dbi"
         >{{db.button_name}}</el-button>
       </div>
-      <div style="display:inline-block;" v-if="commonBtn">
-        <el-button size="mini" type="primary" round v-if="isEditBtn" @click="save('form')">保存</el-button>
-        <el-button size="mini" type="info" round @click="cancel">取消</el-button>
-      </div>
-      
+      <el-button size="mini" type="primary" round v-if="isEditBtn" @click="save('form')">保存</el-button>
+      <el-button size="mini" type="info" round @click="cancel">取消</el-button>
 
       <!-- <el-button
         v-if="dialogType=='gnlb'"
@@ -167,10 +159,6 @@ export default {
     isEditBtn: {
       type: Boolean,
       default: true
-    },
-    commonBtn: {
-      type: Boolean,
-      default: true
     }
   },
   data() {
@@ -185,7 +173,11 @@ export default {
     };
     return {
       // form: {},
-      rules: {
+      rules: this.dialogType=='singSb'?{
+        suboffice: [{ required: true, message: "请选择分局", trigger: "blur" }],
+        policestation: [{ required: true, message: "请选择派出所", trigger: "blur" }],
+        turnoutarea: [{ required: true, message: "请选择责任区", trigger: "blur" }],
+      }:{
         xtmm: [{ required: true, message: "请输入密码", trigger: "blur" }],
         qrxtmm: [{ validator: validatePass, trigger: "blur" }],
         xm: [{ required: true, message: "请输入姓名", trigger: "blur" }],

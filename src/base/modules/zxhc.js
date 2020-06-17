@@ -632,32 +632,81 @@ function innerDia(page){
         resolve(zxhc.innerDiaCon)
     })
 }
-function innerBtn(data){
+function innerSbDia(data){
     return new Promise((resolve) => {
-        if(data == '1'){
-            zxhc.dbBtn = [
-                {
-                    "button_name": "上报",
-                    "serial": "201",
-                    "button_type": "singSb",
-                    "type": "primary",
-                },
-            ]
-        }else{
-            zxhc.dbBtn = [
-                {
-                    "button_name": "上报",
-                    "serial": "201",
-                    "button_type": "singSb",
-                    "type": "primary",
-                },
-                {
-                    "button_name": "下发",
-                    "serial": "201",
-                    "button_type": "singXf",
-                    "type": "primary",
-                },
-            ]
+        zxhc.innerDiaCon=[];
+        if(!data.suboffice){
+            zxhc.innerDiaCon.push({
+                cm: '所属分局',
+                type: 'select',
+                dm: 'suboffice',
+            })
+        }
+        if(!data.policestation){
+            zxhc.innerDiaCon.push({
+                cm: '所属派出所',
+                type: 'select',
+                dm: 'policestation',  
+            })
+        }
+        if(!data.turnoutarea){
+            zxhc.innerDiaCon.push({
+                cm: '所属责任区',
+                type: 'select',
+                dm: 'turnoutarea',
+            })
+        }
+        resolve(zxhc.innerDiaCon)
+    })
+}
+function innerBtn(data,page){
+    return new Promise((resolve) => {
+        if(data == '1'){//已走访
+            if(page=='1'){//市局已处理 只能下发
+                zxhc.dbBtn = [
+                    {
+                        "button_name": "下发",
+                        "serial": "201",
+                        "button_type": "singXf",
+                        "type": "primary",
+                    },
+                ]
+            }else{
+                zxhc.dbBtn = [
+                    {
+                        "button_name": "上报",
+                        "serial": "201",
+                        "button_type": "singSb",
+                        "type": "primary",
+                    },
+                ]
+            }
+        }else if(data == '2'){//未走访
+            if(page=='1'){//市局未处理
+                zxhc.dbBtn = [
+                    {
+                        "button_name": "下发",
+                        "serial": "201",
+                        "button_type": "singXf",
+                        "type": "primary",
+                    },
+                ]
+            }else{
+                zxhc.dbBtn = [
+                    {
+                        "button_name": "上报",
+                        "serial": "201",
+                        "button_type": "singSb",
+                        "type": "primary",
+                    },
+                    {
+                        "button_name": "下发",
+                        "serial": "201",
+                        "button_type": "singXf",
+                        "type": "primary",
+                    },
+                ]
+            }
         }
         
         resolve(zxhc.dbBtn)
@@ -785,5 +834,6 @@ export default {
     editShow,
     handShow,
     innerDia,
-    innerBtn
+    innerBtn,
+    innerSbDia
 }

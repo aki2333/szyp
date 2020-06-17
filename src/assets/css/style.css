@@ -150,6 +150,9 @@
 #big-img-box .el-image-viewer__wrapper:focus{
     outline: none!important;
 }
+#big-img-box .el-image-viewer__canvas{
+    align-items: baseline;
+}
 #big-img-box .el-image-viewer__canvas img{
     margin: 0!important;
 }

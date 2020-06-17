@@ -7,7 +7,7 @@ var root = 'http://192.168.3.131:1101/'//测试
 // var root = 'http://10.0.8.68:1101/'//任本地
 
 var aport1 = 'permission'//任
-// var aport1 = 'http://10.0.8.138:9404'
+// var aport1 = 'http://10.0.8.49:9404'
 var aport2 = 'datarelease'//石
 // var aport2 = 'http://10.0.30.40:9405'//石本地
 var aport3 = 'lzsb'
@@ -116,6 +116,8 @@ function apiAxios(method, url, params, success, failure, isDownload) {
               } else {
                 Message({
                   message: res.data.message,
+                  showClose: true,
+                  duration:0,
                   type: 'warning'
                 });
               }

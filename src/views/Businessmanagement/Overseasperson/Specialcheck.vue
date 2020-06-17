@@ -41,12 +41,29 @@
         :dialogData="dialogData"
         :joinFlag="joinFlag"
         :isEditBtn="isEditBtn"
+        :commonBtn="commonBtn"
+        :isDb="isDb"
+        :dbBtn="dbBtn"
         @dialogCancel="isShowDialog=false"
         @dialogSave="dialogSave"
         @formLcFnc="formLcFnc"
         @radioChange="radioChange"
+        @dbFnc="dbFnc"
       ></Form>
     </Dialog>
+    <Dialog :isShowDialog="innerVisible" :title="indialogTitle" @hideDialog="innerVisible=false">
+        <Form
+          v-if="innerVisible"
+          :cxData="inlabelData"
+          :dialogType="indialogType"
+          :dialogData="indialogData"
+          :commonBtn="incommonBtn"
+          :isDb="inisDb"
+          @dialogCancel="innerVisible=false"
+          @dialogSave="indialogSave"
+          @formLcFnc="informLcFnc"
+        ></Form>
+       </Dialog> 
   </div>
 </template>
 <script>
@@ -98,6 +115,7 @@ export default {
       backstatusArr:[],
       selection:[],
       changeK: "",
+      seriFlag:'',//唯一标识
       //弹窗数据
       isShowDialog: false,
       joinFlag:false,
@@ -106,6 +124,17 @@ export default {
       dialogData: {},
       labelData: [],
       isEditBtn:true,
+      commonBtn:true,
+      isDb:false,
+      dbBtn: this.$cdata.zxhc.zxhc.dbBtn,
+      // 内联弹窗
+      innerVisible:false,
+      indialogTitle:'',
+      inlabelData:[],
+      indialogType:'',
+      indialogData:{},
+      incommonBtn:true,
+      inisDb:false,
     };
   },
   watch:{
@@ -266,6 +295,26 @@ export default {
         this.$store.dispatch("aGetZrq",data.data.slice(0, 8));
       }
     },
+    informLcFnc(data){
+      if(data.key.dm == "suboffice") {
+        if(data.data==''){
+          data.obj.policestation = '';
+        }
+        if(data.obj.policestation){
+          data.obj.policestation = '';
+        }
+        this.$store.dispatch("aGetPolice",data.data.slice(0,6));
+      }
+      if(data.key.dm == "policestation"){
+        if(data.data==''){
+          data.obj.turnoutarea = '';
+        }
+        if(data.obj.turnoutarea){
+          data.obj.turnoutarea = '';
+        }
+        this.$store.dispatch("aGetZrq",data.data.slice(0, 8));
+      }
+    },
     radioChange(val){
       console.log(val)
       if(val){
@@ -349,11 +398,15 @@ export default {
       if (this.multipleArr.length == 0) {
         this.$message({
           message: "请先选择数据！",
+          duration:13000,
+          showClose: true,
           type: "warning"
         });
         return false;
       }
       this.isEditBtn=true;
+      this.commonBtn = true;
+      this.isDb = false;
       this.dialogTitle = data.menu_name;
       this.dialogType = data.py;
       if (data.py == "sb") {
@@ -369,6 +422,8 @@ export default {
           r => {
             this.$message({
               message: r.message,
+              duration:8000,
+              showClose: true,
               type: "success"
             });
             this.getTable();
@@ -393,6 +448,8 @@ export default {
             //分局下发 选择数据的分局必须为同一分局
             this.$message({
               message: "必须选择同一分局！",
+              duration:13000,
+              showClose: true,
               type: "warning"
             });
             return false;
@@ -410,6 +467,8 @@ export default {
             //派出所空值和有值同时存在
             this.$message({
               message: "不支持多所混发！",
+              duration:13000,
+              showClose: true,
               type: "warning"
             });
             return false;
@@ -430,6 +489,8 @@ export default {
             this.$api.post(this.$api.aport2 + "/issueData/issueDataTrigger", p, r => {
               this.$message({
                 message: r.message,
+                duration:8000,
+                showClose: true,
                 type: "success"
               });
               this.getTable();
@@ -446,10 +507,10 @@ export default {
     },
     //列表内按钮
     blFnc(data) {
+      this.seriFlag = data.data.serial
       this.dialogTitle = data.btn.button_name;
       this.dialogType = data.btn.button_type;
-      if (data.btn.button_type == "edit") {
-        this.$cdata.zxhc.editShow(this.$store.state.user.jb).then(data => {//根据级别控制弹窗编辑项禁止与否
+        this.$cdata.zxhc.editShow(this.$store.state.user.jb,data.data.whetherUpdateState).then(data => {
           this.labelData = data;
         });
         this.$store.dispatch("aGetBackstatus", data.data.datatype);
@@ -459,10 +520,27 @@ export default {
         if(data.data.policestation){
           this.$store.dispatch("aGetZrq",data.data.policestation.slice(0, 8));
         }
-        if(this.clzt == 2){
-          this.isEditBtn = false
-        }else{
+        if (data.btn.button_type == "edit") {
+        if(this.clzt == 2){//已走访   
+          if(data.data.whetherUpdateState == '0'){//whetherUpdateState 0:不可修改；1：可修改；
+            this.isEditBtn = false
+            this.commonBtn = true
+            this.isDb = false
+          }else{
+            this.isEditBtn = false
+            this.commonBtn = true
+            this.isDb = true
+            this.$cdata.zxhc.innerBtn(data.data.whetherUpdateState).then(data => {
+              this.dbBtn = data;
+            });
+          }
+        }else{//未走访
           this.isEditBtn = true
+          this.commonBtn = false
+          this.isDb = true
+          this.$cdata.zxhc.innerBtn().then(data => {
+              this.dbBtn = data;
+          });
         }
         this.isShowDialog = true;
         if(data.data.backstatus){
@@ -471,6 +549,12 @@ export default {
           this.joinFlag = true
         }
         this.dialogData = Object.assign({},data.data);
+      }else if(data.btn.button_type == "detail"){
+        this.isEditBtn = false
+        this.commonBtn = true
+        this.isDb = false
+        this.dialogData = Object.assign({},data.data);
+        this.isShowDialog = true;
       }
     },
     //编辑保存
@@ -479,6 +563,8 @@ export default {
       if((data.datatype=='1'&&(data.backstatus=='zfzt_1'||data.backstatus=='zfzt_2')||(data.datatype=='2'&&(data.backstatus=='zfzt_1')))&&(data.suboffice==''||data.suboffice==undefined)){
         this.$message({
           message: '此走访状态下，所属分局不能为空！',
+          duration:13000,
+          showClose: true,
           type: "warning"
         });
         return false
@@ -486,6 +572,8 @@ export default {
       if((data.datatype=='1'&&(data.backstatus=='zfzt_1'||data.backstatus=='zfzt_2')||(data.datatype=='2'&&(data.backstatus=='zfzt_1')))&&(data.policestation==''||data.policestation==undefined)){
         this.$message({
           message: '此走访状态下，所属派出所不能为空！',
+          duration:13000,
+          showClose: true,
           type: "warning"
         });
         return false
@@ -493,6 +581,8 @@ export default {
       if((data.datatype=='1'&&(data.backstatus=='zfzt_1'||data.backstatus=='zfzt_2')||(data.datatype=='2'&&(data.backstatus=='zfzt_1')))&&(data.turnoutarea==''||data.turnoutarea==undefined)){
         this.$message({
           message: '此走访状态下，所属责任区不能为空！',
+          duration:13000,
+          showClose: true,
           type: "warning"
         });
         return false
@@ -507,12 +597,82 @@ export default {
       this.$api.post(this.$api.aport2 + "/issueData/updateIssueData", p, r => {
         this.$message({
           message: r.message,
+          duration:8000,
+          showClose: true,
           type: "success"
         });
         this.getTable();
         this.isShowDialog = false;
       });
     },
+    // 编辑上报 下发操作
+    dbFnc(data){
+      if(data.button_type == 'singXf'){
+        this.indialogData = {};
+        this.indialogTitle = data.button_name;
+        this.indialogType = data.button_type
+        this.$cdata.zxhc.innerDia(this.page).then(data =>{
+          this.inlabelData=data
+        });
+        this.innerVisible =true;
+      }
+      if(data.button_type == 'singSb'){
+         let p = this.dialogData
+         p.jb = this.$store.state.user.jb;
+         p.bmbh = this.$store.state.user.bmbh;
+         p.userId = this.$store.state.user.userId;
+         p.pageData ={
+          clzt:this.page,
+        }
+         console.log('上报保存',p)
+        this.$api.post(
+          this.$api.aport2 + "/issueData/updateReportData",
+          p,
+          r => {
+            this.$message({
+              message: r.message,
+              duration:8000,
+              showClose: true,
+              type: "success"
+            });
+            this.getTable();
+            this.isShowDialog = false;
+            this.innerVisible = false;
+            this.selection=[];
+          }
+        );
+      }
+    },
+    singXfSave(data){
+      let p = Object.assign({},this.dialogData,data)
+      if(this.page=='1'){//市局
+        if(!data.suboffice){p.suboffice='';p.suboffice_desc=''}
+        if(!data.policestation){p.policestation='';p.policestation_desc=''}
+        if(!data.turnoutarea){p.turnoutarea='';p.turnoutarea_desc=''}
+      }else if(this.page=='2'){//分局
+        if(!data.policestation){p.policestation='';p.policestation_desc=''}
+        if(!data.turnoutarea){p.turnoutarea='';p.turnoutarea_desc=''}
+      }else if(this.page=='3'){//派出所
+        if(!data.turnoutarea){p.turnoutarea='';p.turnoutarea_desc=''}
+      }
+      p.jb = this.$store.state.user.jb;
+      p.bmbh = this.$store.state.user.bmbh;
+      p.userId = this.$store.state.user.userId;
+      console.log('下发保存',p)
+      this.$api.post(this.$api.aport2 +'/issueData/updateSendOutData',p,r=>{
+        this.$message({
+          message: r.message,
+          duration:8000,
+          showClose: true,
+          type: "success"
+        });
+        this.getTable();
+        this.isShowDialog = false;
+        this.innerVisible = false;
+        this.selection = [];
+      })
+    },
+
     //下发保存
     xfSave(data) {
       let p = data;
@@ -523,6 +683,8 @@ export default {
       this.$api.post(this.$api.aport2 + "/issueData/issueDataTrigger", p, r => {
         this.$message({
           message: r.message,
+          duration:8000,
+          showClose: true,
           type: "success"
         });
         this.getTable();
@@ -544,7 +706,12 @@ export default {
       } else if (data.type == "xf") {
         this.xfSave(data.data);
       }
-    }
+    },
+    // 内联弹窗保存
+    indialogSave(data){
+      this.singXfSave(data.data)
+      console.log(data)
+    },
   }
 };
 </script>

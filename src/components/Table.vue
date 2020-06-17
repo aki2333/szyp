@@ -65,7 +65,7 @@
                 @click="handleClick(scope.row,lbt)"
                 type="text"
                 size="small"
-                v-else-if="!lbt.user_ctrl||(lbt.user_ctrl==scope.row.status)"
+                v-else-if="!lbt.user_ctrl||(lbt.user_ctrl==scope.row.status&&!lbt.status)||(lbt.user_ctrl==scope.row.whetherUpdateState)"
               >{{lbt.button_name}}</el-button>
             </span>
           </template>
@@ -236,8 +236,11 @@ export default {
         this.$refs[this.refName].clearSelection();
       }
     },
-    rowClick(row) {
+    rowClick(row,column) {
       if (!this.isRowClick) {
+        return false;
+      }
+      if(column.label=="操作"){
         return false;
       }
       this.$emit("rowClick", { type: this.lbType, data: row });

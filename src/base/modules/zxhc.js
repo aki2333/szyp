@@ -10,7 +10,7 @@ const zxhc = {
         {
             cm: '英文姓名',
             type: 'input',
-            dm: 'gavenname'
+            dm: 'givenname'
         },
         {
             cm: '性别',
@@ -88,7 +88,7 @@ const zxhc = {
             dm: 'backstatus'
         },
         {
-            cm: '下发时间',
+            cm: '分局下发时间',
             type: 'double',
             dm: 'xfTime',
             children: [
@@ -177,9 +177,18 @@ const zxhc = {
     ],
     lbBtn: [
         {
-            "button_name": "编辑",
+            "button_name": "处理",
             "button_type": 'edit',
             "serial": "201",
+            "user_ctrl":'1',
+            "status":true
+        },
+        {
+            "button_name": "详情",
+            "button_type": 'detail',
+            "serial": "201",
+            "user_ctrl":'0',
+            "status":true
         },
     ],
     plBtn: [
@@ -216,6 +225,22 @@ const zxhc = {
             type: 'select',
             dm: 'policestation',
             dis: false,
+        },
+    ],
+    //内联弹窗
+    innerDiaCon:[],
+    dbBtn: [
+        {
+            "button_name": "上报",
+            "serial": "201",
+            "button_type": "singSb",
+            "type": "primary",
+        },
+        {
+            "button_name": "下发",
+            "serial": "201",
+            "button_type": "singXf",
+            "type": "primary",
         },
     ],
 }
@@ -391,46 +416,9 @@ const zrqzf = {
             "button_type": "nextPage",
             "type": "info",
         },
-        // {
-        //     "button_name": "确定",
-        //     "serial": "201",
-        //     "button_type": "sure",
-        //     "type":"info",
-        // },
     ],
 }
-function plBtnShow(flag, clzt) {
-    return new Promise((resolve) => {
-        if (flag == 1 && clzt == 1) {
-            zxhc.plBtn = [
-                {
-                    "button_name": "下发",
-                    "serial": "201",
-                    "button_type": "xf",
-                    "type": "primary"
-                },
-            ]
-        } else if (flag == 3 || clzt == 2) {//已处理状态不能上报和下发
-            zxhc.plBtn = []
-        } else if (flag == 2 && clzt == 1) {
-            zxhc.plBtn = [
-                {
-                    "button_name": "上报",
-                    "serial": "201",
-                    "button_type": "sb",
-                    "type": "success"
-                },
-                {
-                    "button_name": "下发",
-                    "serial": "201",
-                    "button_type": "xf",
-                    "type": "primary"
-                },
-            ]
-        }
-        resolve(zxhc.plBtn)
-    })
-}
+// 核查走访
 function lbTabShow(jb) {
     return new Promise((resolve) => {
         if(jb=='1'){
@@ -500,9 +488,189 @@ function lbTabShow(jb) {
         resolve({lbTab:zxhc.lbTab,lbTab1:zxhc.lbTab1})
     })
 }
-function editShow(jb) {
+function editShow(jb,isE) {
     return new Promise((resolve) => {
         zxhc.editcontent = [
+            {
+                title:'基本信息',
+                type:'line'
+            },
+            {
+                cm: '姓名',
+                type: 'input',
+                dm: 'name',
+                dis: jb == "3"||isE == '0' ? true : false
+            },
+            {
+                cm: '性别',
+                type: 'select',
+                dm: 'gender',
+                dis: jb == "3"||isE == '0' ? true : false
+            },
+            {
+                cm: '出生日期',
+                type: 'datePicker',
+                dm: 'birthday',
+                dis: jb == "3"||isE == '0' ? true : false
+            },
+            {
+                cm: '国家地区',
+                type: 'select',
+                dm: 'nationality',
+                dis: jb == "3"||isE == '0' ? true : false
+            },
+            {
+                cm: '证件种类',
+                type: 'select',
+                dm: 'passportType',
+                dis: jb == "3"||isE == '0' ? true : false
+            },
+            {
+                cm: '证件号码',
+                type: 'input',
+                dm: 'passportno',
+                dis: jb == "3"||isE == '0' ? true : false
+            },
+            {
+                title:'走访信息',
+                type:'line'
+            },
+            {
+                cm: '下发类别',
+                type: 'select',
+                dm: 'datatype',
+                dis: true
+            },
+            {
+                cm: '住宿地址',
+                type: 'input',
+                dm: 'address',
+                dis: true,
+            },
+            {
+                cm: '走访状态',
+                type: 'radio',
+                dm: 'backstatus',
+                dis:isE == '0'?true : false
+            },
+            {
+                cm: '备注',
+                type: 'joinInput',
+                dm: 'remarks',
+                dis:isE == '0'?true : false
+            },
+            {
+                title:'数据归属',
+                type:'line'
+            },
+            {
+                cm: '所属分局',
+                type: 'select',
+                dm: 'suboffice',
+                dis: true
+            },
+            {
+                cm: '所属派出所',
+                type: 'select',
+                dm: 'policestation',
+                dis: true
+            },
+            {
+                cm: '所属责任区',
+                type: 'select',
+                dm: 'turnoutarea',
+                dis:true
+            },
+        ]
+        resolve(zxhc.editcontent)
+    })
+}
+// 核查走访内联弹窗内容
+function innerDia(page){
+    return new Promise((resolve) => {
+        if(page == '1'){
+            zxhc.innerDiaCon = [
+                {
+                    cm: '所属分局',
+                    type: 'select',
+                    dm: 'suboffice',
+                },
+                {
+                    cm: '所属派出所',
+                    type: 'select',
+                    dm: 'policestation',  
+                },
+                {
+                    cm: '所属责任区',
+                    type: 'select',
+                    dm: 'turnoutarea',
+                },
+            ]
+        }else if(page=='2'){
+            zxhc.innerDiaCon = [
+                {
+                    cm: '所属派出所',
+                    type: 'select',
+                    dm: 'policestation',  
+                },
+                {
+                    cm: '所属责任区',
+                    type: 'select',
+                    dm: 'turnoutarea',
+                },
+            ]
+        }else if(page=='3'){
+            zxhc.innerDiaCon = [
+                {
+                    cm: '所属责任区',
+                    type: 'select',
+                    dm: 'turnoutarea',
+                },
+            ]
+        }
+        
+        resolve(zxhc.innerDiaCon)
+    })
+}
+function innerBtn(data){
+    return new Promise((resolve) => {
+        if(data == '1'){
+            zxhc.dbBtn = [
+                {
+                    "button_name": "上报",
+                    "serial": "201",
+                    "button_type": "singSb",
+                    "type": "primary",
+                },
+            ]
+        }else{
+            zxhc.dbBtn = [
+                {
+                    "button_name": "上报",
+                    "serial": "201",
+                    "button_type": "singSb",
+                    "type": "primary",
+                },
+                {
+                    "button_name": "下发",
+                    "serial": "201",
+                    "button_type": "singXf",
+                    "type": "primary",
+                },
+            ]
+        }
+        
+        resolve(zxhc.dbBtn)
+    })
+}
+//责任区管理
+function handShow(jb) {
+    return new Promise((resolve) => {
+        zrqzf.clDia = [
+            {
+                title:'基本信息',
+                type:'line'
+            },
             {
                 cm: '姓名',
                 type: 'input',
@@ -528,19 +696,20 @@ function editShow(jb) {
                 dis: jb == "3" ? true : false
             },
             {
-                type: 'line',
-            },
-            {
                 cm: '证件种类',
                 type: 'select',
                 dm: 'passportType',
-                dis: jb == "3" ? true : false
+
             },
             {
                 cm: '证件号码',
                 type: 'input',
                 dm: 'passportno',
-                dis: jb == "3" ? true : false
+
+            },
+            {
+                title:'走访信息',
+                type:'line'
             },
             {
                 cm: '下发类别',
@@ -553,26 +722,6 @@ function editShow(jb) {
                 type: 'input',
                 dm: 'address',
                 dis: true,
-            },
-            {
-                cm: '所属分局',
-                type: 'select',
-                dm: 'suboffice',
-                dis: jb == "2" || jb == "3" ? true : false
-            },
-            {
-                cm: '所属派出所',
-                type: 'select',
-                dm: 'policestation',
-                dis: jb == "3" ? true : false
-            },
-            {
-                cm: '所属责任区',
-                type: 'select',
-                dm: 'turnoutarea',
-            },
-            {
-                type: 'line',
             },
             {
                 cm: '走访状态',
@@ -581,101 +730,31 @@ function editShow(jb) {
             },
             {
                 cm: '备注',
-                type: 'joinInput',
+                type: 'input',
                 dm: 'remarks'
             },
             {
-                type: 'line',
-            },
-        ]
-        resolve(zxhc.editcontent)
-    })
-}
-function handShow(jb) {
-    return new Promise((resolve) => {
-        zrqzf.clDia = [
-            {
-                cm: '姓名',
-                type: 'input',
-                dm: 'name',
-
-            },
-            {
-                cm: '性别',
-                type: 'select',
-                dm: 'gender',
-
-            },
-            {
-                cm: '出生日期',
-                type: 'datePicker',
-                dm: 'birthday',
-
-            },
-            {
-                cm: '国家地区',
-                type: 'select',
-                dm: 'nationality',
-
-            },
-            {
-                type: 'line',
-            },
-            {
-                cm: '证件种类',
-                type: 'select',
-                dm: 'passportType',
-
-            },
-            {
-                cm: '证件号码',
-                type: 'input',
-                dm: 'passportno',
-
-            },
-            {
-                cm: '下发类别',
-                type: 'select',
-                dm: 'datatype',
-                dis: true
-            },
-            {
-                cm: '住宿地址',
-                type: 'input',
-                dm: 'address',
-                dis: true,
+                title:'数据归属',
+                type:'line'
             },
             {
                 cm: '所属分局',
                 type: 'select',
                 dm: 'suboffice',
-                dis: jb == "2" || jb == "3" ? true : false
+                dis: true
             },
             {
                 cm: '所属派出所',
                 type: 'select',
                 dm: 'policestation',
-                dis: jb == "3" ? true : false
+                dis: true
             },
             // {
             //     cm:'所属责任区',
             //     type:'select',
             //     dm:'policestation',
             //     dis:jb=="3"?true:false
-            // },
-            {
-                type: 'line',
-            },
-            {
-                cm: '走访状态',
-                type: 'radio',
-                dm: 'backstatus'
-            },
-            {
-                cm: '备注',
-                type: 'input',
-                dm: 'remarks'
-            },
+            // },         
             {
                 cm: '接收人',
                 type: 'input',
@@ -694,9 +773,6 @@ function handShow(jb) {
                 dm: 'turnoutarea_receivedate',
                 dis: true
             },
-            {
-                type: 'line',
-            },
         ]
         resolve(zrqzf.clDia)
     })
@@ -705,8 +781,9 @@ function handShow(jb) {
 export default {
     zxhc,
     zrqzf,
-    plBtnShow,
     lbTabShow,
     editShow,
-    handShow
+    handShow,
+    innerDia,
+    innerBtn
 }

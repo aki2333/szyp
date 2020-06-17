@@ -13,14 +13,16 @@
                     <el-button type="primary" size="small" class="ml-5" @click="getHandData()">查询</el-button>
                 </div>
                 <div class="base-flex left-query" v-if="$store.state.user.jb!='3'">
-                    <el-select v-model="pcsQuery" filterable placeholder="请选择" size="mini" @change="getHandData()">
-                      <el-option
-                        v-for="item in pcsArr"
-                        :key="item.dm"
-                        :label="item.mc"
-                        :value="item.dm">
-                      </el-option>
-                    </el-select>
+                    <el-tooltip content="请选择派出所" placement="bottom-start" :value="pcsQuery==$store.state.user.bmbh" manual="true" :offset="50">
+                      <el-select v-model="pcsQuery" filterable placeholder="请选择" size="mini" @change="getHandData()">
+                        <el-option
+                          v-for="item in pcsArr"
+                          :key="item.dm"
+                          :label="item.mc"
+                          :value="item.dm">
+                        </el-option>
+                      </el-select>
+                    </el-tooltip>
                 </div>
                 <div class="base-flex mb-12">
                     <div class="text-tip">待接收</div>
@@ -285,9 +287,9 @@ export default {
         }
       },
       handChangeFun(value){
-          let checkedCount = value.length;
-          this.checkAll = checkedCount === this.handData.length;
-          this.isIndeterminate = checkedCount > 0 && checkedCount < this.handData.length;
+        let checkedCount = value.length;
+        this.checkAll = checkedCount === this.handData.length;
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.handData.length;
       },
       handleCheckAllChange(val){
         if(val){
@@ -333,6 +335,15 @@ export default {
         })
       },
       handOutFun(){//派发
+        if(this.$store.state.user.jb != '3'){
+          if(this.pcsQuery == this.$store.state.user.bmbh){
+              this.$message({
+              message: '请先选择派出所！',
+              type: "warning"
+            });
+            return
+          }
+        }
         if(this.checkedList.length==0){
           this.$message({
             message: '请先选择数据！',
@@ -602,7 +613,7 @@ export default {
       p.bmbh = this.$store.state.user.bmbh;
       p.userId = this.$store.state.user.userId;
       p.pageData={clzt:'3'}
-      this.$api.post(this.$api.aport2 + "/issueData/updateIssueData", p, r => {
+      this.$api.post(this.$api.aport2 + "/issueData/updateReportData", p, r => {
         this.$message({
           message: r.message,
           type: "success"

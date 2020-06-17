@@ -47,12 +47,12 @@
       style="margin-top: -9vh;"
     >
       <el-dialog width="50%" :visible.sync="innerVisible" append-to-body>
-        <el-form :model="innerForm" ref="innerForm" label-width="100px" class="tc-form">
-          <el-form-item label="不通过原因" prop="hcsm">
+        <el-form :model="innerForm" :rules="rules" ref="innerForm" label-width="100px" class="tc-form">
+          <el-form-item label="不通过原因" prop="shsm">
             <el-input v-model="innerForm.shsm" autocomplete="off"></el-input>
           </el-form-item>
           <div class="page-btn-box">
-            <el-button type="primary" @click="shwtg">提交</el-button>
+            <el-button type="primary" @click="shwtg('innerForm')">提交</el-button>
           </div>
         </el-form>
       </el-dialog>
@@ -79,6 +79,9 @@ export default {
   components: { Inquire, Table, Dialog, TemporaryXQ },
   data() {
     return {
+      rules:{
+        shsm:[{ required: true, message: "此项必填", trigger: "blur" }],
+      },
       isTab: false,
       lbTab: [],
       lbBtn: this.$cdata.lzsb.lzsb.lbBtn1,
@@ -279,19 +282,29 @@ export default {
     dialogSave(data) {
       console.log(data);
       if (data.type == "bj") {
-        if (data.btnType == 1) {
+        if (data.btnType == 1) {//审核通过
           let p = data.data;
           p.shzt = "shzt_1";
           this.updateLzsb(data.data);
-        } else if (data.btnType == 0) {
+        } else if (data.btnType == 0) {//审核未通过
           this.innerForm = data.data;
           this.innerForm.shzt = "shzt_2";
           this.innerVisible = true;
         }
       }
     },
-    shwtg() {
-      this.updateLzsb(this.innerForm);
+    shwtg(formName) {//未通过提交  原因必填
+      
+      this.$refs[formName].validate(valid => {
+        console.log('formName',valid,this.$refs[formName])
+        if(valid){
+          console.log('dui',valid)
+          this.updateLzsb(this.innerForm);
+        }else{
+          console.log('error')
+          return false
+        }
+      })
     },
     updateLzsb(data) {
       this.$api.post(this.$api.aport3 + "/api/lzsb/updateLzsb", data, () => {

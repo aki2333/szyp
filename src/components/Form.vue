@@ -116,8 +116,11 @@
           :key="dbi"
         >{{db.button_name}}</el-button>
       </div>
-      <el-button size="mini" type="primary" round v-if="isEditBtn" @click="save('form')">保存</el-button>
-      <el-button size="mini" type="info" round @click="cancel">取消</el-button>
+      <div style="display:inline-block" v-if="commonBtn">
+        <el-button size="mini" type="primary" round v-if="isEditBtn" @click="save('form')">保存</el-button>
+        <el-button size="mini" type="info" round @click="cancel">取消</el-button>
+      </div>
+      
 
       <!-- <el-button
         v-if="dialogType=='gnlb'"
@@ -157,6 +160,10 @@ export default {
       default: false
     },
     isEditBtn: {
+      type: Boolean,
+      default: true
+    },
+    commonBtn:{
       type: Boolean,
       default: true
     }

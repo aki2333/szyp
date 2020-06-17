@@ -92,8 +92,14 @@ export default {
           type: "ssfj"
         });
         if (this.$store.state.user.jb == 2) {
-          this.cx.pd.ssfj = data.bmbh;
-          this.dialogData.ssfj = data.bmbh;
+          if (data.fj) {
+            this.cx.pd.ssfj = data.fj;
+            this.dialogData.ssfj = data.fj;
+          } else {
+            this.cx.pd.ssfj = data.bmbh;
+            this.dialogData.ssfj = data.bmbh;
+          }
+
           this.$store.dispatch("aGetssdw", { bmbh: data.bmbh, type: "sspcs" });
           this.cx.pd.ssfjdis = true;
         } else if (this.$store.state.user.jb == 3) {

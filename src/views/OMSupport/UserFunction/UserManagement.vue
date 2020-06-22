@@ -280,12 +280,16 @@ export default {
         if (JSON.stringify(this.dialogData) == "{}") {
           this.$message({
             message: "请先选择用户",
+            showClose: true,
+            duration:13000,
             type: "warning"
           });
           return false;
         } else if (this.dialogData.userType == "系统用户") {
           this.$message({
             message: "该用户为系统用户，不可修改",
+            showClose: true,
+            duration:13000,
             type: "warning"
           });
           return false;
@@ -298,12 +302,16 @@ export default {
         if (JSON.stringify(this.dialogData) == "{}") {
           this.$message({
             message: "请先选择用户",
+            showClose: true,
+            duration:13000,
             type: "warning"
           });
           return false;
         } else if (this.dialogData.userType == "系统用户") {
           this.$message({
             message: "该用户为系统用户，不可修改",
+            showClose: true,
+            duration:13000,
             type: "warning"
           });
           return false;
@@ -349,6 +357,8 @@ export default {
       this.$api.post(this.$api.aport1 + "/userController/saveUser", p, r => {
         this.$message({
           message: r.message,
+          showClose: true,
+          duration:8000,
           type: "success"
         });
         this.getTable();
@@ -363,6 +373,8 @@ export default {
         r => {
           this.$message({
             message: r.message,
+            showClose: true,
+            duration:8000,
             type: "success"
           });
           this.getTable();
@@ -387,6 +399,8 @@ export default {
           () => {
             this.$message({
               message: "删除成功",
+              showClose: true,
+              duration:8000,
               type: "success"
             });
             this.getTable();
@@ -406,6 +420,8 @@ export default {
         r => {
           this.$message({
             message: r.message,
+            showClose: true,
+            duration:8000,
             type: "success"
           });
           this.getTable();
@@ -431,6 +447,8 @@ export default {
           r => {
             this.$message({
               message: r.message,
+              showClose: true,
+              duration:8000,
               type: "success"
             });
             this.getTable();
@@ -454,6 +472,8 @@ export default {
         r => {
           this.$message({
             message: r.message,
+            showClose: true,
+            duration:8000,
             type: "success"
           });
           this.getTable();

@@ -593,7 +593,14 @@ const zrqgl = {
             type: 'input',
             col: 8,
             dm: 'jinghao'
-        }
+        },
+        {
+            cm: '状态',
+            type: 'select',
+            col: 8,
+            dm: 'sfyx',
+            optype:true
+        },
     ],
     yhlb: [
         {

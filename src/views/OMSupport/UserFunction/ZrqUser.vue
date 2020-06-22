@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="tc-cx">
-      <Inquire cxType="noCbtn" :cxData="$cdata.qxgl.zrqgl.yhcx" :pd="cx.pd" @cxFnc="cxFnc"></Inquire>
+      <Inquire cxType="noCbtn" :cxData="$cdata.qxgl.zrqgl.yhcx" :pd="cx.pd" @cxFnc="cxFnc" @lcFnc="lcFnc"></Inquire>
     </div>
     <el-row type="flex">
       <el-col :span="24">
@@ -12,7 +12,9 @@
           :isTab="false"
           :isEdit="false"
           :selection="zrqDmList"
+          :timeChange="timeChange"
           @SelectionChange="addZrqUser"
+          @selectPageFnc="selectPageFnc"
           @pageSizeFnc="pageSizeFnc"
           @pageNumFnc="pageNumFnc"
           :tableData="tableData"
@@ -64,12 +66,23 @@ export default {
         pageNum: 1
       },
       zrqDmList: [],
-      checkedUser: []
+      checkedUser: [],
+      //跨页选中
+      multipleSelection: [],
+      selectionAll: [],
+      selectionReal:[],
+      timeChange:0,
+      //跨页回填
+      multipleBackData:[],
+      zrqAll:[],
+      yxFlag:'',//未选择有效用户
     };
   },
   mounted() {
     console.log("角色用户", this.dialogType, this.dialogData);
-    this.begin();
+    this.$nextTick(() => {
+      this.begin();
+    })
   },
   methods: {
     cxFnc(data) {
@@ -77,21 +90,54 @@ export default {
       this.cx.pageNum = 1;
       this.getTable();
     },
+    lcFnc(data){
+      if(data.key.dm=='sfyx'){
+        this.yxFlag = data.data // 0 未配置  1已配置  空 未选择
+        this.getAllData();
+      }
+    },
     // 查询用户列表
     getTable() {
       console.log("查询列表-", this.cx);
       this.$api.post(this.$api.aport1 + "/zrq/getZrqUser", this.cx, r => {
         this.tableData = r.pageInfo;
+        this.zrqAll = r.zrqDmList; //与无配置选中的数据合并
         let zrqDmList = [];
-        this.tableData.list.forEach(item1 => {
-          r.zrqDmList.forEach(item2 => {
-            if (item2 == item1.wybs) {
-              zrqDmList.push(item1);
-            }
-          });
-        });
-        this.zrqDmList = zrqDmList;
-        console.log("zrqDmList", zrqDmList);
+        // this.tableData.list.forEach(item1 => {
+        //     r.zrqDmList.forEach(item2 => {
+        //       if (item2 == item1.wybs) {
+        //         zrqDmList.push(item1);
+        //       }
+        //     });
+        //   });
+          if (this.selectionReal.length == 0) {
+            //声明一个数组对象
+            this.selectionReal = new Array(
+              Math.ceil(this.tableData.total / this.tableData.pageSize)
+            );
+          } 
+          this.$nextTick(()=>{
+            this.tableData.list.forEach(item1 => {
+              this.selectionAll.forEach(item2 => {
+                if (item2 == item1.wybs) {
+                  zrqDmList.push(item1)
+                }
+              });
+            });
+            
+          })
+          this.zrqDmList = zrqDmList;
+          console.log('切换分页selectionReal==',this.selectionReal)
+          console.log('切换分页selectionAll==',this.selectionAll)
+          console.log('切换分页zrqDmList==',this.zrqDmList)
+          console.log("zrqDmList", this.zrqDmList);
+      });
+    },
+    getAllData(){
+      this.$api.post(this.$api.aport1 + "/zrq/getZrqUser", this.cx, r => {
+        this.selectionReal = r.selectAll;
+        this.dataSelection();  
+        this.getTable();
       });
     },
     // 获取分页等信息
@@ -103,35 +149,66 @@ export default {
       this.cx.pageNum = data;
       this.getTable();
     },
-    addZrqUser(data) {
-      console.log("已选中", data);
-      this.checkedUser = [];
-      let arr = [...data];
-      arr.forEach(item => {
-        this.checkedUser.push(item.wybs);
-      });
+    selectPageFnc(data) {
+      //手动触发
+      console.log("data==", data.data);
+      this.multipleSelection = data.data;
+       console.log("this.multipleSelection", this.multipleSelection);
+        this.selectionReal.splice(
+        this.tableData.pageNum - 1,
+        1,
+        this.multipleSelection
+      );
+      console.log("this.selectionReal", this.selectionReal);
+      this.dataSelection();
+    },
+    dataSelection(){
+      this.selectionAll = [];//选中id
+      for (var i = 0; i < this.selectionReal.length; i++) {
+        if (this.selectionReal[i]) {
+          for (var j = 0; j < this.selectionReal[i].length; j++) {
+            this.selectionAll.push(this.selectionReal[i][j].wybs);
+          }
+        }
+      }
+      console.log("this.selectionAll", this.selectionAll);
+      // this.checkedUser = [];
+      // let arr = [...this.selectionAll];
+      // arr.forEach(item => {
+      //   this.checkedUser.push(item.wybs);
+      // });
+    },
+    addZrqUser() {
+      // console.log("回填", data);
     },
     save() {
-      // console.log("arr", this.checkedUser);
+      if(this.selectionReal&&this.selectionAll.length==0){
+        this.dataSelection();
+      }
+      if(this.yxFlag == '0'){//无配置数据选择的时候  与有效数据合并
+        this.selectionAll = this.selectionAll.concat(this.zrqAll)
+      }
       let p = {
         userId: this.$store.state.user.userId,
         zrqDm: this.dialogData.zrqDm,
-        wybs: this.checkedUser
+        wybs: this.selectionAll,
+        selecAll:this.selectionReal
       };
       this.$api.post(this.$api.aport1 + "/zrq/addZrqUser", p, r => {
         this.$message({
           message: r,
+          showClose: true,
+          duration:8000,
           type: "success"
         });
       });
     },
-
     cancel() {
       this.$emit("dialogCancel");
     },
     // 开始
     begin() {
-      this.getTable();
+       this.getAllData();//打开弹窗，先获取默认选中数组
       //this.$store.dispatch("aGetBmbh", { bmbh: this.$store.state.user.bmbh });
     }
   }

@@ -173,6 +173,8 @@ export default {
         if (!this.checkRow.serial) {
           this.$message({
             message: "请先选择部门",
+            showClose: true,
+            duration:13000,
             type: "warning"
           });
           return false;
@@ -198,6 +200,8 @@ export default {
         r => {
           this.$message({
             message: r,
+            showClose: true,
+            duration:8000,
             type: "success"
           });
           this.isShowDialog = false;
@@ -220,6 +224,8 @@ export default {
         r => {
           this.$message({
             message: r,
+            showClose: true,
+            duration:8000,
             type: "success"
           });
           this.begin();
@@ -244,6 +250,8 @@ export default {
           r => {
             this.$message({
               message: r,
+              showClose: true,
+              duration:8000,
               type: "success"
             });
             this.begin();

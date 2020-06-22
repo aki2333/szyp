@@ -22,7 +22,7 @@
               :content="dialogData.xgMap[cx.dm]"
             ></el-popover>
             <el-form-item
-              :class="{'yxg-form-item':dialogData.xgMap&&dialogData.xgMap[cx.dm]}"
+              :class="{'yxg-form-item':dialogData.xgMap&&dialogData.xgMap[cx.dm],'font-blod':cx.weight}"
               v-popover="'popover'+i"
               :label="cx.cm"
               :prop="cx.dm"

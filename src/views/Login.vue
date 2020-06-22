@@ -1,5 +1,28 @@
 <template>
   <div class="login">
+    <div class="other-page">
+      <el-popover placement="bottom" width="300" trigger="hover">
+        <div class="other-dia">
+          <!-- <img src="@/assets/images/main/chrome.png" alt /> -->
+          <h3>推荐浏览器下载</h3>
+          <img src="@/assets/images/main/chrome.png" alt />
+          <a href="http://50.73.70.116:8080/83.0.4103.97_chrome_installerX32.exe">chrome 32位</a>
+          <a href="http://50.73.70.116:8080/83.0.4103.97_chrome_installer.exe">chrome 64位</a>
+        </div>
+        <span slot="reference" class="other-title hand">
+          <i class="el-icon-question mr-5"></i>帮助中心
+        </span>
+      </el-popover>
+
+      <!-- <img src="@/assets/images/main/chrome.png" alt />
+        <a
+        href="http://50.73.70.116:8080/83.0.4103.97_chrome_installerX32.exe"
+      >32位</a>
+
+      <a
+        href="http://50.73.70.116:8080/83.0.4103.97_chrome_installer.exe"
+      >64位</a>-->
+    </div>
     <div class="login_main">
       <img src="../assets/images/login/pro_tip.png" alt />
       <img class="mt-30" src="../assets/images/login/login_tip.png" @click="loginPassword" alt />
@@ -111,11 +134,21 @@ export default {
     },
     keyLogin() {
       if (this.user.name == "" || this.user.name == undefined) {
-        this.$message.error("请输入用户名！");
+        this.$message({
+          showClose: true,
+          message: "请输入用户名！",
+          duration: 0,
+          type: "error"
+        });
         return;
       }
       if (this.user.password == "" || this.user.password == undefined) {
-        this.$message.error("请输入密码！");
+        this.$message({
+          showClose: true,
+          message: "请输入密码！",
+          duration: 0,
+          type: "error"
+        });
         return;
       }
       if (this.user.name && this.user.password) {
@@ -166,6 +199,42 @@ export default {
 };
 </script>
 <style scoped>
+.other-page {
+  position: fixed;
+  width: 100%;
+  height: 50px;
+  top: 0px;
+  left: 0;
+  bottom: 0;
+  right: 0px;
+  text-align: right;
+  color: #fff;
+}
+.other-title {
+  color: #fff;
+  margin: 20px 25px 0px 0px;
+  display: inline-block;
+}
+.other-dia{
+  text-align: center;
+}
+.other-dia h3 {
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.other-dia img {
+  width: 25px;
+  vertical-align: middle;
+}
+.other-dia a {
+  color: #000;
+  margin: 10px;
+}
+.other-dia a:hover{
+  color: #4186f4;
+}
 .login {
   background: url("../assets/images/login/bg.png");
   background-size: 100% 100%;

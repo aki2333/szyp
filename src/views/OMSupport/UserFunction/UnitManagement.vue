@@ -185,6 +185,8 @@ export default {
         r => {
           this.$message({
             message: r,
+            showClose: true,
+            duration:8000,
             type: "success"
           });
           this.cancel();

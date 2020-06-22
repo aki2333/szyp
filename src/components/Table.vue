@@ -37,6 +37,7 @@
       style="width: 100%"
       @row-click="rowClick"
       @selection-change="handleSelectionChange"
+      @select="selectPage"
     >
       <el-table-column v-if="isSelect" align="center" type="selection" width="50"></el-table-column>
       <!--  -->
@@ -163,6 +164,10 @@ export default {
     czWidth: {
       type: String,
       default: "auto"
+    },
+    timeChange: {
+      type: Number,
+      default:0
     }
   },
   data() {
@@ -177,19 +182,26 @@ export default {
   },
   watch: {
     selection(val) {
-      console.log(val);
+      // console.log(val);
       this.$nextTick(function() {
-        var arrAfter = [];
-        var arrReal = [];
-        for (var h = 0; h < val.length; h++) {
-          if (arrAfter.indexOf(val[h].serial) == -1) {
-            arrAfter.push(val[h].serial);
-            arrReal.push(val[h]);
-          }
-        }
-        val = arrReal;
         this.toggleSelection(val);
       });
+    },
+    timeChange(){
+      console.log('跨页==',this.selection);
+      if (this.selection) {
+        console.log('selection',this.selection)
+        this.$nextTick(() =>{
+          console.log('selection==',this.selection)
+          this.selection.forEach(row => {
+            console.log("row==", row, this.$refs[this.refName], this.refName);
+            this.$refs[this.refName].toggleRowSelection(row, true);
+          });
+        })
+      }
+      // this.$nextTick(() => {
+        // this.toggleSelection(this.selection);
+      // });
     },
     lbTab(val) {
       if (val.length > 0) {
@@ -221,22 +233,29 @@ export default {
       this.pageNum = val;
       this.$emit("pageNumFnc", this.pageNum);
     },
-    handleSelectionChange(val) {
+    handleSelectionChange(val) {//当选择项发生变化时会触发该事件
       // console.log(val);
       this.$emit("SelectionChange", val);
     },
-    toggleSelection(rows) {
+    selectPage(val,ref){//当用户手动勾选数据行的 Checkbox 时触发的事件   跨页选中需要手动触发
+      console.log('手动触发==',val)
+      this.$emit("selectPageFnc",{data:val,refName:ref})
+    },
+    toggleSelection(rows) {//选中行
       //this.$refs[this.refName].toggleAllSelection();
       if (rows) {
-        rows.forEach(row => {
-          console.log("row", row, this.$refs[this.refName], this.refName);
-          this.$refs[this.refName].toggleRowSelection(row, true);
-        });
+        this.$nextTick(() =>{
+          rows.forEach(row => {
+            // console.log("row++", row, this.$refs[this.refName], this.refName);
+            this.$refs[this.refName].toggleRowSelection(row, true);
+          });
+        })
+        
       } else {
         this.$refs[this.refName].clearSelection();
       }
     },
-    rowClick(row,column) {
+    rowClick(row,column) {//点击行
       if (!this.isRowClick) {
         return false;
       }

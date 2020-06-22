@@ -159,6 +159,8 @@ export default {
       if (!this.formData.serial) {
         this.$message({
           message: "请先选择菜单",
+          showClose: true,
+          duration:13000,
           type: "warning"
         });
         return false;
@@ -185,6 +187,8 @@ export default {
         r => {
           this.$message({
             message: r,
+            showClose: true,
+            duration:8000,
             type: "success"
           });
           this.cancel();
@@ -198,6 +202,8 @@ export default {
       if (!this.formData.serial) {
         this.$message({
           message: "请先选择菜单",
+          showClose: true,
+          duration:13000,
           type: "warning"
         });
         return false;
@@ -213,6 +219,8 @@ export default {
         r => {
           this.$message({
             message: r,
+            showClose: true,
+            duration:8000,
             type: "success"
           });
           this.cancel();
@@ -241,6 +249,8 @@ export default {
       if (!this.formData.serial) {
         this.$message({
           message: "请先选择菜单",
+          showClose: true,
+          duration:13000,
           type: "warning"
         });
         return false;
@@ -258,6 +268,8 @@ export default {
           r => {
             this.$message({
               message: r,
+              showClose: true,
+              duration:8000,
               type: "success"
             });
             this.cancel();

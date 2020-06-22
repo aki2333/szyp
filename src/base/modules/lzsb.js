@@ -242,16 +242,19 @@ const lzsb = {
                 cm: '国家(地区)',
                 type: 'select',
                 dm: 'nationality',
+                weight:true
             },
             {
                 cm: '证件种类',
                 type: 'select',
                 dm: 'passportType',
+                weight:true
             },
             {
                 cm: '证件号码',
                 type: 'input',
-                dm: 'passportno'
+                dm: 'passportno',
+                weight:true
             },
             {
                 cm: '英文姓',

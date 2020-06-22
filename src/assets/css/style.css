@@ -15,6 +15,9 @@
 .ml-5{
     margin-left: 5px!important;
 }
+.mr-5{
+    margin-right: 5px!important;
+}
 .mr-10{
     margin-right: 10px;
 }
@@ -61,6 +64,9 @@
 }
 .hand{
     cursor: pointer;
+}
+.el-dialog .font-blod .el-form-item__label{
+    font-weight: bold!important;
 }
 /* 元素样式 */
 .page{
@@ -158,4 +164,10 @@
 }
 .yxg-form-item label {
   color: red;
+}
+.imgbox .el-carousel__arrow{
+    background-color: rgba(31,45,61,.41);
+}
+.imgbox .el-carousel__arrow:hover{
+    background-color: rgba(31,45,61,.73);
 }

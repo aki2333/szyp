@@ -117,6 +117,8 @@ export default {
       if (this.cx.bmbh == "") {
         this.$message({
           message: "请先选择部门",
+          showClose: true,
+          duration:13000,
           type: "warning"
         });
         return false;
@@ -172,6 +174,8 @@ export default {
       this.$api.post(this.$api.aport1 + "/role/addRole", data, r => {
         this.$message({
           message: r,
+          showClose: true,
+          duration:8000,
           type: "success"
         });
         this.isShowDialog = false;
@@ -186,6 +190,8 @@ export default {
       this.$api.post(this.$api.aport1 + "/role/editRole", p, r => {
         this.$message({
           message: r,
+          showClose: true,
+          duration:8000,
           type: "success"
         });
         this.isShowDialog = false;
@@ -203,6 +209,8 @@ export default {
       this.$api.post(this.$api.aport1 + "/role/deleteRole", p, r => {
         this.$message({
           message: r,
+          showClose: true,
+          duration:8000,
           type: "success"
         });
         this.isShowDialog = false;
@@ -218,6 +226,8 @@ export default {
       this.$api.post(this.$api.aport1 + "/role/enableRole", p, r => {
         this.$message({
           message: r,
+          showClose: true,
+          duration:8000,
           type: "success"
         });
         this.isShowDialog = false;

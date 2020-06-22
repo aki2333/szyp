@@ -128,6 +128,8 @@ export default {
       this.$api.post(this.$api.aport1 + "/role/addRoleUser", data, r => {
         this.$message({
           message: r,
+          showClose: true,
+          duration:8000,
           type: "success"
         });
         this.getTable();
@@ -143,6 +145,8 @@ export default {
         this.$api.post(this.$api.aport1 + "/role/delRoleUser", data, r => {
           this.$message({
             message: r,
+            showClose: true,
+            duration:8000,
             type: "success"
           });
           this.getTable();

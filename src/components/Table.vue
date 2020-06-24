@@ -38,6 +38,7 @@
       @row-click="rowClick"
       @selection-change="handleSelectionChange"
       @select="selectPage"
+      @select-all="selectPage"
     >
       <el-table-column v-if="isSelect" align="center" type="selection" width="50"></el-table-column>
       <!--  -->
@@ -259,7 +260,8 @@ export default {
       if (!this.isRowClick) {
         return false;
       }
-      if(column.label=="操作"){
+      console.log(row,column)
+      if(column.label=="操作"&&row.whetherUpdateState){
         return false;
       }
       this.$emit("rowClick", { type: this.lbType, data: row });

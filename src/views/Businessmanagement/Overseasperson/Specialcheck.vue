@@ -52,18 +52,18 @@
       ></Form>
     </Dialog>
     <Dialog :isShowDialog="innerVisible" :title="indialogTitle" @hideDialog="innerVisible=false">
-        <Form
-          v-if="innerVisible"
-          :cxData="inlabelData"
-          :dialogType="indialogType"
-          :dialogData="indialogData"
-          :commonBtn="incommonBtn"
-          :isDb="inisDb"
-          @dialogCancel="innerVisible=false"
-          @dialogSave="indialogSave"
-          @formLcFnc="informLcFnc"
-        ></Form>
-       </Dialog> 
+      <Form
+        v-if="innerVisible"
+        :cxData="inlabelData"
+        :dialogType="indialogType"
+        :dialogData="indialogData"
+        :commonBtn="incommonBtn"
+        :isDb="inisDb"
+        @dialogCancel="innerVisible=false"
+        @dialogSave="indialogSave"
+        @formLcFnc="informLcFnc"
+      ></Form>
+    </Dialog>
   </div>
 </template>
 <script>
@@ -93,7 +93,7 @@ export default {
       lbBtn: this.$cdata.zxhc.zxhc.lbBtn,
       plBtn: [],
       lbTab: this.$cdata.zxhc.zxhc.lbTab,
-      pageSizeArr:[15,100,500],
+      pageSizeArr: [15, 100, 500],
       //业务数据
       cx: {
         pd: {},
@@ -106,106 +106,121 @@ export default {
         pageSize: 10,
         pageNum: 1
       },
-      page: '1',
+      page: "1",
       clzt: 1,
       multipleSelection: [],
       multipleArr: [],
       officeArr: [],
       policeArr: [],
-      backstatusArr:[],
-      selection:[],
+      backstatusArr: [],
+      selection: [],
       changeK: "",
-      seriFlag:'',//唯一标识
+      seriFlag: "", //唯一标识
       //弹窗数据
       isShowDialog: false,
-      joinFlag:false,
+      joinFlag: false,
       dialogTitle: "",
       dialogType: "",
       dialogData: {},
       labelData: [],
-      isEditBtn:true,
-      commonBtn:true,
-      isDb:false,
+      isEditBtn: true,
+      commonBtn: true,
+      isDb: false,
       dbBtn: this.$cdata.zxhc.zxhc.dbBtn,
       // 内联弹窗
-      innerVisible:false,
-      indialogTitle:'',
-      inlabelData:[],
-      indialogType:'',
-      indialogData:{},
-      incommonBtn:true,
-      inisDb:false,
+      innerVisible: false,
+      indialogTitle: "",
+      inlabelData: [],
+      indialogType: "",
+      indialogData: {},
+      incommonBtn: true,
+      inisDb: false
     };
   },
-  watch:{
+  watch: {
     // clzt(val){
 
     // },
-    page(val){
-      if(this.clzt==1){//未处理
-        if(val == '1'){
-          this.plBtn = this.$store.state.plBtn
+    page(val) {
+      if (this.clzt == 1) {
+        //未处理
+        if (val == "1") {
+          this.plBtn = this.$store.state.plBtn;
           let arr = [];
-          for(var i=0;i<this.plBtn.length;i++){
-              if(this.plBtn[i].py!='sb'){
-                arr.push(this.plBtn[i])
-              }
+          for (var i = 0; i < this.plBtn.length; i++) {
+            if (this.plBtn[i].py != "sb") {
+              arr.push(this.plBtn[i]);
             }
-          this.plBtn = arr
-        }else if(val=='2'){
-          this.plBtn = this.$store.state.plBtn
-        }else if(val=='3'){
-          this.plBtn = this.$store.state.plBtn
+          }
+          this.plBtn = arr;
+        } else if (val == "2") {
+          this.plBtn = this.$store.state.plBtn;
+        } else if (val == "3") {
+          this.plBtn = this.$store.state.plBtn;
           let arr = [];
-          for(var j=0;j<this.plBtn.length;j++){
-              if(this.plBtn[j].py=='cx'||this.plBtn[j].py=='qc'){
-                arr.push(this.plBtn[j])
-              }
+          for (var j = 0; j < this.plBtn.length; j++) {
+            if (this.plBtn[j].py == "cx" || this.plBtn[j].py == "qc") {
+              arr.push(this.plBtn[j]);
             }
-          this.plBtn = arr
+          }
+          this.plBtn = arr;
         }
       }
-    },
+    }
   },
   mounted() {
     this.$nextTick(() => {
       this.$store.dispatch("aGetNation");
       this.$store.dispatch("aGetGender");
       this.$store.dispatch("aGetPassport");
-      if (this.$store.state.user.jb == '1') {
+      if (this.$store.state.user.jb == "1") {
         this.$store.dispatch("aGetSuboffice");
-      } else if (this.$store.state.user.jb == '2') {
-        this.$store.dispatch("aGetSuboffice",this.$store.state.user.bmbh.slice(0, 6));
-      } else if (this.$store.state.user.jb == '3') {
-        this.$store.dispatch("aGetSuboffice",this.$store.state.user.bmbh.slice(0, 6) + '000000');
-      }  
-      if (this.$store.state.user.jb == '1') {
+      } else if (this.$store.state.user.jb == "2") {
+        this.$store.dispatch(
+          "aGetSuboffice",
+          this.$store.state.user.bmbh.slice(0, 6)
+        );
+      } else if (this.$store.state.user.jb == "3") {
+        this.$store.dispatch(
+          "aGetSuboffice",
+          this.$store.state.user.bmbh.slice(0, 6) + "000000"
+        );
+      }
+      if (this.$store.state.user.jb == "1") {
         this.$store.dispatch("aGetPolice");
         this.$store.dispatch("aGetZrq");
-      } else if (this.$store.state.user.jb == '2') {
-        this.$store.dispatch("aGetPolice",this.$store.state.user.bmbh.slice(0, 6));
-        this.$store.dispatch("aGetZrq",this.$store.state.user.bmbh.slice(0, 6));
-      } else if (this.$store.state.user.jb == '3') {
-        this.$store.dispatch("aGetPolice",this.$store.state.user.bmbh);
-        this.$store.dispatch("aGetZrq",this.$store.state.user.bmbh.slice(0, 8));
-      }  
+      } else if (this.$store.state.user.jb == "2") {
+        this.$store.dispatch(
+          "aGetPolice",
+          this.$store.state.user.bmbh.slice(0, 6)
+        );
+        this.$store.dispatch(
+          "aGetZrq",
+          this.$store.state.user.bmbh.slice(0, 6)
+        );
+      } else if (this.$store.state.user.jb == "3") {
+        this.$store.dispatch("aGetPolice", this.$store.state.user.bmbh);
+        this.$store.dispatch(
+          "aGetZrq",
+          this.$store.state.user.bmbh.slice(0, 8)
+        );
+      }
       this.$store.dispatch("aGetDatatype");
-      
+
       let arr = [];
-      this.plBtn = this.$store.state.plBtn
-      for(var i=0;i<this.plBtn.length;i++){
-          if(this.plBtn[i].py!='sb'){
-            arr.push(this.plBtn[i])
-          }
+      this.plBtn = this.$store.state.plBtn;
+      for (var i = 0; i < this.plBtn.length; i++) {
+        if (this.plBtn[i].py != "sb") {
+          arr.push(this.plBtn[i]);
         }
-      this.plBtn = arr
+      }
+      this.plBtn = arr;
       // this.$store.dispatch("aGetBackstatus");
-      this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data =>{
-        this.lbTab=data.lbTab
-        this.page = this.lbTab[0].dm
+      this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data => {
+        this.lbTab = data.lbTab;
+        this.page = this.lbTab[0].dm;
         this.getTable();
       });
-      
     });
   },
   methods: {
@@ -214,61 +229,61 @@ export default {
       this.cx.pageNum = 1;
       this.getTable();
     },
-    tabTopClick1(){
-      this.clzt=1;
+    tabTopClick1() {
+      this.clzt = 1;
       this.cx.pageNum = 1;
-      this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data =>{
-        this.lbTab=data.lbTab
-        this.page = this.lbTab[0].dm
+      this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data => {
+        this.lbTab = data.lbTab;
+        this.page = this.lbTab[0].dm;
       });
-      this.plBtn = this.$store.state.plBtn
-          let arr = [];
-          for(var i=0;i<this.plBtn.length;i++){
-              if(this.plBtn[i].py!='sb'){
-                arr.push(this.plBtn[i])
-              }
-            }
-          this.plBtn = arr
-      this.getTable()
+      this.plBtn = this.$store.state.plBtn;
+      let arr = [];
+      for (var i = 0; i < this.plBtn.length; i++) {
+        if (this.plBtn[i].py != "sb") {
+          arr.push(this.plBtn[i]);
+        }
+      }
+      this.plBtn = arr;
+      this.getTable();
     },
-    tabTopClick2(){
-      this.clzt=2;
+    tabTopClick2() {
+      this.clzt = 2;
       this.cx.pageNum = 1;
-      this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data =>{
-        this.lbTab=data.lbTab1
-        this.page = this.lbTab[0].dm
+      this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data => {
+        this.lbTab = data.lbTab1;
+        this.page = this.lbTab[0].dm;
       });
       let arr = [];
-          for(var k=0;k<this.plBtn.length;k++){
-              if(this.plBtn[k].py=='cx'||this.plBtn[k].py=='qc'){
-                arr.push(this.plBtn[k])
-              }
-            }
-          this.plBtn = arr
-      this.getTable()
+      for (var k = 0; k < this.plBtn.length; k++) {
+        if (this.plBtn[k].py == "cx" || this.plBtn[k].py == "qc") {
+          arr.push(this.plBtn[k]);
+        }
+      }
+      this.plBtn = arr;
+      this.getTable();
     },
-    rowClick(data){
+    rowClick(data) {
       this.selection = [];
-      this.selection.push(data.data)
+      this.selection.push(data.data);
     },
     //下拉框联动
     lcFnc(data) {
       if (data.key.dm == "datatype") {
-        if(data.data==''){
+        if (data.data == "") {
           this.$store.state.backstatus = [];
-          data.obj.backstatus = '';
-        }else{
+          data.obj.backstatus = "";
+        } else {
           this.$store.dispatch("aGetBackstatus", data.data).then(() => {});
         }
       }
-      if(data.key.dm == "suboffice") {
-        if(data.data==''){
-          data.obj.policestation = '';
+      if (data.key.dm == "suboffice") {
+        if (data.data == "") {
+          data.obj.policestation = "";
         }
-        if(data.obj.policestation){
-          data.obj.policestation = '';
+        if (data.obj.policestation) {
+          data.obj.policestation = "";
         }
-        this.$store.dispatch("aGetPolice",data.data.slice(0,6));
+        this.$store.dispatch("aGetPolice", data.data.slice(0, 6));
       }
     },
     //弹窗form下拉框联动
@@ -276,50 +291,50 @@ export default {
       if (data.key.dm == "datatype") {
         this.$store.dispatch("aGetBackstatus", data.data).then(() => {});
       }
-      if(data.key.dm == "suboffice") {
-        if(data.data==''){
-          data.obj.policestation = '';
+      if (data.key.dm == "suboffice") {
+        if (data.data == "") {
+          data.obj.policestation = "";
         }
-        if(data.obj.policestation){
-          data.obj.policestation = '';
+        if (data.obj.policestation) {
+          data.obj.policestation = "";
         }
-        this.$store.dispatch("aGetPolice",data.data.slice(0,6));
+        this.$store.dispatch("aGetPolice", data.data.slice(0, 6));
       }
-      if(data.key.dm == "policestation"){
-        if(data.data==''){
-          data.obj.turnoutarea = '';
+      if (data.key.dm == "policestation") {
+        if (data.data == "") {
+          data.obj.turnoutarea = "";
         }
-        if(data.obj.turnoutarea){
-          data.obj.turnoutarea = '';
+        if (data.obj.turnoutarea) {
+          data.obj.turnoutarea = "";
         }
-        this.$store.dispatch("aGetZrq",data.data.slice(0, 8));
-      }
-    },
-    informLcFnc(data){
-      if(data.key.dm == "suboffice") {
-        if(data.data==''){
-          data.obj.policestation = '';
-        }
-        if(data.obj.policestation){
-          data.obj.policestation = '';
-        }
-        this.$store.dispatch("aGetPolice",data.data.slice(0,6));
-      }
-      if(data.key.dm == "policestation"){
-        if(data.data==''){
-          data.obj.turnoutarea = '';
-        }
-        if(data.obj.turnoutarea){
-          data.obj.turnoutarea = '';
-        }
-        this.$store.dispatch("aGetZrq",data.data.slice(0, 8));
+        this.$store.dispatch("aGetZrq", data.data.slice(0, 8));
       }
     },
-    radioChange(val){
-      console.log(val)
-      if(val){
-        if(this.joinFlag == true){
-          this.joinFlag = false
+    informLcFnc(data) {
+      if (data.key.dm == "suboffice") {
+        if (data.data == "") {
+          data.obj.policestation = "";
+        }
+        if (data.obj.policestation) {
+          data.obj.policestation = "";
+        }
+        this.$store.dispatch("aGetPolice", data.data.slice(0, 6));
+      }
+      if (data.key.dm == "policestation") {
+        if (data.data == "") {
+          data.obj.turnoutarea = "";
+        }
+        if (data.obj.turnoutarea) {
+          data.obj.turnoutarea = "";
+        }
+        this.$store.dispatch("aGetZrq", data.data.slice(0, 8));
+      }
+    },
+    radioChange(val) {
+      console.log(val);
+      if (val) {
+        if (this.joinFlag == true) {
+          this.joinFlag = false;
         }
       }
     },
@@ -334,7 +349,7 @@ export default {
     },
     //表格复选框选择
     SelectionChange(data) {
-      console.log('this.multipleSelection',this.multipleSelection)
+      console.log("this.multipleSelection", this.multipleSelection);
       this.multipleSelection = data;
       this.multipleArr = [];
       this.officeArr = [];
@@ -398,23 +413,26 @@ export default {
       if (this.multipleArr.length == 0) {
         this.$message({
           message: "请先选择数据！",
-          duration:13000,
+          duration: 13000,
           showClose: true,
           type: "warning"
         });
         return false;
       }
-      this.isEditBtn=true;
+      this.isEditBtn = true;
       this.commonBtn = true;
       this.isDb = false;
       this.dialogTitle = data.menu_name;
       this.dialogType = data.py;
       if (data.py == "sb") {
+        //批量上报
         let p = {
           serialList: this.multipleArr,
           bmbh: this.$store.state.user.bmbh,
           jb: this.$store.state.user.jb,
-          userId: this.$store.state.user.userId
+          userId: this.$store.state.user.userId,
+          cljg: this.page,
+          clzt: this.clzt
         };
         this.$api.post(
           this.$api.aport2 + "/issueData/reportDataSuboffice",
@@ -422,17 +440,18 @@ export default {
           r => {
             this.$message({
               message: r.message,
-              duration:8000,
+              duration: 8000,
               showClose: true,
               type: "success"
             });
             this.getTable();
-            this.selection=[];
+            this.selection = [];
           }
         );
       } else if (data.py == "xf") {
+        //批量下发
         this.dialogData = {};
-        if (this.page == '1') {
+        if (this.page == "1") {
           // if (!this.isArrEmpty(this.officeArr)) {
           //   //市局下发分局 如果选择数据分局有空值 不允许下发
           //   this.$message({
@@ -443,12 +462,12 @@ export default {
           // }
           this.labelData = this.$cdata.zxhc.zxhc.xfSContent;
           this.isShowDialog = true;
-        } else if (this.page == '2') {
+        } else if (this.page == "2") {
           if (!this.isAllEqual(this.officeArr)) {
             //分局下发 选择数据的分局必须为同一分局
             this.$message({
               message: "必须选择同一分局！",
-              duration:13000,
+              duration: 13000,
               showClose: true,
               type: "warning"
             });
@@ -463,141 +482,173 @@ export default {
           //   });
           //   return false;
           // }
-          if((!this.isArrEmpty(this.policeArr)&&!this.isArrValue(this.policeArr))){
-            //派出所空值和有值同时存在
-            this.$message({
-              message: "不支持多所混发！",
-              duration:13000,
-              showClose: true,
-              type: "warning"
-            });
-            return false;
-          }else if(!this.isArrEmpty(this.policeArr)){
+          // if (
+          //   !this.isArrEmpty(this.policeArr) &&
+          //   !this.isArrValue(this.policeArr)
+          // ) {
+          //   //派出所空值和有值同时存在
+          //   this.$message({
+          //     message: "不支持多所混发！",
+          //     duration: 13000,
+          //     showClose: true,
+          //     type: "warning"
+          //   });
+          //   return false;
+          // } else 
+          // if (!this.isArrEmpty(this.policeArr)) {
             //都是空值
-            this.$store.dispatch("aGetPolice",this.officeArr[0].slice(0, 6));
+            this.$store.dispatch("aGetPolice", this.officeArr[0].slice(0, 6));
             this.labelData = this.$cdata.zxhc.zxhc.xfFContent;
             this.isShowDialog = true;
-          }else if(!this.isArrValue(this.policeArr)){
-            //都有值
-            let p = {
-            // suboffice:this.officeArr[0],
-              serialList:this.multipleArr,
-              jb:this.$store.state.user.jb,
-              bmbh:this.$store.state.user.bmbh,
-              userId:this.$store.state.user.userId
-            };
-            this.$api.post(this.$api.aport2 + "/issueData/issueDataTrigger", p, r => {
-              this.$message({
-                message: r.message,
-                duration:8000,
-                showClose: true,
-                type: "success"
-              });
-              this.getTable();
-              this.selection=[];
-            });
-          }
-          
+          // } 
+          // else if (!this.isArrValue(this.policeArr)) {
+          //   //都有值
+          //   let p = {
+          //     // suboffice:this.officeArr[0],
+          //     serialList: this.multipleArr,
+          //     jb: this.$store.state.user.jb,
+          //     bmbh: this.$store.state.user.bmbh,
+          //     userId: this.$store.state.user.userId,
+          //     cljg: this.page,
+          //     clzt: this.clzt
+          //   };
+          //   this.$api.post(
+          //     this.$api.aport2 + "/issueData/issueDataTrigger",
+          //     p,
+          //     r => {
+          //       this.$message({
+          //         message: r.message,
+          //         duration: 8000,
+          //         showClose: true,
+          //         type: "success"
+          //       });
+          //       this.getTable();
+          //       this.selection = [];
+          //     }
+          //   );
+          // }
+
           // console.log(this.isArrEmpty(this.officeArr, this.policeArr));
           // console.log(this.isAllEqual(this.policeArr));
-          
         }
-        
       }
     },
     //列表内按钮
     blFnc(data) {
-      this.seriFlag = data.data.serial
+      this.seriFlag = data.data.serial;
       this.dialogTitle = data.btn.button_name;
       this.dialogType = data.btn.button_type;
-        this.$cdata.zxhc.editShow(this.$store.state.user.jb,data.data.whetherUpdateState).then(data => {
+      this.$cdata.zxhc
+        .editShow(this.$store.state.user.jb, data.data.whetherUpdateState)
+        .then(data => {
           this.labelData = data;
         });
-        this.$store.dispatch("aGetBackstatus", data.data.datatype);
-        if(data.data.suboffice){
-          this.$store.dispatch("aGetPolice",data.data.suboffice.slice(0,6));
-        }
-        if(data.data.policestation){
-          this.$store.dispatch("aGetZrq",data.data.policestation.slice(0, 8));
-        }
-        if (data.btn.button_type == "edit") {
-        if(this.clzt == 2){//已走访   
-          if(data.data.whetherUpdateState == '0'){//whetherUpdateState 0:不可修改；1：可修改；
-            this.isEditBtn = false
-            this.commonBtn = true
-            this.isDb = false
-          }else{//已走访 可处理
-            this.isEditBtn = false
-            this.commonBtn = true
-            this.isDb = true
-            this.$cdata.zxhc.innerBtn(data.data.whetherUpdateState,this.page).then(data => {
-              this.dbBtn = data;
-            });
+      this.$store.dispatch("aGetBackstatus", data.data.datatype);
+      if (data.data.suboffice) {
+        this.$store.dispatch("aGetPolice", data.data.suboffice.slice(0, 6));
+      }
+      if (data.data.policestation) {
+        this.$store.dispatch("aGetZrq", data.data.policestation.slice(0, 8));
+      }
+      if (data.btn.button_type == "edit") {
+        if (this.clzt == 2) {
+          //已走访
+          if (data.data.whetherUpdateState == "0") {
+            //whetherUpdateState 0:不可修改；1：可修改；
+            this.isEditBtn = false;
+            this.commonBtn = true;
+            this.isDb = false;
+          } else {
+            //已走访 可处理
+            this.isEditBtn = false;
+            this.commonBtn = true;
+            this.isDb = true;
+            this.$cdata.zxhc
+              .innerBtn(data.data.whetherUpdateState, this.page)
+              .then(data => {
+                this.dbBtn = data;
+              });
           }
-        }else{//未走访
-          this.isEditBtn = true
-          this.commonBtn = false
-          this.isDb = true
-          this.$cdata.zxhc.innerBtn('2',this.page).then(data => {
-              this.dbBtn = data;
+        } else {
+          //未走访
+          this.isEditBtn = true;
+          this.commonBtn = false;
+          this.isDb = true;
+          this.$cdata.zxhc.innerBtn("2", this.page).then(data => {
+            this.dbBtn = data;
           });
         }
         this.isShowDialog = true;
-        if(data.data.backstatus){
-          this.joinFlag = false
-        }else{
-          this.joinFlag = true
+        if (data.data.backstatus) {
+          this.joinFlag = false;
+        } else {
+          this.joinFlag = true;
         }
-        this.dialogData = Object.assign({},data.data);
-      }else if(data.btn.button_type == "detail"){
-        this.isEditBtn = false
-        this.commonBtn = true
-        this.isDb = false
-        this.dialogData = Object.assign({},data.data);
+        this.dialogData = Object.assign({}, data.data);
+      } else if (data.btn.button_type == "detail") {
+        this.isEditBtn = false;
+        this.commonBtn = true;
+        this.isDb = false;
+        this.dialogData = Object.assign({}, data.data);
         this.isShowDialog = true;
       }
     },
     //编辑保存
     editSave(data) {
-      console.log()
-      if((data.datatype=='1'&&(data.backstatus=='zfzt_1'||data.backstatus=='zfzt_2')||(data.datatype=='2'&&(data.backstatus=='zfzt_1')))&&(data.suboffice==''||data.suboffice==undefined)){
+      console.log();
+      if (
+        ((data.datatype == "1" &&
+          (data.backstatus == "zfzt_1" || data.backstatus == "zfzt_2")) ||
+          (data.datatype == "2" && data.backstatus == "zfzt_1")) &&
+        (data.suboffice == "" || data.suboffice == undefined)
+      ) {
         this.$message({
-          message: '此走访状态下，所属分局不能为空！',
-          duration:13000,
+          message: "此走访状态下，所属分局不能为空！",
+          duration: 13000,
           showClose: true,
           type: "warning"
         });
-        return false
+        return false;
       }
-      if((data.datatype=='1'&&(data.backstatus=='zfzt_1'||data.backstatus=='zfzt_2')||(data.datatype=='2'&&(data.backstatus=='zfzt_1')))&&(data.policestation==''||data.policestation==undefined)){
+      if (
+        ((data.datatype == "1" &&
+          (data.backstatus == "zfzt_1" || data.backstatus == "zfzt_2")) ||
+          (data.datatype == "2" && data.backstatus == "zfzt_1")) &&
+        (data.policestation == "" || data.policestation == undefined)
+      ) {
         this.$message({
-          message: '此走访状态下，所属派出所不能为空！',
-          duration:13000,
+          message: "此走访状态下，所属派出所不能为空！",
+          duration: 13000,
           showClose: true,
           type: "warning"
         });
-        return false
+        return false;
       }
-      if((data.datatype=='1'&&(data.backstatus=='zfzt_1'||data.backstatus=='zfzt_2')||(data.datatype=='2'&&(data.backstatus=='zfzt_1')))&&(data.turnoutarea==''||data.turnoutarea==undefined)){
+      if (
+        ((data.datatype == "1" &&
+          (data.backstatus == "zfzt_1" || data.backstatus == "zfzt_2")) ||
+          (data.datatype == "2" && data.backstatus == "zfzt_1")) &&
+        (data.turnoutarea == "" || data.turnoutarea == undefined)
+      ) {
         this.$message({
-          message: '此走访状态下，所属责任区不能为空！',
-          duration:13000,
+          message: "此走访状态下，所属责任区不能为空！",
+          duration: 13000,
           showClose: true,
           type: "warning"
         });
-        return false
+        return false;
       }
       let p = data;
       p.jb = this.$store.state.user.jb;
       p.bmbh = this.$store.state.user.bmbh;
       p.userId = this.$store.state.user.userId;
-      p.pageData ={
-        clzt:this.page,
-      }
+      p.pageData = {
+        clzt: this.clzt
+      };
       this.$api.post(this.$api.aport2 + "/issueData/updateIssueData", p, r => {
         this.$message({
           message: r.message,
-          duration:8000,
+          duration: 8000,
           showClose: true,
           type: "success"
         });
@@ -606,75 +657,175 @@ export default {
       });
     },
     // 编辑上报 下发操作
-    dbFnc(data){
-      if(data.button_type == 'singXf'){
+    dbFnc(data) {
+      if (data.button_type == "singXf") {
         this.indialogData = {};
         this.indialogTitle = data.button_name;
-        this.indialogType = data.button_type
-        this.$cdata.zxhc.innerDia(this.page).then(data =>{
-          this.inlabelData=data
+        this.indialogType = data.button_type;
+        this.$cdata.zxhc.innerDia(this.page).then(data => {
+          this.inlabelData = data;
         });
-        this.innerVisible =true;
+        this.innerVisible = true;
       }
-      if(data.button_type == 'singSb'){
-         let p = this.dialogData
-         p.jb = this.$store.state.user.jb;
-         p.bmbh = this.$store.state.user.bmbh;
-         p.userId = this.$store.state.user.userId;
-         p.pageData ={
-          clzt:this.page,
-        }
-         console.log('上报保存',p)
-        if(((this.dialogData.datatype=='1'&&(this.dialogData.backstatus=='zfzt_1'||this.dialogData.backstatus=='zfzt_2')||(this.dialogData.datatype=='2'&&(this.dialogData.backstatus=='zfzt_1')))&&(this.dialogData.suboffice==''||this.dialogData.suboffice==undefined))
-        ||((this.dialogData.datatype=='1'&&(this.dialogData.backstatus=='zfzt_1'||this.dialogData.backstatus=='zfzt_2')||(this.dialogData.datatype=='2'&&(this.dialogData.backstatus=='zfzt_1')))&&(this.dialogData.policestation==''||this.dialogData.policestation==undefined))
-        ||((this.dialogData.datatype=='1'&&(this.dialogData.backstatus=='zfzt_1'||this.dialogData.backstatus=='zfzt_2')||(this.dialogData.datatype=='2'&&(this.dialogData.backstatus=='zfzt_1')))&&(this.dialogData.turnoutarea==''||this.dialogData.turnoutarea==undefined))){
+      if (data.button_type == "singSb") {
+        let p = this.dialogData;
+        p.jb = this.$store.state.user.jb;
+        p.bmbh = this.$store.state.user.bmbh;
+        p.userId = this.$store.state.user.userId;
+        p.pageData = {
+          clzt: this.clzt,
+          cljg: this.page
+        };
+        console.log("上报保存", p);
+        if (
+          (((this.dialogData.datatype == "1" &&
+            (this.dialogData.backstatus == "zfzt_1" ||
+              this.dialogData.backstatus == "zfzt_2")) ||
+            (this.dialogData.datatype == "2" &&
+              this.dialogData.backstatus == "zfzt_1")) &&
+            (this.dialogData.suboffice == "" ||
+              this.dialogData.suboffice == undefined)) ||
+          (((this.dialogData.datatype == "1" &&
+            (this.dialogData.backstatus == "zfzt_1" ||
+              this.dialogData.backstatus == "zfzt_2")) ||
+            (this.dialogData.datatype == "2" &&
+              this.dialogData.backstatus == "zfzt_1")) &&
+            (this.dialogData.policestation == "" ||
+              this.dialogData.policestation == undefined)) ||
+          (((this.dialogData.datatype == "1" &&
+            (this.dialogData.backstatus == "zfzt_1" ||
+              this.dialogData.backstatus == "zfzt_2")) ||
+            (this.dialogData.datatype == "2" &&
+              this.dialogData.backstatus == "zfzt_1")) &&
+            (this.dialogData.turnoutarea == "" ||
+              this.dialogData.turnoutarea == undefined))
+        ) {
           this.indialogData = {};
           this.indialogTitle = data.button_name;
-          this.indialogType = data.button_type
-          this.$cdata.zxhc.innerSbDia(this.dialogData).then(data =>{
-            this.inlabelData=data
+          this.indialogType = data.button_type;
+          this.$cdata.zxhc.innerSbDia(this.dialogData).then(data => {
+            this.inlabelData = data;
           });
-          this.innerVisible =true;
-        }else{
+          this.innerVisible = true;
+        } else {
           this.$api.post(
-          this.$api.aport2 + "/issueData/updateReportData",
-          p,
-          r => {
-            this.$message({
-              message: r.message,
-              duration:8000,
-              showClose: true,
-              type: "success"
-            });
-            this.getTable();
-            this.isShowDialog = false;
-            this.innerVisible = false;
-            this.selection=[];
-          }
-        );
-        } 
+            this.$api.aport2 + "/issueData/updateReportData",
+            p,
+            r => {
+              this.$message({
+                message: r.message,
+                duration: 8000,
+                showClose: true,
+                type: "success"
+              });
+              this.getTable();
+              this.isShowDialog = false;
+              this.innerVisible = false;
+              this.selection = [];
+            }
+          );
+        }
       }
     },
-    singXfSave(data){
-      let p = Object.assign({},this.dialogData,data)
-      if(this.page=='1'){//市局
-        if(!data.suboffice){p.suboffice='';p.suboffice_desc=''}
-        if(!data.policestation){p.policestation='';p.policestation_desc=''}
-        if(!data.turnoutarea){p.turnoutarea='';p.turnoutarea_desc=''}
-      }else if(this.page=='2'){//分局
-        if(!data.policestation){p.policestation='';p.policestation_desc=''}
-        if(!data.turnoutarea){p.turnoutarea='';p.turnoutarea_desc=''}
-      }else if(this.page=='3'){//派出所
-        if(!data.turnoutarea){p.turnoutarea='';p.turnoutarea_desc=''}
+    singXfSave(data) {
+      let p = Object.assign({}, this.dialogData, data);
+      if (this.page == "1") {
+        //市局
+        if (!data.suboffice) {
+          p.suboffice = "";
+          p.suboffice_desc = "";
+        }
+        if (!data.policestation) {
+          p.policestation = "";
+          p.policestation_desc = "";
+        }
+        if (!data.turnoutarea) {
+          p.turnoutarea = "";
+          p.turnoutarea_desc = "";
+        }
+      } else if (this.page == "2") {
+        //分局
+        if (!data.policestation) {
+          p.policestation = "";
+          p.policestation_desc = "";
+        }
+        if (!data.turnoutarea) {
+          p.turnoutarea = "";
+          p.turnoutarea_desc = "";
+        }
+      } else if (this.page == "3") {
+        //派出所
+        if (!data.turnoutarea) {
+          p.turnoutarea = "";
+          p.turnoutarea_desc = "";
+        }
       }
       p.jb = this.$store.state.user.jb;
       p.bmbh = this.$store.state.user.bmbh;
       p.userId = this.$store.state.user.userId;
-      console.log('下发保存',p)
-      this.$api.post(this.$api.aport2 +'/issueData/updateSendOutData',p,r=>{
+      p.pageData = {
+        clzt: this.clzt,
+        cljg: this.page
+      };
+      console.log("下发保存", p);
+      this.$api.post(
+        this.$api.aport2 + "/issueData/updateSendOutData",
+        p,
+        r => {
+          this.$message({
+            message: r.message,
+            duration: 8000,
+            showClose: true,
+            type: "success"
+          });
+          this.getTable();
+          this.isShowDialog = false;
+          this.innerVisible = false;
+          this.selection = [];
+        }
+      );
+    },
+    singSbSave(data) {
+      let p = Object.assign({}, this.dialogData, data);
+      p.jb = this.$store.state.user.jb;
+      p.bmbh = this.$store.state.user.bmbh;
+      p.userId = this.$store.state.user.userId;
+      p.pageData = {
+        clzt: this.clzt,
+        cljg: this.page
+      };
+
+      // if(!p.suboffice){this.$message({
+      //   message: '此走访状态下，所属分局不能为空！',
+      //   duration:13000,
+      //   showClose: true,
+      //   type: "warning"
+      // });
+      // return false
+      // }
+      // if(!p.policestation){
+      //   this.$message({
+      //   message: '此走访状态下，所属派出所不能为空！',
+      //   duration:13000,
+      //   showClose: true,
+      //   type: "warning"
+      // });
+      // return false
+      // }
+      // if(!p.turnoutarea){
+      //   this.$message({
+      //   message: '此走访状态下，所属责任区不能为空！',
+      //   duration:13000,
+      //   showClose: true,
+      //   type: "warning"
+      // });
+      // return false
+      // }
+
+      this.$api.post(this.$api.aport2 + "/issueData/updateReportData", p, r => {
         this.$message({
           message: r.message,
-          duration:8000,
+          duration: 8000,
           showClose: true,
           type: "success"
         });
@@ -682,73 +833,21 @@ export default {
         this.isShowDialog = false;
         this.innerVisible = false;
         this.selection = [];
-      })
+      });
     },
-    singSbSave(data){
-      let p = Object.assign({},this.dialogData,data)
-      p.jb = this.$store.state.user.jb;
-         p.bmbh = this.$store.state.user.bmbh;
-         p.userId = this.$store.state.user.userId;
-         p.pageData ={
-          clzt:this.page,
-      }
-     
-        // if(!p.suboffice){this.$message({
-        //   message: '此走访状态下，所属分局不能为空！',
-        //   duration:13000,
-        //   showClose: true,
-        //   type: "warning"
-        // });
-        // return false
-        // }
-        // if(!p.policestation){
-        //   this.$message({
-        //   message: '此走访状态下，所属派出所不能为空！',
-        //   duration:13000,
-        //   showClose: true,
-        //   type: "warning"
-        // });
-        // return false
-        // }
-        // if(!p.turnoutarea){
-        //   this.$message({
-        //   message: '此走访状态下，所属责任区不能为空！',
-        //   duration:13000,
-        //   showClose: true,
-        //   type: "warning"
-        // });
-        // return false
-        // }
-     
-      this.$api.post(
-          this.$api.aport2 + "/issueData/updateReportData",
-          p,
-          r => {
-            this.$message({
-              message: r.message,
-              duration:8000,
-              showClose: true,
-              type: "success"
-            });
-            this.getTable();
-            this.isShowDialog = false;
-            this.innerVisible = false;
-            this.selection=[];
-          }
-        );
-
-    },
-    //下发保存
+    //批量下发保存
     xfSave(data) {
       let p = data;
       p.serialList = this.multipleArr;
       p.jb = this.$store.state.user.jb;
       p.bmbh = this.$store.state.user.bmbh;
       p.userId = this.$store.state.user.userId;
+      p.cljg = this.page;
+      p.clzt = this.clzt;
       this.$api.post(this.$api.aport2 + "/issueData/issueDataTrigger", p, r => {
         this.$message({
           message: r.message,
-          duration:8000,
+          duration: 8000,
           showClose: true,
           type: "success"
         });
@@ -773,14 +872,14 @@ export default {
       }
     },
     // 内联弹窗保存
-    indialogSave(data){
-      if(data.type == 'singXf'){
-        this.singXfSave(data.data)
-      }else if(data.type == 'singSb'){
-        this.singSbSave(data.data)
+    indialogSave(data) {
+      if (data.type == "singXf") {
+        this.singXfSave(data.data);
+      } else if (data.type == "singSb") {
+        this.singSbSave(data.data);
       }
-      console.log(data)
-    },
+      console.log(data);
+    }
   }
 };
 </script>

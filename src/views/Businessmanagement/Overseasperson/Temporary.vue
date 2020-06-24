@@ -56,8 +56,9 @@
           </div>
         </el-form>
       </el-dialog>
+      <!-- v-if="(dialogType=='bj'||dialogType=='ck')&&isShowDialog" -->
       <TemporaryXQ
-        v-if="(dialogType=='bj'||dialogType=='ck')&&isShowDialog"
+        
         :dialogType="dialogType"
         :dialogData="dialogData"
         :dialogImgData="dialogImgData"

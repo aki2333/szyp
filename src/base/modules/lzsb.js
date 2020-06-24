@@ -143,7 +143,7 @@ const lzsb = {
             dm: 'zssj'
         },
         {
-            cm: '上报日期',
+            cm: '上报时间',
             dm: 'sbsj'
         },
         // {
@@ -353,7 +353,8 @@ const lzsb = {
             {
                 cm: '住宿日期',
                 type: 'datePicker',
-                dm: 'zssj'
+                dm: 'zssj',
+                toS:true,//日期精确到秒
             },
             {
                 cm: '行政区划',

@@ -169,6 +169,9 @@ th {
   background-color: #48b8ff!important;
   box-shadow: inset 0px 0px 5px #009bfe;
 }
+.table-box .el-button--text{
+  font-weight: bold;
+}
 .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
     background-color: #b4ddf7!important;
 }

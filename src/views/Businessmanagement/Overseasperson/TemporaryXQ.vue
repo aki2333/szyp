@@ -70,8 +70,8 @@
                 <el-date-picker
                   v-model="dialogData[cx.dm]"
                   :disabled="cx.dis"
-                  type="date"
-                  value-format="yyyy-MM-dd"
+                  :type="cx.toS?'datetime':'date'"
+                  :value-format="cx.toS?'yyyy-MM-dd HH:mm:ss':'yyyy-MM-dd'"
                   placeholder="选择日期"
                 ></el-date-picker>
               </template>
@@ -199,8 +199,8 @@
                 <el-date-picker
                   v-model="dialogData[cx.dm]"
                   :disabled="cx.dis"
-                  type="date"
-                  value-format="yyyy-MM-dd"
+                  :type="cx.toS?'datetime':'date'"
+                  :value-format="cx.toS?'yyyy-MM-dd HH:mm:ss':'yyyy-MM-dd'"
                   placeholder="选择日期"
                 ></el-date-picker>
               </template>

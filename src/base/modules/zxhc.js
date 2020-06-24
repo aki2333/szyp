@@ -104,7 +104,11 @@ const zxhc = {
                 }
             ]
         },
-
+        {
+            cm: '住宿地址',
+            type: 'input',
+            dm: 'address'
+        },
 
     ],
     lb: [
@@ -496,9 +500,15 @@ function editShow(jb,isE) {
                 type:'line'
             },
             {
-                cm: '姓名',
+                cm: '中文姓名',
                 type: 'input',
                 dm: 'name',
+                dis: jb == "3"||isE == '0' ? true : false
+            },
+            {
+                cm: '英文姓名',
+                type: 'input',
+                dm: 'givenname',
                 dis: jb == "3"||isE == '0' ? true : false
             },
             {
@@ -721,9 +731,15 @@ function handShow(jb) {
                 type:'line'
             },
             {
-                cm: '姓名',
+                cm: '中文姓名',
                 type: 'input',
                 dm: 'name',
+                dis: jb == "3" ? true : false
+            },
+            {
+                cm: '英文姓名',
+                type: 'input',
+                dm: 'givenname',
                 dis: jb == "3" ? true : false
             },
             {

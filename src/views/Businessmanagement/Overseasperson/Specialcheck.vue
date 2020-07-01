@@ -14,6 +14,7 @@
     <div class="page-box">
       <Table
         :page="page"
+        :clzt="clzt"
         :lbData="lbData"
         :isSelect="isSelect"
         :lbBtn="lbBtn"
@@ -21,8 +22,10 @@
         :isTab="isTab"
         :lbTab="lbTab"
         :tableData="tableData"
+        :refName="'hczf'"
         :selection="selection"
         :pageSizeArr="pageSizeArr"
+        :czWidth="'100'"
         @plFnc="plFnc"
         @pageSizeFnc="pageSizeFnc"
         @pageNumFnc="pageNumFnc"
@@ -30,12 +33,27 @@
         @blFnc="blFnc"
         @SelectionChange="SelectionChange"
         @rowClick="rowClick"
+        @rowDbClick="blFnc"
       ></Table>
     </div>
     <!-- 弹窗 -->
-    <Dialog :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
+    <Dialog :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false" :class="{'hczf-dia':dialogType == 'edit'}">
+      <Trans
+        v-if="dialogType == 'jb'"
+        :transData="transData"
+        :pointData="pointData"
+        @transSave="transSave"
+        @dialogCancel="isShowDialog=false"></Trans>
+      <!-- <Table 
+        v-if="dialogType == 'edit'" 
+        :lbData="inlbData"
+        :tableData="intableData"
+        :isPagination="isPagination"
+        :isEdit="isEdit"
+        style="width:34%"
+      ></Table> -->
       <Form
-        v-if="isShowDialog"
+        v-if="dialogType != 'jb'"
         :cxData="labelData"
         :dialogType="dialogType"
         :dialogData="dialogData"
@@ -71,12 +89,14 @@ import Inquire from "@/components/Inquire.vue";
 import Table from "@/components/Table.vue";
 import Dialog from "@/components/Dialog.vue";
 import Form from "@/components/Form.vue";
+import Trans from "@/components/Transfer.vue"
 export default {
   components: {
     Inquire,
     Table,
     Dialog,
-    Form
+    Form,
+    Trans
   },
   data() {
     return {
@@ -134,13 +154,20 @@ export default {
       indialogType: "",
       indialogData: {},
       incommonBtn: true,
-      inisDb: false
+      inisDb: false,
+      //内联弹窗表格
+      isPagination:false,
+      isEdit:false,
+      inlbData:this.$cdata.zxhc.zxhc.inlb,
+      intableData:{
+        list: [],
+      },
+      //穿梭框数据
+      transData:this.$cdata.zxhc.zxhc.lb,
+      pointData:[],
     };
   },
   watch: {
-    // clzt(val){
-
-    // },
     page(val) {
       if (this.clzt == 1) {
         //未处理
@@ -232,6 +259,7 @@ export default {
     tabTopClick1() {
       this.clzt = 1;
       this.cx.pageNum = 1;
+      this.lbData = this.$cdata.zxhc.zxhc.lb
       this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data => {
         this.lbTab = data.lbTab;
         this.page = this.lbTab[0].dm;
@@ -249,6 +277,7 @@ export default {
     tabTopClick2() {
       this.clzt = 2;
       this.cx.pageNum = 1;
+      this.lbData = this.$cdata.zxhc.zxhc.lb
       this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data => {
         this.lbTab = data.lbTab1;
         this.page = this.lbTab[0].dm;
@@ -263,8 +292,13 @@ export default {
       this.getTable();
     },
     rowClick(data) {
-      this.selection = [];
-      this.selection.push(data.data);
+      console.log(data)
+      // this.selection = [];
+      // this.selection.push(data.data);
+    },
+    transSave(data){
+      console.log(data)
+      
     },
     //下拉框联动
     lcFnc(data) {
@@ -410,7 +444,13 @@ export default {
     },
     //批量操作按钮  data==按钮名字
     plFnc(data) {
-      if (this.multipleArr.length == 0) {
+      this.isEditBtn = true;
+      this.commonBtn = true;
+      this.isDb = false;
+      this.dialogTitle = data.menu_name;
+      this.dialogType = data.py;
+      if (data.py == "sb") {
+        if (this.multipleArr.length == 0) {
         this.$message({
           message: "请先选择数据！",
           duration: 13000,
@@ -419,12 +459,6 @@ export default {
         });
         return false;
       }
-      this.isEditBtn = true;
-      this.commonBtn = true;
-      this.isDb = false;
-      this.dialogTitle = data.menu_name;
-      this.dialogType = data.py;
-      if (data.py == "sb") {
         //批量上报
         let p = {
           serialList: this.multipleArr,
@@ -449,6 +483,15 @@ export default {
           }
         );
       } else if (data.py == "xf") {
+        if (this.multipleArr.length == 0) {
+        this.$message({
+          message: "请先选择数据！",
+          duration: 13000,
+          showClose: true,
+          type: "warning"
+        });
+        return false;
+      }
         //批量下发
         this.dialogData = {};
         if (this.page == "1") {
@@ -531,13 +574,21 @@ export default {
           // console.log(this.isArrEmpty(this.officeArr, this.policeArr));
           // console.log(this.isAllEqual(this.policeArr));
         }
+      }else if(data.py == "jb"){
+        this.pointData = this.$cdata.zxhc.zxhc.lb
+        this.isShowDialog = true;
       }
     },
     //列表内按钮
     blFnc(data) {
       this.seriFlag = data.data.serial;
-      this.dialogTitle = data.btn.button_name;
-      this.dialogType = data.btn.button_type;
+      if(data.double){//双击打开
+        this.dialogType = 'edit'
+        this.dialogTitle = '处理'
+      }else{
+        this.dialogTitle = data.btn.button_name;
+        this.dialogType = data.btn.button_type;
+      }
       this.$cdata.zxhc
         .editShow(this.$store.state.user.jb, data.data.whetherUpdateState)
         .then(data => {
@@ -550,7 +601,7 @@ export default {
       if (data.data.policestation) {
         this.$store.dispatch("aGetZrq", data.data.policestation.slice(0, 8));
       }
-      if (data.btn.button_type == "edit") {
+      if (this.dialogType == "edit") {
         if (this.clzt == 2) {
           //已走访
           if (data.data.whetherUpdateState == "0") {
@@ -585,7 +636,7 @@ export default {
           this.joinFlag = true;
         }
         this.dialogData = Object.assign({}, data.data);
-      } else if (data.btn.button_type == "detail") {
+      } else if (this.dialogType == "detail") {
         this.isEditBtn = false;
         this.commonBtn = true;
         this.isDb = false;
@@ -859,6 +910,7 @@ export default {
     //列表tab切换  data==page 从1开始 控制按钮是否出现 v-for 和 v-if不能同时使用
     tabFnc(data) {
       this.page = data;
+      this.lbData = this.$cdata.zxhc.zxhc.lb
       this.cx.pageNum = 1;
       this.selection = [];
       this.getTable();
@@ -883,5 +935,11 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style>
+/* .hczf-dia .el-col.el-col-16{
+  width: 91.66667%;
+}
+.hczf-dia .el-dialog__body{
+  display: flex;
+} */
 </style>

@@ -104,15 +104,18 @@ const lzsb = {
         },
         {
             cm: '性别',
-            dm: 'genderMc'
+            dm: 'genderMc',
+            width:'50'
         },
         {
             cm: '出生日期',
-            dm: 'birthday'
+            dm: 'birthday',
+            width:'85'
         },
         {
             cm: '国家地区',
-            dm: 'nationalityMc'
+            dm: 'nationalityMc',
+            width:'70'
         },
         {
             cm: '证件种类',
@@ -132,11 +135,13 @@ const lzsb = {
         },
         {
             cm: '所属分局',
-            dm: 'subofficeMc'
+            dm: 'subofficeMc',
+            width:'280'
         },
         {
             cm: '住宿地址',
-            dm: 'zsdz'
+            dm: 'zsdz',
+            width:'280'
         },
         {
             cm: '住宿日期',
@@ -456,8 +461,8 @@ const lzsb = {
             {
                 cm: '审核时间',
                 type: 'datetimePicker',
-                dm: 'spsj'
-
+                dm: 'spsj',
+                dis: true
             }
 
         ]

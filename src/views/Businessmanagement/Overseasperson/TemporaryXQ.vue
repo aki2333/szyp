@@ -364,13 +364,13 @@ export default {
         let top = "";
         el.onmousedown = e => {
           //算出鼠标相对元素的位置
-          console.log("el===", e, el.getElementsByTagName("img")[0]);
+          console.log("el===", el, el.getElementsByTagName("img")[0]);
           let oImg = el.getElementsByTagName("img")[0];
           console.log("oImg==", oImg);
           if (e.target.tagName == "IMG") {
             let leftImg = "";
             let topImg = "";
-            oImg.style.position = "relative";
+            // oImg.style.position = "relative";
             console.log("onmousedown", e);
             //算出鼠标相对元素的位置
             let disX = e.clientX - oImg.offsetLeft;
@@ -382,9 +382,9 @@ export default {
               //用鼠标的位置减去鼠标相对元素的位置，得到元素的位置
               console.log("e.clientX", e.clientX);
               console.log("disX", disX);
-              console.log("oImg.offsetLeft", oImg.offsetLeft);
-              leftImg = e.clientX - disX;
-              topImg = e.clientY - disY;
+              console.log("oImg.offsetLeft", oImg.offsetLeft,oImg.offsetParent.offsetLeft);
+              leftImg = e.clientX - disX - 40;
+              topImg = e.clientY - disY - 40;
               //绑定元素位置到positionX和positionY上面
               //移动当前元素
               oImg.style.left = leftImg + "px";

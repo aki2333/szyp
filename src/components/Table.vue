@@ -36,20 +36,33 @@
       :data="tableData.list"
       style="width: 100%"
       @row-click="rowClick"
+      @row-dblclick="rowDbClick"
       @selection-change="handleSelectionChange"
       @select="selectPage"
       @select-all="selectPage"
     >
       <el-table-column v-if="isSelect" align="center" type="selection" width="50"></el-table-column>
       <!--  -->
-      <el-table-column
-        align="center"
-        show-overflow-tooltip
-        v-for="(lb,i) in lbData"
-        :key="i"
-        :prop="lb.dm"
-        :label="lb.cm"
-      ></el-table-column>
+      <template v-for="(lb,i) in lbData">
+        <el-table-column
+          align="center"
+          show-overflow-tooltip
+          v-if="!lb.control"
+          :key="i"
+          :prop="lb.dm"
+          :label="lb.cm"
+          :width="lb.width"
+        ></el-table-column>
+        <el-table-column
+          align="center"
+          show-overflow-tooltip
+          v-if="lb.dm=='sjly'&&page1=='1'&&refName=='hczf'"
+          :key="i"
+          :prop="lb.dm"
+          :label="lb.cm"
+          :width="lb.width"
+        ></el-table-column>
+      </template>
       <el-table-column :width="czWidth" align="center" label="操作" v-if="isEdit">
         <template slot-scope="scope">
           <template v-for="(lbt,lbi) in lbBtn">
@@ -67,7 +80,7 @@
                 @click="handleClick(scope.row,lbt)"
                 type="text"
                 size="small"
-                v-else-if="!lbt.user_ctrl||(lbt.user_ctrl==scope.row.status&&!lbt.status)||(lbt.user_ctrl==scope.row.whetherUpdateState)"
+                v-else-if="!lbt.user_ctrl||(lbt.user_ctrl==scope.row.status&&!lbt.status)||(lbt.user_ctrl==scope.row.whetherUpdateState&&!lbt.control)||(lbt.control&&page1=='1'&&clzt1==1)"
               >{{lbt.button_name}}</el-button>
             </span>
           </template>
@@ -94,9 +107,15 @@ export default {
       type: String,
       default: ""
     },
+    // 【内层列表tab】
     page: {
       type: String,
       default: ""
+    },
+    // 【外层列表tab】
+    clzt: {
+      type: Number,
+      default: 0,
     },
     isTab: {
       type: Boolean,
@@ -166,10 +185,10 @@ export default {
       type: String,
       default: "auto"
     },
-    timeChange: {
-      type: Number,
-      default:0
-    }
+    // timeChange: {
+    //   type: Number,
+    //   default:0
+    // }
   },
   data() {
     return {
@@ -178,31 +197,15 @@ export default {
       // order: "serial",
       // direction: 1,
       currentRow: 0,
-      page1: this.lbTab.length > 0 ? this.lbTab[0].dm : this.page
+      page1: this.lbTab.length > 0 ? this.lbTab[0].dm : this.page,
+      clzt1:this.clzt
     };
   },
   watch: {
     selection(val) {
-      // console.log(val);
       this.$nextTick(function() {
         this.toggleSelection(val);
       });
-    },
-    timeChange(){
-      console.log('跨页==',this.selection);
-      if (this.selection) {
-        console.log('selection',this.selection)
-        this.$nextTick(() =>{
-          console.log('selection==',this.selection)
-          this.selection.forEach(row => {
-            console.log("row==", row, this.$refs[this.refName], this.refName);
-            this.$refs[this.refName].toggleRowSelection(row, true);
-          });
-        })
-      }
-      // this.$nextTick(() => {
-        // this.toggleSelection(this.selection);
-      // });
     },
     lbTab(val) {
       if (val.length > 0) {
@@ -215,10 +218,14 @@ export default {
     },
     page(val) {
       this.page1 = val;
+    },
+    clzt(val){
+      this.clzt1 = val;
+      console.log('clzt',this.clzt)
     }
   },
   mounted() {
-    console.log("表格", this.lbType, this.tableData);
+    // console.log("表格", this.lbType, this.tableData);
     this.$nextTick(function() {
       this.toggleSelection(this.selection);
     });
@@ -260,11 +267,14 @@ export default {
       if (!this.isRowClick) {
         return false;
       }
-      console.log(row,column)
-      if(column.label=="操作"&&row.whetherUpdateState){
+      console.log(row,column,this.refName)
+      if(column.label=="操作"&&this.refName=='hczf'){
         return false;
       }
       this.$emit("rowClick", { type: this.lbType, data: row });
+    },
+    rowDbClick(row){
+      this.$emit("blFnc", { btn:'', data: row ,double:true});
     },
     handleClick(row, btn) {
       this.$emit("blFnc", { btn: btn, data: row });

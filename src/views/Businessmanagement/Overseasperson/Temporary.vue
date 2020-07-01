@@ -123,8 +123,8 @@ export default {
     this.$store.dispatch("aGetGender");
     this.$store.dispatch("aGetPassport");
     this.$store.dispatch("aGetDM", "qzzl");
-    this.$store.dispatch("aGetDM", "xzqh");
-
+    // this.$store.dispatch("aGetDM", "xzqh");
+    this.$store.dispatch("aGetXzqh");//只获取苏州的行政区划
     this.$store.dispatch("aGetDM", "lz_zfzl");
     this.$store.dispatch("aGetDM", "lz_zsxz");
     this.$store.dispatch("aGetDM", "rydylb");
@@ -233,11 +233,21 @@ export default {
     // 表格内操作
     blFnc(data) {
       console.log("表格按钮" + data.btn.button_name, data);
-      this.dialogTitle = data.btn.button_name;
-      this.dialogType = data.btn.button_type;
-      if (data.btn.button_type == "xzjl") {
+      if(data.double){//双击
+        if(this.cx.pd.shzt=='shzt_0'){//待审核
+          this.dialogTitle = '编辑';
+          this.dialogType = 'bj';
+        }else{
+          this.dialogTitle = '查看';
+          this.dialogType = 'ck';
+        }
+      }else{
+        this.dialogTitle = data.btn.button_name;
+        this.dialogType = data.btn.button_type;
+      }
+      if (this.dialogType == "xzjl") {
         this.downZsdjd(data.data.id);
-      } else if (data.btn.button_type == "bj") {
+      } else if (this.dialogType == "bj") {
         let p = {
           id: data.data.id,
           spr: this.$store.state.user.userId,
@@ -245,7 +255,7 @@ export default {
         };
         this.getDetailLzsb(p);
         this.getDetailLzsbTp(data.data.id);
-      } else if (data.btn.button_type == "ck") {
+      } else if (this.dialogType == "ck") {
         let p = {
           id: data.data.id
         };
@@ -253,6 +263,7 @@ export default {
         this.getDetailLzsbTp(data.data.id);
       }
     },
+    
     // 获取详情
     getDetailLzsb(p) {
       this.$api.post(this.$api.aport3 + "/api/lzsb/getDetailLzsb", p, r => {

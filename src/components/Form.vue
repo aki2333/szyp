@@ -97,6 +97,7 @@
               </template>
             </el-form-item>
             <template v-if="cx.type=='line'">
+                <span class="divider-text">{{cx.title}}</span>
                 <el-divider></el-divider>
             </template>
           </el-col>

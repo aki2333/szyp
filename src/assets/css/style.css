@@ -5,7 +5,8 @@
   }
   @media(max-width: 1400px){
     #big-img-box{    
-        top:114%!important;
+        top:72%!important;
+        height: 540px!important;
     }
   }  
 /* 间距样式 */
@@ -64,6 +65,9 @@
 }
 .hand{
     cursor: pointer;
+}
+.text-center{
+    text-align: center;
 }
 .el-dialog .font-blod .el-form-item__label{
     font-weight: bold!important;
@@ -125,13 +129,13 @@
     /* max-width: 50%;
     max-height: 500px;
     min-height: 200px; */
-    height: 800px;
+    height: 640px;
     width: 800px;
     z-index: 2020;
     margin:auto;
     left:0;
     right:0;
-    top:46%;
+    top:29%;
     bottom:0;
     padding: 40px;
     /* top:50%;
@@ -161,6 +165,9 @@
 }
 #big-img-box .el-image-viewer__canvas img{
     margin: 0!important;
+    width: 100%;
+    position: relative;
+
 }
 .yxg-form-item label {
   color: red;

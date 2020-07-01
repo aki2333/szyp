@@ -28,6 +28,12 @@
     </div>
     <!-- 弹窗 -->
     <Dialog :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
+      <Trans
+        v-if="dialogType == 'jb'"
+        :transData="transData"
+        :pointData="pointData"
+        @transSave="transSave"
+        @dialogCancel="isShowDialog=false"></Trans>
       <ZrqUser
         v-if="dialogType=='glyh'&&isShowDialog"
         :dialogType="dialogType"
@@ -53,9 +59,10 @@ import Table from "@/components/Table.vue";
 import Dialog from "@/components/Dialog.vue";
 import Form from "@/components/Form.vue";
 import ZrqUser from "./ZrqUser.vue";
+import Trans from "@/components/Transfer.vue"
 
 export default {
-  components: { Inquire, Table, Dialog, Form, ZrqUser },
+  components: { Inquire, Table, Dialog, Form, ZrqUser, Trans},
   data() {
     return {
       cx: {
@@ -77,7 +84,10 @@ export default {
       dialogTitle: "",
       dialogType: "",
       dialogData: {},
-      labelData: []
+      labelData: [],
+      //穿梭框数据
+      transData:this.$cdata.qxgl.zrqgl.lb,
+      pointData:[],
     };
   },
   mounted() {
@@ -208,6 +218,9 @@ export default {
         }).then(() => {
           this.disEnableZrq(tydata);
         });
+      }else if(data.py == 'jb'){
+        this.pointData = this.$cdata.qxgl.zrqgl.lb
+        this.isShowDialog = true;
       }
     },
     // 表格内操作
@@ -234,6 +247,9 @@ export default {
       } else if (data.type == "glyh") {
         this.addZrqUser(data.data);
       }
+    },
+    transSave(data){
+      console.log(data)
     },
     getNewZrqDm(data) {
       return new Promise(resolve => {

@@ -91,9 +91,6 @@ th {
 .inquire-ruleForm .el-col-8,.inquire-ruleForm .el-col-16{
   height: 38px;
 }
-.page>.inquire .el-form-item__label,.page>.inquire input{
-  color: #666!important;
-}
 .el-input.is-disabled .el-input__inner {
   color: #8a8a8a!important;
 }
@@ -111,7 +108,7 @@ th {
 }
 .left-content .el-checkbox{
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center; 
   padding: 10px 10px 10px 16px;
   margin-right: 0px;
@@ -236,4 +233,20 @@ input[type="number"]{
 .el-carousel__button{
   width: 7px!important;
   height:7px!important;
+}
+/* 字体颜色 */
+.el-table{
+  color: #000!important;
+}
+.el-dialog__body{
+  color: #000!important;
+}
+.el-form-item__label{
+  color: #000!important;
+}
+.el-input__inner{
+  color: #000!important;
+}
+.page>.inquire .el-form-item__label, .page>.inquire input{
+  color: #000!important;
 }

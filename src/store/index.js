@@ -112,9 +112,10 @@ export default new Vuex.Store({
       } else {
         state[data.type] = data.data;
       }
-
     },
-
+    getXzqh(state,data){//只包含苏州
+      state.xzqh = data
+    },
     getSuboffice(state, data) {
       state.suboffice = data;
     },
@@ -184,6 +185,14 @@ export default new Vuex.Store({
       return new Promise((resolve) => {
         context.commit('getPlBtn', payload)
         resolve(payload)
+      })
+    },
+    aGetXzqh(context,payload){
+      return new Promise((resolve) => {
+        api.post(api.aport3 + "/api/dm/getDmByJson",{ tab: 'dm_xzqhb'}, r =>{
+          context.commit('getXzqh',fnc.sortByKey(r, 'dm'))
+          resolve(payload)
+        })
       })
     },
     aGetNation(context, payload) {

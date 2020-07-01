@@ -169,7 +169,9 @@ export default {
         this.dialogTitle = data.button_name;
         this.dialogType = data.py;
         this.isShowDialog = true;
-      } else {
+      } else if(data.py == 'dc'){
+        this.$api.post(this.$api.aport1 + "/templateController/exportTemplateList",this.cx,r=>{console.log(r)},"","","blob",'xlsx')
+      }else {
         if (!this.checkRow.serial) {
           this.$message({
             message: "请先选择部门",

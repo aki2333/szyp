@@ -122,15 +122,18 @@ const zxhc = {
         },
         {
             cm: '性别',
-            dm: 'gender_desc'
+            dm: 'gender_desc',
+            width:'50'
         },
         {
             cm: '出生日期',
-            dm: 'birthday'
+            dm: 'birthday',
+            width:'85'
         },
         {
             cm: '国家地区',
-            dm: 'nationality_desc'
+            dm: 'nationality_desc',
+            width:'70'
         },
         {
             cm: '证件种类',
@@ -142,15 +145,18 @@ const zxhc = {
         },
         {
             cm: '详细地址',
-            dm: 'address'
+            dm: 'address',
+            width:'280'
         },
         {
             cm: '所属分局',
-            dm: 'suboffice_desc'
+            dm: 'suboffice_desc',
+            width:'280'
         },
         {
             cm: '所属派出所',
-            dm: 'policestation_desc'
+            dm: 'policestation_desc',
+            width:'280'
         },
         {
             cm: '下发类别',
@@ -176,10 +182,40 @@ const zxhc = {
             cm: '任务处理状态',
             dm: 'statusName'
         },
-
+        // {
+        //     cm: '数据来源',
+        //     dm: 'sjly',
+        //     control:true,//列表项根据条件控制显示
+        // },
 
     ],
+    inlb:[
+        {
+            cm:'处理单位',
+            dm:'cldw'
+        },
+        {
+            cm:'处理人',
+            dm:'clr'
+        },
+        {
+            cm:'处理时间',
+            dm:'clsj'
+        },
+        {
+            cm:'处理状态',
+            dm:'clzt'
+        },
+    ],
     lbBtn: [
+        // {
+        //     "button_name": "回退",
+        //     "button_type": 'back',
+        //     "serial": "201",
+        //     "user_ctrl":'1',
+        //     "status":true,
+        //     "control":true//根据Tab控制
+        // },
         {
             "button_name": "处理",
             "button_type": 'edit',
@@ -337,15 +373,18 @@ const zrqzf = {
         },
         {
             cm: '性别',
-            dm: 'gender_desc'
+            dm: 'gender_desc',
+            width:'50'
         },
         {
             cm: '出生日期',
-            dm: 'birthday'
+            dm: 'birthday',
+            width:'85'
         },
         {
             cm: '国家地区',
-            dm: 'nationality_desc'
+            dm: 'nationality_desc',
+            width:'70'
         },
         {
             cm: '证件号码',
@@ -353,11 +392,13 @@ const zrqzf = {
         },
         {
             cm: '住宿地址',
-            dm: 'address'
+            dm: 'address',
+            width:'280'
         },
         {
             cm: '接收责任区',
-            dm: 'turnoutarea_desc'
+            dm: 'turnoutarea_desc',
+            
         },
         {
             cm: '接收人',

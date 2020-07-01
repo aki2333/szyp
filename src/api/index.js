@@ -9,7 +9,7 @@ var root = 'http://192.168.3.131:1101/'//测试
 var aport1 = 'permission'//任
 // var aport1 = 'http://10.0.8.76:9404'
 var aport2 = 'datarelease'//石
-// var aport2 = 'http://10.0.30.40:9405'//石本地
+// var aport2 = 'http://10.0.30.68:9405'//石本地
 var aport3 = 'lzsb'
 
 // 引用axios
@@ -71,7 +71,7 @@ axios.interceptors.request.use(
   }
 )
 
-function apiAxios(method, url, params, success, failure, isDownload) {
+function apiAxios(method, url, params, success, failure, isDownload,type) {
   let loadingInstance1 = null;
   loadingInstance1 = Loading.service({ fullscreen: true, spinner: 'el-icon-loading', text: '正在加载中', background: 'rgba(0,0,0,0.6)', customClass: 'loadingClass' });
   if (params) {
@@ -131,7 +131,7 @@ function apiAxios(method, url, params, success, failure, isDownload) {
               link.href = url;
               // 生成时间戳
               let timestamp = new Date().getTime();
-              link.download = timestamp + ".pdf";
+              link.download = timestamp + "." + type;
               document.body.appendChild(link);
               link.click();
             }
@@ -158,8 +158,8 @@ export default {
   get: function (url, params, success, failure) {
     return apiAxios('GET', url, params, success, failure)
   },
-  post: function (url, params, success, failure, isDownload) {
-    return apiAxios('POST', url, params, success, failure, isDownload)
+  post: function (url, params, success, failure, isDownload,type) {
+    return apiAxios('POST', url, params, success, failure, isDownload,type)
   },
   put: function (url, params, success, failure) {
     return apiAxios('PUT', url, params, success, failure)

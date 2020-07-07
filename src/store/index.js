@@ -125,6 +125,9 @@ export default new Vuex.Store({
     getZrq(state, data) {
       state.turnoutarea = data;
     },
+    getzrq(state, data) {
+      state.turnoutarea = data;
+    },
     getDatatype(state, data) {
       state.datatype = data;
     },
@@ -139,9 +142,11 @@ export default new Vuex.Store({
     },
     getssfj(state, data) {
       state.ssfj = data
+      state.suboffice = data
     },
     getsspcs(state, data) {
       state.sspcs = data
+      state.policestation = data
     }
   },
   actions: {
@@ -271,7 +276,7 @@ export default new Vuex.Store({
     aGetBackstatus(context, payload) {
       return new Promise((resolve) => {
         api.post(api.aport2 + '/dm/getDmList', { tableName: 'dm_zfztb', sjly: payload }, r => {
-          context.commit('getBackstatus', fnc.sortByKey(r, 'dm'))
+          context.commit('getBackstatus', r)
           resolve(payload)
         })
       })
@@ -291,6 +296,8 @@ export default new Vuex.Store({
             context.commit('getssfj', fnc.sortByKey(r, 'dm'))
           } else if (payload.type == "sspcs") {
             context.commit('getsspcs', fnc.sortByKey(r, 'dm'))
+          } else if (payload.type == "zrq") {
+            context.commit('getzrq', fnc.sortByKey(r, 'dm'))
           }
           resolve(r)
         })

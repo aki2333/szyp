@@ -11,29 +11,32 @@
       <el-row :gutter="20">
         <el-col :span="24">
           <Table
-            :lbData="$cdata.qxgl.zrqgl.lb"
+            :lbData="lbData"
             :isSelect="false"
             :isEdit="true"
             :lbBtn="$cdata.qxgl.zrqgl.lbBtn"
             :plBtn="$store.state.plBtn"
             :tableData="tableData"
+            :clearSort="clearSort"
             @rowClick="rowClick"
             @pageSizeFnc="pageSizeFnc"
             @pageNumFnc="pageNumFnc"
             @plFnc="plFnc"
             @blFnc="blFnc"
+            @sortChange="sortChange"
+            @transSaveFnc="transSaveFnc"
           ></Table>
         </el-col>
       </el-row>
     </div>
     <!-- 弹窗 -->
     <Dialog :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
-      <Trans
+      <!-- <Trans
         v-if="dialogType == 'jb'"
         :transData="transData"
         :pointData="pointData"
         @transSave="transSave"
-        @dialogCancel="isShowDialog=false"></Trans>
+        @dialogCancel="isShowDialog=false"></Trans> -->
       <ZrqUser
         v-if="dialogType=='glyh'&&isShowDialog"
         :dialogType="dialogType"
@@ -59,19 +62,20 @@ import Table from "@/components/Table.vue";
 import Dialog from "@/components/Dialog.vue";
 import Form from "@/components/Form.vue";
 import ZrqUser from "./ZrqUser.vue";
-import Trans from "@/components/Transfer.vue"
+// import Trans from "@/components/Transfer.vue"
 
 export default {
-  components: { Inquire, Table, Dialog, Form, ZrqUser, Trans},
+  components: { Inquire, Table, Dialog, Form, ZrqUser},
   data() {
     return {
       cx: {
         pd: { zt: "1" },
         pageSize: 10,
         pageNum: 1,
-        order: "serial",
-        direction: 1
+        // order: "dm",
+        // direction: 0
       },
+      lbData:this.$cdata.qxgl.zrqgl.lb,
       tableData: {
         list: [],
         total: 0,
@@ -79,6 +83,7 @@ export default {
         pageNum: 1
       },
       currentRow: {},
+      clearSort:0,
       // 弹窗数据,
       isShowDialog: false,
       dialogTitle: "",
@@ -86,8 +91,8 @@ export default {
       dialogData: {},
       labelData: [],
       //穿梭框数据
-      transData:this.$cdata.qxgl.zrqgl.lb,
-      pointData:[],
+      // transData:this.$cdata.qxgl.zrqgl.lb,
+      // pointData:[],
     };
   },
   mounted() {
@@ -123,10 +128,14 @@ export default {
         }
       });
     },
+    //简表数据 子组件通知父组件改表格数据
+    transSaveFnc(data){
+      this.lbData = data
+    },
     // 获取查询参数
     cxFnc(data) {
       this.cx.pd = data;
-      this.getTable();
+      this.getTable(true);
     },
     // 获取分页等信息
     pageSizeFnc(data) {
@@ -137,8 +146,14 @@ export default {
       this.cx.pageNum = data;
       this.getTable();
     },
+    sortChange(data){
+      this.cx.order = data.prop;
+      this.cx.direction = data.direction;
+      this.getTable();
+    },
     // 查询列表
-    getTable() {
+    getTable(flag) {
+      if(flag){this.clearSort = new Date().getTime();delete this.cx.order;delete this.cx.direction }
       this.currentRow = {};
       this.$api.post(this.$api.aport1 + "/zrq/getZrq", this.cx, r => {
         // this.tableData = r.resultList;
@@ -218,10 +233,11 @@ export default {
         }).then(() => {
           this.disEnableZrq(tydata);
         });
-      }else if(data.py == 'jb'){
-        this.pointData = this.$cdata.qxgl.zrqgl.lb
-        this.isShowDialog = true;
       }
+      // else if(data.py == 'jb'){
+      //   this.pointData = this.$cdata.qxgl.zrqgl.lb
+      //   this.isShowDialog = true;
+      // }
     },
     // 表格内操作
     blFnc(data) {
@@ -248,9 +264,21 @@ export default {
         this.addZrqUser(data.data);
       }
     },
-    transSave(data){
-      console.log(data)
-    },
+    // 简表保存
+    // transSave(data){
+    //   let lbArr = this.$cdata.qxgl.zrqgl.lb
+    //   let jbArr = [];
+    //   lbArr.forEach(item1 => {
+    //     data.forEach(item2 => {
+    //       if(item1.dm == item2){
+    //         jbArr.push(item1)
+    //       }
+    //     })
+    //   });
+    //   console.log('jbArr',jbArr)
+    //   this.lbData = jbArr;
+    //   this.isShowDialog = false;
+    // },
     getNewZrqDm(data) {
       return new Promise(resolve => {
         this.$api.post(

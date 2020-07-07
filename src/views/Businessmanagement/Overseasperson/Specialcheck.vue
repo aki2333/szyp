@@ -1,6 +1,13 @@
 <template>
   <div class="page">
-    <Inquire :cxData="cxData" :pd="cx.pd" @cxFnc="cxFnc" @lcFnc="lcFnc"></Inquire>
+    <Inquire 
+      :cxData="cxData" 
+      :facxData="facxData" 
+      :pd="cx.pd" 
+      @cxFnc="cxFnc" 
+      @lcFnc="lcFnc" 
+      @queryShowFnc="queryShowFnc"
+      @commandfnc="commandfnc"></Inquire>
     <div class="t-tab-top">
       <div class="tab-top-item hand" @click="tabTopClick1">
         <img :src="clzt==1?tabImgActive_1:tabImg_1" alt />
@@ -26,6 +33,7 @@
         :selection="selection"
         :pageSizeArr="pageSizeArr"
         :czWidth="'100'"
+        :clearSort="clearSort"
         @plFnc="plFnc"
         @pageSizeFnc="pageSizeFnc"
         @pageNumFnc="pageNumFnc"
@@ -34,16 +42,12 @@
         @SelectionChange="SelectionChange"
         @rowClick="rowClick"
         @rowDbClick="blFnc"
+        @sortChange="sortChange"
+        @transSaveFnc="transSaveFnc"
       ></Table>
     </div>
     <!-- 弹窗 -->
     <Dialog :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false" :class="{'hczf-dia':dialogType == 'edit'}">
-      <Trans
-        v-if="dialogType == 'jb'"
-        :transData="transData"
-        :pointData="pointData"
-        @transSave="transSave"
-        @dialogCancel="isShowDialog=false"></Trans>
       <!-- <Table 
         v-if="dialogType == 'edit'" 
         :lbData="inlbData"
@@ -53,7 +57,6 @@
         style="width:34%"
       ></Table> -->
       <Form
-        v-if="dialogType != 'jb'"
         :cxData="labelData"
         :dialogType="dialogType"
         :dialogData="dialogData"
@@ -89,14 +92,12 @@ import Inquire from "@/components/Inquire.vue";
 import Table from "@/components/Table.vue";
 import Dialog from "@/components/Dialog.vue";
 import Form from "@/components/Form.vue";
-import Trans from "@/components/Transfer.vue"
 export default {
   components: {
     Inquire,
     Table,
     Dialog,
     Form,
-    Trans
   },
   data() {
     return {
@@ -109,6 +110,7 @@ export default {
       isSelect: true,
       isTab: true,
       cxData: this.$cdata.zxhc.zxhc.cx,
+      facxData: this.$cdata.zxhc.zxhc.facx,
       lbData: this.$cdata.zxhc.zxhc.lb,
       lbBtn: this.$cdata.zxhc.zxhc.lbBtn,
       plBtn: [],
@@ -118,7 +120,7 @@ export default {
       cx: {
         pd: {},
         pageSize: 15,
-        pageNum: 1
+        pageNum: 1,
       },
       tableData: {
         list: [],
@@ -126,6 +128,7 @@ export default {
         pageSize: 10,
         pageNum: 1
       },
+      clearSort:0,
       page: "1",
       clzt: 1,
       multipleSelection: [],
@@ -162,9 +165,6 @@ export default {
       intableData:{
         list: [],
       },
-      //穿梭框数据
-      transData:this.$cdata.zxhc.zxhc.lb,
-      pointData:[],
     };
   },
   watch: {
@@ -186,7 +186,7 @@ export default {
           this.plBtn = this.$store.state.plBtn;
           let arr = [];
           for (var j = 0; j < this.plBtn.length; j++) {
-            if (this.plBtn[j].py == "cx" || this.plBtn[j].py == "qc") {
+            if (this.plBtn[j].py == "cx" || this.plBtn[j].py == "qc" || this.plBtn[j].py == "jb") {
               arr.push(this.plBtn[j]);
             }
           }
@@ -196,44 +196,44 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(() => {
       this.$store.dispatch("aGetNation");
       this.$store.dispatch("aGetGender");
       this.$store.dispatch("aGetPassport");
-      if (this.$store.state.user.jb == "1") {
-        this.$store.dispatch("aGetSuboffice");
-      } else if (this.$store.state.user.jb == "2") {
-        this.$store.dispatch(
-          "aGetSuboffice",
-          this.$store.state.user.bmbh.slice(0, 6)
-        );
-      } else if (this.$store.state.user.jb == "3") {
-        this.$store.dispatch(
-          "aGetSuboffice",
-          this.$store.state.user.bmbh.slice(0, 6) + "000000"
-        );
-      }
-      if (this.$store.state.user.jb == "1") {
-        this.$store.dispatch("aGetPolice");
-        this.$store.dispatch("aGetZrq");
-      } else if (this.$store.state.user.jb == "2") {
-        this.$store.dispatch(
-          "aGetPolice",
-          this.$store.state.user.bmbh.slice(0, 6)
-        );
-        this.$store.dispatch(
-          "aGetZrq",
-          this.$store.state.user.bmbh.slice(0, 6)
-        );
-      } else if (this.$store.state.user.jb == "3") {
-        this.$store.dispatch("aGetPolice", this.$store.state.user.bmbh);
-        this.$store.dispatch(
-          "aGetZrq",
-          this.$store.state.user.bmbh.slice(0, 8)
-        );
-      }
       this.$store.dispatch("aGetDatatype");
-
+      this.getSpInit();
+      // if (this.$store.state.user.jb == "1") {
+      //   this.$store.dispatch("aGetSuboffice");
+      // } else if (this.$store.state.user.jb == "2") {
+      //   this.$store.dispatch(
+      //     "aGetSuboffice",
+      //     this.$store.state.user.bmbh.slice(0, 6)
+      //   );
+      // } else if (this.$store.state.user.jb == "3") {
+      //   this.$store.dispatch(
+      //     "aGetSuboffice",
+      //     this.$store.state.user.bmbh.slice(0, 6) + "000000"
+      //   );
+      // }
+      // if (this.$store.state.user.jb == "1") {
+      //   this.$store.dispatch("aGetPolice");
+      //   this.$store.dispatch("aGetZrq");
+      // } else if (this.$store.state.user.jb == "2") {
+      //   this.$store.dispatch(
+      //     "aGetPolice",
+      //     this.$store.state.user.bmbh.slice(0, 6)
+      //   );
+      //   this.$store.dispatch(
+      //     "aGetZrq",
+      //     this.$store.state.user.bmbh.slice(0, 6)
+      //   );
+      // } else if (this.$store.state.user.jb == "3") {
+      //   this.$store.dispatch("aGetPolice", this.$store.state.user.bmbh);
+      //   this.$store.dispatch(
+      //     "aGetZrq",
+      //     this.$store.state.user.bmbh.slice(0, 8)
+      //   );
+      // }
+    this.$nextTick(() => {
       let arr = [];
       this.plBtn = this.$store.state.plBtn;
       for (var i = 0; i < this.plBtn.length; i++) {
@@ -251,15 +251,54 @@ export default {
     });
   },
   methods: {
+    getSpInit(){
+      this.$cdata.qxgl.getSjBm(this.$store.state.user.bmbh).then(data => {
+        this.$store.dispatch("aGetssdw", {
+          bmbh: "320500000000",
+          type: "ssfj"
+        });
+        if (this.$store.state.user.jb == 2) {
+          if(data.fj){
+            this.cx.pd.suboffice = data.fj
+          }else{
+            this.cx.pd.suboffice = data.bmbh
+          }
+          this.$store.dispatch("aGetssdw", { bmbh: data.bmbh, type: "sspcs" });
+          this.cx.pd.subofficedis = true;
+        } else if (this.$store.state.user.jb == 3) {
+          this.$store.dispatch("aGetssdw", { bmbh: data.fj, type: "sspcs" });
+          this.$store.dispatch("aGetssdw", { bmbh: data.bmbh, type: "zrq" });
+          this.cx.pd.suboffice = data.fj;
+          this.cx.pd.policestation = data.bmbh;
+          this.cx.pd.subofficedis = true;
+          this.cx.pd.policestationdis = true;
+        }
+      });
+    },
+    //简表数据 子组件通知父组件改表格数据
+    transSaveFnc(data){
+
+      this.lbData = data
+    },
+    queryShowFnc(flag){
+      if(!flag){
+        this.$store.dispatch("aGetBackstatus").then(() => {});
+      }
+    },
+    commandfnc(data){
+      if(data.data=='datatype'){
+        this.$store.dispatch("aGetBackstatus",data.command).then(() => {});
+      }
+    },
     cxFnc(data) {
       this.cx.pd = data;
       this.cx.pageNum = 1;
-      this.getTable();
+      this.getTable(true);
     },
     tabTopClick1() {
       this.clzt = 1;
       this.cx.pageNum = 1;
-      this.lbData = this.$cdata.zxhc.zxhc.lb
+      
       this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data => {
         this.lbTab = data.lbTab;
         this.page = this.lbTab[0].dm;
@@ -272,33 +311,36 @@ export default {
         }
       }
       this.plBtn = arr;
-      this.getTable();
+      this.getTable(true);
     },
     tabTopClick2() {
       this.clzt = 2;
       this.cx.pageNum = 1;
-      this.lbData = this.$cdata.zxhc.zxhc.lb
+      
       this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data => {
         this.lbTab = data.lbTab1;
         this.page = this.lbTab[0].dm;
       });
       let arr = [];
       for (var k = 0; k < this.plBtn.length; k++) {
-        if (this.plBtn[k].py == "cx" || this.plBtn[k].py == "qc") {
+        if (this.plBtn[k].py == "cx" || this.plBtn[k].py == "qc" || this.plBtn[k].py == "jb") {
           arr.push(this.plBtn[k]);
         }
       }
       this.plBtn = arr;
-      this.getTable();
+      this.getTable(true);
+    },
+    //列表tab切换  data==page 从1开始 控制按钮是否出现 v-for 和 v-if不能同时使用
+    tabFnc(data) {
+      this.page = data;
+      this.cx.pageNum = 1;
+      this.selection = [];
+      this.getTable(true);
     },
     rowClick(data) {
       console.log(data)
       // this.selection = [];
       // this.selection.push(data.data);
-    },
-    transSave(data){
-      console.log(data)
-      
     },
     //下拉框联动
     lcFnc(data) {
@@ -317,7 +359,7 @@ export default {
         if (data.obj.policestation) {
           data.obj.policestation = "";
         }
-        this.$store.dispatch("aGetPolice", data.data.slice(0, 6));
+        this.$store.dispatch("aGetssdw", { bmbh: data.data, type: "sspcs" });
       }
     },
     //弹窗form下拉框联动
@@ -332,7 +374,7 @@ export default {
         if (data.obj.policestation) {
           data.obj.policestation = "";
         }
-        this.$store.dispatch("aGetPolice", data.data.slice(0, 6));
+        this.$store.dispatch("aGetssdw", { bmbh: data.data, type: "sspcs" });
       }
       if (data.key.dm == "policestation") {
         if (data.data == "") {
@@ -341,7 +383,7 @@ export default {
         if (data.obj.turnoutarea) {
           data.obj.turnoutarea = "";
         }
-        this.$store.dispatch("aGetZrq", data.data.slice(0, 8));
+        this.$store.dispatch("aGetssdw", { bmbh: data.data, type: "zrq" });
       }
     },
     informLcFnc(data) {
@@ -352,7 +394,7 @@ export default {
         if (data.obj.policestation) {
           data.obj.policestation = "";
         }
-        this.$store.dispatch("aGetPolice", data.data.slice(0, 6));
+        this.$store.dispatch("aGetssdw", { bmbh: data.data, type: "sspcs" });
       }
       if (data.key.dm == "policestation") {
         if (data.data == "") {
@@ -361,7 +403,7 @@ export default {
         if (data.obj.turnoutarea) {
           data.obj.turnoutarea = "";
         }
-        this.$store.dispatch("aGetZrq", data.data.slice(0, 8));
+        this.$store.dispatch("aGetssdw", { bmbh: data.data, type: "zrq" });
       }
     },
     radioChange(val) {
@@ -424,15 +466,18 @@ export default {
         return value !== undefined;
       });
     },
+    sortChange(data){
+      this.cx.order = data.prop;
+      this.cx.direction = data.direction
+      this.getTable();
+    },
     // 查询列表
-    getTable() {
-      let pdAdd = {
-        jb: this.$store.state.user.jb,
-        bmbh: this.$store.state.user.bmbh,
-        clzt: this.clzt,
-        cljg: this.page
-      };
-      this.cx.pd = Object.assign({}, this.cx.pd, pdAdd);
+    getTable(flag) {
+      if(flag){this.clearSort = new Date().getTime();delete this.cx.order;delete this.cx.direction }
+      this.cx.pd.jb = this.$store.state.user.jb;
+      this.cx.pd.bmbh = this.$store.state.user.bmbh;
+      this.cx.pd.clzt = this.clzt;
+      this.cx.pd.cljg = this.page;
       this.$api.post(
         this.$api.aport2 + "/issueData/getIssueDataPage",
         this.cx,
@@ -540,7 +585,8 @@ export default {
           // } else 
           // if (!this.isArrEmpty(this.policeArr)) {
             //都是空值
-            this.$store.dispatch("aGetPolice", this.officeArr[0].slice(0, 6));
+            this.$store.dispatch("aGetssdw", { bmbh: this.officeArr[0], type: "sspcs" });
+            // this.$store.dispatch("aGetPolice", this.officeArr[0].slice(0, 6));
             this.labelData = this.$cdata.zxhc.zxhc.xfFContent;
             this.isShowDialog = true;
           // } 
@@ -574,9 +620,6 @@ export default {
           // console.log(this.isArrEmpty(this.officeArr, this.policeArr));
           // console.log(this.isAllEqual(this.policeArr));
         }
-      }else if(data.py == "jb"){
-        this.pointData = this.$cdata.zxhc.zxhc.lb
-        this.isShowDialog = true;
       }
     },
     //列表内按钮
@@ -596,10 +639,12 @@ export default {
         });
       this.$store.dispatch("aGetBackstatus", data.data.datatype);
       if (data.data.suboffice) {
-        this.$store.dispatch("aGetPolice", data.data.suboffice.slice(0, 6));
+        this.$store.dispatch("aGetssdw", { bmbh: data.data.suboffice, type: "sspcs" });
+        // this.$store.dispatch("aGetPolice", data.data.suboffice.slice(0, 6));
       }
       if (data.data.policestation) {
-        this.$store.dispatch("aGetZrq", data.data.policestation.slice(0, 8));
+        this.$store.dispatch("aGetssdw", { bmbh: data.data.policestation, type: "zrq" });
+        // this.$store.dispatch("aGetZrq", data.data.policestation.slice(0, 8));
       }
       if (this.dialogType == "edit") {
         if (this.clzt == 2) {
@@ -642,6 +687,22 @@ export default {
         this.isDb = false;
         this.dialogData = Object.assign({}, data.data);
         this.isShowDialog = true;
+      }else if(this.dialogType == "back"){
+        let p={
+          serial:data.data.serial,
+          jb : this.$store.state.user.jb,
+          bmbh : this.$store.state.user.bmbh,
+          userId : this.$store.state.user.userId,
+        }
+        this.$api.post(this.$api.aport2 + "/issueData/updateReportDataByZfzt",p,r=>{
+          this.$message({
+          message: r.message,
+          duration: 8000,
+          showClose: true,
+          type: "success"
+        });
+        this.getTable();
+        })
       }
     },
     //编辑保存
@@ -845,34 +906,6 @@ export default {
         clzt: this.clzt,
         cljg: this.page
       };
-
-      // if(!p.suboffice){this.$message({
-      //   message: '此走访状态下，所属分局不能为空！',
-      //   duration:13000,
-      //   showClose: true,
-      //   type: "warning"
-      // });
-      // return false
-      // }
-      // if(!p.policestation){
-      //   this.$message({
-      //   message: '此走访状态下，所属派出所不能为空！',
-      //   duration:13000,
-      //   showClose: true,
-      //   type: "warning"
-      // });
-      // return false
-      // }
-      // if(!p.turnoutarea){
-      //   this.$message({
-      //   message: '此走访状态下，所属责任区不能为空！',
-      //   duration:13000,
-      //   showClose: true,
-      //   type: "warning"
-      // });
-      // return false
-      // }
-
       this.$api.post(this.$api.aport2 + "/issueData/updateReportData", p, r => {
         this.$message({
           message: r.message,
@@ -907,14 +940,7 @@ export default {
         this.selection = [];
       });
     },
-    //列表tab切换  data==page 从1开始 控制按钮是否出现 v-for 和 v-if不能同时使用
-    tabFnc(data) {
-      this.page = data;
-      this.lbData = this.$cdata.zxhc.zxhc.lb
-      this.cx.pageNum = 1;
-      this.selection = [];
-      this.getTable();
-    },
+    
     //弹窗保存
     dialogSave(data) {
       if (data.type == "edit") {

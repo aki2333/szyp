@@ -111,6 +111,23 @@ const zxhc = {
         },
 
     ],
+    facx:[
+        {
+            cm: '下发类别',
+            type: 'select',
+            dm: 'datatype'
+        },
+        {
+            cm: '走访状态',
+            type: 'select',
+            dm: 'backstatus'
+        }, 
+        {
+            cm: '任务处理状态',
+            type: 'select',
+            dm: 'statusName'
+        },
+    ],
     lb: [
         {
             cm: '中文姓名',
@@ -208,14 +225,14 @@ const zxhc = {
         },
     ],
     lbBtn: [
-        // {
-        //     "button_name": "回退",
-        //     "button_type": 'back',
-        //     "serial": "201",
-        //     "user_ctrl":'1',
-        //     "status":true,
-        //     "control":true//根据Tab控制
-        // },
+        {
+            "button_name": "回退",
+            "button_type": 'back',
+            "serial": "201",
+            "user_ctrl":'1',
+            "status":true,
+            "control":true//根据Tab控制
+        },
         {
             "button_name": "处理",
             "button_type": 'edit',

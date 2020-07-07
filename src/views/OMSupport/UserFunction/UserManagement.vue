@@ -19,11 +19,14 @@
             :plBtn="plBtn"
             :disPlBtn="disPlBtn"
             :tableData="tableData"
+            :clearSort="clearSort"
             @pageSizeFnc="pageSizeFnc"
             @pageNumFnc="pageNumFnc"
             @rowClick="rowClick"
             @plFnc="plFnc"
             @blFnc="blFnc"
+            @sortChange="sortChange"
+            @transSaveFnc="transSaveFnc"
           ></Table>
         </el-col>
         <el-col :span="8" v-if="dwtbShow">
@@ -33,6 +36,7 @@
             :isSelect="false"
             :isPl="false"
             :isEdit="false"
+            :isSort="false"
             :tableData="tableData2"
             :isPagination="false"
             @rowClick="rowClick"
@@ -45,6 +49,7 @@
             :lbData="$cdata.qxgl.jsgl.lb"
             :isPl="false"
             :isEdit="false"
+            :isSort="false"
             refName="jstb"
             :lbBtn="$cdata.qxgl.jsgl.lbBtn"
             :tableData="tableData3"
@@ -124,8 +129,8 @@ export default {
         pd: { userType: "0", valid: "1" },
         pageSize: 10,
         pageNum: 1,
-        order: "serial",
-        direction: 1
+        // order: "",
+        // direction: ''
       },
       disPlBtn: false,
       tableData: {
@@ -134,6 +139,7 @@ export default {
         pageSize: 10,
         pageNum: 1
       },
+      clearSort:0,
       selection: [],
       tableData2: { list: [] },
       tableData3: { list: [] },
@@ -158,6 +164,7 @@ export default {
   },
   mounted() {
     // this.getTable();
+    console.log('---',this.$route)
     this.$store
       .dispatch("aGetBmbh", { bmbh: this.$store.state.user.bmbh })
       .then(() => {});
@@ -171,13 +178,17 @@ export default {
         this.cancel();
       }
     },
+    //简表数据 子组件通知父组件改表格数据
+    transSaveFnc(data){
+      this.lbData = data
+    },
     // 获取查询参数
     cxFnc(data) {
       this.cx.pd = data;
       this.cx.pageNum = 1;
       console.log("用户类型", data);
       // this.disPlBtn = data.userType == 0 ? true : false;
-      this.getTable();
+      this.getTable(true);
     },
     // 获取分页等信息
     pageSizeFnc(data) {
@@ -188,9 +199,14 @@ export default {
       this.cx.pageNum = data;
       this.getTable();
     },
+    sortChange(data){
+      this.cx.order = data.prop;
+      this.cx.direction = data.direction
+      this.getTable();
+    },
     // 查询用户列表
-    getTable() {
-      console.log(this.cx);
+    getTable(flag) {
+      if(flag){this.clearSort = new Date().getTime();delete this.cx.order;delete this.cx.direction }
       this.$api.post(
         this.$api.aport1 + "/userController/queryUserInfo",
         this.cx,

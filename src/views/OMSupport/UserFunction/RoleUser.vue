@@ -13,10 +13,12 @@
           :isTab="true"
           :page="tabPage"
           :lbTab="$cdata.qxgl.jsgl.yhlbTab"
+          :clearSort="clearSort"
           @blFnc="blFnc"
           @pageSizeFnc="pageSizeFnc"
           @pageNumFnc="pageNumFnc"
           @tabFnc="tabFnc"
+          @sortChange="sortChange"
           :tableData="tableData"
         ></Table>
       </el-col>
@@ -60,8 +62,8 @@ export default {
         },
         pageSize: 10,
         pageNum: 1,
-        order: "serial",
-        direction: 1
+        // order: "serial",
+        // direction: 1
       },
       tabPage: "",
       tableData: {
@@ -69,7 +71,8 @@ export default {
         total: 0,
         pageSize: 10,
         pageNum: 1
-      }
+      },
+      clearSort:0,
     };
   },
   mounted() {
@@ -80,17 +83,22 @@ export default {
     cxFnc(data) {
       console.log(data);
       this.cx.pd = data;
+      this.getTable(true);
+    },
+    sortChange(data){
+      this.cx.order = data.prop;
+      this.cx.direction = data.direction
       this.getTable();
     },
     // 查询用户列表
-    getTable() {
-      console.log("查询用户列表-", this.cx);
+    getTable(flag) {
+      if(flag){this.clearSort = new Date().getTime();delete this.cx.order;delete this.cx.direction }
       this.$api.post(this.$api.aport1 + "/role/getRoleUser", this.cx, r => {
         this.tableData = r;
         this.tableData.list.forEach(item => {
           item.status = this.cx.pd.status;
         });
-        console.log(this.tableData);
+        // console.log(this.tableData);
       });
     },
     // 获取分页等信息
@@ -158,7 +166,7 @@ export default {
       this.cx.pd.status = data;
       this.tabPage = data;
       this.cx.pageNum = 1;
-      this.getTable();
+      this.getTable(true);
     },
     cancel() {
       this.$emit("dialogCancel");

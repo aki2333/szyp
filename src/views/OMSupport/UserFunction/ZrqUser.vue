@@ -13,10 +13,12 @@
           :isEdit="false"
           :selection="zrqDmList"
           :timeChange="timeChange"
+          :clearSort="clearSort"
           @SelectionChange="addZrqUser"
           @selectPageFnc="selectPageFnc"
           @pageSizeFnc="pageSizeFnc"
           @pageNumFnc="pageNumFnc"
+          @sortChange="sortChange"
           :tableData="tableData"
         ></Table>
       </el-col>
@@ -56,8 +58,8 @@ export default {
         },
         pageSize: 10,
         pageNum: 1,
-        order: "serial",
-        direction: 1
+        // order: "serial",
+        // direction: 1
       },
       tableData: {
         list: [],
@@ -65,6 +67,7 @@ export default {
         pageSize: 10,
         pageNum: 1
       },
+      clearSort:0,
       zrqDmList: [],
       checkedUser: [],
       //跨页选中
@@ -88,7 +91,7 @@ export default {
     cxFnc(data) {
       this.cx.pd = data;
       this.cx.pageNum = 1;
-      this.getTable();
+      this.getTable(true);
     },
     lcFnc(data){
       if(data.key.dm=='sfyx'){
@@ -96,9 +99,15 @@ export default {
         this.getAllData();
       }
     },
+    sortChange(data){
+      this.cx.order = data.prop;
+      this.cx.direction = data.direction;
+      this.getTable();
+    },
     // 查询用户列表
-    getTable() {
+    getTable(flag) {
       console.log("查询列表-", this.cx);
+      if(flag){this.clearSort = new Date().getTime();delete this.cx.order;delete this.cx.direction }
       this.$api.post(this.$api.aport1 + "/zrq/getZrqUser", this.cx, r => {
         this.tableData = r.pageInfo;
         this.zrqAll = r.zrqDmList; //与无配置选中的数据合并

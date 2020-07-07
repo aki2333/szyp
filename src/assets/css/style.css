@@ -76,6 +76,7 @@
 .page{
     min-height: 96%;
     background-color: #ffffff;
+    border-radius: 0 0 20px 20px;
 }
 .page-box{
     background: #ffffff;

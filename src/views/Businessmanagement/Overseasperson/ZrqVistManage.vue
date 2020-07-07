@@ -13,7 +13,7 @@
                     <el-button type="primary" size="small" class="ml-5" @click="getHandData()">查询</el-button>
                 </div>
                 <div class="base-flex left-query" v-if="$store.state.user.jb!='3'">
-                    <el-tooltip content="请选择派出所" placement="bottom-start" :value="pcsQuery==$store.state.user.bmbh" :manual="true" :offset="50">
+                    <el-tooltip content="请选择派出所" popper-class="zrq-pop" placement="bottom-start" :value="pcsQuery==$store.state.user.bmbh" :manual="true" :offset="50">
                       <el-select v-model="pcsQuery" filterable placeholder="请选择" size="mini" @change="getHandData()">
                         <el-option
                           v-for="item in pcsArr"
@@ -98,12 +98,15 @@
                 :isEdit="isEdit"
                 :tableData="tableData"
                 :selection="selection"
+                :clearSort="clearSort"
                 @plFnc="plFnc"
                 @pageSizeFnc="pageSizeFnc"
                 @pageNumFnc="pageNumFnc"               
                 @blFnc="blFnc"
                 @SelectionChange="SelectionChange"
                 @rowClick="rowClick"
+                @sortChange="sortChange"
+                @transSaveFnc="transSaveFnc"
             ></Table>
             </div>
       </el-main>
@@ -182,6 +185,7 @@ export default {
         pageSize: 10,
         pageNum: 1
       },
+      clearSort:0,
       page: 1,
       clzt: 1,
       multipleSelection: [],
@@ -232,6 +236,10 @@ export default {
   methods: {
       aaa(val){
         console.log(val.length)
+      },
+      //简表数据 子组件通知父组件改表格数据
+      transSaveFnc(data){
+        this.lbData = data
       },
       load(){
         // if(this.hazyFlag==true){//模糊查询 有值 懒加载
@@ -421,14 +429,14 @@ export default {
     cxFnc(data) {
       this.cx.pd = data;
       this.cx.pageNum = 1;
-      this.getTable();
+      this.getTable(true);
     },
     tabTopClick1(){
       this.clzt=1;
       this.isEdit = true;
       this.plBtn = this.$store.state.plBtn
       this.cx.pageNum = 1;
-      this.getTable()
+      this.getTable(true)
     },
     tabTopClick2(){
       this.clzt=2;
@@ -442,7 +450,7 @@ export default {
             }
           this.plBtn = arr
       this.cx.pageNum = 1;
-      this.getTable()
+      this.getTable(true)
     },
     rowClick(data){
       this.selection=[];
@@ -544,8 +552,14 @@ export default {
         return value !== undefined;
       });
     },
+    sortChange(data){
+      this.cx.order = data.prop;
+      this.cx.direction = data.direction
+      this.getTable();
+    },
     // 查询列表
-    getTable() {
+    getTable(flag) {
+      if(flag){this.clearSort = new Date().getTime();delete this.cx.order;delete this.cx.direction }
       let pdAdd = {
         bmbh: this.$store.state.user.bmbh,
         jb:this.$store.state.user.jb,
@@ -554,7 +568,6 @@ export default {
         clzt: this.clzt,
         cljg: 4
       };
-      console.log('===',this.cx.pageNum)
       this.cx.pd = Object.assign({}, this.cx.pd, pdAdd);
       this.$api.post(
         this.$api.aport2 + "/issueData/getIssueDataPage",
@@ -571,8 +584,7 @@ export default {
     },
     //批量操作按钮  data==按钮名字
     plFnc(data) {
-       console.log(this.multipleSelection.length,this.diaPage)
-      if (this.multipleArr.length == 0) {
+      if (this.multipleArr.length == 0&&data.py != "jb") {
         this.$message({
           message: "请先选择数据！",
           duration:13000,
@@ -697,5 +709,11 @@ export default {
   overflow: hidden;
   text-overflow:ellipsis;
   white-space: nowrap;
+}
+</style>
+<style>
+.zrq-pop{
+  top: 196px!important;
+  line-height: 0.9!important;
 }
 </style>

@@ -40,27 +40,30 @@
       @selection-change="handleSelectionChange"
       @select="selectPage"
       @select-all="selectPage"
+      @sort-change="sortChange"
     >
       <el-table-column v-if="isSelect" align="center" type="selection" width="50"></el-table-column>
       <!--  -->
       <template v-for="(lb,i) in lbData">
         <el-table-column
-          align="center"
+          align="left"
           show-overflow-tooltip
           v-if="!lb.control"
           :key="i"
           :prop="lb.dm"
           :label="lb.cm"
           :width="lb.width"
+          :sortable="'custom'&&isSort"
         ></el-table-column>
         <el-table-column
-          align="center"
+          align="left"
           show-overflow-tooltip
           v-if="lb.dm=='sjly'&&page1=='1'&&refName=='hczf'"
           :key="i"
           :prop="lb.dm"
           :label="lb.cm"
           :width="lb.width"
+          :sortable="'custom'&&isSort"
         ></el-table-column>
       </template>
       <el-table-column :width="czWidth" align="center" label="操作" v-if="isEdit">
@@ -98,10 +101,21 @@
         :total="tableData.total"
       ></el-pagination>
     </div>
+    <Dialog :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
+      <Trans
+        :transData="transData"
+        :pointData="pointData"
+        :dialogType="dialogType"
+        @transSave="transSave"
+        @dialogCancel="isShowDialog=false"></Trans>
+    </Dialog>
   </div>
 </template>
 <script>
+import Dialog from "./Dialog.vue";
+import Trans from "./Transfer.vue"
 export default {
+  components: { Dialog, Trans},
   props: {
     lbType: {
       type: String,
@@ -149,6 +163,10 @@ export default {
       type: Boolean,
       default: true
     },
+    isSort: {
+      type: Boolean,
+      default: true
+    },
     pageSizeArr: {
       type: Array,
       default: () => [10, 20, 30, 40]
@@ -185,10 +203,10 @@ export default {
       type: String,
       default: "auto"
     },
-    // timeChange: {
-    //   type: Number,
-    //   default:0
-    // }
+    clearSort: {
+      type: Number,
+      default:0
+    }
   },
   data() {
     return {
@@ -198,7 +216,15 @@ export default {
       // direction: 1,
       currentRow: 0,
       page1: this.lbTab.length > 0 ? this.lbTab[0].dm : this.page,
-      clzt1:this.clzt
+      clzt1:this.clzt,
+      lbArr:this.lbData,
+      jbArr:[],
+      isShowDialog: false,
+      dialogTitle: "",
+      dialogType:"",
+      //穿梭框数据
+      transData:this.lbData,
+      pointData:[],
     };
   },
   watch: {
@@ -221,11 +247,15 @@ export default {
     },
     clzt(val){
       this.clzt1 = val;
-      console.log('clzt',this.clzt)
-    }
+    },
+    //清除排序
+    clearSort(){
+      this.$nextTick(()=>{
+        this.$refs[this.refName].clearSort()
+      })
+    },
   },
   mounted() {
-    // console.log("表格", this.lbType, this.tableData);
     this.$nextTick(function() {
       this.toggleSelection(this.selection);
     });
@@ -242,7 +272,7 @@ export default {
       this.$emit("pageNumFnc", this.pageNum);
     },
     handleSelectionChange(val) {//当选择项发生变化时会触发该事件
-      // console.log(val);
+      console.log('选择',val);
       this.$emit("SelectionChange", val);
     },
     selectPage(val,ref){//当用户手动勾选数据行的 Checkbox 时触发的事件   跨页选中需要手动触发
@@ -283,8 +313,32 @@ export default {
       this.$emit("tabFnc", val);
     },
     plBtnFun(val) {
+      if(val.py == 'jb'){//简表
+        this.dialogTitle = val.menu_name;
+        this.dialogType = val.py;
+        this.pointData = this.lbData
+        this.isShowDialog = true;
+      }
       this.$emit("plFnc", val);
-    }
+    },
+    // 简表保存
+    transSave(data){
+      this.jbArr = [];
+      this.lbArr.forEach(item1 => {
+        data.forEach(item2 => {
+          if(item1.dm == item2){
+            this.jbArr.push(item1)
+          }
+        })
+      });
+      this.$emit('transSaveFnc',this.jbArr)
+      this.isShowDialog = false;
+    },
+    sortChange(column){
+      column.order=="ascending"?column.order='asc':column.order=="descending"?column.order='desc':column.order=null
+      if(column.prop.includes('_desc')){column.prop=column.prop.replace("_desc","");}
+      this.$emit("sortChange",{prop:column.prop,direction:column.order})
+    },
   }
 };
 </script>

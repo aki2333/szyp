@@ -1,5 +1,27 @@
 <template>
   <div class="inquire">
+    <template  v-if="!queryIsShow">
+      <!-- <el-dropdown v-for="(fa,fai) in facxData" :key="fai" @command="commandfnc" class="mr-10">
+        <el-button type="primary" size='mini'>
+          {{JSON.stringify(checkObj[fai]) == "{}"?fa.cm:checkObj[fai].mc}}<i class="el-icon-arrow-down el-icon--right"></i>
+        </el-button>
+        <el-dropdown-menu slot="dropdown" v-if="fa.type=='select'">
+          <el-dropdown-item v-for="(item,ind) in $store.state[fa.dm]" :key="ind" :command="item.mc+'-'+item.dm+'-'+fa.dm+'-'+fai">{{item.mc}}</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown> -->
+      <!-- <template v-for="(item,ind) in $store.state[fa.dm]">
+        <el-tag 
+        type="warning"
+        :key="ind"
+        v-if="item.dm==checkObj[fai]"
+        >{{item.mc}}</el-tag>
+      </template> -->
+      
+        <!-- <el-tag 
+          :key="fai"
+        >{{checkObj[fai]}}</el-tag> -->
+      
+    </template>
     <el-form
       :model="inquire"
       status-icon
@@ -139,6 +161,10 @@ export default {
       type: Array,
       default: () => []
     },
+    facxData:{
+      type:Array,
+      default: () => []
+    },
     pd: {
       type: Object,
       default: () => {}
@@ -154,11 +180,18 @@ export default {
   data() {
     return {
       inquire: this.pd,
+      tagCheck:'',
       rules: {},
       queryIsShow: true,
       openImg: require("../assets/images/main/open_query.png"),
       closeImg: require("../assets/images/main/close_query.png"),
-      mrz: {}
+      mrz: {},
+      checkObj:{
+        0:{},
+        1:{},
+        2:{},
+        3:{},
+      },
     };
   },
   mounted() {
@@ -173,6 +206,19 @@ export default {
       } else if (py == "qc") {
         this.resetForm("inquire");
       }
+    },
+    commandfnc(command){
+      this.$nextTick(()=>{
+        let obj={
+          dm:command.split('-')[1],
+          mc:command.split('-')[0]
+        }
+        this.checkObj[command.split('-')[3]] = obj;
+        // this.checkObj[command.split('-')[3]] = command.split('-')[1];
+        console.log(this.checkObj,this.checkObj[command.split('-')[3]],command.split('-')[1],command.split('-')[0])
+        this.$emit('commandfnc',{command:command.split('-')[1],data:command.split('-')[2]})
+      })
+      
     },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
@@ -204,16 +250,17 @@ export default {
 </script>
 <style scoped>
 .inquire {
-  padding: 18px 15px 0;
+  padding: 18px 15px 11px;
   box-sizing: border-box;
   /* border-bottom: 1px solid #295287; */
-  margin-bottom: 11px;
+  /* margin-bottom: 11px; */
   color: #a09fa7;
   position: relative;
+  /* background-color: #fff; */
 }
 .changeBtn {
   position: absolute;
-  bottom: -10px;
+  bottom: 0px;
   right: 0px;
 }
 .cx-btn {

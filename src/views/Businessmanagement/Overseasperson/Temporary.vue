@@ -19,14 +19,15 @@
       <el-row :gutter="20">
         <el-col :span="24">
           <Table
-            :lbData="$cdata.lzsb.lzsb.lb"
+            :lbData="lbData"
             :isSelect="false"
             :isEdit="true"
-            :isPl="false"
             :isTab="isTab"
             :page="tabPage"
             :lbTab="lbTab"
             :lbBtn="lbBtn"
+            :plBtn="$store.state.plBtn"
+            :clearSort="clearSort"
             czWidth="130px"
             :tableData="tableData"
             @tabFnc="tabFnc"
@@ -34,6 +35,8 @@
             @pageSizeFnc="pageSizeFnc"
             @pageNumFnc="pageNumFnc"
             @blFnc="blFnc"
+            @sortChange="sortChange"
+            @transSaveFnc="transSaveFnc"
           ></Table>
         </el-col>
       </el-row>
@@ -95,8 +98,6 @@ export default {
         pd: { shzt: "shzt_0", hczt: "hczt_0" },
         pageSize: 10,
         pageNum: 1,
-        order: "id",
-        direction: 1
       },
       tableData: {
         list: [],
@@ -104,7 +105,9 @@ export default {
         pageSize: 10,
         pageNum: 1
       },
+      clearSort:0,
       currentRow: {},
+      lbData:this.$cdata.lzsb.lzsb.lb,
       // 弹窗数据,
       isShowDialog: false,
       innerVisible: false,
@@ -131,34 +134,37 @@ export default {
     this.$store.dispatch("aGetDM", "bjjgka");
     this.$store.dispatch("aGetDM", "wgr_sqsy");
     this.$store.dispatch("aGetDM", "spqfd");
-
-    if (this.$store.state.user.jb == "1") {
-      this.$store.dispatch("aGetSuboffice");
-    } else if (this.$store.state.user.jb == "2") {
-      this.$store.dispatch(
-        "aGetSuboffice",
-        this.$store.state.user.bmbh.slice(0, 6)
-      );
-    } else if (this.$store.state.user.jb == "3") {
-      this.$store.dispatch(
-        "aGetSuboffice",
-        this.$store.state.user.bmbh.slice(0, 6) + "000000"
-      );
-    }
-
-    if (this.$store.state.user.jb == "1") {
-      this.$store.dispatch("aGetPolice");
-    } else if (this.$store.state.user.jb == "2") {
-      this.$store.dispatch(
-        "aGetPolice",
-        this.$store.state.user.bmbh.slice(0, 6)
-      );
-    } else if (this.$store.state.user.jb == "3") {
-      this.$store.dispatch("aGetPolice", this.$store.state.user.bmbh);
-    }
+    this.getSpInit();
     this.tabTopClick(0);
   },
   methods: {
+    getSpInit(){
+      this.$cdata.qxgl.getSjBm(this.$store.state.user.bmbh).then(data => {
+        this.$store.dispatch("aGetssdw", {
+          bmbh: "320500000000",
+          type: "ssfj"
+        });
+        if (this.$store.state.user.jb == 2) {
+          if(data.fj){
+            this.cx.pd.suboffice = data.fj
+          }else{
+            this.cx.pd.suboffice = data.bmbh
+          }
+          this.$store.dispatch("aGetssdw", { bmbh: data.bmbh, type: "sspcs" });
+          this.cx.pd.subofficedis = true;
+        } else if (this.$store.state.user.jb == 3) {
+          this.$store.dispatch("aGetssdw", { bmbh: data.fj, type: "sspcs" });
+          this.cx.pd.suboffice = data.fj;
+          this.cx.pd.policestation = data.bmbh;
+          this.cx.pd.subofficedis = true;
+          this.cx.pd.policestationdis = true;
+        }
+      });
+    },
+    //简表数据 子组件通知父组件改表格数据
+    transSaveFnc(data){
+      this.lbData = data
+    },
     tabTopClick(index) {
       this.cx.pd.shzt = "shzt_" + index;
       this.cx.pageNum = 1;
@@ -178,7 +184,7 @@ export default {
         this.cx.pd.hczt = "hczt_2";
         this.lbBtn = this.$cdata.lzsb.lzsb.lbBtn2;
       }
-      this.getTable();
+      this.getTable(true);
     },
     tabFnc(data) {
       console.log("shangbaozhuangtai", data);
@@ -190,13 +196,13 @@ export default {
       } else {
         this.lbBtn = this.$cdata.lzsb.lzsb.lbBtn2;
       }
-      this.getTable();
+      this.getTable(true);
     },
     // 获取查询参数
     cxFnc(data) {
       this.cx.pd = data;
       this.cx.pageNum = 1;
-      this.getTable();
+      this.getTable(true);
     },
     // 获取分页等信息
     pageSizeFnc(data) {
@@ -207,8 +213,15 @@ export default {
       this.cx.pageNum = data;
       this.getTable();
     },
+    //列表排序
+    sortChange(data){
+      this.cx.order = data.prop;
+      this.cx.direction = data.direction
+      this.getTable();
+    },
     // 查询列表
-    getTable() {
+    getTable(flag) {
+      if(flag){this.clearSort = new Date().getTime();delete this.cx.order;delete this.cx.direction }
       this.$api.post(this.$api.aport3 + "/api/lzsb/getLzsb", this.cx, r => {
         this.tableData = r;
       });
@@ -218,15 +231,14 @@ export default {
       this.currentRow = data.data;
     },
     lcFnc(data) {
-      console.log("下拉选", data.data);
+       console.log("下拉选", data.data);
       if (data.key.dm == "suboffice") {
-        if (data.data == "") {
-          data.obj.policestation = "";
+        if (data.data != "") {
+          this.$store.dispatch("aGetssdw", { bmbh: data.data, type: "sspcs" });
+        } else {
+          this.cx.pd.policestation = "";
+          this.$store.commit("getsspcs", []);
         }
-        if (data.obj.policestation) {
-          data.obj.policestation = "";
-        }
-        this.$store.dispatch("aGetPolice", data.data.slice(0, 6));
       }
     },
 
@@ -268,7 +280,7 @@ export default {
     getDetailLzsb(p) {
       this.$api.post(this.$api.aport3 + "/api/lzsb/getDetailLzsb", p, r => {
         this.dialogData = r;
-        this.$store.dispatch("aGetPolice", r.suboffice.slice(0, 6));
+        this.$store.dispatch("aGetssdw", { bmbh: r.suboffice, type: "sspcs" });
         this.isShowDialog = true;
       });
     },

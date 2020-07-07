@@ -21,9 +21,12 @@
           :isPagination="false"
           :lbBtn="lbBtn"
           :plBtn="plBtn"
+          :clearSort="clearSort"
           :tableData="tableData"
           @blFnc="blFnc"
           @plFnc="plFnc"
+          @sortChange="sortChange"
+          @transSaveFnc="transSaveFnc"
         ></Table>
       </el-col>
     </el-row>
@@ -81,6 +84,8 @@ export default {
         pageSize: 10,
         pageNum: 1
       },
+      clearSort:0,
+      treeBmbh:'',
       // 弹窗数据
       isShowDialog: false,
       dialogTitle: "",
@@ -92,14 +97,24 @@ export default {
     this.begin();
   },
   methods: {
+    //简表数据 子组件通知父组件改表格数据
+    transSaveFnc(data){
+      this.lbData = data
+    },
     // 获取单位列表
     getDeptTreeByBmbh() {
       this.$cdata.qxgl.getDeptTreeByBmbh().then(data => {
         this.treeData1 = data;
       });
     },
+    sortChange(data){
+      this.cx.order = data.prop;
+      this.cx.direction = data.direction;
+      this.getRole(this.treeBmbh);
+    },
     // 获取角色列表
-    getRole(bmbh) {
+    getRole(bmbh,flag) {
+      if(flag){this.clearSort = new Date().getTime();delete this.cx.order;delete this.cx.direction }
       this.cx.bmbh = bmbh;
       this.$api.post(this.$api.aport1 + "/role/getRole", this.cx, r => {
         this.tableData.list = r;
@@ -108,27 +123,30 @@ export default {
     getTree(data) {
       if (data.type == "dwlb") {
         this.treeBMXX = data.data;
-        this.getRole(data.data.bmbh);
+        console.log('===',data.data.bmbh)
+        this.treeBmbh = data.data.bmbh
+        this.getRole(data.data.bmbh,true);
       }
     },
     // 批量操作
     plFnc(data) {
-      console.log("点击批量按钮-", data);
-      if (this.cx.bmbh == "") {
-        this.$message({
-          message: "请先选择部门",
-          showClose: true,
-          duration:13000,
-          type: "warning"
-        });
-        return false;
+      if(data.py!='jb'){
+          if (this.cx.bmbh == "") {
+          this.$message({
+            message: "请先选择部门",
+            showClose: true,
+            duration:13000,
+            type: "warning"
+          });
+          return false;
+        }
+        // data.btn按钮信息
+        this.dialogTitle = data.menu_name;
+        this.dialogType = data.py;
+        // data.data行内信息
+        this.dialogData = this.cx;
+        this.isShowDialog = true;
       }
-      // data.btn按钮信息
-      this.dialogTitle = data.menu_name;
-      this.dialogType = data.py;
-      // data.data行内信息
-      this.dialogData = this.cx;
-      this.isShowDialog = true;
     },
     // 表格内操作
     blFnc(data) {

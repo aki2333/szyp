@@ -5,10 +5,11 @@
         v-model="value"
         :props="propsData"
         :data="transData"
+        :titles="['可选择列', '已选择列']"
         ></el-transfer>
     </div>
     <div class="mt-30 text-center">
-        <el-button size="mini" type="primary" round  @click="save(value)">保存</el-button>
+        <el-button size="mini" type="primary" round  @click="save(value)">确定</el-button>
         <el-button size="mini" type="info" round @click="cancel">取消</el-button>
     </div>
   </div>
@@ -53,6 +54,7 @@ export default {
     },
     methods:{
         save(data){
+            console.log('value',data)
             this.$emit("transSave",data);
         },
         cancel() {

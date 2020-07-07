@@ -11,6 +11,8 @@
           :tableData="tableData"
           @rowClick="rowClick"
           @plFnc="plFnc"
+          @sortChange="sortChange"
+          @transSaveFnc="transSaveFnc"
         ></Table>
       </el-col>
       <el-col :span="8">
@@ -80,8 +82,6 @@ export default {
         },
         pageSize: 10,
         pageNum: 1,
-        order: "serial",
-        direction: 1
       },
       tableData: {
         list: [],
@@ -103,12 +103,21 @@ export default {
     this.begin();
   },
   methods: {
+    //简表数据 子组件通知父组件改表格数据
+    transSaveFnc(data){
+      this.lbData = data
+    },
     btnClick(py) {
       if (py == "bc") {
         this.updateTemplate();
       } else if (py == "qc") {
         this.cancel();
       }
+    },
+    sortChange(data){
+      this.cx.order = data.prop;
+      this.cx.direction = data.direction
+      this.selectTemplateList();
     },
     // 获取角色列表
     selectTemplateList() {

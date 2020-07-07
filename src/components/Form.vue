@@ -87,7 +87,7 @@
                 </div>
               </template>
               <template v-else-if="cx.type=='radio'">
-                <el-radio-group v-model="dialogData[cx.dm]" @change="radioChange">
+                <el-radio-group v-model="dialogData[cx.dm]" @change="radioChange" class="form-radio">
                   <el-radio
                     :label="item.dm"
                     v-for="(item,ind) in $store.state[cx.dm]"

@@ -8,14 +8,16 @@
       ref="form"
       label-width="100px"
       class="form-ruleForm"
+      :disabled="dialogType=='ck'"
     >
       <el-row :gutter="30" type="flex" align="middle" justify="center">
         <el-col :span="16">
           <el-col :span="24" v-for="(cx,i) in cxData" :key="i">
-            <el-form-item :label="cx.cm" :prop="cx.dm">
+            <el-form-item :label="!cx.hc_con||(cx.dm=='datasources_desc'&&page==cx.hc_con)||(cx.dm=='phone'&&dialogData['datatype']==cx.hc_con)?cx.cm:''" :prop="cx.dm">
               <template v-if="cx.type=='input'">
-                <el-input v-model="dialogData[cx.dm]" :disabled="cx.dis"></el-input>
+                <el-input v-if="!cx.hc_con||(cx.dm=='datasources_desc'&&page==cx.hc_con)||(cx.dm=='phone'&&dialogData['datatype']==cx.hc_con)" v-model="dialogData[cx.dm]" :disabled="cx.dis"></el-input>
               </template>
+              
               <template v-if="cx.type=='joinInput'">
                 <el-input v-model="dialogData[cx.dm]" :disabled="joinFlag"></el-input>
               </template>
@@ -104,8 +106,10 @@
         </el-col>
       </el-row>
     </el-form>
-
-    <div class="page-btn-box">
+    <div class="page-btn-box" v-if="dialogType=='ck'">
+        <el-button size="mini" type="info" round @click="cancel">关闭</el-button>
+    </div>
+    <div class="page-btn-box" v-else>
       <!-- <el-button v-if="dialogType=='gnlb'" size="mini" type="primary" round @click="xj()">新建</el-button> -->
       <div style="display:inline-block;margin-right:10px" v-if="isDb">
         <el-button
@@ -121,15 +125,6 @@
         <el-button size="mini" type="primary" round v-if="isEditBtn" @click="save('form')">保存</el-button>
         <el-button size="mini" type="info" round @click="cancel">取消</el-button>
       </div>
-      
-
-      <!-- <el-button
-        v-if="dialogType=='gnlb'"
-        size="mini"
-        type="info"
-        round
-        @click="save('form','del')"
-      >删除</el-button>-->
     </div>
   </div>
 </template>
@@ -139,6 +134,11 @@ export default {
     cxData: {
       type: Array,
       default: () => []
+    },
+    // 【内层列表tab】
+    page: {
+      type: String,
+      default: ""
     },
     dialogType: {
       type: String,

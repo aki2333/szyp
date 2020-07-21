@@ -183,6 +183,9 @@ th {
   background-color: #85bcfc!important;
   color: #ffffff!important;
 }
+.el-table .cell{
+  width: 100%!important;
+}
 .el-table__body tr.current-row>td{
   background-color: transparent!important;
   color: #fff!important;
@@ -209,6 +212,9 @@ th {
 }
 .el-card{
   border-radius: 0!important;
+}
+.timeLine .el-card{
+  margin-bottom: 10px;
 }
 .hand{
   cursor: pointer;

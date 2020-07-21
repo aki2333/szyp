@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <Inquire :cxData="$cdata.lzsb.lzsb.cx" :pd="cx.pd" @cxFnc="cxFnc" @lcFnc="lcFnc"></Inquire>
+    <Inquire :cxData="$cdata.lzsb.lzsb.cx" :pd="cx.pd" :cxPara="cx" @cxFnc="cxFnc" @lcFnc="lcFnc"></Inquire>
     <div class="t-tab-top">
       <div class="tab-top-item hand" @click="tabTopClick(0)">
         <img :src="cx.pd.shzt=='shzt_0'?tabImgActive_1:tabImg_1" alt />
@@ -30,6 +30,8 @@
             :clearSort="clearSort"
             czWidth="130px"
             :tableData="tableData"
+            :expData="cx"
+            :expUrl="$api.aport3+'/api/lzsb/dataExport'"
             @tabFnc="tabFnc"
             @rowClick="rowClick"
             @pageSizeFnc="pageSizeFnc"
@@ -61,7 +63,6 @@
       </el-dialog>
       <!-- v-if="(dialogType=='bj'||dialogType=='ck')&&isShowDialog" -->
       <TemporaryXQ
-        
         :dialogType="dialogType"
         :dialogData="dialogData"
         :dialogImgData="dialogImgData"
@@ -258,7 +259,7 @@ export default {
         this.dialogType = data.btn.button_type;
       }
       if (this.dialogType == "xzjl") {
-        this.downZsdjd(data.data.id);
+        this.downZsdjd(data.data);
       } else if (this.dialogType == "bj") {
         let p = {
           id: data.data.id,
@@ -294,13 +295,13 @@ export default {
         }
       );
     },
-    downZsdjd(id) {
+    downZsdjd(data) {
       this.$api.post(
         this.$api.aport3 + "/api/lzsb/downZsdjd",
-        { id: id },
+        { id: data.id },
         "",
         "",
-        "blob"
+        "blob",'pdf',data.nationalityMc+data.passportno
       );
     },
     dialogSave(data) {

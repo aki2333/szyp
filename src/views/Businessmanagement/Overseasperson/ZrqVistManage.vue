@@ -77,7 +77,7 @@
            </div>
       </el-aside>
       <el-main style="padding:0">
-        <Inquire :cxData="cxData" :pd="cx.pd" @cxFnc="cxFnc" @lcFnc="lcFnc"></Inquire>
+        <Inquire :cxData="cxData" :pd="cx.pd" :cxPara="cx" @cxFnc="cxFnc" @lcFnc="lcFnc"></Inquire>
             <div class="t-tab-top">
             <div class="tab-top-item hand" @click="tabTopClick1">
                 <img :src="clzt==1?tabImgActive_1:tabImg_1" alt />
@@ -99,10 +99,13 @@
                 :tableData="tableData"
                 :selection="selection"
                 :clearSort="clearSort"
+                :expData="cx"
+                :expUrl="$api.aport2+''"
                 @plFnc="plFnc"
                 @pageSizeFnc="pageSizeFnc"
                 @pageNumFnc="pageNumFnc"               
                 @blFnc="blFnc"
+                @rowDbClick="blFnc"
                 @SelectionChange="SelectionChange"
                 @rowClick="rowClick"
                 @sortChange="sortChange"
@@ -226,9 +229,7 @@ export default {
 
       this.$store.dispatch("aGetDatatype");
       this.getPcsQueryData();
-      // this.$set(this.pcsQuery,this.$store.state.user.bmbh)
       this.pcsQuery = this.$store.state.user.bmbh
-      // this.$store.dispatch("aGetBackstatus");
       this.getTable();
       this.getHandData();
     });
@@ -242,41 +243,23 @@ export default {
         this.lbData = data
       },
       load(){
-        // if(this.hazyFlag==true){//模糊查询 有值 懒加载
-        //   let aa=[];
-        //   if(this.filArr.length-this.filCount>20){
-        //     this.filCount+=20;
-        //     aa = (this.filArr).slice(this.filCount,this.filCount+20)
-        //   }else if(0<=Math.abs(this.filArr.length-this.filCount)<=20){
-        //     this.filCount+=20;
-        //     aa = (this.filArr).slice(this.filCount,this.filCount+Math.abs(this.filArr.length-this.filCount))
-        //   }else{
-        //     return
-        //   }
-        //   for(var i in aa){
-        //     this.menudata.push(aa[i])
-        //   }
-        // }else{
-          let aa=[];
-          console.log(this.handData.length-this.xzCount)
-          if(this.handData.length-this.xzCount>20){
-            this.xzCount+=20;
-            aa=(this.handData).slice(this.xzCount,this.xzCount+20)
-          }else if(0<=Math.abs(this.handData.length-this.xzCount)<=20){
-            // this.xzCount+=20;
-            console.log(this.xzCount,this.xzCount+Math.abs(this.handData.length-this.xzCount),aa)
-            aa=(this.handData).slice(this.xzCount,this.xzCount+Math.abs(this.handData.length-this.xzCount))
-            return
-          }else{
-            return
-          }
-          for(var i in aa){
-            this.allArr.push(aa[i])
-          }
-          this.handShowData = this.allArr;
-          // console.log('this.$refs.tree.$el',this.handShowData,this.handShowData.length)
-          // this.scrollW = this.$refs.tree.$el.scrollTop;
-        // }
+        let aa=[];
+        console.log(this.handData.length-this.xzCount)
+        if(this.handData.length-this.xzCount>20){
+          this.xzCount+=20;
+          aa=(this.handData).slice(this.xzCount,this.xzCount+20)
+        }else if(0<=Math.abs(this.handData.length-this.xzCount)<=20){
+          // this.xzCount+=20;
+          console.log(this.xzCount,this.xzCount+Math.abs(this.handData.length-this.xzCount),aa)
+          aa=(this.handData).slice(this.xzCount,this.xzCount+Math.abs(this.handData.length-this.xzCount))
+          return
+        }else{
+          return
+        }
+        for(var i in aa){
+          this.allArr.push(aa[i])
+        }
+        this.handShowData = this.allArr;
       },
       getPcsQueryData(){
         let p={
@@ -399,6 +382,7 @@ export default {
       },
     //左栏待接收数据
     getHandData(){
+      this.checkedList = [];
         let p={
             pd:{
                 address:this.adressQuery,
@@ -442,19 +426,14 @@ export default {
       this.clzt=2;
       this.isEdit = false; 
       this.plBtn = this.$store.state.plBtn
-          let arr = [];
-          for(var i=0;i<this.plBtn.length;i++){
-              if(this.plBtn[i].py!='cl'){
-                arr.push(this.plBtn[i])
-              }
-            }
-          this.plBtn = arr
+      this.plBtn = this.plBtn.filter(item => ['cl'].indexOf(item.py) == -1);
       this.cx.pageNum = 1;
       this.getTable(true)
     },
     rowClick(data){
-      this.selection=[];
-      this.selection.push(data.data)
+      console.log(data)
+      // this.selection=[];
+      // this.selection.push(data.data)
     },
     //下拉框联动
     lcFnc(data) {
@@ -534,24 +513,6 @@ export default {
         ]);
       }
     },
-    //判断数组元素是否完全相等
-    isAllEqual(array) {
-      return !array.some(function(value) {
-        return value !== array[0];
-      });
-    },
-    //判断数组元素是否为空
-    isArrEmpty(array) {
-      return !array.some(function(value) {
-        return value == undefined;
-      });
-    },
-    //判断数组元素是否有值
-    isArrValue(array) {
-      return !array.some(function(value) {
-        return value !== undefined;
-      });
-    },
     sortChange(data){
       this.cx.order = data.prop;
       this.cx.direction = data.direction
@@ -564,7 +525,6 @@ export default {
         bmbh: this.$store.state.user.bmbh,
         jb:this.$store.state.user.jb,
         zrqList:this.$store.state.user.jb=='3'?this.$store.state.user.zrqList:[],
-        // zrqList:this.$store.state.user.zrqList,
         clzt: this.clzt,
         cljg: 4
       };
@@ -597,7 +557,6 @@ export default {
       this.dialogTitle = data.menu_name;
       this.dialogType = data.py;
       if (data.py == "cl") {
-          // this.dialogData = {};
           this.$cdata.zxhc.handShow(this.$store.state.user.jb).then(data => {//根据级别控制弹窗编辑项禁止与否
             this.labelData = data;
           });
@@ -621,16 +580,14 @@ export default {
           });
           this.getTable();
           this.getHandData();
-          // this.$nextTick(() => {
-          //   if(this.tableData.list.length==0){
-          //     console.log('jin==')
-          //   this.cx.pageNum = 1;
-          //   this.getTable();
-          // }else{
-          //   this.getTable();
-          // }
-          // })
         })
+      }else if(data.double){
+        this.dialogTitle = '详情';
+        this.dialogType = 'ck';
+        this.dialogData = data.data;
+        this.labelData = this.$cdata.zxhc.zrqzf.clDia;
+        this.$store.dispatch("aGetBackstatus", data.data.datatype);
+        this.isShowDialog = true;
       }
     },
     //处理保存

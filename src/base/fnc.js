@@ -96,8 +96,58 @@ function getBroswerAndVersion() {
   }
   return info;
 }
-
-
+// 【例子】
+// format(1554889542170); // 2019-04-10
+// format(1554889542170, 'yyyy/mm/dd hh:ii:ss'); // 2019/04/10 17:45:42
+// format(1554889542170, 'yy/m/d hh:ii:ss'); // 19/4/10 17:45:42
+// format(1554889542170, 'yyyy/mm/dd w'); // 2019/04/10 星期三
+// format(1554889542170, 'mm/dd/yyyy'); // 04/10/2019
+function format(time, format = 'yyyy-mm-dd'){
+  const d = time ? new Date(time) : new Date();
+  const t = (i) => { return (i < 10 ? '0' : '') + i };
+ 
+  const year = d.getFullYear();
+  const month = d.getMonth() + 1;
+  const day = d.getDate();
+  const hour = d.getHours();
+  const minutes = d.getMinutes();
+  const seconds = d.getSeconds();
+  const weekday = d.getDay();
+ 
+  return format.replace(/(yy){1,2}|m{1,2}|d{1,2}|h{1,2}|i{1,2}|s{1,2}|w{1,2}/gi, function(r) {
+    switch (r.toUpperCase()) {
+      case 'YY':
+        return ('' + year).substr(2);
+      case 'YYYY':
+        return year;
+      case 'M':
+        return month;
+      case 'MM':
+        return t(month);
+      case 'D':
+        return day;
+      case 'DD':
+        return t(day);
+      case 'H':
+        return hour;
+      case 'HH':
+        return t(hour);
+      case 'I':
+        return minutes;
+      case 'II':
+        return t(minutes);
+      case 'S':
+        return seconds;
+      case 'SS':
+        return t(seconds);
+      case 'W':
+        return `星期${['日', '一', '二', '三', '四', '五', '六'][weekday]}`;
+      case 'WW':
+        return ['Sunday', 'Monday', 'TuesDay', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][weekday];
+    }
+  });
+}
+  
 export default {
   test,
   sortNumber,
@@ -105,5 +155,6 @@ export default {
   arrayIndex,
   ToArray,
   cxSort,
-  getBroswerAndVersion
+  getBroswerAndVersion,
+  format
 }

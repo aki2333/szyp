@@ -309,17 +309,12 @@ const jsgl = {
     ],
     plBtn: [
         {
-            "button_name": "新建全局角色",
-            "button_type": "xjqjjs",
+            "button_name": "导出",
+            "py": "dc",
             "serial": "201",
-            "type": "success"
+            "type": "success",
+            'button_type':2,
         },
-        {
-            "button_name": "新建本地角色",
-            "button_type": "xjbdjs",
-            "serial": "201",
-            "type": "primary"
-        }
     ],
     yhcx: [
 
@@ -519,23 +514,12 @@ const zrqgl = {
     ],
     plBtn: [
         {
-            "button_name": "新建",
-            "button_type": "xj",
+            "button_name": "导出",
+            "py": "dc",
             "serial": "201",
-            "type": "success"
+            "type": "success",
+            'button_type':2,
         },
-        {
-            "button_name": "启用",
-            "button_type": "qy",
-            "serial": "201",
-            "type": "primary"
-        },
-        {
-            "button_name": "停用",
-            "button_type": "ty",
-            "serial": "201",
-            "type": "info"
-        }
     ],
     xj: [
         {
@@ -594,13 +578,13 @@ const zrqgl = {
             col: 8,
             dm: 'jinghao'
         },
-        {
-            cm: '状态',
-            type: 'select',
-            col: 8,
-            dm: 'sfyx',
-            optype:true
-        },
+        // {
+        //     cm: '状态',
+        //     type: 'select',
+        //     col: 8,
+        //     dm: 'sfyx',
+        //     optype:true
+        // },
     ],
     yhlb: [
         {
@@ -618,6 +602,30 @@ const zrqgl = {
         {
             cm: '部门名称',
             dm: 'xtyhbmmc'
+        }
+    ],
+    yhlbTab: [
+        {
+            "mc": '已添加',
+            "dm": '1',
+        },
+        {
+            "mc": '未添加',
+            "dm": '0',
+        }
+    ],
+    yhlbBtn: [
+        {
+            "button_name": "添加",
+            "button_type": "tj",
+            "serial": "201",
+            "user_ctrl": '0',
+        },
+        {
+            "button_name": "删除",
+            "button_type": "sc",
+            "serial": "201",
+            "user_ctrl": '1',
         }
     ],
 }

@@ -75,6 +75,11 @@ const routes = [
         name: 'ResidentAnalyze',
         component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/ResidentAnalyze.vue')
       },
+      {
+        path: '/CheckZXHC',
+        name: 'CheckZXHC',
+        component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/CheckZXHC.vue')
+      },
     ]
   },
   {

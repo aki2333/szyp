@@ -1,5 +1,5 @@
 // import store from '@/store'
-//核查走访
+//核查走访管理
 const zxhc = {
     cx: [
         {
@@ -122,11 +122,11 @@ const zxhc = {
             type: 'select',
             dm: 'backstatus'
         }, 
-        {
-            cm: '任务处理状态',
-            type: 'select',
-            dm: 'statusName'
-        },
+        // {
+        //     cm: '任务处理状态',
+        //     type: 'select',
+        //     dm: 'statusName'
+        // },
     ],
     lb: [
         {
@@ -179,6 +179,10 @@ const zxhc = {
             cm: '下发类别',
             dm: 'datatype_desc'
         },
+        // {
+        //     cm: '手机号码',
+        //     dm: 'phone',
+        // },
         {
             cm: '走访状态',
             dm: 'backstatus_desc'
@@ -199,12 +203,15 @@ const zxhc = {
             cm: '任务处理状态',
             dm: 'statusName'
         },
-        // {
-        //     cm: '数据来源',
-        //     dm: 'sjly',
-        //     control:true,//列表项根据条件控制显示
-        // },
-
+        {
+            cm: '数据来源',
+            dm: 'datasources_desc',
+            control:true,//列表项根据条件控制显示
+        },
+        {
+            cm: '停留事由',
+            dm: 'stopmatter',
+        },
     ],
     inlb:[
         {
@@ -427,8 +434,16 @@ const zrqzf = {
             dm: 'turnoutarea_receivedate'
         },
         {
+            cm: '走访状态',
+            dm: 'backstatus_desc'
+        },
+        {
             cm: '接收类型',
             dm: 'datatype_desc'
+        },
+        {
+            cm: '停留事由',
+            dm: 'stopmatter',
         },
     ],
     lbBtn: [
@@ -448,7 +463,109 @@ const zrqzf = {
         },
     ],
     clDia: [
-
+        {
+            title:'基本信息',
+            type:'line'
+        },
+        {
+            cm: '中文姓名',
+            type: 'input',
+            dm: 'name',            
+        },
+        {
+            cm: '英文姓名',
+            type: 'input',
+            dm: 'givenname',            
+        },
+        {
+            cm: '性别',
+            type: 'select',
+            dm: 'gender',            
+        },
+        {
+            cm: '出生日期',
+            type: 'datePicker',
+            dm: 'birthday',            
+        },
+        {
+            cm: '国家地区',
+            type: 'select',
+            dm: 'nationality',            
+        },
+        {
+            cm: '证件种类',
+            type: 'select',
+            dm: 'passportType',
+        },
+        {
+            cm: '证件号码',
+            type: 'input',
+            dm: 'passportno',
+        },
+        {
+            cm: '停留事由',
+            type: 'input',
+            dm: 'stopmatter',
+        },
+        {
+            cm: '手机号码',
+            type: 'input',
+            dm: 'phone',
+            hc_con:'2',
+        },
+        {
+            title:'走访信息',
+            type:'line'
+        },
+        {
+            cm: '下发类别',
+            type: 'select',
+            dm: 'datatype',            
+        },
+        {
+            cm: '住宿地址',
+            type: 'input',
+            dm: 'address',            
+        },
+        {
+            cm: '走访状态',
+            type: 'radio',
+            dm: 'backstatus'
+        },
+        {
+            cm: '备注',
+            type: 'input',
+            dm: 'remarks'
+        },
+        {
+            title:'数据归属',
+            type:'line'
+        },
+        {
+            cm: '所属分局',
+            type: 'select',
+            dm: 'suboffice',            
+        },
+        {
+            cm: '所属派出所',
+            type: 'select',
+            dm: 'policestation',            
+        },       
+        {
+            cm: '接收人',
+            type: 'input',
+            dm: 'turnoutarea_receive_user',            
+        },
+        {
+            cm: '接收责任区',
+            type: 'input',
+            dm: 'turnoutarea_desc',            
+        },
+        {
+            cm: '接收时间',
+            type: 'input',
+            dm: 'turnoutarea_receivedate',            
+        },
     ],
     zrqDia: [
         {
@@ -479,6 +596,220 @@ const zrqzf = {
             "type": "info",
         },
     ],
+}
+//专项核查管理
+const zxhcgl = {
+    cx: [
+        {
+            cm: '标题',
+            type: 'input',
+            dm: 'bt'
+        },
+        {
+            cm: '中文姓名',
+            type: 'input',
+            dm: 'name'
+        },
+        {
+            cm: '英文姓名',
+            type: 'input',
+            dm: 'givenname'
+        },
+        {
+            cm: '性别',
+            type: 'select',
+            dm: 'gender',
+        },
+        {
+            cm: '出生日期',
+            type: 'double',
+            dm: 'xfTime',
+            children: [
+                {
+                    cm: '下发开始时间',
+                    type: 'date',
+                    dm: 'suboffice_issuedateStart'
+                },
+                {
+                    cm: '下发结束时间',
+                    type: 'date',
+                    dm: 'suboffice_issuedateEnd'
+                }
+            ]
+        },
+        {
+            cm: '国家地区',
+            type: 'select',
+            dm: 'nationality'
+        },
+        {
+            cm: '证件种类',
+            type: 'select',
+            dm: 'passportType'
+        },
+        {
+            cm: '反馈时间',
+            type: 'double',
+            dm: 'fkTime',
+            children: [
+                {
+                    cm: '反馈开始时间',
+                    type: 'date',
+                    dm: 'policestation_backtimeStar'
+                },
+                {
+                    cm: '反馈结束时间',
+                    type: 'date',
+                    dm: 'policestation_backtimeEnd'
+                },
+            ],
+        },
+        {
+            cm: '证件号码',
+            type: 'input',
+            dm: 'passportno'
+        },
+        {
+            cm: '签证种类',
+            type: 'select',
+            dm: 'qzzl'
+        },
+        {
+            cm: '分局下发时间',
+            type: 'double',
+            dm: 'xfTime',
+            children: [
+                {
+                    cm: '下发开始时间',
+                    type: 'date',
+                    dm: 'suboffice_issuedateStart'
+                },
+                {
+                    cm: '下发结束时间',
+                    type: 'date',
+                    dm: 'suboffice_issuedateEnd'
+                }
+            ]
+        },
+        {
+            cm: '签证号码',
+            type: 'input',
+            dm: 'qzhm'
+        },
+        {
+            cm: '出入境状态',
+            type: 'select',
+            dm: 'datatype'
+        },
+        {
+            cm: '出入境时间',
+            type: 'double',
+            dm: 'fkTime',
+            children: [
+                {
+                    cm: '反馈开始时间',
+                    type: 'date',
+                    dm: 'policestation_backtimeStar'
+                },
+                {
+                    cm: '反馈结束时间',
+                    type: 'date',
+                    dm: 'policestation_backtimeEnd'
+                },
+            ],
+        },
+        {
+            cm: '数据状态',
+            type: 'select',
+            dm: 'backstatus'
+        },
+    ],
+    facx:[
+
+    ],
+    lb: [
+        {
+            cm: '标题',
+            dm: 'bt'
+        },
+        {
+            cm: '中文姓名',
+            dm: 'name'
+        },
+        {
+            cm: '英文姓名',
+            dm: 'givenname'
+        },
+        {
+            cm: '性别',
+            dm: 'gender_desc',
+            width:'50'
+        },
+        {
+            cm: '出生日期',
+            dm: 'birthday',
+            width:'85'
+        },
+        {
+            cm: '国家地区',
+            dm: 'nationality_desc',
+            width:'70'
+        },
+        {
+            cm: '证件种类',
+            dm: 'passportType_desc'
+        },
+        {
+            cm: '证件号码',
+            dm: 'passportno'
+        },
+        {
+            cm: '签证种类',
+            dm: 'qqzl',
+        },
+        {
+            cm: '签证号码',
+            dm: 'qzhm',
+        },
+        {
+            cm: '下发时间',
+            dm: 'issuedate'
+        },
+        {
+            cm: '出入境时间',
+            dm: 'suboffice_issuedate'
+        },
+        {
+            cm: '反馈时间',
+            dm: 'policestation_backtime'
+        },
+        {
+            cm: '出入境状态',
+            dm: 'datatype_desc'
+        },
+        {
+            cm: '数据状态',
+            dm: 'backstatus_desc'
+        },
+    ],
+    lbBtn: [
+        {
+            "button_name": "详情",
+            "button_type": 'detail',
+            "serial": "201",
+        },
+        {
+            "button_name": "编辑",
+            "button_type": 'edit',
+            "serial": "201",
+        },
+        {
+            "button_name": "删除",
+            "button_type": 'delete',
+            "serial": "201",
+        },
+    ],
+    
 }
 // 核查走访
 function lbTabShow(jb) {
@@ -598,6 +929,23 @@ function editShow(jb,isE) {
                 type: 'input',
                 dm: 'passportno',
                 dis: jb == "3"||isE == '0' ? true : false
+            },
+            {
+                cm: '停留事由',
+                type: 'input',
+                dm: 'stopmatter',
+            },
+            {
+                cm: '手机号码',
+                type: 'input',
+                dm: 'phone',
+                hc_con:'2'
+            },
+            {
+                cm: '数据来源',
+                type: 'input',
+                dm: 'datasources_desc',
+                hc_con:'1'
             },
             {
                 title:'走访信息',
@@ -753,6 +1101,12 @@ function innerBtn(data,page){
             if(page=='1'){//市局未处理
                 zxhc.dbBtn = [
                     {
+                        "button_name": "回退",
+                        "serial": "201",
+                        "button_type": "singback",
+                        "type": "primary",
+                    },
+                    {
                         "button_name": "下发",
                         "serial": "201",
                         "button_type": "singXf",
@@ -831,6 +1185,16 @@ function handShow(jb) {
 
             },
             {
+                cm: '手机号码',
+                type: 'input',
+                dm: 'phone',
+            },
+            {
+                cm: '停留事由',
+                type: 'input',
+                dm: 'stopmatter',
+            },
+            {
                 title:'走访信息',
                 type:'line'
             },
@@ -904,6 +1268,7 @@ function handShow(jb) {
 export default {
     zxhc,
     zrqzf,
+    zxhcgl,
     lbTabShow,
     editShow,
     handShow,

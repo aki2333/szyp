@@ -43,22 +43,10 @@
       @sort-change="sortChange"
     >
       <el-table-column v-if="isSelect" align="center" type="selection" width="50"></el-table-column>
-      <!--  -->
       <template v-for="(lb,i) in lbData">
         <el-table-column
           align="left"
           show-overflow-tooltip
-          v-if="!lb.control"
-          :key="i"
-          :prop="lb.dm"
-          :label="lb.cm"
-          :width="lb.width"
-          :sortable="'custom'&&isSort"
-        ></el-table-column>
-        <el-table-column
-          align="left"
-          show-overflow-tooltip
-          v-if="lb.dm=='sjly'&&page1=='1'&&refName=='hczf'"
           :key="i"
           :prop="lb.dm"
           :label="lb.cm"
@@ -83,7 +71,7 @@
                 @click="handleClick(scope.row,lbt)"
                 type="text"
                 size="small"
-                v-else-if="!lbt.user_ctrl||(lbt.user_ctrl==scope.row.status&&!lbt.status)||(lbt.user_ctrl==scope.row.whetherUpdateState&&!lbt.control)||(lbt.control&&page1=='1'&&clzt1==1)"
+                v-else-if="!lbt.user_ctrl||(lbt.user_ctrl==scope.row.status&&!lbt.status)||(lbt.user_ctrl==scope.row.whetherUpdateState&&!lbt.control)||(lbt.control&&page1=='1'&&clzt1==1&&(scope.row.backstatus_desc=='无效地址'||!scope.row.backstatus_desc))"
               >{{lbt.button_name}}</el-button>
             </span>
           </template>
@@ -179,6 +167,10 @@ export default {
       type: Array,
       default: () => []
     },
+    lbControlData: {
+      type: Array,
+      default: () => []
+    },
     lbBtn: {
       type: Array,
       default: () => []
@@ -206,6 +198,14 @@ export default {
     clearSort: {
       type: Number,
       default:0
+    },
+    expData:{
+      type:Object,
+      default: () => {}
+    },
+    expUrl:{
+      type:String,
+      default:''
     }
   },
   data() {
@@ -217,14 +217,18 @@ export default {
       currentRow: 0,
       page1: this.lbTab.length > 0 ? this.lbTab[0].dm : this.page,
       clzt1:this.clzt,
-      lbArr:this.lbData,
-      jbArr:[],
+
+      lbArr:this.lbData,//获取初始全部列表项
+      jbArr:[],//已选择展示项
+
       isShowDialog: false,
       dialogTitle: "",
       dialogType:"",
       //穿梭框数据
-      transData:this.lbData,
-      pointData:[],
+      transData:this.lbData,//数据来源（全部展示列表项）
+      pointData:[],//选中项
+      confirmFlag:true,
+      expD:{}
     };
   },
   watch: {
@@ -242,10 +246,18 @@ export default {
       handler() {},
       deep: true
     },
+    // lbData: {
+    //   handler(n) {
+    //     this.lbArr = n;
+    //   },
+    //   deep: true
+    // },
     page(val) {
+      // this.transData = this.lbData;
       this.page1 = val;
     },
     clzt(val){
+      // this.transData = this.lbData;
       this.clzt1 = val;
     },
     //清除排序
@@ -257,6 +269,7 @@ export default {
   },
   mounted() {
     this.$nextTick(function() {
+      // this.transData = this.lbData;
       this.toggleSelection(this.selection);
     });
   },
@@ -280,11 +293,9 @@ export default {
       this.$emit("selectPageFnc",{data:val,refName:ref})
     },
     toggleSelection(rows) {//选中行
-      //this.$refs[this.refName].toggleAllSelection();
       if (rows) {
         this.$nextTick(() =>{
           rows.forEach(row => {
-            // console.log("row++", row, this.$refs[this.refName], this.refName);
             this.$refs[this.refName].toggleRowSelection(row, true);
           });
         })
@@ -297,7 +308,6 @@ export default {
       if (!this.isRowClick) {
         return false;
       }
-      console.log(row,column,this.refName)
       if(column.label=="操作"&&this.refName=='hczf'){
         return false;
       }
@@ -312,12 +322,65 @@ export default {
     lbTabFun(val) {
       this.$emit("tabFnc", val);
     },
-    plBtnFun(val) {
+    async plBtnFun(val) {
       if(val.py == 'jb'){//简表
         this.dialogTitle = val.menu_name;
         this.dialogType = val.py;
-        this.pointData = this.lbData
+        if(this.refName=="hczf"){
+          if(this.page1!='1'){
+            this.transData = this.transData.filter(item => ['datasources_desc'].indexOf(item.dm) == -1);
+          }else{
+            this.transData = this.lbControlData
+          }
+        }
+        this.pointData = this.lbData;//选中值
+        // console.log('this.transData',this.transData)
+        // console.log('this.pointData',this.lbData)
         this.isShowDialog = true;
+      }
+      if(val.py == 'dc'){//导出
+        let expName = this.$store.state.breadcrumb[this.$store.state.breadcrumb.length-1].menu_name;
+        console.log('expName',expName)
+        this.expD = Object.assign({},this.expData)
+        this.expD.menu_name = this.$store.state.breadcrumb[this.$store.state.breadcrumb.length-1].menu_name;
+        this.expD.btn_name = val.menu_name;
+        this.expD.user = this.$store.state.user;
+        this.expD.pd.listName = this.lbData;
+        this.expD.pageSize = 2000;
+        if(this.tableData.list.length==0){
+          this.$message({
+            message: "无可导出数据！",
+            showClose: true,
+            duration:13000,
+            type: "warning"
+          });
+          return false;
+        }
+        if(this.tableData.total<=2000){//导出条数小于2000条
+          this.expD.pageNum = 1
+          this.$api.post(this.expUrl,this.expD,'','','blob','xlsx',expName)
+        }else{
+          for(var i=1;i<=Math.ceil(this.tableData.total/2000);i++){
+            this.expD.pageNum = i
+              await this.$confirm('将导出'+i+'个文件，将导出 '+(i)*2000 +' 条，是否继续导出?','提示',{
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                this.$api.post(this.expUrl,this.expD,'','','blob','xlsx',expName)
+              }).catch(() => {
+                this.$message({
+                  type: 'info',
+                  message: '已取消导出'
+                })
+                this.confirmFlag = false
+              })
+              if(!this.confirmFlag){
+                this.confirmFlag = true
+                return false
+              }
+          }
+        }
       }
       this.$emit("plFnc", val);
     },

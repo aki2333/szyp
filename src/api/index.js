@@ -7,7 +7,7 @@ var root = 'http://192.168.3.131:1101/'//测试
 // var root = 'http://10.0.8.68:1101/'//任本地
 
 var aport1 = 'permission'//任
-// var aport1 = 'http://10.0.30.40:9404'
+// var aport1 = 'http://10.0.30.64:9404'
 var aport2 = 'datarelease'//石
 // var aport2 = 'http://10.0.30.68:9405'//石本地
 var aport3 = 'lzsb'
@@ -16,6 +16,7 @@ var aport3 = 'lzsb'
 import axios from 'axios';
 import store from '@/store'
 import router from '@/router'
+import fnc from '../base/fnc.js'
 
 import { Message } from 'element-ui';
 import { Loading } from 'element-ui';
@@ -71,7 +72,7 @@ axios.interceptors.request.use(
   }
 )
 
-function apiAxios(method, url, params, success, failure, isDownload,type) {
+function apiAxios(method, url, params, success, failure, isDownload,type,name) {
   let loadingInstance1 = null;
   loadingInstance1 = Loading.service({ fullscreen: true, spinner: 'el-icon-loading', text: '正在加载中', background: 'rgba(0,0,0,0.6)', customClass: 'loadingClass' });
   if (params) {
@@ -91,6 +92,24 @@ function apiAxios(method, url, params, success, failure, isDownload,type) {
       if (res.status == 200) {
         if (loadingInstance1) {
           loadingInstance1.close();
+        }
+        console.log("isDownload", isDownload,name)
+        if (isDownload) {
+          let url = window.URL.createObjectURL(new Blob([res.data]));
+          // 生成一个a标签
+          let link = document.createElement("a");
+          link.style.display = "none";
+          link.href = url;
+          // 生成时间戳
+          let timestamp = new Date().getTime();
+          let timeChange = fnc.format(timestamp,'yyyymmddhhiiss')
+          if(type=='pdf'){
+            link.download = name + "." + type;
+          }else{
+            link.download = name + timeChange + "." + type;
+          }
+          document.body.appendChild(link);
+          link.click();
         }
         if (res.data.success) {
           // 请求成功
@@ -122,19 +141,6 @@ function apiAxios(method, url, params, success, failure, isDownload,type) {
                 });
               }
             }
-            // console.log("er:", res)
-            if (isDownload) {
-              let url = window.URL.createObjectURL(new Blob([res.data]));
-              // 生成一个a标签
-              let link = document.createElement("a");
-              link.style.display = "none";
-              link.href = url;
-              // 生成时间戳
-              let timestamp = new Date().getTime();
-              link.download = timestamp + "." + type;
-              document.body.appendChild(link);
-              link.click();
-            }
           }
         }
       } else {
@@ -158,8 +164,8 @@ export default {
   get: function (url, params, success, failure) {
     return apiAxios('GET', url, params, success, failure)
   },
-  post: function (url, params, success, failure, isDownload,type) {
-    return apiAxios('POST', url, params, success, failure, isDownload,type)
+  post: function (url, params, success, failure, isDownload,type,name) {
+    return apiAxios('POST', url, params, success, failure, isDownload,type,name)
   },
   put: function (url, params, success, failure) {
     return apiAxios('PUT', url, params, success, failure)

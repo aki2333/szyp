@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <Inquire :cxData="$cdata.qxgl.zrqgl.cx" :pd="cx.pd" @cxFnc="cxFnc" @lcFnc="lcFnc"></Inquire>
+    <Inquire :cxData="$cdata.qxgl.zrqgl.cx" :pd="cx.pd" :cxPara="cx" @cxFnc="cxFnc" @lcFnc="lcFnc"></Inquire>
     <div class="t-tab-top">
       <div class="tab-top-item hand">
         <img src="../../../assets/images/main/tab_2_pre.png" alt />
@@ -18,6 +18,8 @@
             :plBtn="$store.state.plBtn"
             :tableData="tableData"
             :clearSort="clearSort"
+            :expData="cx"
+            :expUrl="$api.aport1+'/zrq/exportdate'"
             @rowClick="rowClick"
             @pageSizeFnc="pageSizeFnc"
             @pageNumFnc="pageNumFnc"
@@ -61,7 +63,7 @@ import Inquire from "@/components/Inquire.vue";
 import Table from "@/components/Table.vue";
 import Dialog from "@/components/Dialog.vue";
 import Form from "@/components/Form.vue";
-import ZrqUser from "./ZrqUser.vue";
+import ZrqUser from "./ZrqUserR.vue";
 // import Trans from "@/components/Transfer.vue"
 
 export default {

@@ -91,7 +91,9 @@
 .tc-cx {
     padding-top: 20px;
 }
-
+.page-inner-box{
+    padding-top: 20px;
+}
 .t-tab-top{
     display: flex;
     justify-content: flex-start;

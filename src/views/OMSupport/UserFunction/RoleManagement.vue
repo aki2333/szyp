@@ -23,6 +23,8 @@
           :plBtn="plBtn"
           :clearSort="clearSort"
           :tableData="tableData"
+          :expData="cx"
+          :expUrl="$api.aport1+'/role/exportRole'"
           @blFnc="blFnc"
           @plFnc="plFnc"
           @sortChange="sortChange"
@@ -75,6 +77,7 @@ export default {
       plBtn: this.$store.state.plBtn,
       // 【业务数据】
       cx: {
+        pd:{},
         bmbh: "",
         quanJu: "true"
       },
@@ -130,7 +133,7 @@ export default {
     },
     // 批量操作
     plFnc(data) {
-      if(data.py!='jb'){
+      if(data.py!='jb'&&data.py!='dc'){
           if (this.cx.bmbh == "") {
           this.$message({
             message: "请先选择部门",

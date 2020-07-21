@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="tc-cx">
-      <Inquire cxType="noCbtn" :cxData="$cdata.qxgl.zrqgl.yhcx" :pd="cx.pd" @cxFnc="cxFnc" @lcFnc="lcFnc"></Inquire>
+      <Inquire cxType="noCbtn" :cxData="$cdata.qxgl.zrqgl.yhcx" :pd="cx.pd" :cxPara="cx" @cxFnc="cxFnc" @lcFnc="lcFnc"></Inquire>
     </div>
     <el-row type="flex">
       <el-col :span="24">

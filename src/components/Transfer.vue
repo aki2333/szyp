@@ -41,20 +41,20 @@ export default {
         }
     },
     mounted(){
-        console.log('transData',this.pointData)
+        // console.log('transData',this.pointData)
         this.$nextTick(() =>{
             let arrObj = this.pointData
             let arr = [];
             arrObj.forEach(element => {
                 arr.push(element.dm)
             });
-            console.log(arr)
+            // console.log(arr)
             this.value = arr
         })
     },
     methods:{
         save(data){
-            console.log('value',data)
+            // console.log('value',data)
             this.$emit("transSave",data);
         },
         cancel() {

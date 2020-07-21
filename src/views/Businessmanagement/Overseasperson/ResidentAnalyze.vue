@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <Inquire :cxData="$cdata.lzsb.lzsb.cx" :pd="cx.pd" @cxFnc="cxFnc"></Inquire>
+    <Inquire :cxData="$cdata.lzsb.lzsb.cx"  :pd="cx.pd" :cxPara="cx"  @cxFnc="cxFnc"></Inquire>
     <div class="t-tab-top">
       <div class="tab-top-item hand" @click="tabTopClick('0')">
         <img :src="tab=='0'?$cdata.tabImgActive_1:$cdata.tabImg_1" alt />

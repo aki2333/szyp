@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <Inquire :cxData="cxData" :pd="cx.pd" @cxFnc="cxFnc"></Inquire>
+    <Inquire :cxData="cxData" :pd="cx.pd" :cxPara="cx" @cxFnc="cxFnc"></Inquire>
     <div class="t-tab-top">
       <div class="tab-top-item hand">
         <img src="../../../assets/images/main/tab_2_pre.png" alt />
@@ -20,6 +20,8 @@
             :disPlBtn="disPlBtn"
             :tableData="tableData"
             :clearSort="clearSort"
+            :expData="cx"
+            :expUrl="$api.aport1+'/userController/exportUserInfo'"
             @pageSizeFnc="pageSizeFnc"
             @pageNumFnc="pageNumFnc"
             @rowClick="rowClick"

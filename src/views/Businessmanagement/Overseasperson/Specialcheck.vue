@@ -4,6 +4,7 @@
       :cxData="cxData" 
       :facxData="facxData" 
       :pd="cx.pd" 
+      :cxPara="cx"
       @cxFnc="cxFnc" 
       @lcFnc="lcFnc" 
       @queryShowFnc="queryShowFnc"
@@ -23,6 +24,7 @@
         :page="page"
         :clzt="clzt"
         :lbData="lbData"
+        :lbControlData="lbControlData"
         :isSelect="isSelect"
         :lbBtn="lbBtn"
         :plBtn="plBtn"
@@ -34,6 +36,8 @@
         :pageSizeArr="pageSizeArr"
         :czWidth="'100'"
         :clearSort="clearSort"
+        :expData="cx"
+        :expUrl="$api.aport2+''"
         @plFnc="plFnc"
         @pageSizeFnc="pageSizeFnc"
         @pageNumFnc="pageNumFnc"
@@ -48,14 +52,6 @@
     </div>
     <!-- 弹窗 -->
     <Dialog :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false" :class="{'hczf-dia':dialogType == 'edit'}">
-      <!-- <Table 
-        v-if="dialogType == 'edit'" 
-        :lbData="inlbData"
-        :tableData="intableData"
-        :isPagination="isPagination"
-        :isEdit="isEdit"
-        style="width:34%"
-      ></Table> -->
       <Form
         :cxData="labelData"
         :dialogType="dialogType"
@@ -65,12 +61,18 @@
         :commonBtn="commonBtn"
         :isDb="isDb"
         :dbBtn="dbBtn"
+        :page="page"
         @dialogCancel="isShowDialog=false"
         @dialogSave="dialogSave"
         @formLcFnc="formLcFnc"
         @radioChange="radioChange"
         @dbFnc="dbFnc"
+        class="hczf-wid"
       ></Form>
+      <Timeline 
+      v-if="dialogType == 'edit'"
+      :cxData="timeData"
+      style="width:34%"></Timeline>
     </Dialog>
     <Dialog :isShowDialog="innerVisible" :title="indialogTitle" @hideDialog="innerVisible=false">
       <Form
@@ -92,12 +94,14 @@ import Inquire from "@/components/Inquire.vue";
 import Table from "@/components/Table.vue";
 import Dialog from "@/components/Dialog.vue";
 import Form from "@/components/Form.vue";
+import Timeline from "@/components/Timeline.vue"
 export default {
   components: {
     Inquire,
     Table,
     Dialog,
     Form,
+    Timeline
   },
   data() {
     return {
@@ -110,15 +114,24 @@ export default {
       isSelect: true,
       isTab: true,
       cxData: this.$cdata.zxhc.zxhc.cx,
-      facxData: this.$cdata.zxhc.zxhc.facx,
+      facxData: this.$cdata.zxhc.zxhc.facx,//快速查询项
       lbData: this.$cdata.zxhc.zxhc.lb,
+      lbControlData:this.$cdata.zxhc.zxhc.lb,//简表里有需要隐藏显示的列表项，用此数据控制
       lbBtn: this.$cdata.zxhc.zxhc.lbBtn,
-      plBtn: [],
+      plBtn: this.$store.state.plBtn,
       lbTab: this.$cdata.zxhc.zxhc.lbTab,
       pageSizeArr: [15, 100, 500],
       //业务数据
       cx: {
         pd: {},
+        pageSize: 15,
+        pageNum: 1,
+      },
+      cxQ:{
+        pd: {
+          jb : this.$store.state.user.jb,
+          bmbh : this.$store.state.user.bmbh,
+        },
         pageSize: 15,
         pageNum: 1,
       },
@@ -158,13 +171,9 @@ export default {
       indialogData: {},
       incommonBtn: true,
       inisDb: false,
-      //内联弹窗表格
-      isPagination:false,
-      isEdit:false,
-      inlbData:this.$cdata.zxhc.zxhc.inlb,
-      intableData:{
-        list: [],
-      },
+      //时间轴
+      timeData:{},
+      jbData:[],
     };
   },
   watch: {
@@ -173,24 +182,17 @@ export default {
         //未处理
         if (val == "1") {
           this.plBtn = this.$store.state.plBtn;
-          let arr = [];
-          for (var i = 0; i < this.plBtn.length; i++) {
-            if (this.plBtn[i].py != "sb") {
-              arr.push(this.plBtn[i]);
-            }
-          }
-          this.plBtn = arr;
+          this.lbData = this.jbData.length==0?this.$cdata.zxhc.zxhc.lb:this.jbData;
+          this.plBtn = this.plBtn.filter(item => ['sb'].indexOf(item.py) == -1);
         } else if (val == "2") {
           this.plBtn = this.$store.state.plBtn;
         } else if (val == "3") {
           this.plBtn = this.$store.state.plBtn;
-          let arr = [];
-          for (var j = 0; j < this.plBtn.length; j++) {
-            if (this.plBtn[j].py == "cx" || this.plBtn[j].py == "qc" || this.plBtn[j].py == "jb") {
-              arr.push(this.plBtn[j]);
-            }
-          }
-          this.plBtn = arr;
+          this.plBtn = this.plBtn.filter(item => ['sb','xf'].indexOf(item.py) == -1);
+        }
+      }else{
+        if(val == 1){
+          this.lbData = this.jbData.length==0?this.$cdata.zxhc.zxhc.lb:this.jbData;
         }
       }
     }
@@ -201,54 +203,16 @@ export default {
       this.$store.dispatch("aGetPassport");
       this.$store.dispatch("aGetDatatype");
       this.getSpInit();
-      // if (this.$store.state.user.jb == "1") {
-      //   this.$store.dispatch("aGetSuboffice");
-      // } else if (this.$store.state.user.jb == "2") {
-      //   this.$store.dispatch(
-      //     "aGetSuboffice",
-      //     this.$store.state.user.bmbh.slice(0, 6)
-      //   );
-      // } else if (this.$store.state.user.jb == "3") {
-      //   this.$store.dispatch(
-      //     "aGetSuboffice",
-      //     this.$store.state.user.bmbh.slice(0, 6) + "000000"
-      //   );
-      // }
-      // if (this.$store.state.user.jb == "1") {
-      //   this.$store.dispatch("aGetPolice");
-      //   this.$store.dispatch("aGetZrq");
-      // } else if (this.$store.state.user.jb == "2") {
-      //   this.$store.dispatch(
-      //     "aGetPolice",
-      //     this.$store.state.user.bmbh.slice(0, 6)
-      //   );
-      //   this.$store.dispatch(
-      //     "aGetZrq",
-      //     this.$store.state.user.bmbh.slice(0, 6)
-      //   );
-      // } else if (this.$store.state.user.jb == "3") {
-      //   this.$store.dispatch("aGetPolice", this.$store.state.user.bmbh);
-      //   this.$store.dispatch(
-      //     "aGetZrq",
-      //     this.$store.state.user.bmbh.slice(0, 8)
-      //   );
-      // }
-    this.$nextTick(() => {
-      let arr = [];
-      this.plBtn = this.$store.state.plBtn;
-      for (var i = 0; i < this.plBtn.length; i++) {
-        if (this.plBtn[i].py != "sb") {
-          arr.push(this.plBtn[i]);
-        }
-      }
-      this.plBtn = arr;
-      // this.$store.dispatch("aGetBackstatus");
-      this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data => {
-        this.lbTab = data.lbTab;
-        this.page = this.lbTab[0].dm;
-        this.getTable();
+      this.$nextTick(() => {
+        console.log('mount',this.jbData)
+        this.plBtn=this.$store.state.plBtn;
+        this.plBtn = this.plBtn.filter(item => ['sb'].indexOf(item.py) == -1);
+        this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data => {
+          this.lbTab = data.lbTab;
+          this.page = this.lbTab[0].dm;
+          this.getTable();
+        });
       });
-    });
   },
   methods: {
     getSpInit(){
@@ -275,20 +239,39 @@ export default {
         }
       });
     },
+    //时间轴
+    getTimeData(serial){
+      this.$api.post(this.$api.aport2+'/issueDataZfjl/getIssueDataZfjlList',{serial:serial},r=>{
+        this.timeData = r;
+      })
+    },
     //简表数据 子组件通知父组件改表格数据
     transSaveFnc(data){
-
+      this.jbData = data
       this.lbData = data
+      console.log('djkjdd',data)
     },
+    //查询条件转换查询
     queryShowFnc(flag){
-      if(!flag){
-        this.$store.dispatch("aGetBackstatus").then(() => {});
+      if(!flag){//快速查询
+        this.cxQ.pd.clzt = this.clzt;
+        this.cxQ.pd.cljg =this.page;
+        this.getTable(true,this.cxQ)
+      }else{
+        this.getTable(true)
       }
     },
+    //筛选条件 快速查询
     commandfnc(data){
       if(data.data=='datatype'){
         this.$store.dispatch("aGetBackstatus",data.command).then(() => {});
       }
+      this.cxQ.pd.clzt = this.clzt;
+      this.cxQ.pd.cljg =this.page;
+      for(var key in data.obj){
+        this.cxQ.pd[data.obj[key].dmx] = data.obj[key].dm;
+      }
+      this.getTable(true,this.cxQ)
     },
     cxFnc(data) {
       this.cx.pd = data;
@@ -298,41 +281,33 @@ export default {
     tabTopClick1() {
       this.clzt = 1;
       this.cx.pageNum = 1;
-      
       this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data => {
         this.lbTab = data.lbTab;
         this.page = this.lbTab[0].dm;
       });
       this.plBtn = this.$store.state.plBtn;
-      let arr = [];
-      for (var i = 0; i < this.plBtn.length; i++) {
-        if (this.plBtn[i].py != "sb") {
-          arr.push(this.plBtn[i]);
-        }
-      }
-      this.plBtn = arr;
+      this.plBtn = this.plBtn.filter(item => ['sb'].indexOf(item.py) == -1);
       this.getTable(true);
     },
     tabTopClick2() {
       this.clzt = 2;
       this.cx.pageNum = 1;
-      
       this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data => {
         this.lbTab = data.lbTab1;
         this.page = this.lbTab[0].dm;
       });
-      let arr = [];
-      for (var k = 0; k < this.plBtn.length; k++) {
-        if (this.plBtn[k].py == "cx" || this.plBtn[k].py == "qc" || this.plBtn[k].py == "jb") {
-          arr.push(this.plBtn[k]);
-        }
-      }
-      this.plBtn = arr;
+      this.plBtn = this.$store.state.plBtn;
+      this.plBtn = this.plBtn.filter(item => ['sb','xf'].indexOf(item.py) == -1);
       this.getTable(true);
     },
     //列表tab切换  data==page 从1开始 控制按钮是否出现 v-for 和 v-if不能同时使用
     tabFnc(data) {
       this.page = data;
+      if(this.page!='1'){
+        this.lbData = this.lbData.filter(item => ['datasources_desc'].indexOf(item.dm) == -1);
+      }else{
+        this.lbData = this.jbData.length==0?this.$cdata.zxhc.zxhc.lb:this.jbData;
+      }
       this.cx.pageNum = 1;
       this.selection = [];
       this.getTable(true);
@@ -407,7 +382,6 @@ export default {
       }
     },
     radioChange(val) {
-      console.log(val);
       if (val) {
         if (this.joinFlag == true) {
           this.joinFlag = false;
@@ -445,8 +419,8 @@ export default {
           this.multipleSelection[i].backstatus
         ]);
       }
-      console.log("this.officeArr==", this.officeArr);
-      console.log("this.policeArr==", this.policeArr);
+      // console.log("this.officeArr==", this.officeArr);
+      // console.log("this.policeArr==", this.policeArr);
     },
     //判断数组元素是否完全相等
     isAllEqual(array) {
@@ -472,7 +446,7 @@ export default {
       this.getTable();
     },
     // 查询列表
-    getTable(flag) {
+    getTable(flag,pdQ) {
       if(flag){this.clearSort = new Date().getTime();delete this.cx.order;delete this.cx.direction }
       this.cx.pd.jb = this.$store.state.user.jb;
       this.cx.pd.bmbh = this.$store.state.user.bmbh;
@@ -480,7 +454,7 @@ export default {
       this.cx.pd.cljg = this.page;
       this.$api.post(
         this.$api.aport2 + "/issueData/getIssueDataPage",
-        this.cx,
+        pdQ||this.cx,
         r => {
           this.tableData.list = r.list;
           this.tableData.total = r.total;
@@ -561,7 +535,6 @@ export default {
             });
             return false;
           }
-
           // if (!this.isArrValue(this.backstatusArr)) {
           //   //分局下发 选择数据已处理过走访状态不能下发
           //   this.$message({
@@ -586,7 +559,6 @@ export default {
           // if (!this.isArrEmpty(this.policeArr)) {
             //都是空值
             this.$store.dispatch("aGetssdw", { bmbh: this.officeArr[0], type: "sspcs" });
-            // this.$store.dispatch("aGetPolice", this.officeArr[0].slice(0, 6));
             this.labelData = this.$cdata.zxhc.zxhc.xfFContent;
             this.isShowDialog = true;
           // } 
@@ -616,7 +588,6 @@ export default {
           //     }
           //   );
           // }
-
           // console.log(this.isArrEmpty(this.officeArr, this.policeArr));
           // console.log(this.isAllEqual(this.policeArr));
         }
@@ -640,13 +611,13 @@ export default {
       this.$store.dispatch("aGetBackstatus", data.data.datatype);
       if (data.data.suboffice) {
         this.$store.dispatch("aGetssdw", { bmbh: data.data.suboffice, type: "sspcs" });
-        // this.$store.dispatch("aGetPolice", data.data.suboffice.slice(0, 6));
       }
       if (data.data.policestation) {
         this.$store.dispatch("aGetssdw", { bmbh: data.data.policestation, type: "zrq" });
-        // this.$store.dispatch("aGetZrq", data.data.policestation.slice(0, 8));
       }
       if (this.dialogType == "edit") {
+        this.getTimeData(data.data.serial)
+
         if (this.clzt == 2) {
           //已走访
           if (data.data.whetherUpdateState == "0") {
@@ -705,9 +676,8 @@ export default {
         })
       }
     },
-    //编辑保存
+    //编辑保存 (废)
     editSave(data) {
-      console.log();
       if (
         ((data.datatype == "1" &&
           (data.backstatus == "zfzt_1" || data.backstatus == "zfzt_2")) ||
@@ -794,21 +764,27 @@ export default {
             (this.dialogData.backstatus == "zfzt_1" ||
               this.dialogData.backstatus == "zfzt_2")) ||
             (this.dialogData.datatype == "2" &&
-              this.dialogData.backstatus == "zfzt_1")) &&
+              this.dialogData.backstatus == "zfzt_1" ||
+              this.dialogData.backstatus == "zfzt_2" ||
+              this.dialogData.backstatus == "zfzt_5" )) &&
             (this.dialogData.suboffice == "" ||
               this.dialogData.suboffice == undefined)) ||
           (((this.dialogData.datatype == "1" &&
             (this.dialogData.backstatus == "zfzt_1" ||
               this.dialogData.backstatus == "zfzt_2")) ||
             (this.dialogData.datatype == "2" &&
-              this.dialogData.backstatus == "zfzt_1")) &&
+              this.dialogData.backstatus == "zfzt_1" ||
+              this.dialogData.backstatus == "zfzt_2" ||
+              this.dialogData.backstatus == "zfzt_5" )) &&
             (this.dialogData.policestation == "" ||
               this.dialogData.policestation == undefined)) ||
           (((this.dialogData.datatype == "1" &&
             (this.dialogData.backstatus == "zfzt_1" ||
               this.dialogData.backstatus == "zfzt_2")) ||
             (this.dialogData.datatype == "2" &&
-              this.dialogData.backstatus == "zfzt_1")) &&
+              this.dialogData.backstatus == "zfzt_1" ||
+              this.dialogData.backstatus == "zfzt_2" ||
+              this.dialogData.backstatus == "zfzt_5" )) &&
             (this.dialogData.turnoutarea == "" ||
               this.dialogData.turnoutarea == undefined))
         ) {
@@ -837,6 +813,23 @@ export default {
             }
           );
         }
+      }else if(data.button_type == "singback"){
+        let p={
+          serial:this.dialogData.serial,
+          jb : this.$store.state.user.jb,
+          bmbh : this.$store.state.user.bmbh,
+          userId : this.$store.state.user.userId,
+        }
+        this.$api.post(this.$api.aport2 + "/issueData/updateReportDataByZfzt",p,r=>{
+          this.$message({
+          message: r.message,
+          duration: 8000,
+          showClose: true,
+          type: "success"
+        });
+        this.isShowDialog = false;
+        this.getTable();
+        })
       }
     },
     singXfSave(data) {
@@ -962,10 +955,13 @@ export default {
 };
 </script>
 <style>
-/* .hczf-dia .el-col.el-col-16{
+.hczf-dia .el-col.el-col-16{
   width: 91.66667%;
 }
 .hczf-dia .el-dialog__body{
   display: flex;
-} */
+}
+.hczf-dia .hczf-wid{
+  width: 66%;
+}
 </style>

@@ -9,6 +9,8 @@
           :isPagination="true"
           :plBtn="plBtn"
           :tableData="tableData"
+          :expData="cx"
+          :expUrl="$api.aport1 + '/templateController/exportTemplateList'"
           @rowClick="rowClick"
           @plFnc="plFnc"
           @sortChange="sortChange"
@@ -178,9 +180,7 @@ export default {
         this.dialogTitle = data.button_name;
         this.dialogType = data.py;
         this.isShowDialog = true;
-      } else if(data.py == 'dc'){
-        this.$api.post(this.$api.aport1 + "/templateController/exportTemplateList",this.cx,r=>{console.log(r)},"","","blob",'xlsx')
-      }else {
+      }else if(data.py == 'sc'){
         if (!this.checkRow.serial) {
           this.$message({
             message: "请先选择部门",
@@ -268,6 +268,11 @@ export default {
             this.begin();
           }
         );
+      }).catch(()=>{
+        this.$message({
+          type: 'info',
+          message: '已取消导出'
+        })
       });
     },
     // 开始

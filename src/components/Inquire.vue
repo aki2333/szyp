@@ -1,14 +1,14 @@
 <template>
   <div class="inquire">
     <template  v-if="!queryIsShow">
-      <!-- <el-dropdown v-for="(fa,fai) in facxData" :key="fai" @command="commandfnc" class="mr-10">
+      <el-dropdown v-for="(fa,fai) in facxData" :key="fai" @command="commandfnc" class="mr-10">
         <el-button type="primary" size='mini'>
           {{JSON.stringify(checkObj[fai]) == "{}"?fa.cm:checkObj[fai].mc}}<i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
         <el-dropdown-menu slot="dropdown" v-if="fa.type=='select'">
           <el-dropdown-item v-for="(item,ind) in $store.state[fa.dm]" :key="ind" :command="item.mc+'-'+item.dm+'-'+fa.dm+'-'+fai">{{item.mc}}</el-dropdown-item>
         </el-dropdown-menu>
-      </el-dropdown> -->
+      </el-dropdown>
       <!-- <template v-for="(item,ind) in $store.state[fa.dm]">
         <el-tag 
         type="warning"
@@ -127,7 +127,7 @@
               round
               v-if="cxType!='noCbtn'&&pb.button_type==1"
               :key="pbi"
-              @click="btnClick(pb.py)"
+              @click="btnClick(pb.py,pb)"
             >{{pb.button_name||pb.menu_name}}</el-button>
           </template>
           <template v-if="cxType=='noCbtn'">
@@ -168,6 +168,10 @@ export default {
     pd: {
       type: Object,
       default: () => {}
+    },
+    cxPara:{
+      type: Object,
+      default: () => {}
     }
   },
   // watch: {
@@ -200,9 +204,9 @@ export default {
     console.log(this.cxType);
   },
   methods: {
-    btnClick(py) {
+    btnClick(py,pb) {
       if (py == "cx") {
-        this.submitForm("inquire");
+        this.submitForm("inquire",pb);
       } else if (py == "qc") {
         this.resetForm("inquire");
       }
@@ -211,18 +215,22 @@ export default {
       this.$nextTick(()=>{
         let obj={
           dm:command.split('-')[1],
-          mc:command.split('-')[0]
+          mc:command.split('-')[0],
+          dmx:command.split('-')[2]
         }
         this.checkObj[command.split('-')[3]] = obj;
-        // this.checkObj[command.split('-')[3]] = command.split('-')[1];
         console.log(this.checkObj,this.checkObj[command.split('-')[3]],command.split('-')[1],command.split('-')[0])
-        this.$emit('commandfnc',{command:command.split('-')[1],data:command.split('-')[2]})
+        this.$emit('commandfnc',{obj:this.checkObj,data:command.split('-')[2],command:command.split('-')[1]})
       })
-      
     },
-    submitForm(formName) {
+    submitForm(formName,pb) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          console.log(pb)
+          // console.log('bread',this.$store.state.breadcrumb[this.$store.state.breadcrumb.length-1].menu_name)
+          this.cxPara.menu_name = this.$store.state.breadcrumb[this.$store.state.breadcrumb.length-1].menu_name;
+          this.cxPara.btn_name = pb.menu_name;
+          this.cxPara.user = this.$store.state.user;
           this.$emit("cxFnc", this.inquire);
         } else {
           console.log("error submit!!");
@@ -232,6 +240,12 @@ export default {
     },
     queryShow() {
       this.queryIsShow = !this.queryIsShow;
+      this.checkObj={
+        0:{},
+        1:{},
+        2:{},
+        3:{},
+      },
       this.$emit("queryShowFnc", this.queryIsShow);
     },
     linkChange(key, val, inquire) {

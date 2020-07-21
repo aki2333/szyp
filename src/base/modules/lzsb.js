@@ -2,9 +2,14 @@
 const lzsb = {
     cx: [
         {
-            cm: '姓名',
+            cm: '中文姓名',
             type: 'input',
-            dm: 'xm'
+            dm: 'name'
+        },
+        {
+            cm: '英文姓名',
+            type: 'input',
+            dm: 'givenname'
         },
         {
             cm: '性别',
@@ -42,6 +47,23 @@ const lzsb = {
             dm: 'visaNo'
         },
         {
+            cm: '上报时间',
+            type: 'double',
+            dm: 'xfTime',
+            children: [
+                {
+                    cm: '开始日期',
+                    type: 'date',
+                    dm: 'sbsjLow'
+                },
+                {
+                    cm: '结束日期',
+                    type: 'date',
+                    dm: 'sbsjUp'
+                }
+            ]
+        },
+        {
             cm: '所属分局',
             type: 'select',
             dm: 'suboffice',
@@ -74,23 +96,7 @@ const lzsb = {
         //     type: 'select',
         //     dm: 'sbzt',
         // },
-        {
-            cm: '上报时间',
-            type: 'double',
-            dm: 'xfTime',
-            children: [
-                {
-                    cm: '开始日期',
-                    type: 'date',
-                    dm: 'sbsjLow'
-                },
-                {
-                    cm: '结束日期',
-                    type: 'date',
-                    dm: 'sbsjUp'
-                }
-            ]
-        },
+        
 
     ],
     lb: [
@@ -272,6 +278,11 @@ const lzsb = {
                 dm: 'firstname'
             },
             {
+                cm: '英文姓名',
+                type: 'input',
+                dm: 'givenname'
+            },
+            {
                 cm: '中文姓名',
                 type: 'input',
                 dm: 'name'
@@ -326,14 +337,15 @@ const lzsb = {
                 type: 'select',
                 dm: 'rjka'
             },
-        ],
-        "b": [
-
             {
                 cm: '停留事由',
                 type: 'select',
                 dm: 'rjsy'
             },
+        ],
+        "b": [
+
+            
             // {
             //     cm: '职业',
             //     type: 'select',

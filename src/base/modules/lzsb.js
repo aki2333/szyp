@@ -90,14 +90,11 @@ const lzsb = {
                 }
             ]
         },
-
-        // {
-        //     cm: '上报状态',
-        //     type: 'select',
-        //     dm: 'sbzt',
-        // },
-        
-
+        {
+            cm: '数据来源',
+            type: 'select',
+            dm: 'sjly',
+        },
     ],
     lb: [
         {
@@ -157,22 +154,22 @@ const lzsb = {
             cm: '上报时间',
             dm: 'sbsj'
         },
-        // {
-        //     cm: '审核状态',
-        //     dm: 'shztMc'
-        // }
+        {
+            cm: '数据来源',
+            dm: 'sjlyMc'
+        }
     ],
     lbTab: [
         {
-            "mc": '核查中',
+            "mc": '走访中',
             "dm": "hczt_0",
         },
         {
-            "mc": '核查通过',
+            "mc": '走访通过',
             "dm": "hczt_1",
         },
         {
-            "mc": '核查未通过',
+            "mc": '走访未通过',
             "dm": "hczt_2",
         }
     ],

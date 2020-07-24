@@ -1,7 +1,8 @@
 // 配置API接口地址
 
 var root = 'http://192.168.3.131:1101/'//测试
-// var root = 'http://50.73.70.116:1101/'//公安
+// var root = 'http://50.73.70.121:1101/'//公安测试环境
+// var root = 'http://50.73.70.116:1101/'//公安正式环境
 
 // var root = 'http://10.0.30.43:1101'//石本地
 // var root = 'http://10.0.8.68:1101/'//任本地
@@ -9,7 +10,7 @@ var root = 'http://192.168.3.131:1101/'//测试
 var aport1 = 'permission'//任
 // var aport1 = 'http://10.0.30.64:9404'
 var aport2 = 'datarelease'//石
-// var aport2 = 'http://10.0.30.68:9405'//石本地
+// var aport2 = 'http://10.0.30.50:9405'//石本地
 var aport3 = 'lzsb'
 
 // 引用axios
@@ -147,6 +148,12 @@ function apiAxios(method, url, params, success, failure, isDownload,type,name) {
         if (loadingInstance1) {
           loadingInstance1.close();
         }
+        Message({
+          message: '操作异常',
+          showClose: true,
+          duration:0,
+          type: 'warning'
+        });
         // 后台错误
         console.log('后台错误: ' + JSON.stringify(res.data))
       }

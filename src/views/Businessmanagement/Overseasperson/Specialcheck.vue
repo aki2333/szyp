@@ -2,11 +2,13 @@
   <div class="page">
     <Inquire 
       :cxData="cxData" 
+      :cxShow="cxShow"
       :facxData="facxData" 
       :pd="cx.pd" 
       :cxPara="cx"
       @cxFnc="cxFnc" 
       @lcFnc="lcFnc" 
+      @tagClickFnc="tagClickFnc"
       @queryShowFnc="queryShowFnc"
       @commandfnc="commandfnc"></Inquire>
     <div class="t-tab-top">
@@ -113,6 +115,7 @@ export default {
       //数据展示
       isSelect: true,
       isTab: true,
+      cxShow:false,
       cxData: this.$cdata.zxhc.zxhc.cx,
       facxData: this.$cdata.zxhc.zxhc.facx,//快速查询项
       lbData: this.$cdata.zxhc.zxhc.lb,
@@ -180,14 +183,15 @@ export default {
     page(val) {
       if (this.clzt == 1) {
         //未处理
+        this.plBtn = this.$store.state.plBtn;
         if (val == "1") {
-          this.plBtn = this.$store.state.plBtn;
           this.lbData = this.jbData.length==0?this.$cdata.zxhc.zxhc.lb:this.jbData;
           this.plBtn = this.plBtn.filter(item => ['sb'].indexOf(item.py) == -1);
-        } else if (val == "2") {
-          this.plBtn = this.$store.state.plBtn;
-        } else if (val == "3") {
-          this.plBtn = this.$store.state.plBtn;
+        } else if(val == "2"){  
+          this.plBtn = this.plBtn.filter(item => ['sb'].indexOf(item.py) == -1);
+        }else if (val == "5") {   
+          this.plBtn = this.plBtn.filter(item => ['xf'].indexOf(item.py) == -1);
+        } else if (val == "3") {   
           this.plBtn = this.plBtn.filter(item => ['sb','xf'].indexOf(item.py) == -1);
         }
       }else{
@@ -253,6 +257,7 @@ export default {
     },
     //查询条件转换查询
     queryShowFnc(flag){
+      this.cxShow = flag;
       if(!flag){//快速查询
         this.cxQ.pd.clzt = this.clzt;
         this.cxQ.pd.cljg =this.page;
@@ -260,6 +265,14 @@ export default {
       }else{
         this.getTable(true)
       }
+    },
+    tagClickFnc(data){
+      this.cxQ.pd.clzt = this.clzt;
+      this.cxQ.pd.cljg =this.page;
+      for(var key in data.para){
+        this.cxQ.pd[data.para[key].dmx] = data.para[key].dm;
+      }
+      this.getTable(true,this.cxQ)
     },
     //筛选条件 快速查询
     commandfnc(data){
@@ -287,7 +300,8 @@ export default {
       });
       this.plBtn = this.$store.state.plBtn;
       this.plBtn = this.plBtn.filter(item => ['sb'].indexOf(item.py) == -1);
-      this.getTable(true);
+      this.queryShowFnc(this.cxShow);
+      // this.getTable(true);
     },
     tabTopClick2() {
       this.clzt = 2;
@@ -298,7 +312,8 @@ export default {
       });
       this.plBtn = this.$store.state.plBtn;
       this.plBtn = this.plBtn.filter(item => ['sb','xf'].indexOf(item.py) == -1);
-      this.getTable(true);
+      this.queryShowFnc(this.cxShow);
+      // this.getTable(true);
     },
     //列表tab切换  data==page 从1开始 控制按钮是否出现 v-for 和 v-if不能同时使用
     tabFnc(data) {
@@ -310,7 +325,8 @@ export default {
       }
       this.cx.pageNum = 1;
       this.selection = [];
-      this.getTable(true);
+      this.queryShowFnc(this.cxShow);
+      // this.getTable(true);
     },
     rowClick(data) {
       console.log(data)

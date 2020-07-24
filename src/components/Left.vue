@@ -65,6 +65,7 @@ export default {
   methods: {
     openLeft() {
       this.leftWidth = this.leftWidth == "36px" ? "auto" : "36px";
+      this.$store.commit('getLeftWid',this.leftWidth)
     },
     toChildren(item, index) {
       this.active1 = index;

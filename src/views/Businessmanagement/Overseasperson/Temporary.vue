@@ -4,15 +4,15 @@
     <div class="t-tab-top">
       <div class="tab-top-item hand" @click="tabTopClick(0)">
         <img :src="cx.pd.shzt=='shzt_0'?tabImgActive_1:tabImg_1" alt />
-        <span>待审核</span>
+        <span>待初审</span>
       </div>
       <div class="tab-top-item hand ml--33" @click="tabTopClick(1)">
         <img :src="cx.pd.shzt=='shzt_1'?tabImgActive_2:tabImg_2" alt />
-        <span class="t-leftT">审核通过</span>
+        <span class="t-leftT">初审通过</span>
       </div>
       <div class="tab-top-item hand" style="margin-left: -14px;" @click="tabTopClick(2)">
         <img :src="cx.pd.shzt=='shzt_2'?tabImgActive_2:tabImg_2" alt />
-        <span class="t-leftT">审核未通过</span>
+        <span class="t-leftT">初审不通过</span>
       </div>
     </div>
     <div class="page-box">
@@ -127,6 +127,7 @@ export default {
     this.$store.dispatch("aGetGender");
     this.$store.dispatch("aGetPassport");
     this.$store.dispatch("aGetDM", "qzzl");
+    this.$store.dispatch("aGetDatatype");
     // this.$store.dispatch("aGetDM", "xzqh");
     this.$store.dispatch("aGetXzqh");//只获取苏州的行政区划
     this.$store.dispatch("aGetDM", "lz_zfzl");
@@ -135,6 +136,7 @@ export default {
     this.$store.dispatch("aGetDM", "bjjgka");
     this.$store.dispatch("aGetDM", "wgr_sqsy");
     this.$store.dispatch("aGetDM", "spqfd");
+    this.$store.dispatch("aGetDM", "sjly");
     this.getSpInit();
     this.tabTopClick(0);
   },
@@ -239,6 +241,14 @@ export default {
         } else {
           this.cx.pd.policestation = "";
           this.$store.commit("getsspcs", []);
+        }
+      }
+      if (data.key.dm == "datatype") {
+        if (data.data == "") {
+          this.$store.state.backstatus = [];
+          data.obj.backstatus = "";
+        } else {
+          this.$store.dispatch("aGetBackstatus", data.data).then(() => {});
         }
       }
     },

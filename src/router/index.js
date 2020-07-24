@@ -24,6 +24,7 @@ const routes = [
       /**
        * 运维支撑
        */
+      //【权限管理】
       {
         path: '/UserManagement',
         name: 'UserManagement',
@@ -54,6 +55,15 @@ const routes = [
         name: 'ZrqManagement',
         component: () => import(/* webpackChunkName: "OMSupport" */ '../views/OMSupport/UserFunction/ZrqManagement.vue')
       },
+      //【配置管理】
+      {
+        path: '/TimeControl',
+        name: 'TimeControl',
+        component: () => import(/* webpackChunkName: "OMSupport" */ '../views/OMSupport/disPoseFunction/TimeControl.vue')
+      },
+      /**
+       * 业务管理
+       */
       // 业务管理
       {
         path: '/Specialcheck',

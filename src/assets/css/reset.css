@@ -284,3 +284,13 @@ input[type="number"]{
 .page>.inquire .el-form-item__label, .page>.inquire input{
   color: #000!important;
 }
+/* 色块下拉框 */
+.color-block .el-select-dropdown__list{
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 152px;
+}
+.color-block .el-select-dropdown__item{
+  padding: 0 9px;
+  text-overflow: unset;
+}

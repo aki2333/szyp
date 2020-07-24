@@ -13,7 +13,7 @@
                     <el-button type="primary" size="small" class="ml-5" @click="getHandData()">查询</el-button>
                 </div>
                 <div class="base-flex left-query" v-if="$store.state.user.jb!='3'">
-                    <el-tooltip content="请选择派出所" popper-class="zrq-pop" placement="bottom-start" :value="pcsQuery==$store.state.user.bmbh" :manual="true" :offset="50">
+                    <el-tooltip content="请选择派出所" :popper-class="$store.state.leftWid=='auto'?'zrq-pop':'zrq-pop-left'" placement="bottom-start" :value="pcsQuery==$store.state.user.bmbh" :manual="true" :offset="50">
                       <el-select v-model="pcsQuery" filterable placeholder="请选择" size="mini" @change="getHandData()">
                         <el-option
                           v-for="item in pcsArr"
@@ -205,6 +205,7 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
+      console.log('yemian',this.$store.state.leftWid)
       this.$store.dispatch("aGetNation");
       this.$store.dispatch("aGetGender");
       this.$store.dispatch("aGetPassport");
@@ -672,5 +673,10 @@ export default {
 .zrq-pop{
   top: 196px!important;
   line-height: 0.9!important;
+}
+.zrq-pop-left{
+  top: 196px!important;
+  line-height: 0.9!important;
+  left:120px!important
 }
 </style>

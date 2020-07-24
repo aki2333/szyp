@@ -424,6 +424,11 @@ export default {
             this.getTable();
           }
         );
+      }).catch(()=>{
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
       });
     },
     // 重置密码
@@ -473,6 +478,11 @@ export default {
             this.isShowDialog = false;
           }
         );
+      }).catch(()=>{
+        this.$message({
+          type: 'info',
+          message: '已取消'
+        })
       });
     },
     userRole(data) {

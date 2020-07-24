@@ -1,14 +1,30 @@
 <template>
   <div class="inquire">
-    <template  v-if="!queryIsShow">
-      <el-dropdown v-for="(fa,fai) in facxData" :key="fai" @command="commandfnc" class="mr-10">
+    <div  v-if="!queryIsShow" key='1'>
+      <div v-for="(item,ind) in facxData" :key="ind" class="inline-block mr-5">
+        <div v-for="(tags,inds) in checkArr[ind]" :key="inds" class="inline-block mr-5">
+          <template v-if="!linkFlag[ind]">
+            <el-tag 
+              size="medium"
+              effect="dark"
+              :type="item.color"
+              class="hand mr-5"
+              :style="[{backgroundColor:backstatus==tags.dm?item.checkC:''},{borderColor:backstatus==tags.dm?item.checkC:''}]"
+              @click="tagClick(tags,item,ind)"
+            >{{tags.mc}}</el-tag>
+          </template>
+        </div>
+      </div>
+
+
+      <!-- <el-dropdown v-for="(fa,fai) in facxData" :key="fai" @command="commandfnc" class="mr-10">
         <el-button type="primary" size='mini'>
           {{JSON.stringify(checkObj[fai]) == "{}"?fa.cm:checkObj[fai].mc}}<i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
         <el-dropdown-menu slot="dropdown" v-if="fa.type=='select'">
           <el-dropdown-item v-for="(item,ind) in $store.state[fa.dm]" :key="ind" :command="item.mc+'-'+item.dm+'-'+fa.dm+'-'+fai">{{item.mc}}</el-dropdown-item>
         </el-dropdown-menu>
-      </el-dropdown>
+      </el-dropdown> -->
       <!-- <template v-for="(item,ind) in $store.state[fa.dm]">
         <el-tag 
         type="warning"
@@ -16,12 +32,7 @@
         v-if="item.dm==checkObj[fai]"
         >{{item.mc}}</el-tag>
       </template> -->
-      
-        <!-- <el-tag 
-          :key="fai"
-        >{{checkObj[fai]}}</el-tag> -->
-      
-    </template>
+    </div>
     <el-form
       :model="inquire"
       status-icon
@@ -30,7 +41,8 @@
       ref="inquire"
       label-width="100px"
       class="inquire-ruleForm"
-      v-if="queryIsShow"
+      v-else
+      key="2"
     >
       <el-row :gutter="0" type="flex" align="middle" justify="center">
         <el-col :span="20">
@@ -67,7 +79,7 @@
                   <el-option
                     v-for="(item,ind) in $store.state[cx.dm]"
                     :key="ind"
-                    :label="item.dm+' - '+item.mc"
+                    :label="cx.disdm?item.mc:item.dm+' - '+item.mc"
                     :value="item.dm"
                   ></el-option>
                 </el-select>
@@ -172,36 +184,64 @@ export default {
     cxPara:{
       type: Object,
       default: () => {}
+    },
+    cxShow:{
+      type: Boolean,
+      default: true
     }
   },
-  // watch: {
-  //   pd(val) {
-  //     console.log("sssss", val, this.mrz);
-  //     //       this.$nextTick(function() {
-  //     // });
-  //   }
-  // },
   data() {
     return {
       inquire: this.pd,
       tagCheck:'',
       rules: {},
-      queryIsShow: true,
+      queryIsShow: this.cxShow,
       openImg: require("../assets/images/main/open_query.png"),
       closeImg: require("../assets/images/main/close_query.png"),
       mrz: {},
+      flag:{
+        0:true,
+        1:true,
+        2:true,
+        3:true,
+      },
+      linkFlag:{},
       checkObj:{
         0:{},
         1:{},
         2:{},
         3:{},
       },
+      checkArr:{
+        0:[],
+        1:[],
+        2:[],
+        3:[],
+      },
+      QcxObj:{},
+      aa:true,
+      backstatus:''//走访状态
     };
+  },
+  watch:{
+    // checkArr: {
+    //   handler() {
+    //     if(this.aa){
+    //       this.facxData.length==0?this.checkArr[0]=[]:this.checkArr[0]
+    //       // this.checkArr[0] = this.$store.state[this.facxData[0].dm]
+    //       this.aa = false
+    //     }
+    //   },
+    //   deep: true
+    // },
   },
   mounted() {
     Object.assign(this.mrz, this.pd);
     this.mrz = JSON.parse(JSON.stringify(this.mrz));
-    console.log(this.cxType);
+    //核查走访
+    this.$store.dispatch("aGetDatatype").then((data) => {
+      this.checkArr[0] = data
+    });  
   },
   methods: {
     btnClick(py,pb) {
@@ -211,6 +251,62 @@ export default {
         this.resetForm("inquire");
       }
     },
+    tagClick(value,data,ind){
+      this.checkArr[ind] = JSON.parse(JSON.stringify(this.$store.state[data.dm]))
+      this.flag[ind] = !this.flag[ind]
+      if(data.dm=='datatype'){//两者位置在一起的联动
+        if(this.flag[ind]){
+          this.linkFlag[ind+1]=true//未选中下发类别，走访状态隐藏
+          this.backstatus = ''//清空走访状态标志值
+        }else{
+          this.linkFlag[ind+1]=false//选中下发类别，走访状态展开
+        }
+        this.$store.dispatch("aGetBackstatus",value.dm).then((data) => {
+          this.checkArr[ind+1] = data
+        });  
+      }
+      if(data.dm=='backstatus'){//走访状态 选中与未选中
+        if(this.backstatus == value.dm){//取消选中
+          
+          this.backstatus = ''
+        }else{
+          this.backstatus = value.dm
+        }
+      }
+      if(data.dm!='backstatus'){//被关联项平铺
+        if(this.flag[ind]){//当下发类别未选中时，去掉走访状态的值
+          this.checkArr[ind] = this.$store.state[data.dm]
+          for(var i in this.QcxObj){
+            if(this.QcxObj[i].dmx=='backstatus'){
+              this.QcxObj[i].dm = ''
+            }
+          }
+        }else{
+          this.checkArr[ind] = Object.assign([],[value])
+        }
+      }
+      // console.log('===',ind,data.dm,value.dm,this.QcxObj)
+      this.QcxObj[ind]={
+          dmx:data.dm,
+          dm:(this.flag[ind]&&data.dm!="backstatus")?'':(data.dm=='backstatus'&&!this.backstatus)?'':value.dm//被关联项平铺，不受flag控制，走访状态的value已在上面控制
+      } 
+      // console.log('flag==',ind,this.flag[ind],this.checkArr[ind],this.QcxObj)
+      this.$emit('tagClickFnc',{value:value,data:data,para:this.QcxObj})
+    },
+    // tagClick(value,data,ind){
+    //   this.checkArr[data.dm] = JSON.parse(JSON.stringify(this.$store.state[data.dm]))
+    //   if(data.dm=='datatype'){
+    //     this.checkArr['backstatus'] = JSON.parse(JSON.stringify(this.$store.state['backstatus']))
+    //   }
+    //   this.flag[data.dm] = !this.flag[data.dm]
+    //   if(this.flag[data.dm]){
+    //     this.checkArr[data.dm] = this.$store.state[data.dm]
+    //   }else{
+    //     this.checkArr[data.dm] = Object.assign([],[value]) 
+    //   }
+    //   console.log('flag==',ind,this.flag[data.dm],this.checkArr[data.dm])
+    //   this.$emit('tagClickFnc',{value:value,data:data})
+    // },
     commandfnc(command){
       this.$nextTick(()=>{
         let obj={
@@ -240,12 +336,8 @@ export default {
     },
     queryShow() {
       this.queryIsShow = !this.queryIsShow;
-      this.checkObj={
-        0:{},
-        1:{},
-        2:{},
-        3:{},
-      },
+      // this.checkArr={0:this.facxData.length==0?[]:this.$store.state[this.facxData[0].dm],1:[],2:[],3:[],},
+
       this.$emit("queryShowFnc", this.queryIsShow);
     },
     linkChange(key, val, inquire) {

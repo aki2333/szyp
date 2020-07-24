@@ -11,15 +11,20 @@
       :disabled="dialogType=='ck'"
     >
       <el-row :gutter="30" type="flex" align="middle" justify="center">
-        <el-col :span="16">
-          <el-col :span="24" v-for="(cx,i) in cxData" :key="i">
+        <el-col :span="cxData[0].mRow?cxData[0].mRow:16">
+          <el-col :span="cx.col?cx.col:24" v-for="(cx,i) in cxData" :key="i">
             <el-form-item :label="!cx.hc_con||(cx.dm=='datasources_desc'&&page==cx.hc_con)||(cx.dm=='phone'&&dialogData['datatype']==cx.hc_con)?cx.cm:''" :prop="cx.dm">
               <template v-if="cx.type=='input'">
                 <el-input v-if="!cx.hc_con||(cx.dm=='datasources_desc'&&page==cx.hc_con)||(cx.dm=='phone'&&dialogData['datatype']==cx.hc_con)" v-model="dialogData[cx.dm]" :disabled="cx.dis"></el-input>
               </template>
-              
               <template v-if="cx.type=='joinInput'">
                 <el-input v-model="dialogData[cx.dm]" :disabled="joinFlag"></el-input>
+              </template>
+              <template v-if="cx.type=='inpColor'">
+                <el-row type="flex" justify="start">
+                  <el-col :span="23"><el-input v-model="dialogData[cx.dm]"></el-input></el-col>
+                  <el-col :span="3" class="ml-10"><span style="width:20px;height:20px;display:inline-block;vertical-align: middle;" :style="{backgroundColor:dialogData[cx.dm]}"></span></el-col>
+                </el-row>
               </template>
               <template v-else-if="cx.type=='password'">
                 <el-input type="password" v-model="dialogData[cx.dm]"></el-input>
@@ -106,6 +111,51 @@
         </el-col>
       </el-row>
     </el-form>
+    <!-- <ZDY
+     v-if="ZDYShow"></ZDY> -->
+     <div class="custom" v-if="ZDYShow">
+      <el-form
+          :model="ColorData"
+          status-icon
+          size="mini"
+         
+          ref="colorForm"
+          label-width="100px"
+          class="form-ruleForm"
+        >
+        <el-row :gutter="30" align="middle" justify="center">
+        <el-col :span="24">
+          <el-col :span="8" v-for="(all,alls) in ColorData.data" :key="alls">
+            <el-row type="flex">
+              <el-col :span="18">
+                  <el-form-item v-for="(item,ind) in ColorLabel" :key="ind" :label="item.cm" :prop="'data.'+alls+'.'+item.dm" 
+                  :rules="{required: true, message: '此项必填', trigger: 'blur'}">
+                    <template v-if="item.type=='input'">
+                      <el-input v-model="all[item.dm]" :type="item.mold?item.mold:''"></el-input>
+                    </template>
+                    <template v-if="item.type=='block'">
+                      <el-select v-model="all[item.dm]" placeholder="请选择" popper-class="color-block" class="color-inp" @change="colorChange(all[item.dm],alls)">
+                        <el-option
+                          v-for="(item,its) in colorArr"
+                          :key="its"
+                          :label="item"
+                          :value="item">
+                          <span style="width:20px;height:20px;display: inline-block;" :style="{backgroundColor:item}"></span>
+                        </el-option>
+                      </el-select>
+                    </template>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6" class="ml-5 align-center"> 
+                  <el-button type="primary" icon="el-icon-plus" size="mini" circle @click="Add()" v-if="ColorData.data.length-1==alls"></el-button>
+                  <el-button type="danger" icon="el-icon-minus" size="mini" circle @click="deleteModel(alls)" v-if="alls!=0"></el-button>
+                </el-col>
+              </el-row>
+          </el-col>
+        </el-col>
+        </el-row>
+      </el-form>
+  </div>
     <div class="page-btn-box" v-if="dialogType=='ck'">
         <el-button size="mini" type="info" round @click="cancel">关闭</el-button>
     </div>
@@ -129,7 +179,9 @@
   </div>
 </template>
 <script>
+// import ZDY from './DiaCus.vue'
 export default {
+  // components:{ZDY},
   props: {
     cxData: {
       type: Array,
@@ -167,6 +219,10 @@ export default {
     commonBtn:{
       type: Boolean,
       default: true
+    },
+    ZDYShow:{
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -213,12 +269,47 @@ export default {
           { required: true, message: "请输入警号", trigger: "blur" },
           { max: 20, message: "长度不可超过20位", trigger: "blur" }
         ],
-        bmbh: [{ required: true, message: "请选择单位", trigger: "blur" }]
+        bmbh: [{ required: true, message: "请选择单位", trigger: "blur" }],
+        ywlb: [{ required: true, message: "此项必填", trigger: "blur" }],
+        dwjb: [{ required: true, message: "此项必填", trigger: "blur" }],
+        czpzlx: [{ required: true, message: "此项必填", trigger: "blur" }],
+        gdsj: [{ required: true, message: "此项必填", trigger: "blur" }],
+        gdyssh: [{ required: true, message: "此项必填", trigger: "blur" }],
       },
       isXJ: false,
       newForm: {},
       isPS:true,
       isJoinFlag:false,
+
+      ColorData:{
+        data:[
+          {
+            id:1,
+            gdsj:'',
+            gdyssh:'',
+          },
+        ],
+      },
+      modelData:{
+        id:1,
+        gdsj:'',
+        gdyssh:'',
+      },
+      count:1,
+      ColorLabel:[
+        {
+            cm:'规定时间',
+            dm:'gdsj',
+            type:'input',
+            mold:'number'
+          },
+          {
+            cm:'规定颜色',
+            dm:'gdyssh',
+            type:'block'
+          }
+      ],
+      colorArr:['#67C23A','#E6A23C','#F56C6C','#409EFF','#909399']
     };
   },
   watch: {
@@ -238,16 +329,60 @@ export default {
     save(formName, type) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.$emit("dialogSave", {
-            type: this.dialogType,
-            data: this.dialogData,
-            btnType: type
-          });
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
+          if(this.ZDYShow){
+            this.$refs['colorForm'].validate(valid => {
+              if(valid){
+                this.dialogData.gdnrList = this.ColorData.data
+                this.$emit("dialogSave", {
+                  type: this.dialogType,
+                  data: this.dialogData,
+                  btnType: type
+                });
+                this.ColorData={
+                  data:[
+                    {
+                      id:1,
+                      gdsj:'',
+                      gdyssh:'',
+                    },
+                  ],
+                }
+                document.getElementsByClassName('color-inp')[0].getElementsByClassName('el-input__inner')[0].style.backgroundColor=''
+              }else {
+                console.log("error submit!!");
+                return false;
+              }
+            });
+          }else{
+            if(valid){
+                this.$emit("dialogSave", {
+                  type: this.dialogType,
+                  data: this.dialogData,
+                  btnType: type
+                });
+              }else {
+                console.log("error submit!!");
+                return false;
+              }
+          } 
+        } 
       });
+    },
+    Add(){
+      this.count++;
+      this.modelData={id:this.count,gdsj:'',gdyssh:''}
+      this.ColorData.data.push(this.modelData)
+    },
+    deleteModel(ind){
+      this.ColorData.data.splice(ind,1)
+    },
+    colorChange(color,ind){
+      if(color){
+        document.getElementsByClassName('color-inp')[ind].getElementsByClassName('el-input__inner')[0].style.backgroundColor=color
+      }else{
+        document.getElementsByClassName('color-inp')[ind].getElementsByClassName('el-input__inner')[0].style.backgroundColor=''
+      }
+      
     },
     dbBtnFun(val) {
       this.$emit("dbFnc", val);

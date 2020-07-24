@@ -1,6 +1,7 @@
 import qxgl from './modules/qxgl.js'
 import zxhc from './modules/zxhc.js'
 import lzsb from './modules/lzsb.js'
+import pzgl from './modules/pzgl.js'
 import api from '@/api/index.js'
 import store from '@/store'
 
@@ -170,6 +171,30 @@ const options = {
             mc: "按钮"
         }
     ],
+    dwjb:[
+        {
+            dm:'1',
+            mc:'市局'
+        },
+        {
+            dm:'2',
+            mc:'分局'
+        },
+        {
+            dm:'3',
+            mc:'派出所'
+        },
+    ],
+    czpzlx:[
+        {
+            dm:'1',
+            mc:'上报'
+        },
+        {
+            dm:'2',
+            mc:'下发'
+        },
+    ],
     turnoutarea: [],
 }
 const tabImg_1 = require("../assets/images/main/tab_2.png");
@@ -181,7 +206,6 @@ function zrqReciData(list) {
     return new Promise((resolve) => {
         api.post(api.aport2 + '/dm/getZrqListByZrqDmList', { zrqList: list }, r => {
             options.turnoutarea = r
-            console.log('options.turnoutarea', options.turnoutarea)
             resolve(r)
         })
     })
@@ -192,6 +216,7 @@ export default {
     qxgl,
     zxhc,
     lzsb,
+    pzgl,
     api,
     store,
     tabImg_1,

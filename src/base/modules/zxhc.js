@@ -85,7 +85,8 @@ const zxhc = {
         {
             cm: '走访状态',
             type: 'select',
-            dm: 'backstatus'
+            dm: 'backstatus',
+            disdm:true
         },
         {
             cm: '分局下发时间',
@@ -115,12 +116,15 @@ const zxhc = {
         {
             cm: '下发类别',
             type: 'select',
-            dm: 'datatype'
+            dm: 'datatype',
+            color:'primary'
         },
         {
             cm: '走访状态',
             type: 'select',
-            dm: 'backstatus'
+            dm: 'backstatus',
+            color:'success',
+            checkC:'#67C23A'
         }, 
         // {
         //     cm: '任务处理状态',
@@ -385,6 +389,18 @@ const zrqzf = {
                 },
             ],
         },
+        {
+            cm: '下发类别',
+            type: 'select',
+            dm: 'datatype'
+        },
+        {
+            cm: '走访状态',
+            type: 'select',
+            dm: 'backstatus',
+            disdm:true//查询项下拉选不展示dm
+        },
+
     ],
     lb: [
         {
@@ -808,8 +824,7 @@ const zxhcgl = {
             "button_type": 'delete',
             "serial": "201",
         },
-    ],
-    
+    ],   
 }
 // 核查走访
 function lbTabShow(jb) {
@@ -821,8 +836,12 @@ function lbTabShow(jb) {
                     "dm": '1',
                 },
                 {
-                    "mc": '分局未处理',
+                    "mc": '分局待下发',
                     "dm": '2',
+                },
+                {
+                    "mc": '分局待上报',
+                    "dm": '5',
                 },
                 {
                     "mc": '派出所未处理',
@@ -846,8 +865,12 @@ function lbTabShow(jb) {
         }else if(jb=='2'){
             zxhc.lbTab = [   
                 {
-                    "mc": '分局未处理',
+                    "mc": '分局待下发',
                     "dm": '2',
+                },
+                {
+                    "mc": '分局待上报',
+                    "dm": '5',
                 },
                 {
                     "mc": '派出所未处理',
@@ -1022,7 +1045,7 @@ function innerDia(page){
                     dm: 'turnoutarea',
                 },
             ]
-        }else if(page=='2'){
+        }else if(page=='2'||page=='5'){
             zxhc.innerDiaCon = [
                 {
                     cm: '所属派出所',

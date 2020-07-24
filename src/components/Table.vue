@@ -48,6 +48,20 @@
           align="left"
           show-overflow-tooltip
           :key="i"
+          v-if="lb.color"
+          :prop="lb.dm"
+          :label="lb.cm"
+          :width="lb.width"
+          :sortable="'custom'&&isSort">
+            <template slot-scope="scope">
+              <span style="width:20px;height:20px;display:inline-block;vertical-align: middle;" :style="{backgroundColor:scope.row.gdyssh}"></span>
+            </template>
+        </el-table-column>
+        <el-table-column
+          align="left"
+          show-overflow-tooltip
+          v-else
+          :key="i"
           :prop="lb.dm"
           :label="lb.cm"
           :width="lb.width"

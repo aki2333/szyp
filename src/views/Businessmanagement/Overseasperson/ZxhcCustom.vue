@@ -6,7 +6,6 @@
           <el-form
             :model="dialogData"
             status-icon
-            :rules="rules"
             size="mini"
             ref="form"
             label-width="100px"
@@ -16,19 +15,22 @@
             <el-col :span="22">         
               <el-form-item label="类型">
                 <el-col :span="18">
-                <el-select v-model="dialogData.type" placeholder="请选择" @change="lxChange(dialogData.type)">
-                  <el-option 
-                  v-for="item in lx"
-                  :key='item.dm'
-                  :label="item.cm"
-                  :value="item.dm"></el-option>
-                </el-select>
+                  <el-select v-model="dialogData.type" placeholder="请选择" @change="lxChange(dialogData.type)">
+                    <el-option 
+                    v-for="item in lx"
+                    :key='item.dm'
+                    :label="item.cm"
+                    :value="item.dm"></el-option>
+                  </el-select>
                 </el-col>
               </el-form-item>             
               <el-form-item label="内容" v-if="dialogData.type=='text'">
-                <el-row type="flex" class="mb-10" v-for="(item,inds) in dialogData.content" :key="inds">
+                <el-row type="flex" v-for="(item,inds) in dialogData.content" :key="inds">
                   <el-col :span="18">
-                    <el-input v-model="item.textAdd"></el-input>
+                    <el-form-item :prop="'content.'+ inds + '.textAdd'" :rules="{
+                      required: true, message: '此项必填', trigger: 'blur'}">
+                      <el-input v-model="item.textAdd"></el-input>
+                    </el-form-item>
                   </el-col>
                   <el-col :span="5" class="ml-5">
                     <el-button type="primary" icon="el-icon-plus" circle @click="Add(dialogData.type)" v-if="dialogData.content.length-1==inds"></el-button>
@@ -37,14 +39,20 @@
                 </el-row>
               </el-form-item>
               <el-form-item label="内容" v-else>
-                <el-row class="mb-10">
+                <el-row>
                   <el-col :span="10">
-                    <el-input placeholder="标题" v-model="dialogData.title"></el-input>
+                    <el-form-item prop="title" :rules="{
+                      required: true, message: '此项必填', trigger: 'blur'}">
+                      <el-input placeholder="标题" v-model="dialogData.title"></el-input>
+                    </el-form-item>
                   </el-col>
                 </el-row>
-                <el-row type="flex" class="mb-10" v-for="(item,inds) in dialogData.content" :key="inds">                  
+                <el-row type="flex" v-for="(item,inds) in dialogData.content" :key="inds">                  
                   <el-col :span="18">
-                    <el-input placeholder="选择项" v-model="item.textAdd"></el-input>
+                    <el-form-item :prop="'content.'+ inds + '.textAdd'" :rules="{
+                      required: true, message: '此项必填', trigger: 'blur'}">
+                      <el-input placeholder="选择项" v-model="item.textAdd"></el-input>
+                    </el-form-item>
                   </el-col>
                   <el-col :span="5" class="ml-5">
                     <el-button type="primary" icon="el-icon-plus" circle @click="Add(dialogData.type)" v-if="dialogData.content.length-1==inds"></el-button>
@@ -62,9 +70,8 @@
           <el-form
             :model="item"
             status-icon
-            :rules="rules"
             size="mini"
-            ref="fCon"
+            :ref="'fCon'+ind"
             label-width="100px"
             class="form-ruleForm"
           >
@@ -84,10 +91,13 @@
                     <el-button type="danger" icon="el-icon-delete" circle @click="deleteItem(ind)"></el-button>
                   </el-col>
                 </el-form-item>    
-                <el-form-item label="内容" v-if="item.type=='text'" prop="textAdd">
-                <el-row type="flex" class="mb-10" v-for="(con,cons) in item.content" :key="cons">
+                <el-form-item label="内容" v-if="item.type=='text'">
+                <el-row type="flex" v-for="(con,cons) in item.content" :key="cons">
                   <el-col :span="18">
-                    <el-input v-model="con.textAdd"></el-input>
+                    <el-form-item :prop="'content.'+ cons + '.textAdd'" :rules="{
+                      required: true, message: '此项必填', trigger: 'blur'}">
+                      <el-input v-model="con.textAdd"></el-input>
+                    </el-form-item>
                   </el-col>
                   <el-col :span="5" class="ml-5">
                     <el-button type="primary" icon="el-icon-plus" circle @click="AddEdit(item,con)" v-if="item.content.length-1==cons"></el-button>
@@ -97,14 +107,18 @@
               </el-form-item>
 
               <el-form-item label="内容" v-else>
-                <el-row class="mb-10">
-                  <el-col :span="10">
+                <el-row>
+                  <el-col :span="10" prop="title" :rules="{
+                      required: true, message: '此项必填', trigger: 'blur'}">
                     <el-input placeholder="标题" v-model="item.title"></el-input>
                   </el-col>
                 </el-row>
-                <el-row type="flex" class="mb-10" v-for="(cond,conds) in item.content" :key="conds">                  
+                <el-row type="flex" v-for="(cond,conds) in item.content" :key="conds">                  
                   <el-col :span="18">
-                    <el-input placeholder="选择项" v-model="cond.textAdd"></el-input>
+                    <el-form-item :prop="'content.'+ conds + '.textAdd'" :rules="{
+                      required: true, message: '此项必填', trigger: 'blur'}">
+                      <el-input placeholder="选择项" v-model="cond.textAdd"></el-input>
+                    </el-form-item>
                   </el-col>
                   <el-col :span="5" class="ml-5">
                     <el-button type="primary" icon="el-icon-plus" circle @click="AddEdit(item,cond)" v-if="item.content.length-1==conds"></el-button>
@@ -121,6 +135,7 @@
     <div class="page-btn-box">
         <el-button size="mini" type="primary" round  @click="save('form')">保存</el-button>
         <el-button size="mini" type="info" round @click="cancel">取消</el-button>
+        <el-button size="mini" type="primary" round  @click="confirm('fCon')">确认</el-button>
     </div>
   </div>
 </template>
@@ -131,7 +146,6 @@ export default {
   },
   data(){
     return{
-      rules:{},
       lx:[
         {
           dm:'text',
@@ -231,6 +245,7 @@ export default {
           }
         ],
       }
+      this.$refs['form'].resetFields();
     },
     Add(type){
       this.count++;
@@ -253,20 +268,37 @@ export default {
     deleteItem(ind){
       this.allData.splice(ind,1);
     },
-    save(){
-      let realObj ={}
-      Object.assign(realObj,this.dialogData)
-      realObj = JSON.parse(JSON.stringify(realObj))
-      this.allData.push(realObj)
-      this.dialogData= {
-          type:'text',
-          title:'',
-          content:[
-            {
-              id:1,
-              textAdd:''
-            }
-          ]
+    save(formName){
+      console.log(this.$refs[formName])
+      this.$refs[formName].validate(valid => { 
+        if(valid){
+          let realObj ={}
+          Object.assign(realObj,this.dialogData)
+          realObj = JSON.parse(JSON.stringify(realObj))
+          this.allData.push(realObj)
+          this.dialogData= {
+              type:'text',
+              title:'',
+              content:[
+                {
+                  id:1,
+                  textAdd:''
+                }
+              ]
+          }
+        }
+      });
+    },
+    confirm(formName){
+      // console.log(this.$refs[formName+'0'][0])
+      // console.log(this.$refs[formName+'0'][0].validate)
+      // console.log(this.$refs[formName+'1'])
+      for(var i=0;i<this.allData.length;i++){
+        this.$refs[formName+i][0].validate(valid => { 
+          if(valid){
+            console.log('this.allData',this.allData)
+          }
+        });
       }
     },
     cancel(){

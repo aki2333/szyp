@@ -63,6 +63,9 @@
 .border-b{
     border-bottom: 1px solid #DEE6E8;
 }
+.inline-block{
+    display: inline-block;
+}
 .hand{
     cursor: pointer;
 }
@@ -71,6 +74,10 @@
 }
 .el-dialog .font-blod .el-form-item__label{
     font-weight: bold!important;
+}
+.align-center{
+    display: flex;
+    align-items: center;
 }
 /* 元素样式 */
 .page{
@@ -173,7 +180,7 @@
 
 }
 .yxg-form-item label {
-  color: red;
+  color: red!important;
 }
 .imgbox .el-carousel__arrow{
     background-color: rgba(31,45,61,.41);

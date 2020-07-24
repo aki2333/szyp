@@ -44,9 +44,14 @@ export default new Vuex.Store({
     ssfj: [],
     sspcs: [],
     aurl: aurl || '',
-
+    sjly:[],//数据来源
+    leftWid:'auto',
+    ywlb:[],//业务类别
   },
   mutations: {
+    getLeftWid(state,data){
+      state.leftWid = data
+    },
     getUser(state, data) {
       state.user = data;
       window.sessionStorage.setItem("user", JSON.stringify(data));
@@ -130,6 +135,7 @@ export default new Vuex.Store({
     },
     getDatatype(state, data) {
       state.datatype = data;
+      state.ywlb = data;
     },
     getBackstatus(state, data) {
       state.backstatus = data;
@@ -265,11 +271,11 @@ export default new Vuex.Store({
         })
       })
     },
-    aGetDatatype(context, payload) {
+    aGetDatatype(context) {
       return new Promise((resolve) => {
         api.post(api.aport2 + '/dm/getDmList', { tableName: 'dm_issue_data' }, r => {
           context.commit('getDatatype', fnc.sortByKey(r, 'dm'))
-          resolve(payload)
+          resolve(fnc.sortByKey(r, 'dm'))
         })
       })
     },
@@ -277,7 +283,7 @@ export default new Vuex.Store({
       return new Promise((resolve) => {
         api.post(api.aport2 + '/dm/getDmList', { tableName: 'dm_zfztb', sjly: payload }, r => {
           context.commit('getBackstatus', r)
-          resolve(payload)
+          resolve(r)
         })
       })
     },

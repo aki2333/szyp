@@ -90,6 +90,11 @@ const routes = [
         name: 'CheckZXHC',
         component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/CheckZXHC.vue')
       },
+      {
+        path: '/CzInformationDefend',
+        name: 'CzInformationDefend',
+        component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/CzInformationDefend.vue')
+      },
     ]
   },
   {

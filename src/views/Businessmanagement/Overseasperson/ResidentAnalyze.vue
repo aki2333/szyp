@@ -12,9 +12,11 @@
       </div>
     </div>
     <div class="page-box">
-      <Charts></Charts>
+      <Charts
+      :key="new Date().getTime()"
+      :optData="optData"></Charts>
     </div>
-  </div>
+  </div> 
 </template>
 <script>
 import Inquire from "@/components/Inquire.vue";
@@ -27,8 +29,12 @@ export default {
       cx: {
         pd: {}
       },
-      tab: "0"
+      tab: "0",
+      optData:{},
     };
+  },
+  mounted(){
+    this.chartShow()
   },
   methods: {
     // 获取查询参数
@@ -39,7 +45,24 @@ export default {
     tabTopClick(index) {
       this.tab = index;
       //   this.getTable();
-    }
+    },
+    chartShow(){
+      let opt = {
+        tooltip: {},
+        xAxis: {
+          data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+        },
+        yAxis: {},
+        series: [
+          {
+            name: "销量",
+            type: "bar",
+            data: [5, 20, 36, 10, 10, 20]
+          }
+        ]
+      };
+      this.optData = opt
+    },
   }
 };
 </script>

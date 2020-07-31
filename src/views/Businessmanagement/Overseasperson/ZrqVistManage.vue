@@ -100,7 +100,7 @@
                 :selection="selection"
                 :clearSort="clearSort"
                 :expData="cx"
-                :expUrl="$api.aport2+''"
+                :expUrl="$api.aport2+'/issueData/exportIssueData'"
                 @plFnc="plFnc"
                 @pageSizeFnc="pageSizeFnc"
                 @pageNumFnc="pageNumFnc"               
@@ -545,19 +545,19 @@ export default {
     },
     //批量操作按钮  data==按钮名字
     plFnc(data) {
-      if (this.multipleArr.length == 0&&data.py != "jb") {
-        this.$message({
-          message: "请先选择数据！",
-          duration:13000,
-          showClose: true,
-          type: "warning"
-        });
-        return false;
-      }
-      this.isDb = true;
       this.dialogTitle = data.menu_name;
       this.dialogType = data.py;
       if (data.py == "cl") {
+          if (this.multipleArr.length == 0) {
+            this.$message({
+              message: "请先选择数据！",
+              duration:13000,
+              showClose: true,
+              type: "warning"
+            });
+            return false;
+          }
+          this.isDb = true;
           this.$cdata.zxhc.handShow(this.$store.state.user.jb).then(data => {//根据级别控制弹窗编辑项禁止与否
             this.labelData = data;
           });

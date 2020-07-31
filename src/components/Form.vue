@@ -6,12 +6,12 @@
       :rules="rules"
       size="mini"
       ref="form"
-      label-width="100px"
+      :label-width="cxData[0].labelWid==undefined?'100px':cxData[0].labelWid"
       class="form-ruleForm"
       :disabled="dialogType=='ck'"
     >
       <el-row :gutter="30" type="flex" align="middle" justify="center">
-        <el-col :span="cxData[0].mRow?cxData[0].mRow:16">
+        <el-col :span="cxData[0].mRow==undefined?16:cxData[0].mRow">
           <el-col :span="cx.col?cx.col:24" v-for="(cx,i) in cxData" :key="i">
             <el-form-item :label="!cx.hc_con||(cx.dm=='datasources_desc'&&page==cx.hc_con)||(cx.dm=='phone'&&dialogData['datatype']==cx.hc_con)?cx.cm:''" :prop="cx.dm">
               <template v-if="cx.type=='input'">
@@ -68,6 +68,16 @@
                   v-model="dialogData[cx.dm]"
                   :disabled="cx.dis"
                   type="date"
+                  value-format="yyyy-MM-dd"
+                  placeholder="选择日期"
+                ></el-date-picker>
+              </template>
+              <template v-else-if="cx.type=='datetimePicker'">
+                <el-date-picker
+                  v-model="dialogData[cx.dm]"
+                  :disabled="cx.dis"
+                  type="datetime"
+                  value-format="yyyy-MM-dd HH:mm:ss"
                   placeholder="选择日期"
                 ></el-date-picker>
               </template>
@@ -107,6 +117,9 @@
                 <span class="divider-text">{{cx.title}}</span>
                 <el-divider></el-divider>
             </template>
+            <template v-else-if="cx.type=='checkbox'">
+              
+            </template>
           </el-col>
         </el-col>
       </el-row>
@@ -118,7 +131,6 @@
           :model="ColorData"
           status-icon
           size="mini"
-         
           ref="colorForm"
           label-width="100px"
           class="form-ruleForm"
@@ -159,8 +171,15 @@
     <div class="page-btn-box" v-if="dialogType=='ck'">
         <el-button size="mini" type="info" round @click="cancel">关闭</el-button>
     </div>
+    <div class="page-btn-box" v-else-if="btnPage=='czxxwhjzd'">
+      <el-button size="mini" type="primary" round v-if="isEditBtn" @click="save('form')">保存</el-button>
+      <el-button size="mini" type="info" round @click="cancel">取消</el-button>
+    </div>
+    <div class="page-btn-box" v-else-if="btnPage=='czxxwhgzd'">
+      <el-button size="mini" type="primary" round v-if="isEditBtn" @click="save('form')">保存</el-button>
+      <el-button size="mini" type="info" round @click="cancel">取消</el-button>
+    </div>
     <div class="page-btn-box" v-else>
-      <!-- <el-button v-if="dialogType=='gnlb'" size="mini" type="primary" round @click="xj()">新建</el-button> -->
       <div style="display:inline-block;margin-right:10px" v-if="isDb">
         <el-button
           size="mini"
@@ -171,7 +190,7 @@
           :key="dbi"
         >{{db.button_name}}</el-button>
       </div>
-      <div style="display:inline-block" v-if="commonBtn">
+      <div style="display:inline-block" v-if="commonBtn&&dialogType!='ck'">
         <el-button size="mini" type="primary" round v-if="isEditBtn" @click="save('form')">保存</el-button>
         <el-button size="mini" type="info" round @click="cancel">取消</el-button>
       </div>
@@ -179,9 +198,7 @@
   </div>
 </template>
 <script>
-// import ZDY from './DiaCus.vue'
 export default {
-  // components:{ZDY},
   props: {
     cxData: {
       type: Array,
@@ -223,6 +240,10 @@ export default {
     ZDYShow:{
       type: Boolean,
       default: false
+    },
+    btnPage:{
+      type:String,
+      default:''
     }
   },
   data() {
@@ -324,6 +345,18 @@ export default {
   mounted() {
     // this.form = this.dialogData;
     // console.log(this.form);
+    if(this.ZDYShow){
+      this.ColorData={
+        data:[
+          {
+            id:1,
+            gdsj:'',
+            gdyssh:'',
+          },
+        ],
+      }
+      document.getElementsByClassName('color-inp')[0].getElementsByClassName('el-input__inner')[0].style.backgroundColor=''
+    }
   },
   methods: {
     save(formName, type) {
@@ -338,16 +371,6 @@ export default {
                   data: this.dialogData,
                   btnType: type
                 });
-                this.ColorData={
-                  data:[
-                    {
-                      id:1,
-                      gdsj:'',
-                      gdyssh:'',
-                    },
-                  ],
-                }
-                document.getElementsByClassName('color-inp')[0].getElementsByClassName('el-input__inner')[0].style.backgroundColor=''
               }else {
                 console.log("error submit!!");
                 return false;

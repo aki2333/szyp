@@ -2,6 +2,7 @@ import qxgl from './modules/qxgl.js'
 import zxhc from './modules/zxhc.js'
 import lzsb from './modules/lzsb.js'
 import pzgl from './modules/pzgl.js'
+import czxx from './modules/czxx.js'
 import api from '@/api/index.js'
 import store from '@/store'
 
@@ -196,6 +197,48 @@ const options = {
         },
     ],
     turnoutarea: [],
+    checklist:[
+        {
+            mc:'英文姓名',
+            dm:'a'
+        },
+        {
+            mc:'中文姓名',
+            dm:'b'
+        },
+        {
+            mc:'性别',
+            dm:'c'
+        },
+        {
+            mc:'出生日期',
+            dm:'d'
+        },
+        {
+            mc:'国家地区',
+            dm:'e'
+        },
+        {
+            mc:'证件种类',
+            dm:'f'
+        },
+        {
+            mc:'证件号码',
+            dm:'g'
+        },
+        {
+            mc:'签证(注)有效期',
+            dm:'h'
+        },
+        {
+            mc:'签证(注)种类',
+            dm:'i'
+        },
+        {
+            mc:'其他',
+            dm:'j'
+        },
+    ]
 }
 const tabImg_1 = require("../assets/images/main/tab_2.png");
 const tabImgActive_1 = require("../assets/images/main/tab_2_pre.png");
@@ -217,6 +260,7 @@ export default {
     zxhc,
     lzsb,
     pzgl,
+    czxx,
     api,
     store,
     tabImg_1,

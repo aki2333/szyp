@@ -1,5 +1,5 @@
 <template>
-  <div class="page-box page">
+  <div class="page">
     <el-form
       :model="dialogData"
       status-icon
@@ -9,7 +9,6 @@
       label-width="137px"
       label-position="right"
       class="tc-form"
-      :disabled="dialogType=='ck'"
     >
       <el-row :gutter="30">
         <el-col :span="16" class="no-padding">
@@ -243,25 +242,15 @@
                   >{{item.mc}}</el-radio>
                 </el-radio-group>
               </template>
-              <template v-else-if="cx.type=='checkbox'">
-                <el-checkbox-group v-model="dialogData[cx.dm]">
-                  <el-checkbox 
-                   v-for="(item,ind) in $cdata.options[cx.dm]"
-                   :key="ind"
-                   :name="cx.dm"
-                   :label="item.dm">{{item.mc}}</el-checkbox>
-                </el-checkbox-group>
-              </template>
             </el-form-item>
           </el-col>
         </el-col>
       </el-row>
     </el-form>
-    <div class="page-btn-box">
-      <el-button size="mini" type="primary" @click="save('form',1)" v-if="dialogType=='bj'">审核通过</el-button>
-      <el-button size="mini" type="primary" @click="save('form',0)" v-if="dialogType=='bj'">审核未通过</el-button>
+    <!-- <div class="page-btn-box">
+      <el-button size="mini" type="primary" @click="save('form')">保存</el-button>
       <el-button size="mini" @click="cancel">取消</el-button>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -285,70 +274,66 @@ export default {
     },
     dialogData: {
       type: Object,
-      default: () => {
-        return{
-          checklist:[]
-        }
-      }
+      default: () => {}
     }
   },
   data() {
-    var validatesurname = (rule, value, callback) => {
-      if (this.dialogData.nationality != "CHN" && value == "") {
-        callback(new Error("此项必填"));
-      } else {
-        callback();
-      }
-    };
-    var validatename = (rule, value, callback) => {
-      if (this.dialogData.nationality == "CHN" && value == "") {
-        callback(new Error("此项必填"));
-      } else {
-        callback();
-      }
-    };
+    // var validatesurname = (rule, value, callback) => {
+    //   if (this.dialogData.nationality != "CHN" && value == "") {
+    //     callback(new Error("此项必填"));
+    //   } else {
+    //     callback();
+    //   }
+    // };
+    // var validatename = (rule, value, callback) => {
+    //   if (this.dialogData.nationality == "CHN" && value == "") {
+    //     callback(new Error("此项必填"));
+    //   } else {
+    //     callback();
+    //   }
+    // };
     return {
-      rules: {
-        nationality: [{ required: true, message: "此项必填", trigger: "blur" }],
-        passportType: [
-          { required: true, message: "此项必填", trigger: "blur" }
-        ],
-        passportno: [{ required: true, message: "此项必填", trigger: "blur" }],
-        surname: [{ validator: validatesurname, trigger: "blur" }],
-        firstname: [{ validator: validatesurname, trigger: "blur" }],
-        name: [{ validator: validatename, trigger: "blur" }],
-        gender: [{ required: true, message: "此项必填", trigger: "blur" }],
-        birthday: [{ required: true, message: "此项必填", trigger: "blur" }],
-        visaType: [{ required: true, message: "此项必填", trigger: "blur" }],
-        visaNo: [{ required: true, message: "此项必填", trigger: "blur" }],
-        tlyxqz: [{ required: true, message: "此项必填", trigger: "blur" }],
-        rjsy: [{ required: true, message: "此项必填", trigger: "blur" }],
-        sjhm: [
-          { required: true, message: "此项必填", trigger: "blur" },
-          { max: 11, message: "长度不可超过11位", trigger: "blur" },
-          {
-            required: true,
-            pattern: /^-?[1-9]\d*$/,
-            message: "请输入正确的电话号码",
-            trigger: "blur"
-          }
-        ],
-        jjlxrdh: [
-          { required: true, message: "此项必填", trigger: "blur" },
-          { max: 11, message: "长度不可超过11位", trigger: "blur" },
-          {
-            required: true,
-            pattern: /^-?[1-9]\d*$/,
-            message: "请输入正确的电话号码",
-            trigger: "blur"
-          }
-        ],
-        suboffice: [{ required: true, message: "此项必填", trigger: "blur" }],
-        policestation: [
-          { required: true, message: "此项必填", trigger: "blur" }
-        ]
-      },
-      isXJ: false,
+      rules:{},
+      // rules: {
+      //   nationality: [{ required: true, message: "此项必填", trigger: "blur" }],
+      //   passportType: [
+      //     { required: true, message: "此项必填", trigger: "blur" }
+      //   ],
+      //   passportno: [{ required: true, message: "此项必填", trigger: "blur" }],
+      //   surname: [{ validator: validatesurname, trigger: "blur" }],
+      //   firstname: [{ validator: validatesurname, trigger: "blur" }],
+      //   name: [{ validator: validatename, trigger: "blur" }],
+      //   gender: [{ required: true, message: "此项必填", trigger: "blur" }],
+      //   birthday: [{ required: true, message: "此项必填", trigger: "blur" }],
+      //   visaType: [{ required: true, message: "此项必填", trigger: "blur" }],
+      //   visaNo: [{ required: true, message: "此项必填", trigger: "blur" }],
+      //   tlyxqz: [{ required: true, message: "此项必填", trigger: "blur" }],
+      //   rjsy: [{ required: true, message: "此项必填", trigger: "blur" }],
+      //   sjhm: [
+      //     { required: true, message: "此项必填", trigger: "blur" },
+      //     { max: 11, message: "长度不可超过11位", trigger: "blur" },
+      //     {
+      //       required: true,
+      //       pattern: /^-?[1-9]\d*$/,
+      //       message: "请输入正确的电话号码",
+      //       trigger: "blur"
+      //     }
+      //   ],
+      //   jjlxrdh: [
+      //     { required: true, message: "此项必填", trigger: "blur" },
+      //     { max: 11, message: "长度不可超过11位", trigger: "blur" },
+      //     {
+      //       required: true,
+      //       pattern: /^-?[1-9]\d*$/,
+      //       message: "请输入正确的电话号码",
+      //       trigger: "blur"
+      //     }
+      //   ],
+      //   suboffice: [{ required: true, message: "此项必填", trigger: "blur" }],
+      //   policestation: [
+      //     { required: true, message: "此项必填", trigger: "blur" }
+      //   ]
+      // },
       newForm: {},
       isimgclick: false,
       imgList:
@@ -363,6 +348,7 @@ export default {
     }
   },
   mounted() {
+    console.log('erceng',this.dialogData.name)
     // this.form = this.dialogData;
     // console.log(this.form);
   },
@@ -431,27 +417,18 @@ export default {
     }
   },
   methods: {
-    save(formName, type) {
-      if (type == 0) {
-        this.$emit("dialogSave", {
-          type: this.dialogType,
-          data: this.dialogData,
-          btnType: type
-        });
-      } else {
-        this.$refs[formName].validate(valid => {
-          if (valid) {
-            this.$emit("dialogSave", {
-              type: this.dialogType,
-              data: this.dialogData,
-              btnType: type
-            });
-          } else {
-            console.log("error submit!!");
-            return false;
-          }
-        });
-      }
+    save(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$emit("dialogSave", {
+            type: this.dialogType,
+            data: this.dialogData,
+          });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
     },
     getSrcList(url) {
       return ["data:image/jpg;base64," + url];
@@ -467,13 +444,6 @@ export default {
     linkChange(key, val, dialogData) {
       this.$emit("formLcFnc", { key: key, data: val, obj: dialogData });
     },
-    cancel() {
-      if (this.isXJ) {
-        this.isXJ = false;
-      } else {
-        this.$emit("dialogCancel");
-      }
-    }
   }
 };
 </script>

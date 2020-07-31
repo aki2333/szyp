@@ -472,8 +472,14 @@ const lzsb = {
                 type: 'datetimePicker',
                 dm: 'spsj',
                 dis: true
+            },
+            {
+                cm:'报错',
+                type:'checkbox',
+                dm:'checklist',
+                col:24,
+                optype:true
             }
-
         ]
     }
 

@@ -105,6 +105,7 @@
     </div>
     <Dialog :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
       <Trans
+        :key="timer"
         :transData="transData"
         :pointData="pointData"
         :dialogType="dialogType"
@@ -239,6 +240,7 @@ export default {
       dialogTitle: "",
       dialogType:"",
       //穿梭框数据
+      timer:'',
       transData:this.lbData,//数据来源（全部展示列表项）
       pointData:[],//选中项
       confirmFlag:true,
@@ -340,6 +342,7 @@ export default {
       if(val.py == 'jb'){//简表
         this.dialogTitle = val.menu_name;
         this.dialogType = val.py;
+        this.timer = new Date().getTime();
         if(this.refName=="hczf"){
           if(this.page1!='1'){
             this.transData = this.transData.filter(item => ['datasources_desc'].indexOf(item.dm) == -1);
@@ -347,7 +350,8 @@ export default {
             this.transData = this.lbControlData
           }
         }
-        this.pointData = this.lbData;//选中值
+        // this.pointData = [];//选中值
+        // this.pointData = this.lbData;//选中值
         // console.log('this.transData',this.transData)
         // console.log('this.pointData',this.lbData)
         this.isShowDialog = true;
@@ -408,7 +412,8 @@ export default {
           }
         })
       });
-      this.$emit('transSaveFnc',this.jbArr)
+      this.$emit('transSaveFnc',this.jbArr);
+      this.pointData=this.jbArr;
       this.isShowDialog = false;
     },
     sortChange(column){
@@ -421,28 +426,30 @@ export default {
 </script>
 <style scoped>
 .table-other {
-  position: relative;
-  height: 34px;
-  border-bottom: 1px solid #e2e7ed;
-  margin-bottom: 12px;
-  /* display: flex;
-  justify-content: space-between; */
-}
+    position: relative;
+    height: 34px;
+    border-bottom: 1px solid #e2e7ed;
+    margin-bottom: 12px;
+    /* display: flex;
+    justify-content: space-between; */
+  }
 .table-tab-box {
-  position: absolute;
-  left: 0;
+    position: absolute;
+    left: 0;
 }
+
 .table-tab-box span {
-  font-size: 12px;
-  color: #9ea5bf;
-  margin-right: 20px;
-  display: inline-block;
-  padding: 0 2px 10px;
-  box-sizing: border-box;
+    font-size: 12px;
+    color: #9ea5bf;
+    margin-right: 20px;
+    display: inline-block;
+    padding: 0 2px 10px;
+    box-sizing: border-box;
 }
+
 .tab_active {
-  color: #2576dc;
-  border-bottom: 3px solid #2576dc;
+    color: #2576dc;
+    border-bottom: 3px solid #2576dc;
 }
 .table-btn-box {
   position: absolute;

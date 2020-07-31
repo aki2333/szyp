@@ -24,6 +24,8 @@ export default new Vuex.Store({
     gender: [],
     grade: [],
     passportType: [],//证件种类
+    paper_type:[],
+
     suboffice: [],//所属分局
     policestation: [],//派出所
     xzqh: [],
@@ -32,6 +34,7 @@ export default new Vuex.Store({
     zfzl: [],
     zsxz: [],
     visaType: [],
+    visa_type:[],
     rjka: [],
     rjsy: [],
     qfjg: [],
@@ -93,11 +96,12 @@ export default new Vuex.Store({
     },
     getPassport(state, data) {
       state.passportType = data;
+      state.paper_type = data;
     },
     getDM(state, data) {
-
       if (data.type == 'qzzl') {
         state.visaType = data.data
+        state.visa_type = data.data
       } else if (data.type == 'lz_zfzl') {
         state.zfzl = data.data
       } else if (data.type == 'lz_zsxz') {

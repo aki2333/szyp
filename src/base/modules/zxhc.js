@@ -745,73 +745,53 @@ const zxhcgl = {
     ],
     lb: [
         {
-            cm: '标题',
-            dm: 'bt'
+            cm: '英文姓名',            
+            dm: 'givenname', 
         },
         {
-            cm: '中文姓名',
-            dm: 'name'
-        },
-        {
-            cm: '英文姓名',
-            dm: 'givenname'
-        },
-        {
-            cm: '性别',
-            dm: 'gender_desc',
+            cm: '性别',            
+            dm: 'gender',
             width:'50'
         },
         {
-            cm: '出生日期',
+            cm: '出生日期',           
             dm: 'birthday',
             width:'85'
         },
         {
-            cm: '国家地区',
-            dm: 'nationality_desc',
+            cm: '国家地区',           
+            dm: 'nationality',
             width:'70'
         },
         {
-            cm: '证件种类',
-            dm: 'passportType_desc'
+            cm: '证件种类',           
+            dm: 'passportType',
         },
         {
-            cm: '证件号码',
-            dm: 'passportno'
+            cm: '证件号码',           
+            dm: 'passportno',
         },
         {
-            cm: '签证种类',
-            dm: 'qqzl',
+            cm: '签证种类',           
+            dm: 'visaType',
         },
         {
-            cm: '签证号码',
-            dm: 'qzhm',
+            cm: '签证号码',           
+            dm: 'visano',
         },
         {
-            cm: '下发时间',
-            dm: 'issuedate'
+            cm: '住宿地址',            
+            dm: 'address',
         },
         {
-            cm: '出入境时间',
-            dm: 'suboffice_issuedate'
-        },
-        {
-            cm: '反馈时间',
-            dm: 'policestation_backtime'
-        },
-        {
-            cm: '出入境状态',
-            dm: 'datatype_desc'
-        },
-        {
-            cm: '数据状态',
-            dm: 'backstatus_desc'
+            cm: '入境时间',            
+            dm: 'entry_date',
         },
     ],
     lbBtn: [
         {
             "button_name": "详情",
-            "button_type": 'detail',
+            "button_type": 'ck',
             "serial": "201",
         },
         {
@@ -824,7 +804,167 @@ const zxhcgl = {
             "button_type": 'delete',
             "serial": "201",
         },
-    ],   
+    ],
+    xzAndEdit:[
+        {
+            cm: '英文姓名',
+            type: 'input',
+            dm: 'givenname', 
+        },
+        {
+            cm: '性别',
+            type: 'select',
+            dm: 'gender',
+        },
+        {
+            cm: '出生日期',
+            type: 'datePicker',
+            dm: 'birthday',
+        },
+        {
+            cm: '国家地区',
+            type: 'select',
+            dm: 'nationality',
+        },
+        {
+            cm: '证件种类',
+            type: 'select',
+            dm: 'passportType',
+        },
+        {
+            cm: '证件号码',
+            type: 'input',
+            dm: 'passportno',
+        },
+        {
+            cm: '签证种类',
+            type: 'select',
+            dm: 'visaType',
+        },
+        {
+            cm: '签证号码',
+            type: 'input',
+            dm: 'visano',
+        },
+        {
+            cm: '住宿地址',
+            type: 'input',
+            dm: 'address',
+        },
+        {
+            cm: '入境时间',
+            type: 'datePicker',
+            dm: 'entry_date',
+        },
+    ],
+    xq:[
+        {
+            mRow:24,
+            labelWid:'100px'
+        },
+        {
+            cm: '英文姓名',
+            type: 'input',
+            dm: 'givenname',
+            col:8 
+        },
+        {
+            cm: '性别',
+            type: 'select',
+            dm: 'gender',
+            col:8 
+        },
+        {
+            cm: '国家地区',
+            type: 'select',
+            dm: 'nationlity',
+            col:8 
+        },
+        {
+            cm: '证件种类',
+            type: 'select',
+            dm: 'passportType',
+            col:8 
+        },
+        {
+            cm: '证件号码',
+            type: 'input',
+            dm: 'passportno',
+            col:8 
+        },
+        {
+            cm: '签证种类',
+            type: 'select',
+            dm: 'visaType',
+            col:8 
+        },
+        {
+            cm: '签证号码',
+            type: 'select',
+            dm: 'visano',
+            col:8 
+        },
+        {
+            cm: '出入境时间',
+            type: 'datePicker',
+            dm: 'entry_date',
+            col:8 
+        },
+        {
+            cm: '出入境状态',
+            type: 'select',
+            dm: 'qzhm',
+            col:8 
+        },
+        {
+            cm: '下发时间',
+            type: 'datePicker',
+            dm: 'qzhm',
+            col:8 
+        },
+        {
+            cm: '下发人',
+            type: 'input',
+            dm: 'qzhm',
+            col:8 
+        },
+        {
+            cm: '下发单位',
+            type: 'input',
+            dm: 'qzhm',
+            col:8 
+        },
+        {
+            cm: '走访时间',
+            type: 'datePicker',
+            dm: 'qzhm',
+            col:8 
+        },
+        {
+            cm: '走访人',
+            type: 'input',
+            dm: 'qzhm',
+            col:8 
+        },
+        {
+            cm: '走访单位',
+            type: 'input',
+            dm: 'qzhm',
+            col:8 
+        },
+        {
+            cm: '反馈类型',
+            type: 'input',
+            dm: 'qzhm',
+            col:8 
+        },
+        {
+            cm: '反馈结果',
+            type: 'input',
+            dm: 'qzhm',
+            col:8 
+        },
+    ]  
 }
 // 核查走访
 function lbTabShow(jb) {

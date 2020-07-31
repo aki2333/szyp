@@ -3,6 +3,12 @@
 </template>
 <script>
 export default {
+  props:{
+    optData:{
+      type:Object,
+      default:() => {}
+    }
+  },
   mounted() {
     this.initchart();
   },
@@ -11,22 +17,22 @@ export default {
       // 初始化
       let mychart = this.$echarts.init(document.getElementById("akiChart"));
       // 配置
-      let option = {
-        tooltip: {},
-        xAxis: {
-          data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
-        },
-        yAxis: {},
-        series: [
-          {
-            name: "销量",
-            type: "bar",
-            data: [5, 20, 36, 10, 10, 20]
-          }
-        ]
-      };
+      // let option = {
+      //   tooltip: {},
+      //   xAxis: {
+      //     data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+      //   },
+      //   yAxis: {},
+      //   series: [
+      //     {
+      //       name: "销量",
+      //       type: "bar",
+      //       data: [5, 20, 36, 10, 10, 20]
+      //     }
+      //   ]
+      // };
       // 绘制
-      mychart.setOption(option);
+      mychart.setOption(this.optData);
       // 监听浏览器尺寸
       window.addEventListener("resize", function() {
         mychart.resize();

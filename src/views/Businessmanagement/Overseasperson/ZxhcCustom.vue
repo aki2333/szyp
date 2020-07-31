@@ -1,7 +1,7 @@
 <template>
   <div class="custom">
-    <el-row>
-      <el-col :span="12">
+    <el-row type="flex">
+      <el-col :span="11">
         <div>
           <el-form
             :model="dialogData"
@@ -32,10 +32,10 @@
                       <el-input v-model="item.textAdd"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="5" class="ml-5">
+                  <!-- <el-col :span="5" class="ml-5">
                     <el-button type="primary" icon="el-icon-plus" circle @click="Add(dialogData.type)" v-if="dialogData.content.length-1==inds"></el-button>
                     <el-button type="danger" icon="el-icon-minus" circle @click="deleteModel(inds)" v-if="inds!=0"></el-button>
-                  </el-col>
+                  </el-col> -->
                 </el-row>
               </el-form-item>
               <el-form-item label="内容" v-else>
@@ -65,7 +65,10 @@
           </el-form>
         </div>
       </el-col>
-      <el-col :span="12">
+      <el-col :span="2" style="display:flex;justify-content: center;align-items: center;">
+        <el-button size="mini" type="success" icon="el-icon-d-arrow-right" circle @click="save('form')"></el-button>
+      </el-col>
+      <el-col :span="11">
         <div v-for="(item,ind) in allData" :key="ind">
           <el-form
             :model="item"
@@ -99,18 +102,20 @@
                       <el-input v-model="con.textAdd"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="5" class="ml-5">
+                  <!-- <el-col :span="5" class="ml-5">
                     <el-button type="primary" icon="el-icon-plus" circle @click="AddEdit(item,con)" v-if="item.content.length-1==cons"></el-button>
                     <el-button type="danger" icon="el-icon-minus" circle @click="deleteEdit(item,cons)" v-if="cons!=0"></el-button>
-                  </el-col>
+                  </el-col> -->
                 </el-row>
               </el-form-item>
 
               <el-form-item label="内容" v-else>
                 <el-row>
-                  <el-col :span="10" prop="title" :rules="{
-                      required: true, message: '此项必填', trigger: 'blur'}">
-                    <el-input placeholder="标题" v-model="item.title"></el-input>
+                  <el-col :span="10">
+                    <el-form-item prop="title" :rules="{
+                      required: true, message: '此项必填', trigger: 'blur'}">  
+                      <el-input placeholder="标题" v-model="item.title"></el-input>
+                    </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row type="flex" v-for="(cond,conds) in item.content" :key="conds">                  
@@ -130,19 +135,48 @@
             </el-row>
           </el-form>
         </div>
+        <el-form
+            :model="time"
+            status-icon
+            size="mini"
+            ref="time"
+            label-width="100px"
+            class="form-ruleForm"
+          >
+          <el-row type="flex" align="middle" justify="center">
+            <el-col :span="22">
+                <el-col :span="19">
+                  <el-form-item label="走访时间" prop="issueTime" :rules="{ required: true, message: '此项必填', trigger: 'blur' }">
+                     <el-time-select
+                        v-model="time.issueTime"
+                        :picker-options="{
+                          start: '00:00',
+                          step: '01:00',
+                          end: '24:00'
+                        }"
+                        placeholder="选择时间">
+                      </el-time-select>
+                      </el-form-item>
+                  </el-col>
+            </el-col>
+          </el-row>
+        </el-form>
       </el-col>
     </el-row>
     <div class="page-btn-box">
-        <el-button size="mini" type="primary" round  @click="save('form')">保存</el-button>
-        <el-button size="mini" type="info" round @click="cancel">取消</el-button>
+        <!-- <el-button size="mini" type="primary" round  @click="save('form')">保存</el-button> -->
         <el-button size="mini" type="primary" round  @click="confirm('fCon')">确认</el-button>
+        <el-button size="mini" type="info" round @click="cancel">取消</el-button>
     </div>
   </div>
 </template>
 <script>
 export default {
   prop:{
-
+    dialogType: {
+      type: String,
+      default: ""
+    },
   },
   data(){
     return{
@@ -180,6 +214,7 @@ export default {
       },
       count:1,
       allData:[],
+      time:{issueTime:''},
       data:[
         {
           type:'text',
@@ -187,50 +222,97 @@ export default {
             {
               id:1,
               textAdd:'备注'
-            },
+            }
+          ],
+        },
+        {
+          type:'radio',
+          title:'性别',
+          content:[
             {
               id:1,
-              textAdd:'翻译'
+              textAdd:'男'
+            },
+            {
+              id:2,
+              textAdd:'女'
+            },
+            {
+              id:3,
+              textAdd:'未知'
             },
           ],
         },
         {
           type:'radio',
+          title:'性别',
           content:[
             {
-              title:'性别',
-              value:['男','女','未知']
+              id:1,
+              textAdd:'男'
             },
-          ],
-        },
-        {
-          type:'radio',
-          content:[
             {
-              title:'类型',
-              value:['出境','入境','出入境']
-            }
+              id:2,
+              textAdd:'女'
+            },
+            {
+              id:3,
+              textAdd:'未知'
+            },
           ],
         },
         {
           type:'select',
+          title:'性别',
           content:[
             {
-              title:'性别',
-              value:['男','女','未知']
+              id:1,
+              textAdd:'男'
             },
             {
-              title:'类型',
-              value:['出境','入境','出入境']
-            }
+              id:2,
+              textAdd:'女'
+            },
+            {
+              id:3,
+              textAdd:'未知'
+            },
           ],
         },
         {
           type:'checkbox',
-          content:[],
+          title:'性别',
+          content:[
+            {
+              id:1,
+              textAdd:'男'
+            },
+            {
+              id:2,
+              textAdd:'女'
+            },
+            {
+              id:3,
+              textAdd:'未知'
+            },
+          ],
         }
       ],
     }
+  },
+  mounted(){
+    this.dialogData={
+      type:'text',
+        title:'',
+        content:[
+          {
+            id:1,
+            textAdd:''
+          }
+        ],
+    }
+    this.count = 1
+    this.allData=[];
   },
   methods:{
     lxChange(type){
@@ -290,13 +372,21 @@ export default {
       });
     },
     confirm(formName){
-      // console.log(this.$refs[formName+'0'][0])
-      // console.log(this.$refs[formName+'0'][0].validate)
-      // console.log(this.$refs[formName+'1'])
       for(var i=0;i<this.allData.length;i++){
         this.$refs[formName+i][0].validate(valid => { 
           if(valid){
-            console.log('this.allData',this.allData)
+            // console.log('formName',valid)
+            this.$refs['time'].validate(valid => {
+              if(valid){
+                // console.log('time',this.dialogType)
+                this.$emit('dialogSave',{
+                  type: 'xf',
+                  data: this.allData,
+                  time: this.time.issueTime
+                })
+                // console.log('this.allData',this.allData)
+              }
+            })
           }
         });
       }

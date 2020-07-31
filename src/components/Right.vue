@@ -8,7 +8,20 @@
         <span class="right-title"><i class="title-icon el-icon-s-help"></i>操作提示</span>
       </div>
     </div>
-
+    <div class="right-box-content" v-else>
+      <div class="right-box-one">
+        <div class="short-title">
+          <i class="title-icon el-icon-edit-outline"></i>
+          <span class="short-text">待办事项</span>
+        </div>
+      </div>
+      <div class="right-box-two">
+        <div class="short-title">
+          <i class="title-icon el-icon-s-help"></i>
+          <span class="short-text">操作提示</span>
+        </div>
+      </div>
+    </div>
     <img
       class="right-open"
       :src="righttWidth=='28px'?require('@/assets/images/main/right_open.png'):require('@/assets/images/main/right_close.png')"
@@ -22,12 +35,12 @@ export default {
   name: "Right",
   data() {
     return {
-      righttWidth: "28px",
+      righttWidth: "36px",
     };
   },
   methods: {
     openRight() {
-      this.righttWidth = this.righttWidth == "28px" ? "182px" : "28px";
+      this.righttWidth = this.righttWidth == "36px" ? "182px" : "36px";
     }
   }
 };
@@ -65,5 +78,16 @@ export default {
   position: absolute;
   left: 0;
   top: 47%;
+}
+.short-title{
+  width: 20px;  
+  margin: 0 auto;  
+  padding-top: 40px;
+  box-sizing: border-box;
+  line-height: 20px;  
+}
+.short-text{
+  display: block;
+  padding-left: 1px;
 }
 </style>

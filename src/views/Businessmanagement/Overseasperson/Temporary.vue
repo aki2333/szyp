@@ -2,18 +2,9 @@
   <div class="page">
     <Inquire :cxData="$cdata.lzsb.lzsb.cx" :pd="cx.pd" :cxPara="cx" @cxFnc="cxFnc" @lcFnc="lcFnc"></Inquire>
     <div class="t-tab-top">
-      <div class="tab-top-item hand" @click="tabTopClick(0)">
-        <img :src="cx.pd.shzt=='shzt_0'?tabImgActive_1:tabImg_1" alt />
-        <span>待初审</span>
-      </div>
-      <div class="tab-top-item hand ml--33" @click="tabTopClick(1)">
-        <img :src="cx.pd.shzt=='shzt_1'?tabImgActive_2:tabImg_2" alt />
-        <span class="t-leftT">初审通过</span>
-      </div>
-      <div class="tab-top-item hand" style="margin-left: -14px;" @click="tabTopClick(2)">
-        <img :src="cx.pd.shzt=='shzt_2'?tabImgActive_2:tabImg_2" alt />
-        <span class="t-leftT">初审不通过</span>
-      </div>
+      <div class="tab-top-item hand" :class="cx.pd.shzt=='shzt_0'?'tabImgActive_1':'tabImg_1'" @click="tabTopClick(0)">待初审</div>
+      <div class="tab-top-item hand" :class="cx.pd.shzt=='shzt_1'?'tabImgActive_2':'tabImg_2'" @click="tabTopClick(1)">初审通过</div>
+      <div class="tab-top-item hand" :class="cx.pd.shzt=='shzt_2'?'tabImgActive_2':'tabImg_2'" style="margin-left:-18px" @click="tabTopClick(2)">初审不通过</div>
     </div>
     <div class="page-box">
       <el-row :gutter="20">
@@ -114,7 +105,9 @@ export default {
       innerVisible: false,
       dialogTitle: "",
       dialogType: "",
-      dialogData: {},
+      dialogData: {
+        checklist:[],
+      },
       dialogImgData: [],
       labelData: [],
       innerForm: {
@@ -291,6 +284,9 @@ export default {
     getDetailLzsb(p) {
       this.$api.post(this.$api.aport3 + "/api/lzsb/getDetailLzsb", p, r => {
         this.dialogData = r;
+        if(this.dialogData.checklist==undefined){
+          this.dialogData.checklist=[];
+        }
         this.$store.dispatch("aGetssdw", { bmbh: r.suboffice, type: "sspcs" });
         this.isShowDialog = true;
       });

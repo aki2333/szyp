@@ -12,6 +12,8 @@ var aport1 = 'permission'//任
 var aport2 = 'datarelease'//石
 // var aport2 = 'http://10.0.30.50:9405'//石本地
 var aport3 = 'lzsb'
+// var aport4 = 'yewu'
+var aport4 = 'http://192.168.3.131:9426'
 
 // 引用axios
 import axios from 'axios';
@@ -183,5 +185,6 @@ export default {
   root,
   aport1,
   aport2,
-  aport3
+  aport3,
+  aport4
 }

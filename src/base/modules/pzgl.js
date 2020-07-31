@@ -62,7 +62,10 @@ const sjkz = {
       },
   ], 
   xzLabel:[
-    {mRow:24},
+    {
+      mRow:24,
+      labelWid:'100px'
+    },
     {
       cm: '业务类别',
       type: 'select',

@@ -12,13 +12,15 @@
       @queryShowFnc="queryShowFnc"
       @commandfnc="commandfnc"></Inquire>
     <div class="t-tab-top">
-      <div class="tab-top-item hand" @click="tabTopClick1">
-        <img :src="clzt==1?tabImgActive_1:tabImg_1" alt />
-        <span>未走访</span>
+      <div class="tab-top-item hand" :class="clzt==1?'tabImgActive_1':'tabImg_1'" @click="tabTopClick1">
+        未走访
+        <!-- <img :src="clzt==1?tabImgActive_1:tabImg_1" alt />
+        <span>未走访</span> -->
       </div>
-      <div class="tab-top-item hand ml--33" @click="tabTopClick2">
-        <img :src="clzt==2?tabImgActive_2:tabImg_2" alt />
-        <span class="t-leftT">已走访</span>
+      <div class="tab-top-item hand" :class="clzt==2?'tabImgActive_2':'tabImg_2'" @click="tabTopClick2">
+        已走访
+        <!-- <img :src="clzt==2?tabImgActive_2:tabImg_2" alt />
+        <span class="t-leftT">已走访</span> -->
       </div>
     </div>
     <div class="page-box">
@@ -39,7 +41,7 @@
         :czWidth="'100'"
         :clearSort="clearSort"
         :expData="cx"
-        :expUrl="$api.aport2+''"
+        :expUrl="$api.aport2+'/issueData/exportIssueData'"
         @plFnc="plFnc"
         @pageSizeFnc="pageSizeFnc"
         @pageNumFnc="pageNumFnc"
@@ -884,6 +886,8 @@ export default {
       p.jb = this.$store.state.user.jb;
       p.bmbh = this.$store.state.user.bmbh;
       p.userId = this.$store.state.user.userId;
+      p.sfzh = this.$store.state.user.sfzh;
+      p.xm = this.$store.state.user.xm;
       p.pageData = {
         clzt: this.clzt,
         cljg: this.page
@@ -935,6 +939,8 @@ export default {
       p.jb = this.$store.state.user.jb;
       p.bmbh = this.$store.state.user.bmbh;
       p.userId = this.$store.state.user.userId;
+      p.sfzh = this.$store.state.user.sfzh;
+      p.xm = this.$store.state.user.xm;
       p.cljg = this.page;
       p.clzt = this.clzt;
       this.$api.post(this.$api.aport2 + "/issueData/issueDataTrigger", p, r => {

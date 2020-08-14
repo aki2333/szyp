@@ -10,10 +10,10 @@ var root = 'http://192.168.3.131:1101/'//测试
 var aport1 = 'permission'//任
 // var aport1 = 'http://10.0.30.64:9404'
 var aport2 = 'datarelease'//石
-// var aport2 = 'http://10.0.30.50:9405'//石本地
+// var aport2 = 'http://10.0.30.55:9405'//石本地
 var aport3 = 'lzsb'
-// var aport4 = 'yewu'
-var aport4 = 'http://192.168.3.131:9426'
+var aport4 = 'yewu'
+// var aport4 = 'http://192.168.3.131:9426'
 
 // 引用axios
 import axios from 'axios';
@@ -186,5 +186,5 @@ export default {
   aport1,
   aport2,
   aport3,
-  aport4
+  aport4,
 }

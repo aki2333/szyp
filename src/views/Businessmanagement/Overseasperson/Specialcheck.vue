@@ -57,6 +57,7 @@
     <!-- 弹窗 -->
     <Dialog :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false" :class="{'hczf-dia':dialogType == 'edit'}">
       <Form
+        :key="new Date().getTime()"
         :cxData="labelData"
         :dialogType="dialogType"
         :dialogData="dialogData"
@@ -159,7 +160,7 @@ export default {
       seriFlag: "", //唯一标识
       //弹窗数据
       isShowDialog: false,
-      joinFlag: false,
+      joinFlag: true,
       dialogTitle: "",
       dialogType: "",
       dialogData: {},
@@ -168,6 +169,7 @@ export default {
       commonBtn: true,
       isDb: false,
       dbBtn: this.$cdata.zxhc.zxhc.dbBtn,
+      currentCus:[],
       // 内联弹窗
       innerVisible: false,
       indialogTitle: "",
@@ -400,7 +402,8 @@ export default {
       }
     },
     radioChange(val) {
-      if (val) {
+      console.log('变化',val)
+      if (val) {//有值 可填
         if (this.joinFlag == true) {
           this.joinFlag = false;
         }
@@ -614,18 +617,34 @@ export default {
     //列表内按钮
     blFnc(data) {
       this.seriFlag = data.data.serial;
+      this.dialogTitle = data.btn.button_name;
+      this.dialogType = data.btn.button_type;
       if(data.double){//双击打开
-        this.dialogType = 'edit'
-        this.dialogTitle = '处理'
-      }else{
-        this.dialogTitle = data.btn.button_name;
-        this.dialogType = data.btn.button_type;
+        if(data.data.whetherUpdateState == 0){//详情
+          this.dialogType = 'ck'
+          this.dialogTitle = '详情'
+        }else{
+          this.dialogType = 'edit'
+          this.dialogTitle = '处理'
+        }
       }
-      this.$cdata.zxhc
-        .editShow(this.$store.state.user.jb, data.data.whetherUpdateState)
-        .then(data => {
+      if(data.data.datatype=='3'||data.data.datatype=='4'||data.data.datatype=='5'){//专项核查 把自定义项插入
+        if(data.data.issueDataFeedbackList){//存在自定义项
+          this.$cdata.zxhc.editShow(this.$store.state.user.jb, data.data.whetherUpdateState).then(label => {
+            label.splice(16,0,{'issueDataFeedbackList':JSON.parse(data.data.issueDataFeedbackList)},{cm: '反馈总时长',type: 'inpUnit', dm: 'issue_time',unit:'hour',dis:true})
+            this.labelData = label;
+          });
+        }else{
+          this.$cdata.zxhc.editShow(this.$store.state.user.jb, data.data.whetherUpdateState).then(label => {//不存在自定义项，只渲染时间，默认0
+            label.splice(16,0,{cm: '反馈总时长',type: 'inpUnit', dm: 'issue_time',unit:'hour',dis:true})
+            this.labelData = label;
+          });
+        }
+      }else{
+        this.$cdata.zxhc.editShow(this.$store.state.user.jb, data.data.whetherUpdateState).then(data => {
           this.labelData = data;
         });
+      }
       this.$store.dispatch("aGetBackstatus", data.data.datatype);
       if (data.data.suboffice) {
         this.$store.dispatch("aGetssdw", { bmbh: data.data.suboffice, type: "sspcs" });
@@ -633,9 +652,8 @@ export default {
       if (data.data.policestation) {
         this.$store.dispatch("aGetssdw", { bmbh: data.data.policestation, type: "zrq" });
       }
-      if (this.dialogType == "edit") {
-        this.getTimeData(data.data.serial)
-
+      if (this.dialogType == "edit" || this.dialogType == "ck") {
+        this.getTimeData(data.data.serial)//时间轴
         if (this.clzt == 2) {
           //已走访
           if (data.data.whetherUpdateState == "0") {
@@ -649,7 +667,7 @@ export default {
             this.commonBtn = true;
             this.isDb = true;
             this.$cdata.zxhc
-              .innerBtn(data.data.whetherUpdateState, this.page)
+              .innerBtn(data.data.whetherUpdateState, this.page,data.data.datatype)
               .then(data => {
                 this.dbBtn = data;
               });
@@ -659,7 +677,7 @@ export default {
           this.isEditBtn = true;
           this.commonBtn = false;
           this.isDb = true;
-          this.$cdata.zxhc.innerBtn("2", this.page).then(data => {
+          this.$cdata.zxhc.innerBtn("2", this.page,data.data.datatype).then(data => {
             this.dbBtn = data;
           });
         }
@@ -667,30 +685,63 @@ export default {
         if (data.data.backstatus) {
           this.joinFlag = false;
         } else {
+          data.data.backstatus = ''
           this.joinFlag = true;
         }
-        this.dialogData = Object.assign({}, data.data);
-      } else if (this.dialogType == "detail") {
-        this.isEditBtn = false;
-        this.commonBtn = true;
-        this.isDb = false;
-        this.dialogData = Object.assign({}, data.data);
-        this.isShowDialog = true;
-      }else if(this.dialogType == "back"){
-        let p={
-          serial:data.data.serial,
-          jb : this.$store.state.user.jb,
-          bmbh : this.$store.state.user.bmbh,
-          userId : this.$store.state.user.userId,
+        if(data.data.datatype=='3'||data.data.datatype=='4'||data.data.datatype=='5'){//专项核查自定义  唯一id为默认值
+          if(data.data.issueDataFeedbackList){//存在自定义选项
+            let cusArr = JSON.parse(data.data.issueDataFeedbackList)
+            this.currentCus = JSON.parse(data.data.issueDataFeedbackList)
+            for(var i=0;i<cusArr.length;i++){
+              data.data[cusArr[i].serial] = {
+                serial:cusArr[i].serial,
+              }
+              if(cusArr[i].value){//回填
+                this.$set(data.data[cusArr[i].serial],'value',cusArr[i].type=='checkbox'?JSON.parse(cusArr[i].value):cusArr[i].type=='text'?cusArr[i].value:parseInt(cusArr[i].value))
+              }else{//渲染
+                this.$set(data.data[cusArr[i].serial],'value',cusArr[i].type=='checkbox'?[]:'')
+              }
+            }
+          } 
+          if(!data.data.issue_time){data.data.issue_time='0'}//反馈时间回填  没有反馈时间默认0
+          this.dialogData = Object.assign({}, data.data);
+        }else{
+          this.dialogData = Object.assign({}, data.data);
         }
-        this.$api.post(this.$api.aport2 + "/issueData/updateReportDataByZfzt",p,r=>{
+      } 
+      // else if (this.dialogType == "detail") {
+      //   this.isEditBtn = false;
+      //   this.commonBtn = true;
+      //   this.isDb = false;
+      //   this.dialogData = Object.assign({}, data.data);
+      //   this.isShowDialog = true;
+      // }
+      else if(this.dialogType == "back"){
+        this.$confirm('是否回退本条数据？','提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(()=>{
+          let p={
+            serial:data.data.serial,
+            jb : this.$store.state.user.jb,
+            bmbh : this.$store.state.user.bmbh,
+            userId : this.$store.state.user.userId,
+          }
+          this.$api.post(this.$api.aport2 + "/issueData/updateReportDataByZfzt",p,r=>{
+            this.$message({
+              message: r.message,
+              duration: 8000,
+              showClose: true,
+              type: "success"
+            });
+            this.getTable();
+          })
+        }).catch(()=>{
           this.$message({
-          message: r.message,
-          duration: 8000,
-          showClose: true,
-          type: "success"
-        });
-        this.getTable();
+            type: 'info',
+            message: '已取消回退'
+          })
         })
       }
     },
@@ -776,35 +827,33 @@ export default {
           clzt: this.clzt,
           cljg: this.page
         };
-        console.log("上报保存", p);
-        if (
-          (((this.dialogData.datatype == "1" &&
-            (this.dialogData.backstatus == "zfzt_1" ||
-              this.dialogData.backstatus == "zfzt_2")) ||
-            (this.dialogData.datatype == "2" &&
-              this.dialogData.backstatus == "zfzt_1" ||
-              this.dialogData.backstatus == "zfzt_2" ||
-              this.dialogData.backstatus == "zfzt_5" )) &&
-            (this.dialogData.suboffice == "" ||
-              this.dialogData.suboffice == undefined)) ||
-          (((this.dialogData.datatype == "1" &&
-            (this.dialogData.backstatus == "zfzt_1" ||
-              this.dialogData.backstatus == "zfzt_2")) ||
-            (this.dialogData.datatype == "2" &&
-              this.dialogData.backstatus == "zfzt_1" ||
-              this.dialogData.backstatus == "zfzt_2" ||
-              this.dialogData.backstatus == "zfzt_5" )) &&
-            (this.dialogData.policestation == "" ||
-              this.dialogData.policestation == undefined)) ||
-          (((this.dialogData.datatype == "1" &&
-            (this.dialogData.backstatus == "zfzt_1" ||
-              this.dialogData.backstatus == "zfzt_2")) ||
-            (this.dialogData.datatype == "2" &&
-              this.dialogData.backstatus == "zfzt_1" ||
-              this.dialogData.backstatus == "zfzt_2" ||
-              this.dialogData.backstatus == "zfzt_5" )) &&
-            (this.dialogData.turnoutarea == "" ||
-              this.dialogData.turnoutarea == undefined))
+        let arr=[];
+        for(var i in p){
+          for(var j=0;j<this.currentCus.length;j++){
+            if(i == this.currentCus[j].serial){
+              arr.push(p[i])
+            }
+          }
+        }
+        p.pageData.customFeedback=arr;
+        console.log("上报", p);
+        if(!this.dialogData.backstatus){
+          this.$message({
+            message: '走访状态不能为空！',
+            duration: 13000,
+            showClose: true,
+            type: "warning"
+          });
+        }else if (
+          (((this.dialogData.datatype == "1" &&(this.dialogData.backstatus == "zfzt_1" ||this.dialogData.backstatus == "zfzt_2")) 
+          ||((this.dialogData.datatype == "2"||this.dialogData.datatype == "3" || this.dialogData.datatype == "4" || this.dialogData.datatype == "5") &&this.dialogData.backstatus == "zfzt_1" ||this.dialogData.backstatus == "zfzt_2" ||this.dialogData.backstatus == "zfzt_5" )) &&
+          (this.dialogData.suboffice == "" ||this.dialogData.suboffice == undefined)) ||
+          (((this.dialogData.datatype == "1" &&(this.dialogData.backstatus == "zfzt_1" ||this.dialogData.backstatus == "zfzt_2")) 
+          ||((this.dialogData.datatype == "2"||this.dialogData.datatype == "3"|| this.dialogData.datatype == "4" || this.dialogData.datatype == "5") &&this.dialogData.backstatus == "zfzt_1" ||this.dialogData.backstatus == "zfzt_2" ||this.dialogData.backstatus == "zfzt_5" )) &&
+          (this.dialogData.policestation == "" ||this.dialogData.policestation == undefined)) ||
+          (((this.dialogData.datatype == "1" &&(this.dialogData.backstatus == "zfzt_1" ||this.dialogData.backstatus == "zfzt_2")) 
+          ||((this.dialogData.datatype == "2"||this.dialogData.datatype == "3"|| this.dialogData.datatype == "4" || this.dialogData.datatype == "5") &&this.dialogData.backstatus == "zfzt_1" ||this.dialogData.backstatus == "zfzt_2" ||this.dialogData.backstatus == "zfzt_5" )) &&
+          (this.dialogData.turnoutarea == "" ||this.dialogData.turnoutarea == undefined))
         ) {
           this.indialogData = {};
           this.indialogTitle = data.button_name;
@@ -866,7 +915,7 @@ export default {
           p.turnoutarea = "";
           p.turnoutarea_desc = "";
         }
-      } else if (this.page == "2") {
+      } else if (this.page == "2" || this.page == "5") {
         //分局
         if (!data.policestation) {
           p.policestation = "";
@@ -917,8 +966,19 @@ export default {
       p.userId = this.$store.state.user.userId;
       p.pageData = {
         clzt: this.clzt,
-        cljg: this.page
+        cljg: this.page,
+        customFeedback:[]
       };
+      let arr=[];
+      for(var i in p){
+        for(var j=0;j<this.currentCus.length;j++){
+          if(i == this.currentCus[j].serial){
+            arr.push(p[i])
+          }
+        }
+      }
+      p.pageData.customFeedback=arr;
+      console.log('上报保存===',p);
       this.$api.post(this.$api.aport2 + "/issueData/updateReportData", p, r => {
         this.$message({
           message: r.message,

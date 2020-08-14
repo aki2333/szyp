@@ -3,6 +3,7 @@
     <el-upload
       ref="upload"
       action=""
+      :multiple='false'
       :http-request="uploadFile"
       :auto-upload="false">
       <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
@@ -24,6 +25,10 @@ export default {
       type: String,
       default: ""
     },
+    dataType:{
+      type: String,
+      default: ""
+    },
   },
   data(){
     return{
@@ -31,6 +36,11 @@ export default {
     }
   },
   methods:{
+    clearFile(){
+      if (this.$refs.upload) {
+          this.$refs.upload.clearFiles();
+      }
+    },
     uploadFile(file) {
       console.log(file)
       this.fileData.append('file', file.file);
@@ -47,7 +57,8 @@ export default {
       }
       this.fileData = new FormData();
       this.$refs.upload.submit();
-      this.fileData.append('userinfor',JSON.stringify(this.$store.state.user))
+      this.fileData.append('userInfor',JSON.stringify(this.$store.state.user))
+      this.fileData.append('dataType',this.dataType)
       this.$api.post(this.url,this.fileData,r=>{
         if(r.errList.length!=0){
           this.$confirm('是否导出错误信息?', '提示', {
@@ -56,6 +67,7 @@ export default {
             type: 'warning'
           }).then(() => {
             this.$api.post(this.urlErr,{errList:r.errList},'','','blob','xlsx','错误信息')
+            this.$emit('expFun')
           }).catch(() => {
             this.$message({
               type: 'info',
@@ -69,9 +81,10 @@ export default {
             duration: 8000,
             showClose: true,
           });
+          this.$emit('expFun')
         }
       })
-      this.$emit('expFun')
+      
     },
     downBase(data){
       let prefix =  'data:application/vnd.ms-excel;base64,'

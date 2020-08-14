@@ -8,12 +8,14 @@ let user = JSON.parse(sessionStorage.getItem('user'))
 let menu = JSON.parse(sessionStorage.getItem('menu'))
 let token = sessionStorage.getItem('token')
 let aurl = sessionStorage.getItem('aurl')
+let itstate = sessionStorage.getItem('itstate')
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
     token: token || '',
+    itstate:itstate||false,
     user: user || {},
     menu: menu || [],
     leftMenu: [],
@@ -24,8 +26,6 @@ export default new Vuex.Store({
     gender: [],
     grade: [],
     passportType: [],//证件种类
-    paper_type:[],
-
     suboffice: [],//所属分局
     policestation: [],//派出所
     xzqh: [],
@@ -34,9 +34,8 @@ export default new Vuex.Store({
     zfzl: [],
     zsxz: [],
     visaType: [],
-    visa_type:[],
     rjka: [],
-    rjsy: [],
+    rjsy: [],//停留事由
     qfjg: [],
     turnoutarea: [],//责任区
     // 【非大众】
@@ -50,6 +49,22 @@ export default new Vuex.Store({
     sjly:[],//数据来源
     leftWid:'auto',
     ywlb:[],//业务类别
+    //【常住信息维护】
+    birthplace:[],//出生地
+    visa_type:[],//签证种类
+    paper_type:[],//证件种类
+    degree_code:[],//身份
+    reside_reason:[],//停留事由
+    entry_reason:[],//入境事由
+    inhabi_state:[],//居住状态类型
+    working_state:[],//工作状态类型
+    inhabi_residence:[],//居住地所在区县
+    workplace_residence:[],//单位所在区县
+    assignment_org:[],//签发地
+    entry_port:[],//入境口岸
+    exit_entry_status:[],//出入境状态
+    inhabi_police_station:[],//居住地所在派出所
+    workplace_police_station:[],//单位所在地派出所
   },
   mutations: {
     getLeftWid(state,data){
@@ -85,8 +100,13 @@ export default new Vuex.Store({
       state.aurl = data;
       window.sessionStorage.setItem("aurl", data)
     },
+    getItS(state,data){
+      state.itstate = data;
+      window.sessionStorage.setItem("itstate", data)
+    },
     getNation(state, data) {
       state.nationality = data;
+      state.birthplace = data;
     },
     getGender(state, data) {
       state.gender = data;
@@ -110,16 +130,38 @@ export default new Vuex.Store({
         state.rylb = data.data
       } else if (data.type == "xzqh") {
         state.xzqh = data.data
+        state.inhabi_residence = data.data
+        state.workplace_residence = data.data
       } else if (data.type == "pcs") {
         state.policestation = data.data
       } else if (data.type == "bjjgka") {
         state.rjka = data.data
       } else if (data.type == "wgr_sqsy") {
         state.rjsy = data.data
+        state.entry_reason = data.data//入境事由
+        state.reside_reason = data.data
       } else if (data.type == "spqfd") {
         state.qfjg = data.data
       } else {
         state[data.type] = data.data;
+      }
+    },
+    getDMPro(state,data){
+      if(data.type == 'dm_jwrysf'){
+        state.degree_code = data.data
+      }else if(data.type == 'dm_jzztlx'){
+        state.inhabi_state = data.data
+      }else if(data.type == 'dm_gzztlx'){
+        state.working_state = data.data
+      }else if(data.type == 'dm_spqfdb'){
+        state.assignment_org = data.data
+      }else if(data.type == 'dm_bjjgkab'){
+        state.entry_port = data.data
+      }else if(data.type == 'dm_crjbs'){
+        state.exit_entry_status = data.data
+      }else if(data.type == 'dm_pcswlb'){
+        state.inhabi_police_station = data.data//居住地所在派出所
+        state.workplace_police_station = data.data//单位所在地派出所
       }
     },
     getXzqh(state,data){//只包含苏州
@@ -139,6 +181,8 @@ export default new Vuex.Store({
     },
     getDatatype(state, data) {
       state.datatype = data;
+    },
+    getYwlb(state,data){
       state.ywlb = data;
     },
     getBackstatus(state, data) {
@@ -157,7 +201,7 @@ export default new Vuex.Store({
     getsspcs(state, data) {
       state.sspcs = data
       state.policestation = data
-    }
+    },
   },
   actions: {
     aGetToken(context, payload) {
@@ -169,6 +213,13 @@ export default new Vuex.Store({
     aGetUrl(context, payload) {
       return new Promise((resolve) => {
         context.commit('getUrl', payload)
+        resolve(payload)
+      })
+    },
+    //由第三方登入标志
+    aGetItS(context, payload){
+      return new Promise((resolve) => {
+        context.commit('getItS', payload)
         resolve(payload)
       })
     },
@@ -251,6 +302,14 @@ export default new Vuex.Store({
         })
       })
     },
+    aGetDMPro(context, payload) {
+      return new Promise((resolve) => {
+        api.post(api.aport1 + '/DmController/getDMInfo', { tableName: payload }, r => {
+          context.commit('getDMPro', { type: payload, data: fnc.ToArray(r.list) })
+          resolve(payload)
+        })
+      })
+    },
     aGetSuboffice(context, payload) {
       return new Promise((resolve) => {
         api.post(api.aport2 + '/dm/getDmList', { tableName: 'dm_pcsb', lvl: '2', dmNameRightLike: payload }, r => {
@@ -283,6 +342,16 @@ export default new Vuex.Store({
         })
       })
     },
+    agetYwlb(context){
+      return new Promise((resolve) => {
+        api.post(api.aport2 + '/dm/getDmList', { tableName: 'dm_issue_data' }, r => {
+          let arr=fnc.sortByKey(r, 'dm');
+          let arrReal = [arr[0],arr[1]]
+          context.commit('getYwlb', arrReal)
+          resolve(arrReal)
+        })
+      })
+    },
     aGetBackstatus(context, payload) {
       return new Promise((resolve) => {
         api.post(api.aport2 + '/dm/getDmList', { tableName: 'dm_zfztb', sjly: payload }, r => {
@@ -312,7 +381,7 @@ export default new Vuex.Store({
           resolve(r)
         })
       })
-    }
+    },
   },
   modules: {
   }

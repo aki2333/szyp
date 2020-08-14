@@ -1,15 +1,25 @@
 <template>
-  <div id="frame">
-    <Header :headData="$store.state.menu"></Header>
-    <el-container>
-      <Left :leftMenu="$store.state.leftMenu"></Left>
-      <el-main class="main">
-        <Breadcrumb></Breadcrumb>
-        <router-view />
-      </el-main>
-      <Right></Right>
-    </el-container>
+  <div>
+    <div id="frame" v-if="$store.state.itstate">
+      <el-container>
+        <el-main class="main">
+          <router-view />
+        </el-main>
+      </el-container>
+    </div>  
+    <div id="frame" v-else>
+      <Header :headData="$store.state.menu"></Header>
+      <el-container>
+        <Left :leftMenu="$store.state.leftMenu"></Left>
+        <el-main class="main">
+          <Breadcrumb></Breadcrumb>
+          <router-view />
+        </el-main>
+        <Right></Right>
+      </el-container>
+    </div>
   </div>
+  
 </template>
 <script>
 // @ is an alias to /src

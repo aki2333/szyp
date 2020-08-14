@@ -63,28 +63,21 @@ const sjkz = {
   ], 
   xzLabel:[
     {
-      mRow:24,
-      labelWid:'100px'
-    },
-    {
       cm: '业务类别',
       type: 'select',
       dm: 'ywlb',
-      col:8
     },
     {
       cm: '单位级别',
       type: 'select',
       dm: 'dwjb',
       optype:true,
-      col:8
     },
     {
       cm: '配置类型',
       type: 'select',
       dm: 'czpzlx',
       optype:true,
-      col:8
     },
   ],
   bjLabel:[
@@ -107,7 +100,7 @@ const sjkz = {
       },
       {
         cm: '规定时间',
-        type: 'input',
+        type: 'inpUnit',
         dm: 'gdsj',
       },
       {

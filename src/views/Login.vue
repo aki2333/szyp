@@ -68,11 +68,29 @@ export default {
     return {
       clickFive: 0,
       user: {},
+      userIt:{},
       isLogin: false
     };
   },
   mounted() {
-    console.log("store:", this.$store.state.token);
+    // 由其他平台登入
+    // console.log('由其他平台登入',window.location.href,window.location.href.includes("sfzh"),this.getItsUrl(window.location.href,'sfzh'))
+    if(window.location.href.includes("sfzh")){
+      let sfzh = this.getItsUrl(window.location.href,"sfzh");
+      if(sfzh){
+        this.userIt.type = '0'
+        this.userIt.name = sfzh
+        this.$api.post(this.$api.aport1 + "/accountLogin", this.userIt, r => {
+          if (r.authorization) {
+            this.$store.dispatch("aGetToken", r.authorization).then(data => {
+              console.log("第三方登陆成功", data);
+              this.getUser();
+            });
+            this.$store.dispatch("aGetItS",true)
+          }
+        });
+      }
+    }
     if (window.location.href.includes("authorization")) {
       let token = this.getUrlParam("authorization");
       // if (token == 1) {
@@ -116,6 +134,17 @@ export default {
         return pair[1];
       }
     },
+    getItsUrl(url,name){
+      //取得url中?后面的字符
+      // console.log('==',url,url.split("?")[1].split("&"))
+      var query = url.split("?")[1];
+      var pair = query.split("&");
+      for(var i=0;i<pair.length;i++){
+        if(pair[i].split('=')[0] == name){
+          return pair[i].split('=')[1]
+        }
+      }
+    },
     //用户名密码登陆
     loginPassword() {
       // this.isLogin = true;
@@ -127,9 +156,9 @@ export default {
         this.isLogin = true;
         this.clickFive = 0;
       } else if (this.clickFive < 5) {
-        setTimeout(() => {
-          this.clickFive = 0;
-        }, 2000);
+        // setTimeout(() => {
+        //   this.clickFive = 0;
+        // }, 2000);
       }
     },
     keyLogin() {
@@ -166,7 +195,11 @@ export default {
       this.$api.post(this.$api.aport1 + "/userController/getUser", {}, r => {
         this.$store.dispatch("aGetUser", r).then(data => {
           console.log("获取用户信息成功", data);
-          this.getNav(data);
+          if(this.$store.state.itstate){
+            this.$router.push({ name: "Specialcheck" });
+          }else{
+            this.getNav(data);
+          }
         });
       });
     },

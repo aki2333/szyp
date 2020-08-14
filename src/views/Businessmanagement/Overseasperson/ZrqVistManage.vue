@@ -200,7 +200,8 @@ export default {
       dialogTitle: "",
       dialogType: "",
       dialogData: {},
-      labelData: []
+      labelData: [],
+      currentCus:[],
     };
   },
   mounted() {
@@ -478,12 +479,69 @@ export default {
           return
         }
         this.diaPage--
-        this.dialogData = Object.assign({},this.multipleSelection[this.diaPage-1]);
+        //专项核查自定义
+        if(this.multipleSelection[this.diaPage-1].datatype == '3'){//专项核查自定义 插入自定义
+          if(this.multipleSelection[this.diaPage-1].issueDataFeedbackList){//存在自定义项
+            this.$cdata.zxhc.handShow(this.$store.state.user.jb).then(data => {//根据级别控制弹窗编辑项禁止与否
+              data.splice(15,0,{'issueDataFeedbackList':JSON.parse(this.multipleSelection[this.diaPage-1].issueDataFeedbackList)},{cm: '反馈总时长',type: 'inpUnit', dm: 'issue_time',unit:'hour',dis:true})
+              this.labelData = data;
+            });
+            let cusArr = JSON.parse(this.multipleSelection[this.diaPage-1].issueDataFeedbackList)
+            this.currentCus = JSON.parse(this.multipleSelection[this.diaPage-1].issueDataFeedbackList)
+            for(var i=0;i<cusArr.length;i++){
+              this.multipleSelection[this.diaPage-1][cusArr[i].serial] = {
+                serial:cusArr[i].serial,
+              }
+              this.$set(this.multipleSelection[this.diaPage-1][cusArr[i].serial],'value',cusArr[i].type=='checkbox'?[]:'')
+            }
+          }else{//没有自定义项，只有自定义反馈时间
+            this.$cdata.zxhc.handShow(this.$store.state.user.jb).then(data => {//编辑选项只插入时间
+              data.splice(15,0,{cm: '反馈总时长',type: 'inpUnit', dm: 'issue_time',unit:'hour',dis:true})
+              this.labelData = data;
+            });
+          }
+          if(!this.multipleSelection[this.diaPage-1].issue_time){this.multipleSelection[this.diaPage-1].issue_time='0'}//反馈时间回填  没有反馈时间默认0
+          this.dialogData = Object.assign({},this.multipleSelection[this.diaPage-1]);
+        }else{
+          this.$cdata.zxhc.handShow(this.$store.state.user.jb).then(data => {//根据级别控制弹窗编辑项禁止与否
+            this.labelData = data;
+          });
+          this.dialogData = Object.assign({},this.multipleSelection[this.diaPage-1]);
+        }
         this.$store.dispatch("aGetBackstatus", this.multipleSelection[this.diaPage-1].datatype);
       }
       if(data.button_type == 'nextPage'){
         if(this.diaPage == this.multipleSelection.length)return
         this.diaPage++
+        //专项核查自定义
+        if(this.multipleSelection[this.diaPage-1].datatype == '3'){//专项核查自定义 插入自定义
+          if(this.multipleSelection[this.diaPage-1].issueDataFeedbackList){//存在自定义项
+            this.$cdata.zxhc.handShow(this.$store.state.user.jb).then(data => {//根据级别控制弹窗编辑项禁止与否
+              data.splice(15,0,{'issueDataFeedbackList':JSON.parse(this.multipleSelection[this.diaPage-1].issueDataFeedbackList)},{cm: '反馈总时长',type: 'inpUnit', dm: 'issue_time',unit:'hour',dis:true})
+              this.labelData = data;
+            });
+            let cusArr = JSON.parse(this.multipleSelection[this.diaPage-1].issueDataFeedbackList)
+            this.currentCus = JSON.parse(this.multipleSelection[this.diaPage-1].issueDataFeedbackList)
+            for(var j=0;j<cusArr.length;j++){
+              this.multipleSelection[this.diaPage-1][cusArr[j].serial] = {
+                serial:cusArr[j].serial,
+              }
+              this.$set(this.multipleSelection[this.diaPage-1][cusArr[j].serial],'value',cusArr[j].type=='checkbox'?[]:'')
+            }
+          }else{//没有自定义项，只有自定义反馈时间
+            this.$cdata.zxhc.handShow(this.$store.state.user.jb).then(data => {//编辑选项只插入时间
+              data.splice(15,0,{cm: '反馈总时长',type: 'inpUnit', dm: 'issue_time',unit:'hour',dis:true})
+              this.labelData = data;
+            });
+          }
+          if(!this.multipleSelection[this.diaPage-1].issue_time){this.multipleSelection[this.diaPage-1].issue_time='0'}//反馈时间回填  没有反馈时间默认0
+          this.dialogData = Object.assign({},this.multipleSelection[this.diaPage-1]);
+        }else{
+          this.$cdata.zxhc.handShow(this.$store.state.user.jb).then(data => {//根据级别控制弹窗编辑项禁止与否
+            this.labelData = data;
+          });
+          this.dialogData = Object.assign({},this.multipleSelection[this.diaPage-1]);
+        }
         this.dialogData = Object.assign({},this.multipleSelection[this.diaPage-1]);
         this.$store.dispatch("aGetBackstatus", this.multipleSelection[this.diaPage-1].datatype);
       }
@@ -558,35 +616,99 @@ export default {
             return false;
           }
           this.isDb = true;
-          this.$cdata.zxhc.handShow(this.$store.state.user.jb).then(data => {//根据级别控制弹窗编辑项禁止与否
-            this.labelData = data;
-          });
-          this.isShowDialog = true;
           this.diaPage = 1;
-          this.dialogData = Object.assign({},this.multipleSelection[this.diaPage-1]);
+          //初始加载
+          if(this.multipleSelection[this.diaPage-1].datatype == '3'||this.multipleSelection[this.diaPage-1].datatype == '4' ||this.multipleSelection[this.diaPage-1].datatype == '5'){//专项核查自定义 插入自定义
+            if(this.multipleSelection[this.diaPage-1].issueDataFeedbackList){
+              this.$cdata.zxhc.handShow(this.$store.state.user.jb).then(data => {//根据级别控制弹窗编辑项禁止与否
+                data.splice(15,0,{'issueDataFeedbackList':JSON.parse(this.multipleSelection[this.diaPage-1].issueDataFeedbackList)},{cm: '反馈总时长',type: 'inpUnit', dm: 'issue_time',unit:'hour',dis:true})
+                this.labelData = data;
+              });
+              let cusArr = JSON.parse(this.multipleSelection[this.diaPage-1].issueDataFeedbackList)
+              this.currentCus = JSON.parse(this.multipleSelection[this.diaPage-1].issueDataFeedbackList)
+              for(var i=0;i<cusArr.length;i++){
+                this.multipleSelection[this.diaPage-1][cusArr[i].serial] = {
+                  serial:cusArr[i].serial,
+                }
+                this.$set(this.multipleSelection[this.diaPage-1][cusArr[i].serial],'value',cusArr[i].type=='checkbox'?[]:'')
+              }
+            }else{
+              this.$cdata.zxhc.handShow(this.$store.state.user.jb).then(data => {//根据级别控制弹窗编辑项禁止与否
+                data.splice(15,0,{cm: '反馈总时长',type: 'inpUnit', dm: 'issue_time',unit:'hour',dis:true})
+                this.labelData = data;
+              });
+            }
+            if(!this.multipleSelection[this.diaPage-1].issue_time){this.multipleSelection[this.diaPage-1].issue_time='0'}//反馈时间回填  没有反馈时间默认0
+            this.dialogData = Object.assign({},this.multipleSelection[this.diaPage-1]);
+          }else{
+            this.$cdata.zxhc.handShow(this.$store.state.user.jb).then(data => {//根据级别控制弹窗编辑项禁止与否
+              this.labelData = data;
+            });
+            this.dialogData = Object.assign({},this.multipleSelection[this.diaPage-1]);
+          }
+          this.isShowDialog = true;
           this.$store.dispatch("aGetBackstatus", this.multipleSelection[this.diaPage-1].datatype);
       }
     },
     //列表内按钮（回退）
     blFnc(data) {
       if (data.btn.button_type == "back") {
-        let formData = new FormData();
-        formData.append('SERIAL',data.data.serial)
-        this.$api.post(this.$api.aport2 + '/issueData/turnoutareaRollbackIssueData',formData,r=>{
+        this.$confirm('是否回退本条数据？','提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(()=>{
+          let formData = new FormData();
+          formData.append('SERIAL',data.data.serial)
+          this.$api.post(this.$api.aport2 + '/issueData/turnoutareaRollbackIssueData',formData,r=>{
+            this.$message({
+              message: r.message,
+              duration:8000,
+              showClose: true,
+              type: "success"
+            });
+            this.getTable();
+            this.getHandData();
+          })
+        }).catch(()=>{
           this.$message({
-            message: r.message,
-            duration:8000,
-            showClose: true,
-            type: "success"
-          });
-          this.getTable();
-          this.getHandData();
+            type: 'info',
+            message: '已取消回退'
+          })
         })
+        
       }else if(data.double){
         this.dialogTitle = '详情';
         this.dialogType = 'ck';
-        this.dialogData = data.data;
-        this.labelData = this.$cdata.zxhc.zrqzf.clDia;
+        // this.dialogData = data.data;
+        if(data.data.datatype == '3' || data.data.datatype == '4' || data.data.datatype == '5'){//专项核查自定义回填
+          if(data.data.issueDataFeedbackList){
+            this.$cdata.zxhc.handShow(this.$store.state.user.jb).then(label => {//根据级别控制弹窗编辑项禁止与否
+              label.splice(15,0,{'issueDataFeedbackList':JSON.parse(data.data.issueDataFeedbackList)},{cm: '反馈总时长',type: 'inpUnit', dm: 'issue_time',unit:'hour',dis:true})
+              this.labelData = label;
+            });
+            let cusArr = JSON.parse(data.data.issueDataFeedbackList)
+            for(var j=0;j<cusArr.length;j++){
+              data.data[cusArr[j].serial] = {
+                serial:cusArr[j].serial,
+              }
+              if(cusArr[j].value){
+                this.$set(data.data[cusArr[j].serial],'value',cusArr[j].type=='checkbox'?JSON.parse(cusArr[j].value):cusArr[j].type=='text'?cusArr[j].value:parseInt(cusArr[j].value))
+              }else{
+                this.$set(data.data[cusArr[j].serial],'value',cusArr[j].type=='checkbox'?[]:'')
+              }
+            }
+          }else{
+            this.$cdata.zxhc.handShow(this.$store.state.user.jb).then(label => {//根据级别控制弹窗编辑项禁止与否
+              label.splice(15,0,{cm: '反馈总时长',type: 'inpUnit', dm: 'issue_time',unit:'hour',dis:true})
+              this.labelData = label;
+            });
+          }
+          if(!data.data.issue_time){data.data.issue_time='0'}//反馈时间回填  没有反馈时间默认0
+        }else{
+          this.labelData = this.$cdata.zxhc.zrqzf.clDia;
+        }
+        this.dialogData = Object.assign({}, data.data);
         this.$store.dispatch("aGetBackstatus", data.data.datatype);
         this.isShowDialog = true;
       }
@@ -601,7 +723,17 @@ export default {
         clzt:'1',
         cljg:'4',
         zrqList:this.$store.state.user.jb=='3'?this.$store.state.user.zrqList:[],
-      },
+        customFeedback:[],
+      }
+      let arr=[];
+      for(var i in p){
+        for(var j=0;j<this.currentCus.length;j++){
+          if(i == this.currentCus[j].serial){
+            arr.push(p[i])
+          }
+        }
+      }
+      p.pageData.customFeedback=arr;
       this.$api.post(this.$api.aport2 + "/issueData/updateReportData", p, r => {
         this.$message({
           message: r.message,

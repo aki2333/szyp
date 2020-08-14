@@ -21,6 +21,17 @@ const xxwhgl = {
       type: 'select',
       dm: 'nationality',
     },
+    
+    {
+      cm: '证件种类',
+      type: 'select',
+      dm: 'paper_type'
+    },
+    {
+      cm: '证件号码',
+      type: 'input',
+      dm: 'paperno',
+    },
     {
       cm: '出生日期',
       type: 'double',
@@ -37,17 +48,6 @@ const xxwhgl = {
           dm: 'birthday_end'
         },
       ],
-    },
-    
-    {
-      cm: '证件种类',
-      type: 'select',
-      dm: 'paper_type'
-    },
-    {
-      cm: '证件号码',
-      type: 'input',
-      dm: 'paperno',
     },
     {
       cm: '签证种类',
@@ -85,53 +85,78 @@ const xxwhgl = {
       cm: '工作单位辖区',
       type: 'select',
       dm: 'workplace_police_station',
+      optype:true,
     },
     {
       cm: '居住地辖区',
       type: 'select',
       dm: 'inhabi_police_station',
+      optype:true,
     },
     {
       cm: '居住地责任区',
       type: 'select',
       dm: 'turnoutarea',
     },
+    {
+      cm: '人员类型',
+      type: 'select',
+      dm: 'resident_type',
+      optype:true
+    },
+  ],
+  cxCheck:[
+    {
+      mc: '居住地辖区或工作地辖区',
+      type: 'checkbox',
+      dm: 'jzd_gzd',
+      trueLabel:'or',
+      falseLabel:'and',
+      check:true,
+    },
+    {
+      mc: '包含下属辖区',
+      type: 'checkbox',
+      dm: 'include_sub',
+      trueLabel:'true',
+      falseLabel:'false',
+      check:true,
+    },
+    {
+      mc: '有效常住人员',
+      type: 'checkbox',
+      dm: 'valid_state',
+      trueLabel:'1',
+      falseLabel:'0',
+      check:true,
+    },
   ],
   facx: [
-
   ],
   lb: [
-    // {
-    //   cm: '中文姓名',
-    //   dm: 'name'
-    // },
-    // {
-    //   cm: '英文姓名',
-    //   dm: 'ename'
-    // },
+    {
+      cm: '中文姓名',
+      dm: 'name'
+    },
+    {
+      cm: '英文姓名',
+      dm: 'ename'
+    },
     {
       cm: '性别',
       dm: 'gender_desc'
     },
-    // {
-    //   cm: '出生日期',
-    //   dm: 'birthday',
-    // },
+    {
+      cm: '出生日期',
+      dm: 'birthday',
+    },
     {
       cm: '国家地区',
       dm: 'nationality_desc',
-    },
+    },  
     {
-      cm: '人员地域类别',
-      dm: 'personnel_area_type_decs',
-    },
-    {
-      cm: '身份',
-      dm: 'degree_code_desc',
-    },
-    {
-      cm: '出生地',
-      dm: 'birthplace_des',
+      cm: '证件号码',
+      dm: 'paperno',
     },
     {
       cm: '证件种类',
@@ -139,31 +164,11 @@ const xxwhgl = {
     },
     {
       cm: '签证种类',
-      dm: 'visa_type',
+      dm: 'visa_type_desc',
     },
     {
-      cm: '签发地',
-      dm: 'assignment_org_desc',
-    },
-    {
-      cm: '停留事由',
-      dm: 'reside_reason_desc',
-    },
-    {
-      cm: '入境事由',
-      dm: 'entry_reason_desc',
-    },
-    {
-      cm: '出入境状态',
-      dm: 'exit_entry_status_desc',
-    },
-    {
-      cm: '注销理由',
-      dm: 'cancel_reason_desc',
-    },
-    {
-      cm: '走访反馈状态',
-      dm: 'backstatus_desc',
+      cm: '停留有效期',
+      dm: 'localize_period',
     },
   ],
   lbBtn: [
@@ -173,7 +178,6 @@ const xxwhgl = {
       "serial": "201",
     },
   ],
-
   lbTabEdit:[
     {
         "mc": '常住人员基本信息',
@@ -190,6 +194,11 @@ const xxwhgl = {
   ],
   jbxxEdit:{
     'a':[
+      {
+          title:'基本信息',
+          type:'line',
+          col:24
+      },
       {
           cm: '国家(地区)',
           type: 'select',
@@ -233,11 +242,11 @@ const xxwhgl = {
           type: 'datePicker',
           dm: 'birthday'
       },
-      {
-        cm: '人员地域类别',
-        type: 'select',
-        dm: 'personnel_area_type',
-      },
+      // {
+      //   cm: '人员地域类别',
+      //   type: 'select',
+      //   dm: 'personnel_area_type',
+      // },
       {
         cm: '身份',
         type: 'select',
@@ -249,6 +258,35 @@ const xxwhgl = {
         dm: 'birthplace',
       },
       {
+          cm: '联系电话',
+          type: 'input',
+          dm: 'reside_contact_tel'
+      },
+      {
+          cm: '紧急情况联系人',
+          type: 'input',
+          dm: 'emergency_contact'
+      },
+      
+      
+    ],
+    'b':[
+      // {
+      //     cm: '有效次数',
+      //     type: 'input',
+      //     dm: 'effective_times'
+      // },
+      {
+          cm: '紧急情况联系电话',
+          type: 'input',
+          dm: 'emergency_contact_tel'
+      },
+      {
+          title:'证件信息',
+          type:'line',
+          col:24
+      },
+      {
           cm: '签发日期',
           type: 'datePicker',
           dm: 'issue_date'
@@ -257,11 +295,6 @@ const xxwhgl = {
           cm: '证件有效期至',
           type: 'datePicker',
           dm: 'expired_day'
-      },
-      {
-          cm: '签证(注)种类',
-          type: 'select',
-          dm: 'visaType',
       },
       {
           cm: '证件内人数',
@@ -278,15 +311,8 @@ const xxwhgl = {
           type: 'input',
           dm: 'visa_no'
       },
-    ],
-    'b':[
       {
-          cm: '有效次数',
-          type: 'input',
-          dm: 'effective_times'
-      },
-      {
-          cm: '签注签发日期',
+          cm: '签证签发日期',
           type: 'datePicker',
           dm: 'reside_permit_assign_day'
       },
@@ -295,11 +321,11 @@ const xxwhgl = {
           type: 'select',
           dm: 'assignment_org',
       },
-      {
-          cm: '签注有效期至',
-          type: 'datePicker',
-          dm: 'reside_permit_expired_day'
-      },
+      // {
+      //     cm: '签注有效期至',
+      //     type: 'datePicker',
+      //     dm: 'reside_permit_expired_day'
+      // },
       {
           cm: '停留有效期',
           type: 'datePicker',
@@ -315,35 +341,22 @@ const xxwhgl = {
           type: 'input',
           dm: 'idno'
       },
-      {
-          cm: '联系电话',
-          type: 'input',
-          dm: 'reside_contact_tel'
-      },
-      {
-          cm: '紧急情况联系人',
-          type: 'input',
-          dm: 'emergency_contact'
-      },
-      {
-          cm: '紧急情况联系电话',
-          type: 'input',
-          dm: 'emergency_contact_tel'
-      },
+      
       {
           cm: '登记日期',
           type: 'datePicker',
           dm: 'registration_time'
       },
+      
+      // {
+      //     cm: '永久居留标识',
+      //     type: 'input',
+      //     dm: 'permanent_residence_sign'
+      // },
       {
-          cm: '省厅下发时间',
-          type: 'datePicker',
-          dm: 'prov_issue_time'
-      },
-      {
-          cm: '永久居留标识',
-          type: 'input',
-          dm: 'permanent_residence_sign'
+          title:'出入境信息',
+          type:'line',
+          col:24
       },
       {
           cm: '入境日期',
@@ -353,7 +366,7 @@ const xxwhgl = {
       {
           cm: '入境事由',
           type: 'select',
-          dm: 'entry_reason_desc'
+          dm: 'entry_reason'
       },
       {
           cm: '入境口岸',
@@ -363,42 +376,29 @@ const xxwhgl = {
       {
           cm: '出入境状态',
           type: 'select',
-          dm: 'exit_entry_status_desc'
+          dm: 'exit_entry_status',
       },
       {
-          cm: '注销时间',
-          type: 'datePicker',
-          dm: 'cancel_time'
-      },
-      {
-          cm: '注销理由',
-          type: 'select',
-          dm: 'cancel_reason'
-      },
-      {
-          cm: '走访反馈状态',
-          type: 'select',
-          dm: 'backstatus',
-      },
-      {
-          cm: '迁入时间',
-          type: 'datePicker',
-          dm: 'move_in_time'
-      },
-      {
-          cm: '迁出时间',
-          type: 'datePicker',
-          dm: 'move_out_time'
+          // title:'出入境信息',
+          type:'line',
+          col:24
       },
       {
           cm: '常住人员类型',
           type: 'select',
-          dm: 'resident_type'
+          dm: 'resident_type',
+          optype:true
       },
       {
           cm: '常住有效状态',
           type: 'select',
-          dm: 'valid_state'
+          dm: 'valid_state',
+          optype:true
+      },
+      {
+          cm: '省厅下发时间',
+          type: 'datePicker',
+          dm: 'prov_issue_time'
       },
       {
           cm: '更新人',
@@ -422,6 +422,10 @@ const xxwhgl = {
   },
   jzdTableEdit:[
     {
+      cm: '居住地详细地址',
+      dm: 'inhabi_detail_addr',
+    },
+    {
       cm: '居住状态类型',
       dm: 'inhabi_state_desc'
     },
@@ -429,14 +433,11 @@ const xxwhgl = {
       cm: '走访反馈状态',
       dm: 'backstatus_desc'
     },
-    // {
-    //   cm: '所在派出所',
-    //   dm: 'gender_desc'
-    // },
-    // {
-    //   cm: '入住方式',
-    //   dm: 'csrq',
-    // },
+    {
+      cm: '居住地所在派出所',
+      dm: 'inhabi_police_station'
+    },
+    
     // {
     //   cm: '房主姓名',
     //   dm: 'gender_desc'
@@ -451,44 +452,32 @@ const xxwhgl = {
       mRow:24,
       labelWid:'137px'
     },
+    // {
+    //   cm: '居住地业务编号',
+    //   type: 'input',
+    //   dm: 'inhabi_businessno',
+    //   col:8
+    // },
+    // {
+    //   cm: '居住地城市',
+    //   type: 'select',
+    //   dm: 'inhabi_city',
+    //   col:8
+    // },
     {
-      cm: '本系统人员编号',
-      type: 'input',
-      dm: 'personnel_id',
-      col:8
-    },
-    {
-      cm: '居住地业务编号',
-      type: 'input',
-      dm: 'inhabi_businessno',
-      col:8
-    },
-    {
-      cm: '居住地城市',
-      type: 'select',
-      dm: 'inhabi_city',
-      col:8
-    },
-    {
-      cm: '当前居住地详细地址',
-      type: 'input',
-      dm: 'inhabi_detail_addr',
-      col:16
-    },
-    {
-      cm: '当前居住初始状态产生时间',
+      cm: '居住初始状态产生时间',
       type: 'datePicker',
       dm: 'inhabi_ori_state_time',
       col:8
     },
     {
-      cm: '当前居住地所在派出所',
+      cm: '居住地所在派出所',
       type: 'select',
       dm: 'inhabi_police_station',
       col:8
     },
     {
-      cm: '当前居住地所在区县',
+      cm: '居住地所在区县',
       type: 'select',
       dm: 'inhabi_residence',
       col:8
@@ -497,7 +486,8 @@ const xxwhgl = {
       cm: '所属责任区',
       type: 'select',
       dm: 'turnoutarea',
-      col:8
+      col:8,
+      optype:true,
     },
     {
       cm: '居住状态类型',
@@ -511,6 +501,24 @@ const xxwhgl = {
       dm: 'backstatus',
       col:8
     },
+    {
+      cm: '居住地详细地址',
+      type: 'input',
+      dm: 'inhabi_detail_addr',
+      col:16
+    },
+    {
+        cm: '迁入时间',
+        type: 'datePicker',
+        dm: 'move_in_time',
+        col:8
+    },
+    {
+      cm: '迁出时间',
+      type: 'datePicker',
+      dm: 'move_out_time',
+      col:8
+  },
     // {
     //   cm: '登记人',
     //   type: 'input',
@@ -535,32 +543,16 @@ const xxwhgl = {
   ],
   gzdTableEdit:[
     {
-      cm: '单位',
-      dm: 'name'
+      cm: '工作单位名称',
+      dm: 'workplace_name'
     },
     {
-      cm: '所在区县',
-      dm: 'givenname'
+      cm: '单位地址',
+      dm: 'workplace_address'
     },
     {
-      cm: '所在派出所',
-      dm: 'gender_desc'
-    },
-    {
-      cm: '职务',
-      dm: 'csrq',
-    },
-    {
-      cm: '工作状态',
-      dm: 'gender_desc'
-    },
-    {
-      cm: '是否有效',
-      dm: 'csrq',
-    },
-    {
-      cm: '更新人',
-      dm: 'csrq',
+      cm: '工作状态类型',
+      dm: 'working_state_desc'
     },
   ],
   gzdFormEdit:[
@@ -569,19 +561,13 @@ const xxwhgl = {
       labelWid:'137px'
     },
     {
-      cm: '本系统人员编号',
-      type: 'input',
-      dm: 'personnel_id',
-      col:8
-    },
-    {
-      cm: '当前工作任职起始时间',
+      cm: '工作任职起始时间',
       type: 'datePicker',
       dm: 'working_begin_time',
       col:8
     },
     {
-      cm: '当前工作任职终止时间',
+      cm: '工作任职终止时间',
       type: 'datePicker',
       dm: 'working_end_time',
       col:8
@@ -592,12 +578,12 @@ const xxwhgl = {
       dm: 'working_state',
       col:8
     },
-    {
-      cm: '工作地业务编号',
-      type: 'input',
-      dm: 'workplace_businessno',
-      col:8
-    },
+    // {
+    //   cm: '工作地业务编号',
+    //   type: 'input',
+    //   dm: 'workplace_businessno',
+    //   col:8
+    // },
     {
       cm: '工作地城市',
       type: 'select',
@@ -605,25 +591,25 @@ const xxwhgl = {
       col:8
     },
     {
-      cm: '当前工作单位名称',
-      type: 'input',
-      dm: 'workplace_name',
-      col:8
-    },
-    {
-      cm: '当前工作单位组织机构',
-      type: 'select',
-      dm: 'workplace_org_code',
-      col:8
-    },
-    {
-      cm: '当前工作单位所在地派出所',
+      cm: '单位所在地派出所',
       type: 'select',
       dm: 'workplace_police_station',
       col:8
     },
     {
-      cm: '当前工作单位所在区县',
+      cm: '工作单位名称',
+      type: 'input',
+      dm: 'workplace_name',
+      col:8
+    },
+    // {
+    //   cm: '工作单位组织机构',
+    //   type: 'select',
+    //   dm: 'workplace_org_code',
+    //   col:8
+    // },
+    {
+      cm: '单位所在区县',
       type: 'select',
       dm: 'workplace_residence',
       col:8
@@ -634,57 +620,39 @@ const xxwhgl = {
       dm: 'workplace_address',
       col:16
     },
-    {
-      cm: '职务',
-      type: 'select',
-      dm: 'work_duty',
-      col:8
-    },
-    {
-      cm: '证明文件号码',
-      type: 'input',
-      dm: 'work_certified_doc_no',
-      col:8
-    },
-    {
-      cm: '证明文件类型',
-      type: 'select',
-      dm: 'work_certified_doc_type',
-      col:8
-    },
-    {
-      cm: '证明文件签发机构',
-      type: 'select',
-      dm: 'work_certified_doc_issue_unit',
-      col:8
-    },
+    // {
+    //   cm: '职务',
+    //   type: 'select',
+    //   dm: 'work_duty',
+    //   col:8
+    // },
     {
       cm: '备注',
       type: 'input',
       dm: 'remarks',
-      col:24
+      col:16
     },
-    {
-      cm: '登记人',
-      type: 'input',
-      dm: 'sprMc',
-      dis: true,
-      col:8
-    },
-    {
-        cm: '登记时间',
-        type: 'datePicker',
-        dm: 'sprdwMc',
-        dis: true,
-        col:8
-    },
-    {
-        cm: '登记单位',
-        type: 'input',
-        dm: 'spsj',
-        dis: true,
-        col:8
-    }
+    // {
+    //   cm: '登记人',
+    //   type: 'input',
+    //   dm: 'sprMc',
+    //   dis: true,
+    //   col:8
+    // },
+    // {
+    //     cm: '登记时间',
+    //     type: 'datePicker',
+    //     dm: 'sprdwMc',
+    //     dis: true,
+    //     col:8
+    // },
+    // {
+    //     cm: '登记单位',
+    //     type: 'input',
+    //     dm: 'spsj',
+    //     dis: true,
+    //     col:8
+    // }
   ],
 }
 export default{

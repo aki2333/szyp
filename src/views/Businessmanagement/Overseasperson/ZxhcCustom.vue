@@ -76,7 +76,7 @@
             size="mini"
             :ref="'fCon'+ind"
             label-width="100px"
-            class="form-ruleForm"
+            class="form-ruleForm cusArr-form mb-12"
           >
             <el-row type="flex" align="middle" justify="center">
               <el-col :span="22">
@@ -146,18 +146,20 @@
           <el-row type="flex" align="middle" justify="center">
             <el-col :span="22">
                 <el-col :span="19">
-                  <el-form-item label="走访时间" prop="issueTime" :rules="{ required: true, message: '此项必填', trigger: 'blur' }">
-                     <el-time-select
-                        v-model="time.issueTime"
-                        :picker-options="{
-                          start: '00:00',
-                          step: '01:00',
-                          end: '24:00'
-                        }"
-                        placeholder="选择时间">
-                      </el-time-select>
-                      </el-form-item>
-                  </el-col>
+                  <el-form-item label="走访时间" prop="issueTime">
+                     <el-input-number v-model="time.issueTime" :min="0"></el-input-number><span class="pl-5">小时</span>
+                  </el-form-item>
+                  <el-form-item label="所属分局" prop="suboffice" :rules="{
+                      required: true, message: '此项必填', trigger: 'blur'}">
+                     <el-select v-model="time.suboffice" placeholder="请选择">
+                        <el-option 
+                        v-for="item in $store.state.suboffice"
+                        :key='item.dm'
+                        :label="item.mc"
+                        :value="item.dm"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
             </el-col>
           </el-row>
         </el-form>
@@ -214,7 +216,7 @@ export default {
       },
       count:1,
       allData:[],
-      time:{issueTime:''},
+      time:{issueTime:'',suboffice:''},
       data:[
         {
           type:'text',
@@ -336,7 +338,6 @@ export default {
       this.dialogData.content.push(this.modelText)
     },
     AddEdit(item,cont){
-      console.log('item==',item)
       let count = cont.id++;
       this.modedlText={id:count,textAdd:''}
       item.content.push(this.modedlText)
@@ -357,6 +358,9 @@ export default {
           let realObj ={}
           Object.assign(realObj,this.dialogData)
           realObj = JSON.parse(JSON.stringify(realObj))
+          if(realObj.type=='text'){
+            realObj.title=realObj.content[0].textAdd
+          }
           this.allData.push(realObj)
           this.dialogData= {
               type:'text',
@@ -372,23 +376,36 @@ export default {
       });
     },
     confirm(formName){
-      for(var i=0;i<this.allData.length;i++){
-        this.$refs[formName+i][0].validate(valid => { 
+      if(this.allData.length == 0){
+        this.$refs['time'].validate(valid => {
           if(valid){
-            // console.log('formName',valid)
-            this.$refs['time'].validate(valid => {
-              if(valid){
-                // console.log('time',this.dialogType)
-                this.$emit('dialogSave',{
-                  type: 'xf',
-                  data: this.allData,
-                  time: this.time.issueTime
-                })
-                // console.log('this.allData',this.allData)
-              }
+            this.$emit('dialogSave',{
+              type: 'xf',
+              data: this.allData,
+              time: this.time.issueTime,
+              suboffice:this.time.suboffice
             })
           }
-        });
+        })
+      }else{
+        for(var i=0;i<this.allData.length;i++){
+          this.$refs[formName+i][0].validate(valid => { 
+            if(valid){
+              this.$refs['time'].validate(valid => {
+                if(valid){
+                  if(i == this.allData.length-1){
+                    this.$emit('dialogSave',{
+                      type: 'xf',
+                      data: this.allData,
+                      time: this.time.issueTime,
+                      suboffice:this.time.suboffice
+                    })
+                  }
+                }
+              })  
+            }
+          });
+        }
       }
     },
     cancel(){

@@ -26,7 +26,7 @@
         :refName="'sjgl'"
         :selection="selection"
         :pageSizeArr="pageSizeArr"
-        :czWidth="'130'"
+        :czWidth="'100'"
         :clearSort="clearSort"
         :expData="cx"
         :expUrl="$api.aport2+''"
@@ -38,9 +38,10 @@
         @rowClick="rowClick"
         @rowDbClick="blFnc"
         @sortChange="sortChange"
+        @transSaveFnc="transSaveFnc"
       ></Table>
     </div>
-    <Dialog :width="dialogType=='xz'?'1000px':'600px'" :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
+    <Dialog :width="'700px'" :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
       <Form
         :key="timer"
         :cxData="labelData"
@@ -107,7 +108,7 @@ export default {
 		}
   },
   mounted(){
-    this.$store.dispatch("aGetDatatype");
+    this.$store.dispatch("agetYwlb");
   },
 	methods:{
 		cxFnc(data) {
@@ -135,7 +136,11 @@ export default {
         this.cxQ.pd[data.obj[key].dmx] = data.obj[key].dm;
       }
       this.getTable(true,this.cxQ)
-		},
+    },
+    //简表数据 子组件通知父组件改表格数据
+    transSaveFnc(data){
+      this.lbData = data
+    },
 		// 获取分页等信息
     pageSizeFnc(data) {
       this.cx.pageSize = data;
@@ -196,15 +201,30 @@ export default {
 		blFnc(data){
       this.dialogType = data.btn.button_type;
       this.dialogTitle = data.btn.button_name;
+      if(data.double){
+        this.dialogType = 'edit'
+        this.dialogTitle = '编辑'
+      }
       if(this.dialogType == 'delete'){
-        this.$api.post(this.$api.aport2 + '/issueTimeControl/deleteIssueTimeControl',{dtid:data.data.dtid},r=>{
+        this.$confirm('是否删除本条数据？','提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(()=>{
+          this.$api.post(this.$api.aport2 + '/issueTimeControl/deleteIssueTimeControl',{dtid:data.data.dtid},r=>{
+            this.$message({
+              message: r.message,
+              duration: 8000,
+              showClose: true,
+              type: "success"
+            });
+            this.getTable();
+          })
+        }).catch(()=>{
           this.$message({
-            message: r.message,
-            duration: 8000,
-            showClose: true,
-            type: "success"
-          });
-          this.getTable();
+            type: 'info',
+            message: '已取消删除'
+          })
         })
       }else if(this.dialogType == 'edit'){
         this.labelData = this.$cdata.pzgl.sjkz.bjLabel;

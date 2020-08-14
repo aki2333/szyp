@@ -77,8 +77,8 @@
                   @change="linkChange(cx,inquire[cx.dm],inquire)"
                 >
                   <el-option
-                    v-for="(item,ind) in $store.state[cx.dm]"
-                    :key="ind"
+                    v-for="(item,inds) in $store.state[cx.dm]"
+                    :key="inds+'o'"
                     :label="cx.disdm?item.mc:item.dm+' - '+item.mc"
                     :value="item.dm"
                   ></el-option>
@@ -129,6 +129,7 @@
               </template>
             </el-form-item>
           </el-col>
+          <el-checkbox v-for="(cc,ind) in cxCheck" :key="ind+'che'" class="quire-check" v-model="inquire[cc.dm]" :true-label="cc.trueLabel" :false-label="cc.falseLabel" :checked="cc.check">{{cc.mc}}</el-checkbox>
         </el-col>
         <el-col :span="4" align="center">
           <template v-for="(pb,pbi) in $store.state.plBtn">
@@ -170,6 +171,10 @@ export default {
       default: "100px"
     },
     cxData: {
+      type: Array,
+      default: () => []
+    },
+    cxCheck: {
       type: Array,
       default: () => []
     },

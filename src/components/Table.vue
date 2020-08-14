@@ -16,7 +16,7 @@
         <template v-for="(pb,pbi) in plBtn">
           <el-button
             size="mini"
-            :type="pbi==0?'success':'primary'"
+            :type="'primary'"
             round
             v-if="pb.button_type==2"
             @click="plBtnFun(pb)"
@@ -29,12 +29,12 @@
       size="small"
       :ref="refName"
       border
-      stripe
       highlight-current-row
       header-row-class-name="table-header"
       header-cell-class-name="table-header-cell"
       :data="tableData.list"
       style="width: 100%"
+      :row-style="rowBackground"
       @row-click="rowClick"
       @row-dblclick="rowDbClick"
       @selection-change="handleSelectionChange"
@@ -85,7 +85,10 @@
                 @click="handleClick(scope.row,lbt)"
                 type="text"
                 size="small"
-                v-else-if="!lbt.user_ctrl||(lbt.user_ctrl==scope.row.status&&!lbt.status)||(lbt.user_ctrl==scope.row.whetherUpdateState&&!lbt.control)||(lbt.control&&page1=='1'&&clzt1==1&&(scope.row.backstatus_desc=='无效地址'||!scope.row.backstatus_desc))"
+                v-else-if="!lbt.user_ctrl||(lbt.user_ctrl==scope.row.status&&!lbt.status)
+                ||(lbt.user_ctrl==scope.row.whetherUpdateState&&!lbt.control)
+                ||(lbt.control&&page1=='1'&&clzt1==1&&((scope.row.backstatus_desc=='无效地址'||!scope.row.backstatus_desc))
+                &&(scope.row.datatype!='3')&&(scope.row.datatype!='4')&&(scope.row.datatype!='5'))"
               >{{lbt.button_name}}</el-button>
             </span>
           </template>
@@ -248,6 +251,13 @@ export default {
     };
   },
   watch: {
+    refName(val){
+      console.log('进入',val)
+      if(val=='jbxxTable'){
+        console.log('进入来了',val)
+        
+      }
+    },
     selection(val) {
       this.$nextTick(function() {
         this.toggleSelection(val);
@@ -269,7 +279,7 @@ export default {
     //   deep: true
     // },
     page(val) {
-      // this.transData = this.lbData;
+      console.log('page1',val)
       this.page1 = val;
     },
     clzt(val){
@@ -290,23 +300,32 @@ export default {
     });
   },
   methods: {
+    //默认当前行高亮
+    cRowHighlight(){
+      this.$refs[this.refName].setCurrentRow(this.tableData.list[0],true)
+    },
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
       this.pageSize = val;
       this.$emit("pageSizeFnc", this.pageSize);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
       this.pageNum = val;
       this.$emit("pageNumFnc", this.pageNum);
     },
     handleSelectionChange(val) {//当选择项发生变化时会触发该事件
-      console.log('选择',val);
+      // console.log('选择',val);
       this.$emit("SelectionChange", val);
     },
     selectPage(val,ref){//当用户手动勾选数据行的 Checkbox 时触发的事件   跨页选中需要手动触发
-      console.log('手动触发==',val)
+      // console.log('手动触发==',val)
       this.$emit("selectPageFnc",{data:val,refName:ref})
+    },
+    rowBackground(row){
+      return{
+        "background-color":row.row.yjssys
+      }
     },
     toggleSelection(rows) {//选中行
       if (rows) {

@@ -95,6 +95,16 @@ const routes = [
         name: 'CzInformationDefend',
         component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/CzInformationDefend.vue')
       },
+      {
+        path: '/Check144',
+        name: 'Check144',
+        component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/Check144.vue')
+      },
+      {
+        path: '/CheckReporter',
+        name: 'CheckReporter',
+        component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/CheckReporter.vue')
+      },
     ]
   },
   {

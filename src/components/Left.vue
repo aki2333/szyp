@@ -60,6 +60,7 @@ export default {
     }
   },
   mounted() {
+    console.log('===',this.$store.state.leftMenu)
     this.toChildren(this.$store.state.leftMenu[0], 0);
   },
   methods: {

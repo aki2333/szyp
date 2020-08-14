@@ -123,8 +123,11 @@ th {
 .el-form-item--mini .el-form-item__content, .el-form-item--mini .el-form-item__label {
   line-height: 26px!important;
 }
-.el-input,.el-select{
+/* .el-input,.el-select{
   height: 28px!important;
+} */
+.form-ruleForm .el-radio-group{
+  line-height: inherit!important;
 }
 /* .el-input__inner{
   padding: 0 10px!important;
@@ -254,6 +257,9 @@ input[type="number"]{
 .el-dialog .el-form-item__label{
   font-size: 15px!important;
   font-weight:normal!important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
  .el-form-item{
   margin-bottom: 8px!important;

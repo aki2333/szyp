@@ -13,7 +13,7 @@
       <el-row :gutter="30" type="flex" align="middle" justify="center">
         <el-col :span="cxData[0].mRow==undefined?16:cxData[0].mRow">
           <el-col :span="cx.col?cx.col:24" v-for="(cx,i) in cxData" :key="i">
-            <el-form-item :label="!cx.hc_con||(cx.dm=='datasources_desc'&&page==cx.hc_con)||(cx.dm=='phone'&&dialogData['datatype']==cx.hc_con)?cx.cm:''" :prop="cx.dm">
+            <el-form-item :label="!cx.hc_con||(cx.dm=='datasources_desc'&&page==cx.hc_con)||(cx.dm=='phone'&&dialogData['datatype']==cx.hc_con)?cx.cm:''" :prop="cx.dm" :title="cx.cm">
               <template v-if="cx.type=='input'">
                 <el-input v-if="!cx.hc_con||(cx.dm=='datasources_desc'&&page==cx.hc_con)||(cx.dm=='phone'&&dialogData['datatype']==cx.hc_con)" v-model="dialogData[cx.dm]" :disabled="cx.dis"></el-input>
               </template>
@@ -24,6 +24,12 @@
                 <el-row type="flex" justify="start">
                   <el-col :span="23"><el-input v-model="dialogData[cx.dm]"></el-input></el-col>
                   <el-col :span="3" class="ml-10"><span style="width:20px;height:20px;display:inline-block;vertical-align: middle;" :style="{backgroundColor:dialogData[cx.dm]}"></span></el-col>
+                </el-row>
+              </template>
+              <template v-if="cx.type=='inpUnit'">
+                <el-row type="flex" justify="start">
+                  <el-col :span="23"><el-input v-model="dialogData[cx.dm]" :disabled="cx.dis"></el-input></el-col>
+                  <el-col :span="3" class="ml-10"><span>{{cx.unit=='hour'?'小时':'天'}}</span></el-col>
                 </el-row>
               </template>
               <template v-else-if="cx.type=='password'">
@@ -104,7 +110,7 @@
                 </div>
               </template>
               <template v-else-if="cx.type=='radio'">
-                <el-radio-group v-model="dialogData[cx.dm]" @change="radioChange" class="form-radio">
+                <el-radio-group v-model="dialogData[cx.dm]" @change="radioChange" class="form-radio" :disabled="cx.dis">
                   <el-radio
                     :label="item.dm"
                     v-for="(item,ind) in $store.state[cx.dm]"
@@ -113,12 +119,59 @@
                 </el-radio-group>
               </template>
             </el-form-item>
+            <el-row  :gutter="30">
+              <el-col :span="cus.col" v-for="(cus,ind) in cx.issueDataFeedbackList" :key="ind">
+                <el-form-item :label="cus.title">
+                  <template v-if="cus.type=='text'">
+                    <el-input v-model="dialogData[cus.serial].value" :disabled="cus.dis"></el-input>
+                  </template>
+                  <template v-if="cus.type=='radio'">
+                    <el-radio-group v-model="dialogData[cus.serial].value" class="form-radio" :disabled="cus.dis">
+                      <el-radio
+                        :label="item.id"
+                        v-for="(item,ind) in JSON.parse(cus.name)"
+                        :key="ind"
+                      >{{item.textAdd}}</el-radio>
+                    </el-radio-group>
+                  </template>
+                  <template v-if="cus.type=='select'">
+                    <el-select
+                      v-model="dialogData[cus.serial].value"
+                      filterable
+                      clearable
+                      :disabled="cus.dis"
+                      placeholder="请选择">
+                      <el-option
+                        v-for="item in JSON.parse(cus.name)"
+                        :key="item.id"
+                        :label="item.textAdd"
+                        :value="item.id"
+                      ></el-option>
+                    </el-select>
+                  </template>
+                  <template v-if="cus.type=='checkbox'">
+                    <el-checkbox-group v-model="dialogData[cus.serial].value" :disabled="cus.dis">
+                      <el-checkbox
+                      v-for="(item,ind) in JSON.parse(cus.name)"
+                      :key="ind"
+                      :label="item.id">{{item.textAdd}}</el-checkbox>
+                    </el-checkbox-group>
+                  </template> 
+                </el-form-item>
+              </el-col>
+            </el-row>
             <template v-if="cx.type=='line'">
                 <span class="divider-text">{{cx.title}}</span>
                 <el-divider></el-divider>
             </template>
             <template v-else-if="cx.type=='checkbox'">
-              
+              <el-checkbox v-model="dialogData[cx.dm]" :true-label="cx.trueLabel" :false-label="cx.falseLabel">{{cx.mc}}</el-checkbox>
+            </template>
+            <template v-if="cx.type=='photo'">
+              <el-popover placement="right" title="" trigger="hover">
+                <img :src="dialogData[cx.dm]" style="max-width:700px; max-height:700px;"/>
+                <img slot="reference" :src="dialogData[cx.dm]" :alt="dialogData[cx.dm]"  width="100" height="100" >
+            </el-popover>
             </template>
           </el-col>
         </el-col>
@@ -135,13 +188,19 @@
           label-width="100px"
           class="form-ruleForm"
         >
-        <el-row :gutter="30" align="middle" justify="center">
-        <el-col :span="24">
-          <el-col :span="8" v-for="(all,alls) in ColorData.data" :key="alls">
+        <el-row :gutter="30" type="flex" align="middle" justify="center">
+        <el-col :span="16">
+          <el-col :span="24" v-for="(all,alls) in ColorData.data" :key="alls">
             <el-row type="flex">
               <el-col :span="18">
                   <el-form-item v-for="(item,ind) in ColorLabel" :key="ind" :label="item.cm" :prop="'data.'+alls+'.'+item.dm" 
                   :rules="{required: true, message: '此项必填', trigger: 'blur'}">
+                    <template v-if="item.type=='inpUnit'">
+                      <el-row type="flex" justify="start">
+                        <el-input v-model="all[item.dm]" :type="item.mold?item.mold:''"></el-input>
+                        <el-col :span="3" class="ml-10"><span>天</span></el-col>
+                      </el-row>
+                    </template>
                     <template v-if="item.type=='input'">
                       <el-input v-model="all[item.dm]" :type="item.mold?item.mold:''"></el-input>
                     </template>
@@ -227,7 +286,7 @@ export default {
     },
     joinFlag: {
       type: Boolean,
-      default: false
+      default: true
     },
     isEditBtn: {
       type: Boolean,
@@ -242,6 +301,10 @@ export default {
       default: false
     },
     btnPage:{
+      type:String,
+      default:''
+    },
+    rulsName:{
       type:String,
       default:''
     }
@@ -262,6 +325,18 @@ export default {
         suboffice: [{ required: true, message: "请选择分局", trigger: "blur" }],
         policestation: [{ required: true, message: "请选择派出所", trigger: "blur" }],
         turnoutarea: [{ required: true, message: "请选择责任区", trigger: "blur" }],
+      }:(this.rulsName=='zxhc'&&this.dialogType!='ck')?{//专项核查新增
+        title:[{required: true, message: "此项必填", trigger: "blur"}],
+        name:[{required: true, message: "此项必填", trigger: "blur"}],
+        givenname:[{required: true, message: "此项必填", trigger: "blur"}],
+        gender:[{required: true, message: "此项必填", trigger: "blur"}],
+        birthday:[{required: true, message: "此项必填", trigger: "blur"}],
+        nationality:[{required: true, message: "此项必填", trigger: "blur"}],
+        passportType:[{required: true, message: "此项必填", trigger: "blur"}],
+        passportno:[{required: true, message: "此项必填", trigger: "blur"}],
+        visaType:[{required: true, message: "此项必填", trigger: "blur"}],
+        visano:[{required: true, message: "此项必填", trigger: "blur"}],
+        address:[{required: true, message: "此项必填", trigger: "blur"}],
       }:{
         xtmm: [{ required: true, message: "请输入密码", trigger: "blur" }],
         qrxtmm: [{ validator: validatePass, trigger: "blur" }],
@@ -300,7 +375,7 @@ export default {
       isXJ: false,
       newForm: {},
       isPS:true,
-      isJoinFlag:false,
+      isJoinFlag:true,
 
       ColorData:{
         data:[
@@ -321,7 +396,7 @@ export default {
         {
             cm:'规定时间',
             dm:'gdsj',
-            type:'input',
+            type:'inpUnit',
             mold:'number'
           },
           {
@@ -339,12 +414,12 @@ export default {
       this.isXJ = false;
     },
     joinFlag(val){
+      console.log('状态',val)
       this.isJoinFlag = val;
     },
   },
   mounted() {
     // this.form = this.dialogData;
-    // console.log(this.form);
     if(this.ZDYShow){
       this.ColorData={
         data:[
@@ -391,6 +466,10 @@ export default {
         } 
       });
     },
+    //移除表单校验
+    clearValid() {
+      this.$refs['form'].clearValidate();
+    },
     Add(){
       this.count++;
       this.modelData={id:this.count,gdsj:'',gdyssh:''}
@@ -411,6 +490,7 @@ export default {
       this.$emit("dbFnc", val);
     },
     radioChange(val){
+      console.log('进入',val)
       this.$emit("radioChange",val);
     },
     linkChange(key, val, dialogData) {

@@ -189,11 +189,11 @@ const options = {
     czpzlx:[
         {
             dm:'1',
-            mc:'上报'
+            mc:'下发'
         },
         {
             dm:'2',
-            mc:'下发'
+            mc:'上报'
         },
     ],
     turnoutarea: [],
@@ -238,7 +238,71 @@ const options = {
             mc:'其他',
             dm:'j'
         },
-    ]
+    ],
+    //下发状态
+    issuedate_status:[
+        {
+            mc:'未下发',
+            dm:'0'
+        },
+        {
+            mc:'已下发',
+            dm:'1'
+        },
+        {
+            mc:'已走访',
+            dm:'2'
+        },
+        {
+            mc:'已归档',
+            dm:'3'
+        },
+    ],
+    //出入境状态
+    entry_exit_status:[
+        {
+            mc:'出境',
+            dm:'1'
+        },
+        {
+            mc:'入境',
+            dm:'2'
+        },
+    ],
+    exit_entry_status:[
+        {
+            mc:'出境',
+            dm:'1'
+        },
+        {
+            mc:'入境',
+            dm:'2'
+        },
+    ],
+   //常住人员类型
+   resident_type:[
+        {
+            mc:'省厅下发',
+            dm:'0'
+        },
+        {
+            mc:'实有常住',
+            dm:'1'
+        },
+   ],
+   //常住有效状态
+   valid_state:[
+        {
+            mc:'无效',
+            dm:'0'
+        },
+        {
+            mc:'有效',
+            dm:'1'
+        },
+   ],
+   inhabi_police_station:[],//居住地所在派出所
+   workplace_police_station:[],//单位所在地派出所
 }
 const tabImg_1 = require("../assets/images/main/tab_2.png");
 const tabImgActive_1 = require("../assets/images/main/tab_2_pre.png");
@@ -253,6 +317,31 @@ function zrqReciData(list) {
         })
     })
 }
+function aGetArea(){
+    return new Promise((resolve) =>{
+      api.post(api.aport1 + '/dept/getAllSubUnit',{bmbh:store.state.user.bmbh},r=>{
+        options.inhabi_police_station = r
+        options.workplace_police_station = r
+        resolve(r)
+      })
+    })
+  }
+  function JoinZrq(join){
+    return new Promise((resolve) =>{
+        api.post(api.aport1 + '/zrq/getSubZrqDmMc',{bmbh:join},r=>{
+            // options.turnoutarea = r
+            resolve(r)
+        })
+    })
+  }
+  function jzdZrq(){
+    return new Promise((resolve) =>{
+        api.post(api.aport1 + '/zrq/getSubZrqDmMc',{tableName:'dm_zrqb'},r=>{
+            options.turnoutarea = r
+            resolve(r)
+        })
+    })
+  }
 export default {
     menu,
     options,
@@ -267,5 +356,8 @@ export default {
     tabImgActive_1,
     tabImg_2,
     tabImgActive_2,
-    zrqReciData
+    zrqReciData,
+    aGetArea,
+    JoinZrq,
+    jzdZrq
 }

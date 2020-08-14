@@ -146,6 +146,13 @@
               v-if="dialogData.xgMap&&dialogData.xgMap[cx.dm]"
               :content="dialogData.xgMap[cx.dm]"
             ></el-popover>
+             <el-popover
+              :ref="'popover2'+i"
+              placement="top-end"
+              trigger="hover"
+              v-else-if="(cx.poup&&dialogData[cx.dm])"
+              :content="dialogData[cx.poupDm]"
+            ></el-popover>
             <el-form-item
               :class="{'yxg-form-item':dialogData.xgMap&&dialogData.xgMap[cx.dm]}"
               v-popover="'popover2'+i"
@@ -258,8 +265,8 @@
       </el-row>
     </el-form>
     <div class="page-btn-box">
-      <el-button size="mini" type="primary" @click="save('form',1)" v-if="dialogType=='bj'">审核通过</el-button>
-      <el-button size="mini" type="primary" @click="save('form',0)" v-if="dialogType=='bj'">审核未通过</el-button>
+      <el-button size="mini" type="primary" @click="save('form',1)" v-if="dialogType=='bj'">初审通过</el-button>
+      <el-button size="mini" type="primary" @click="save('form',0)" v-if="dialogType=='bj'">初审不通过</el-button>
       <el-button size="mini" @click="cancel">取消</el-button>
     </div>
   </div>
@@ -307,6 +314,21 @@ export default {
         callback();
       }
     };
+    var validqz = (rule, value, callback) => {
+      if ((this.dialogData.nationality != "MAC" && this.dialogData.nationality != "HKG" && this.dialogData.nationality != "TWN")&&value == "") {
+        callback(new Error("此项必填"));
+      } else {
+        callback();
+      }
+    };
+    var validqzhm = (rule, value, callback) => {
+      if(((this.dialogData.nationality != "MAC" && this.dialogData.nationality != "HKG" && this.dialogData.nationality != "TWN")&&
+      (this.dialogData.visaType != 'M' && this.dialogData.visaType != 'V'))&&value == ""){
+        callback(new Error("此项必填"));
+      }else{
+        callback();
+      }
+    }
     return {
       rules: {
         nationality: [{ required: true, message: "此项必填", trigger: "blur" }],
@@ -319,9 +341,9 @@ export default {
         name: [{ validator: validatename, trigger: "blur" }],
         gender: [{ required: true, message: "此项必填", trigger: "blur" }],
         birthday: [{ required: true, message: "此项必填", trigger: "blur" }],
-        visaType: [{ required: true, message: "此项必填", trigger: "blur" }],
-        visaNo: [{ required: true, message: "此项必填", trigger: "blur" }],
-        tlyxqz: [{ required: true, message: "此项必填", trigger: "blur" }],
+        visaType: [{ validator:validqz, trigger: "blur" }],
+        visaNo: [{ validator:validqzhm, trigger: "blur" }],
+        tlyxqz: [{ validator:validqz, trigger: "blur" }],
         rjsy: [{ required: true, message: "此项必填", trigger: "blur" }],
         sjhm: [
           { required: true, message: "此项必填", trigger: "blur" },
@@ -466,6 +488,10 @@ export default {
     },
     linkChange(key, val, dialogData) {
       this.$emit("formLcFnc", { key: key, data: val, obj: dialogData });
+    },
+    //移除表单校验
+    clearValid() {
+      this.$refs['form'].clearValidate();
     },
     cancel() {
       if (this.isXJ) {

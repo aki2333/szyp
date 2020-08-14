@@ -305,17 +305,17 @@ const lzsb = {
                 dm: 'zjyxq'
             },
             {
-                cm: '签证(注)种类',
+                cm: '签证种类',
                 type: 'select',
                 dm: 'visaType',
             },
             {
-                cm: '签证(注)号码',
+                cm: '签证号码',
                 type: 'input',
                 dm: 'visaNo'
             },
             {
-                cm: '签证(注)有效期至',
+                cm: '签证有效期至',
                 type: 'datePicker',
                 dm: 'tlyxqz'
             },
@@ -379,11 +379,15 @@ const lzsb = {
                 cm: '所属分局',
                 type: 'select',
                 dm: 'suboffice',
+                poupDm:'subofficeMc',
+                poup:true
             },
             {
                 cm: '所属派出所',
                 type: 'select',
                 dm: 'policestation',
+                poupDm:'policestationMc',
+                poup:true
             },
             {
                 cm: '本人联系电话',

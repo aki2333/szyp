@@ -2,10 +2,12 @@
   <div class="page">
     <Inquire 
 		:cxData="cxData" 
+    :cxCheck="cxCheck"
 		:facxData="facxData" 
 		:pd="cx.pd" 
 		:cxPara="cx"
 		@cxFnc="cxFnc" 
+    @lcFnc="lcFnc" 
 		@queryShowFnc="queryShowFnc"></Inquire>
 		<div class="t-tab-top">
       <div class="tab-top-item tabImgActive_1 hand">常住人员信息维护列表</div>
@@ -31,9 +33,10 @@
         @rowClick="rowClick"
         @rowDbClick="blFnc"
         @sortChange="sortChange"
+        @transSaveFnc="transSaveFnc"
       ></Table>
     </div>
-    <Dialog :width="dialogType=='edit'?'1500px':'1000px'" :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
+    <Dialog :width="dialogType=='edit'?'1300px':'1000px'" :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
       <Edit 
       :timer="timer"
       :jbxxdiaData="jbxxdiaData"
@@ -63,7 +66,8 @@ export default {
 			
 			//数据展示
 			//查询项
-			cxData: this.$cdata.czxx.xxwhgl.cx,
+      cxData: this.$cdata.czxx.xxwhgl.cx,
+      cxCheck:this.$cdata.czxx.xxwhgl.cxCheck,
 			facxData: this.$cdata.czxx.xxwhgl.facx,//快速查询项
 			//列表
 			lbData: this.$cdata.czxx.xxwhgl.lb,
@@ -100,13 +104,42 @@ export default {
       jbxxdiaData:{},
       onlyId:'',
 		}
-	},
+  },
+  mounted(){
+    this.$store.dispatch("aGetDM", "qzzl");
+    this.$store.dispatch("aGetDM", "xzqh");
+    this.$store.dispatch('aGetDMPro', "dm_jwrysf");//身份
+    this.$store.dispatch('aGetDMPro', "dm_jzztlx");//居住状态类型
+    this.$store.dispatch('aGetDMPro', "dm_gzztlx");//工作状态类型
+    this.$store.dispatch('aGetDMPro', "dm_spqfdb");//签发地
+    this.$store.dispatch('aGetDMPro', "dm_bjjgkab");//入境口岸
+    this.$store.dispatch('aGetDMPro', "dm_crjbs");//出入境状态
+    this.$store.dispatch('aGetDMPro', "dm_pcswlb");//居住地所在派出所
+    this.$store.dispatch('aGetDM', "wgr_sqsy");//停留事由&&入境事由
+    this.$store.dispatch("aGetNation");//国家地区&出生地
+    this.$store.dispatch("aGetBackstatus",'1')//走访反馈状态
+    this.$cdata.aGetArea()
+    this.$cdata.jzdZrq()
+  },
 	methods:{
 		cxFnc(data) {
       this.cx.pd = data;
       this.cx.pageNum = 1;
       this.getTable(true);
-		},
+    },
+    //下拉框联动
+    lcFnc(data){
+      if(data.key.dm == "inhabi_police_station"){
+        // if(data.data == ""){
+        //   this.$cdata.options.turnoutarea = [];
+        //   data.obj.turnoutarea = '';
+        // }else{
+          this.$cdata.JoinZrq(data.data).then((data) =>{
+            this.$store.state.turnoutarea = data
+          })
+        // }
+      }
+    },
 		//查询条件转换查询
     queryShowFnc(flag){
       if(!flag&&this.facxData.length!=0){//快速查询
@@ -114,6 +147,10 @@ export default {
       }else{
         this.getTable(true)
       }
+    },
+    //简表数据 子组件通知父组件改表格数据
+    transSaveFnc(data){
+      this.lbData = data
     },
 		// 获取分页等信息
     pageSizeFnc(data) {
@@ -147,13 +184,13 @@ export default {
 		blFnc(data){
       this.dialogType = data.btn.button_type;
       this.dialogTitle = data.btn.button_name;
-      this.onlyId = data.data.business_number;
+      this.onlyId = data.data.personnel_id;
       if(data.double){
         this.dialogType = 'edit',
         this.dialogTitle = '编辑'
       }
       if(this.dialogType == 'edit'){
-        this.jbxxdiaData = Object.assign({},data.data)//赋值基本信息
+        // this.jbxxdiaData = Object.assign({},data.data)//赋值基本信息
         // this.getJbxxPho();
         this.timer = new Date().getTime();
         this.isShowDialog = true;
@@ -163,7 +200,7 @@ export default {
     editSave(data){
       let url='';
       if(data.editPage=='1'){
-        url="/czry/getCzRyxx"
+        url="/czry/updateCzRyxx"
       }else if(data.editPage=='2'){
         url="/czjzd/updateCzJzdxx"
       }else if(data.editPage=='3'){

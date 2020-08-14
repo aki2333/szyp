@@ -58,6 +58,7 @@
         :dialogData="dialogData"
         :dialogImgData="dialogImgData"
         :cxData="$cdata.lzsb.lzsb.bj"
+        ref="temp"
         @dialogCancel="isShowDialog=false"
         @dialogSave="dialogSave"
         @formLcFnc="lcFnc"
@@ -111,7 +112,7 @@ export default {
       dialogImgData: [],
       labelData: [],
       innerForm: {
-        shsm: ""
+        shsm: "审核信息有误"
       }
     };
   },
@@ -287,8 +288,10 @@ export default {
         if(this.dialogData.checklist==undefined){
           this.dialogData.checklist=[];
         }
+        console.log('===',this.dialogData)
         this.$store.dispatch("aGetssdw", { bmbh: r.suboffice, type: "sspcs" });
         this.isShowDialog = true;
+        this.$refs.temp.clearValid();
       });
     },
     // 获取图片
@@ -320,19 +323,16 @@ export default {
         } else if (data.btnType == 0) {//审核未通过
           this.innerForm = data.data;
           this.innerForm.shzt = "shzt_2";
+          this.innerForm.shsm="审核信息有误";
           this.innerVisible = true;
         }
       }
     },
     shwtg(formName) {//未通过提交  原因必填
-      
       this.$refs[formName].validate(valid => {
-        console.log('formName',valid,this.$refs[formName])
         if(valid){
-          console.log('dui',valid)
           this.updateLzsb(this.innerForm);
         }else{
-          console.log('error')
           return false
         }
       })

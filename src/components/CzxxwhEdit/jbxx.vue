@@ -24,8 +24,7 @@
               :class="{'yxg-form-item':dialogData.xgMap&&dialogData.xgMap[cx.dm],'font-blod':cx.weight}"
               v-popover="'popover'+i"
               :label="cx.cm"
-              :prop="cx.dm"
-            >
+              :prop="cx.dm">
               <template v-if="cx.type=='input'">
                 <el-input v-model="dialogData[cx.dm]" :disabled="cx.dis"></el-input>
               </template>
@@ -38,7 +37,7 @@
                   filterable
                   v-if="cx.optype"
                   clearable
-                  :disabled="cx.dis"
+                  :disabled="dialogData[cx.dm+'dis']||cx.dis"
                   placeholder="请选择"
                 >
                   <el-option
@@ -105,6 +104,14 @@
                 </el-radio-group>
               </template>
             </el-form-item>
+            <!-- <el-row>
+              <el-col :span="24"> -->
+                <template v-if="cx.type=='line'">
+                  <span class="divider-text">{{cx.title}}</span>
+                  <el-divider></el-divider>
+                </template>
+              <!-- </el-col>
+             </el-row> -->
           </el-col>
         </el-col>
         <el-col :span="8">
@@ -150,8 +157,7 @@
               v-popover="'popover2'+i"
               :label="cx.cm"
               :prop="cx.dm"
-              v-if="!cx.cshow||(cx.cshow&&dialogData[cx.dm])"
-            >
+              v-if="!cx.cshow||(cx.cshow&&dialogData[cx.dm])">
               <template v-if="cx.type=='input'">
                 <el-input v-model="dialogData[cx.dm]" :disabled="cx.dis"></el-input>
               </template>
@@ -243,6 +249,10 @@
                 </el-radio-group>
               </template>
             </el-form-item>
+            <template v-if="cx.type=='line'">
+              <span class="divider-text">{{cx.title}}</span>
+              <el-divider></el-divider>
+            </template>
           </el-col>
         </el-col>
       </el-row>
@@ -250,7 +260,7 @@
     <!-- <div class="page-btn-box">
       <el-button size="mini" type="primary" @click="save('form')">保存</el-button>
       <el-button size="mini" @click="cancel">取消</el-button>
-    </div> -->
+    </div>-->
   </div>
 </template>
 <script>
@@ -293,7 +303,7 @@ export default {
     //   }
     // };
     return {
-      rules:{},
+      rules: {},
       // rules: {
       //   nationality: [{ required: true, message: "此项必填", trigger: "blur" }],
       //   passportType: [
@@ -348,14 +358,14 @@ export default {
     }
   },
   mounted() {
-    console.log('erceng',this.dialogData.name)
+    console.log("erceng", this.dialogData.name);
     // this.form = this.dialogData;
     // console.log(this.form);
   },
   directives: {
     drag: {
       // 指令的定义
-      bind: (el) => {
+      bind: el => {
         let odiv = el; //获取当前元素
         let left = "";
         let top = "";
@@ -379,7 +389,11 @@ export default {
               //用鼠标的位置减去鼠标相对元素的位置，得到元素的位置
               console.log("e.clientX", e.clientX);
               console.log("disX", disX);
-              console.log("oImg.offsetLeft", oImg.offsetLeft,oImg.offsetParent.offsetLeft);
+              console.log(
+                "oImg.offsetLeft",
+                oImg.offsetLeft,
+                oImg.offsetParent.offsetLeft
+              );
               leftImg = e.clientX - disX - 40;
               topImg = e.clientY - disY - 40;
               //绑定元素位置到positionX和positionY上面
@@ -422,7 +436,7 @@ export default {
         if (valid) {
           this.$emit("dialogSave", {
             type: this.dialogType,
-            data: this.dialogData,
+            data: this.dialogData
           });
         } else {
           console.log("error submit!!");
@@ -443,7 +457,7 @@ export default {
     },
     linkChange(key, val, dialogData) {
       this.$emit("formLcFnc", { key: key, data: val, obj: dialogData });
-    },
+    }
   }
 };
 </script>

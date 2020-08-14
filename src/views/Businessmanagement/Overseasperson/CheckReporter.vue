@@ -8,7 +8,7 @@
 		@cxFnc="cxFnc" 
 		@queryShowFnc="queryShowFnc"></Inquire>
 		<div class="t-tab-top">
-      <div class="tab-top-item tabImgActive_1 hand">专项核查列表</div>
+      <div class="tab-top-item tabImgActive_1 hand">记者自动核查列表</div>
     </div>
 		<div class="page-box">
       <Table
@@ -19,15 +19,15 @@
         :plBtn="plBtn"
         :lbTab="lbTab"
         :isTab="true"
-        :isEdit="isEdit"
         :tableData="tableData"
         :refName="'zxhc'"
         :selection="selection"
         :pageSizeArr="pageSizeArr"
+        :isEdit="isEdit"
         :czWidth="'130'"
         :clearSort="clearSort"
         :expData="cx"
-        :expUrl="$api.aport2+'/specialCheck/exportData'"
+        :expUrl="$api.aport2+'/issueData/exportIssueData'"
         @plFnc="plFnc"
         @tabFnc="tabFnc"
         @pageSizeFnc="pageSizeFnc"
@@ -49,11 +49,11 @@
       @dialogCancel="isShowDialog=false"
 			></Custom>
       <BatchIm
-      v-else-if="dialogType=='pldr'"
-      :url="$api.aport2 + '/specialCheck/readExcel'"
-      :urlErr="$api.aport2 + '/specialCheck/exportErrData'"
-      :dataType="'3'"
       ref="batchIm"
+      v-else-if="dialogType=='pldr'"
+      :url="$api.aport2 + '/specialCheckReporter/readExcel'"
+      :urlErr="$api.aport2 + '/specialCheckReporter/exportErrData'"
+      :dataType="'5'"
       @expFun="expFun"
       @dialogCancel="isShowDialog=false"></BatchIm>
       <Form
@@ -92,13 +92,13 @@ export default {
       tabImgActive_2: require("../../../assets/images/main/tab_1_pre.png"),
 			//数据展示
 			//查询项
-			cxData: this.$cdata.zxhc.zxhcgl.cx,
-			facxData: this.$cdata.zxhc.zxhcgl.facx,//快速查询项
+			cxData: this.$cdata.zxhc.jzzdhc.cx,
+			facxData: this.$cdata.zxhc.jzzdhc.facx,//快速查询项
       //列表
       isEdit:true,
-			lbData: this.$cdata.zxhc.zxhcgl.lb,
+			lbData: this.$cdata.zxhc.jzzdhc.lb,
       lbBtn: [],
-      lbTab:this.$cdata.zxhc.zxhcgl.lbTab,
+      lbTab:this.$cdata.zxhc.jzzdhc.lbTab,
 			plBtn: this.$store.state.plBtn,
 			pageSizeArr: [15, 100, 500],
       selection: [],
@@ -139,7 +139,7 @@ export default {
     this.$cdata.qxgl.getSjBm(this.$store.state.user.bmbh).then(() => {//所属分局
         this.$store.dispatch("aGetssdw", {bmbh: "320500000000",type: "ssfj"});
     });
-    this.$cdata.zxhc.zxhcLbbtn('3',this.page).then((data) => {
+    this.$cdata.zxhc.zxhcLbbtn('5',this.page).then((data) => {
       this.lbBtn = data
     })
     this.getTable(true)
@@ -162,7 +162,7 @@ export default {
       this.page = data;
       this.cx.pageNum = 1;
       this.issueDataIds = [];
-      this.$cdata.zxhc.zxhcLbbtn('3',this.page).then((data) => {
+      this.$cdata.zxhc.zxhcLbbtn('5',this.page).then((data) => {
         this.lbBtn = data
       })
       if(this.page == '1'){
@@ -211,7 +211,7 @@ export default {
 		// 查询用户列表
     getTable(flag,pdQ) {
       if(flag){this.clearSort = new Date().getTime();delete this.cx.order;delete this.cx.direction }
-      this.cx.pd.datatype = '3';
+      this.cx.pd.datatype = '5';
       this.cx.pd.issuedate_status = this.page
       this.$api.post(this.$api.aport2 + "/specialCheck/getIssueDataPage", pdQ||this.cx, r => {
 				this.tableData.list = r.list;
@@ -240,14 +240,15 @@ export default {
           this.$refs.batchIm.clearFile();
         }
       }else if(data.py=='xz'){
-        this.labelData = this.$cdata.zxhc.zxhcgl.xz;
+        this.labelData = this.$cdata.zxhc.jzzdhc.xz;
         this.dialogData = {};
         this.isShowDialog = true
         if(this.$refs.zxhcForm){
           this.$refs.zxhcForm.clearValid()
         }
       }else if(data.py=='mbxz'){//模板下载
-        var url = this.$api.root + this.$api.aport2 +'/webapp/templateFile/专项核查数据模板.xlsx';
+        var url = this.$api.root + this.$api.aport2 + '/webapp/templateFile/记者类签证专项核查模板.xlsx';
+        // console.log(url)
         window.location.href = url;
       }
 		},
@@ -265,10 +266,10 @@ export default {
           this.dialogTitle = '详情'
         }
       }
-      if(this.dialogType == 'edit'||this.dialogType == 'ck'){
-        // this.labelData = this.$cdata.zxhc.zxhcgl.cl
+      if(this.dialogType == 'edit' || this.dialogType == 'ck'){
+        // this.labelData = this.$cdata.zxhc.jzzdhc.cl
         if(data.data.issueDataFeedbackList){//存在自定义
-          this.$cdata.zxhc.handCL().then(label => {//插入自定义走访内容
+          this.$cdata.zxhc.jzzdhandCL().then(label => {//插入自定义走访内容
             label.push({title:'自定义走访信息',type:'line'},{'issueDataFeedbackList':JSON.parse(data.data.issueDataFeedbackList)},{cm: '反馈总时长',type: 'inpUnit', dm: 'issue_time',unit:'hour',dis:true,col:8})
             this.labelData = label;
           });
@@ -288,7 +289,7 @@ export default {
           }
           data.data.issueDataFeedbackList = JSON.stringify(cusArr);
         }else{//没有自定义选择，只有反馈时间
-          this.$cdata.zxhc.handCL().then(label => {//插入自定义走访内容
+          this.$cdata.zxhc.jzzdhandCL().then(label => {//插入自定义走访内容
             label.push({title:'自定义走访信息',type:'line'},{cm: '反馈总时长',type: 'inpUnit', dm: 'issue_time',unit:'hour',dis:true,col:8})
             this.labelData = label;
           });
@@ -309,7 +310,7 @@ export default {
           let p={
             serial:data.data.serial,
             delete_user_id:this.$store.state.user.userId,
-            dataType:'3',
+            dataType:'5',
           }
           this.$api.post(this.$api.aport2 + '/specialCheck/deleteSpecialCheckIssueData',p,r=>{
             this.$message({
@@ -330,7 +331,7 @@ export default {
         let p={
           serial:data.data.serial,
           userId:this.$store.state.user.userId,
-          dataType:'3',
+          dataType:'5',
         }
         this.$api.post(this.$api.aport2 + '/specialCheck/updateFileSpecialCheckIssueData',p,r=>{
           this.$message({
@@ -346,7 +347,7 @@ export default {
     editSave(data){
       let p = data;
       p.update_user_id = this.$store.state.user.userId;
-      p.dataType = '3';
+      p.dataType = '5';
       p.serial = this.onlySerial;
       p.bmbh = this.$store.state.user.bmbh;
       this.$api.post(this.$api.aport2 + '/specialCheck/updateSpecialCheckIssueData',data,r=>{
@@ -368,7 +369,7 @@ export default {
         issueTime:data.time,
         suboffice:data.suboffice,
         color:"red",
-        dataType:'3'
+        dataType:'5'
       }
       this.$api.post(this.$api.aport2 + '/specialCheck/issueDataTrigger',p,r=>{
         this.$message({
@@ -383,7 +384,7 @@ export default {
     },
     xzSave(data){
       let p = Object.assign({},data);
-      p.dataType = '3';
+      p.dataType = '5';
       p.create_user_id = this.$store.state.user.userId;
       this.$api.post(this.$api.aport2 + '/specialCheck/addSpecialCheckIssueData',p,r=>{
         this.$message({

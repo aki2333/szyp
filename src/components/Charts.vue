@@ -1,12 +1,25 @@
 <template>
-  <div id="akiChart" class="my-chart" ref="akiChart"></div>
+  <div>
+    <p class="chart-title mb-10">TOP</p>
+    <div class="chart-outer ml-10">
+      <div class="chart-outer-label">分析维度</div>
+      <el-select class="chart-select" placeholder="请选择" size="medium">
+        <el-option>{{'1'}}</el-option>
+      </el-select>
+    </div>
+    <div :id="'akiChart'+id" class="my-chart" :ref="'akiChart'+id"></div>
+  </div>
 </template>
 <script>
 export default {
-  props:{
-    optData:{
-      type:Object,
-      default:() => {}
+  props: {
+    optData: {
+      type: Object,
+      default: () => {}
+    },
+    id:{
+      type:String,
+      default:""
     }
   },
   mounted() {
@@ -15,22 +28,7 @@ export default {
   methods: {
     initchart() {
       // 初始化
-      let mychart = this.$echarts.init(document.getElementById("akiChart"));
-      // 配置
-      // let option = {
-      //   tooltip: {},
-      //   xAxis: {
-      //     data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
-      //   },
-      //   yAxis: {},
-      //   series: [
-      //     {
-      //       name: "销量",
-      //       type: "bar",
-      //       data: [5, 20, 36, 10, 10, 20]
-      //     }
-      //   ]
-      // };
+      let mychart = this.$echarts.init(document.getElementById("akiChart"+this.id));
       // 绘制
       mychart.setOption(this.optData);
       // 监听浏览器尺寸

@@ -271,6 +271,9 @@ export default {
         if(data.data.issueDataFeedbackList){//存在自定义
           this.$cdata.zxhc.offhandCL().then(label => {//插入自定义走访内容
             label.push({title:'自定义走访信息',type:'line'},{'issueDataFeedbackList':JSON.parse(data.data.issueDataFeedbackList)},{cm: '反馈总时长',type: 'inpUnit', dm: 'issue_time',unit:'hour',dis:true,col:8})
+            if(data.data.photoEncoder){//存在图片
+              label.push({title:'图片信息',type:'line'},{type: 'photo', dm: 'photoEncoder'})
+            }
             this.labelData = label;
           });
           //自定义内容回填
@@ -291,21 +294,14 @@ export default {
         }else{//没有自定义选择，只有反馈时间
           this.$cdata.zxhc.offhandCL().then(label => {//插入自定义走访内容
             label.push({title:'自定义走访信息',type:'line'},{cm: '反馈总时长',type: 'inpUnit', dm: 'issue_time',unit:'hour',dis:true,col:8})
+            if(data.data.photoEncoder){//存在图片
+              label.push({title:'图片信息',type:'line'},{type: 'photo', dm: 'photoEncoder'})
+            }
             this.labelData = label;
           });
         }
         if(!data.data.issue_time){data.data.issue_time='0'}//反馈时间回填  没有反馈时间默认0
         // data.data.photoEncoder=this.$cdata.tabImgActive_1
-        if(data.data.photoEncoder){//存在图片
-          this.$cdata.zxhc.offhandCL().then(label => {//插入图片内容
-            label.push({title:'图片信息',type:'line'},{type: 'photo', dm: 'photoEncoder'})
-            this.labelData = label;
-          });
-        }else{//不存在图片
-          this.$cdata.zxhc.offhandCL().then(label => {//插入图片内容
-            this.labelData = label;
-          });
-        }
         this.dialogData = Object.assign({},data.data);
         this.$store.dispatch("aGetBackstatus", data.data.datatype);
         this.isShowDialog = true;

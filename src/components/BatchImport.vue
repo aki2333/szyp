@@ -61,7 +61,7 @@ export default {
       this.fileData.append('dataType',this.dataType)
       this.$api.post(this.url,this.fileData,r=>{
         if(r.errList.length!=0){
-          this.$confirm('是否导出错误信息?', '提示', {
+          this.$confirm(r.message + '！是否导出错误信息?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'

@@ -15,7 +15,7 @@
           <el-col :span="cx.col?cx.col:24" v-for="(cx,i) in cxData" :key="i">
             <el-form-item :label="!cx.hc_con||(cx.dm=='datasources_desc'&&page==cx.hc_con)||(cx.dm=='phone'&&dialogData['datatype']==cx.hc_con)?cx.cm:''" :prop="cx.dm" :title="cx.cm">
               <template v-if="cx.type=='input'">
-                <el-input v-if="!cx.hc_con||(cx.dm=='datasources_desc'&&page==cx.hc_con)||(cx.dm=='phone'&&dialogData['datatype']==cx.hc_con)" v-model="dialogData[cx.dm]" :disabled="cx.dis"></el-input>
+                <el-input v-if="!cx.hc_con||(cx.dm=='datasources_desc'&&page==cx.hc_con)||(cx.dm=='phone'&&dialogData['datatype']==cx.hc_con)" v-model="dialogData[cx.dm]" :disabled="cx.dis" :maxlength="cx.max"></el-input>
               </template>
               <template v-if="cx.type=='joinInput'">
                 <el-input v-model="dialogData[cx.dm]" :disabled="joinFlag"></el-input>
@@ -25,6 +25,18 @@
                   <el-col :span="23"><el-input v-model="dialogData[cx.dm]"></el-input></el-col>
                   <el-col :span="3" class="ml-10"><span style="width:20px;height:20px;display:inline-block;vertical-align: middle;" :style="{backgroundColor:dialogData[cx.dm]}"></span></el-col>
                 </el-row>
+              </template>
+              <template v-if="cx.type=='block'">
+                <colorPicker v-model="dialogData[cx.dm]"/>
+                <!-- <el-select v-model="dialogData[cx.dm]" placeholder="请选择" popper-class="color-block" class="color-inp" @change="colorChange(dialogData[cx.dm],0)">
+                  <el-option
+                    v-for="(item,its) in colorArr"
+                    :key="its"
+                    :label="item"
+                    :value="item">
+                    <span style="width:20px;height:20px;display: inline-block;" :style="{backgroundColor:item}"></span>
+                  </el-option>
+                </el-select> -->
               </template>
               <template v-if="cx.type=='inpUnit'">
                 <el-row type="flex" justify="start">
@@ -194,7 +206,7 @@
             <el-row type="flex">
               <el-col :span="18">
                   <el-form-item v-for="(item,ind) in ColorLabel" :key="ind" :label="item.cm" :prop="'data.'+alls+'.'+item.dm" 
-                  :rules="{required: true, message: '此项必填', trigger: 'blur'}">
+                  :rules="{required: true, message: '此项必填', trigger: 'blur'}" :class="item.class">
                     <template v-if="item.type=='inpUnit'">
                       <el-row type="flex" justify="start">
                         <el-input v-model="all[item.dm]" :type="item.mold?item.mold:''"></el-input>
@@ -205,7 +217,8 @@
                       <el-input v-model="all[item.dm]" :type="item.mold?item.mold:''"></el-input>
                     </template>
                     <template v-if="item.type=='block'">
-                      <el-select v-model="all[item.dm]" placeholder="请选择" popper-class="color-block" class="color-inp" @change="colorChange(all[item.dm],alls)">
+                      <colorPicker v-model="all[item.dm]"/>
+                      <!-- <el-select v-model="all[item.dm]" placeholder="请选择" popper-class="color-block" class="color-inp" @change="colorChange(all[item.dm],alls)">
                         <el-option
                           v-for="(item,its) in colorArr"
                           :key="its"
@@ -213,7 +226,7 @@
                           :value="item">
                           <span style="width:20px;height:20px;display: inline-block;" :style="{backgroundColor:item}"></span>
                         </el-option>
-                      </el-select>
+                      </el-select> -->
                     </template>
                   </el-form-item>
                 </el-col>
@@ -370,7 +383,7 @@ export default {
         dwjb: [{ required: true, message: "此项必填", trigger: "blur" }],
         czpzlx: [{ required: true, message: "此项必填", trigger: "blur" }],
         gdsj: [{ required: true, message: "此项必填", trigger: "blur" }],
-        gdyssh: [{ required: true, message: "此项必填", trigger: "blur" }],
+        gdyssh: [{ required: true, message: "请选择颜色", trigger: "blur" }],
       },
       isXJ: false,
       newForm: {},
@@ -402,7 +415,8 @@ export default {
           {
             cm:'规定颜色',
             dm:'gdyssh',
-            type:'block'
+            type:'block',
+            class:'m-color'
           }
       ],
       colorArr:['#67C23A','#E6A23C','#F56C6C','#409EFF','#909399']
@@ -419,8 +433,7 @@ export default {
     },
   },
   mounted() {
-    // this.form = this.dialogData;
-    if(this.ZDYShow){
+    if(this.ZDYShow){//新增 颜色清空
       this.ColorData={
         data:[
           {
@@ -430,8 +443,11 @@ export default {
           },
         ],
       }
-      document.getElementsByClassName('color-inp')[0].getElementsByClassName('el-input__inner')[0].style.backgroundColor=''
+      // document.getElementsByClassName('color-inp')[0].getElementsByClassName('el-input__inner')[0].style.backgroundColor=''
     }
+    // if(this.dialogType == 'edit'){
+    //   document.getElementsByClassName('color-inp')[0].getElementsByClassName('el-input__inner')[0].style.backgroundColor=this.dialogData.gdyssh
+    // }
   },
   methods: {
     save(formName, type) {
@@ -479,12 +495,12 @@ export default {
       this.ColorData.data.splice(ind,1)
     },
     colorChange(color,ind){
+      console.log('====',color)
       if(color){
         document.getElementsByClassName('color-inp')[ind].getElementsByClassName('el-input__inner')[0].style.backgroundColor=color
       }else{
         document.getElementsByClassName('color-inp')[ind].getElementsByClassName('el-input__inner')[0].style.backgroundColor=''
       }
-      
     },
     dbBtnFun(val) {
       this.$emit("dbFnc", val);

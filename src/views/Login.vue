@@ -25,14 +25,15 @@
     </div>
     <div class="login_main">
       <img src="../assets/images/login/pro_tip.png" alt />
-      <img class="mt-30" src="../assets/images/login/login_tip.png" @click="loginPassword" alt />
+      <img class="mt-30" src="../assets/images/login/login_tip_1.png" @click="loginPassword" alt />
       <img
         class="mt-50"
         src="../assets/images/login/login_btn.png"
         @click="login"
         alt
-        v-if="!isLogin"
+        v-show="!isLogin"
       />
+
       <div class="login-box" v-if="isLogin">
         <div class="logintitle" style="color:#fff">用户登录</div>
         <div class="login-item yzform">
@@ -60,6 +61,10 @@
         </div>
       </div>
     </div>
+    <div class="login-bottom">
+      <div class="copyright">© 版权所有：苏州市公安局</div>
+      <!-- <div class="copyright">安全备案号：苏050200000003</div> -->
+    </div>
   </div>
 </template>
 <script>
@@ -69,49 +74,68 @@ export default {
       clickFive: 0,
       user: {},
       userIt:{},
-      isLogin: false
+      isLogin: false,
+      turnPage:'',
+      sfzh:this.$store.state.sfzhTurn,
+      loginFlag:false,
     };
   },
   mounted() {
     // 由其他平台登入
     // console.log('由其他平台登入',window.location.href,window.location.href.includes("sfzh"),this.getItsUrl(window.location.href,'sfzh'))
     if(window.location.href.includes("sfzh")){
-      let sfzh = this.getItsUrl(window.location.href,"sfzh");
-      if(sfzh){
+      console.log('this.$store.sfzh前',this.$store.state.sfzhTurn)
+      this.sfzh = this.getItsUrl(window.location.href,"sfzh");
+      this.turnPage = this.getItsUrl(window.location.href,"page");
+      this.$store.dispatch("aGetPage",this.turnPage)//存入跳转页面page
+      console.log('this.turnPage',this.turnPage)
+      this.$store.dispatch("aGetItS",true)//是否隐藏菜单标志
+      if(this.sfzh != this.$store.state.sfzhTurn){ //身份证号是否变更
+        console.log('身份证号已变更',this.sfzh)
         this.userIt.type = '0'
-        this.userIt.name = sfzh
+        this.userIt.name = this.sfzh
         this.$api.post(this.$api.aport1 + "/accountLogin", this.userIt, r => {
           if (r.authorization) {
             this.$store.dispatch("aGetToken", r.authorization).then(data => {
               console.log("第三方登陆成功", data);
               this.getUser();
             });
-            this.$store.dispatch("aGetItS",true)
+            this.$store.dispatch("aGetSfzhT",this.sfzh)//存入身份证号
+            console.log('this.$store.sfzh后',this.$store.state.sfzhTurn)
           }
         });
+      }else{
+        console.log('身份证号未变更')
+        this.getUser();
       }
     }
+    console.log('====',window.location.href)
     if (window.location.href.includes("authorization")) {
-      let token = this.getUrlParam("authorization");
-      // if (token == 1) {
-      //   let url = this.$store.state.aurl;
-      //   window.location.href = url.replace(/login\?/, "logout?");
-      // } else
-      if (token) {
-        this.$store.dispatch("aGetToken", token).then(() => {
-          // this.$router.push({ name: "Frame" });
-          this.getUser();
-        });
-      }
-      // else {
-      //   this.$message({
-      //     message: "登录失败！请重新登录",
-      //     type: "warning"
-      //   });
-      // }
-    } else if (this.$store.state.token) {
-      this.getUser();
-    }
+      if(this.$store.state.token){
+        this.getUser();
+      }else{
+        let token = this.getUrlParam("authorization");
+        // if (token == 1) {
+        //   let url = this.$store.state.aurl;
+        //   window.location.href = url.replace(/login\?/, "logout?");
+        // } else
+        if (token) {
+          this.$store.dispatch("aGetToken", token).then(() => {
+            // this.$router.push({ name: "Frame" });
+            this.getUser();
+          });
+        }
+        // else {
+        //   this.$message({
+        //     message: "登录失败！请重新登录",
+        //     type: "warning"
+        //   });
+        // }
+        }
+    } 
+    // else if (this.$store.state.token) {
+    //   this.getUser();
+    // }
   },
   methods: {
     //证书登陆
@@ -194,12 +218,8 @@ export default {
     getUser() {
       this.$api.post(this.$api.aport1 + "/userController/getUser", {}, r => {
         this.$store.dispatch("aGetUser", r).then(data => {
-          console.log("获取用户信息成功", data);
-          if(this.$store.state.itstate){
-            this.$router.push({ name: "Specialcheck" });
-          }else{
-            this.getNav(data);
-          }
+          console.log("获取用户信息成功", data);     
+          this.getNav(data); 
         });
       });
     },
@@ -213,7 +233,6 @@ export default {
         r => {
           this.$store.dispatch("aGetMenu", r[0].childrenMenu).then(data2 => {
             console.log("获取菜单成功", data2);
-
             if (data2.length == 0) {
               this.$confirm(" 没有功能权限，请联系管理员", "提示", {
                 confirmButtonText: "确定",
@@ -221,7 +240,7 @@ export default {
                 type: "warning"
               }).then(() => {});
             } else {
-              this.$router.push({ name: "Frame" });
+              this.$router.push({ name: "Frame" }); //page:由第三方介入页面跳转
               this.isLogin = false;
             }
           });

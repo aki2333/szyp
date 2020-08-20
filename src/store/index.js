@@ -7,6 +7,7 @@ let breadData = JSON.parse(sessionStorage.getItem('bread'))
 let user = JSON.parse(sessionStorage.getItem('user'))
 let menu = JSON.parse(sessionStorage.getItem('menu'))
 let token = sessionStorage.getItem('token')
+let sfzhTurn = sessionStorage.getItem('sfzhTurn')
 let aurl = sessionStorage.getItem('aurl')
 let itstate = sessionStorage.getItem('itstate')
 
@@ -15,7 +16,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     token: token || '',
+    turnPage:'',
     itstate:itstate||false,
+    sfzhTurn:sfzhTurn||'',
     user: user || {},
     menu: menu || [],
     leftMenu: [],
@@ -96,6 +99,10 @@ export default new Vuex.Store({
       state.token = data;
       window.sessionStorage.setItem("token", data)
     },
+    getSfzhT(state, data) {
+      state.sfzhTurn = data;
+      window.sessionStorage.setItem("sfzhTurn", data)
+    },
     getUrl(state, data) {
       state.aurl = data;
       window.sessionStorage.setItem("aurl", data)
@@ -103,6 +110,9 @@ export default new Vuex.Store({
     getItS(state,data){
       state.itstate = data;
       window.sessionStorage.setItem("itstate", data)
+    },
+    getPage(state,data){
+      state.turnPage = data;
     },
     getNation(state, data) {
       state.nationality = data;
@@ -210,6 +220,12 @@ export default new Vuex.Store({
         resolve(payload)
       })
     },
+    aGetSfzhT(context, payload) {
+      return new Promise((resolve) => {
+        context.commit('getSfzhT', payload)
+        resolve(payload)
+      })
+    },
     aGetUrl(context, payload) {
       return new Promise((resolve) => {
         context.commit('getUrl', payload)
@@ -220,6 +236,13 @@ export default new Vuex.Store({
     aGetItS(context, payload){
       return new Promise((resolve) => {
         context.commit('getItS', payload)
+        resolve(payload)
+      })
+    },
+    //由第三方登入标志
+    aGetPage(context, payload){
+      return new Promise((resolve) => {
+        context.commit('getPage', payload)
         resolve(payload)
       })
     },

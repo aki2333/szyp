@@ -1,21 +1,23 @@
 <template>
   <div>
-    <div id="frame" v-if="$store.state.itstate">
+    <!-- <div id="frame" v-if="$store.state.itstate">
+      <Header :headData="$store.state.menu" v-show="false"></Header>
       <el-container>
+        <Left :leftMenu="$store.state.leftMenu" v-show="false"></Left>
         <el-main class="main">
           <router-view />
         </el-main>
       </el-container>
-    </div>  
-    <div id="frame" v-else>
-      <Header :headData="$store.state.menu"></Header>
+    </div>   -->
+    <div id="frame">
+      <Header :headData="$store.state.menu" v-show="!$store.state.itstate"></Header>
       <el-container>
-        <Left :leftMenu="$store.state.leftMenu"></Left>
+        <Left :leftMenu="$store.state.leftMenu" v-show="!$store.state.itstate"></Left>
         <el-main class="main">
-          <Breadcrumb></Breadcrumb>
+          <Breadcrumb v-show="!$store.state.itstate"></Breadcrumb>
           <router-view />
         </el-main>
-        <Right></Right>
+        <Right v-show="!$store.state.itstate"></Right>
       </el-container>
     </div>
   </div>
@@ -38,11 +40,20 @@ export default {
   },
   data() {
     return {
-      headData: []
+      headData: [],
+      turnPage:'',
     };
   },
   mounted() {
-    console.log("store", this.$store.state);
+    // this.turnPage = this.$route.query.page
+    // if(this.turnPage == 'Specialcheck'){
+    //   this.$router.push({ name: "Specialcheck" });
+    // }else if(this.turnPage == 'ZrqManagement'){
+    //   this.$router.push({ name: "ZrqManagement" });
+    // }else if(this.turnPage == 'ZrqVistManage'){
+    //   this.$router.push({ name: "ZrqVistManage" });
+    // }
+    console.log("store", this.$store.state,this.turnPage);
   },
   methods: {}
 };

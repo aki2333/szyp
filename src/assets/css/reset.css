@@ -120,6 +120,12 @@ th {
 .el-input.is-disabled .el-input__inner {
   color: #8a8a8a!important;
 }
+.el-radio__input.is-disabled+span.el-radio__label{
+  color: #8a8a8a!important;
+}
+.el-checkbox__input.is-disabled+span.el-checkbox__label{
+  color: #8a8a8a!important;
+}
 .el-form-item--mini .el-form-item__content, .el-form-item--mini .el-form-item__label {
   line-height: 26px!important;
 }

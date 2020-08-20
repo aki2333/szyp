@@ -551,7 +551,8 @@ const zrqzf = {
         {
             cm: '备注',
             type: 'input',
-            dm: 'remarks'
+            dm: 'remarks',
+            max:160,
         },
         {
             title:'数据归属',
@@ -990,6 +991,7 @@ const zxhcgl = {
             type: 'input',
             dm: 'remarks',
             dis:true,
+            max:160,
             col:8
         },   
     ]  
@@ -1377,6 +1379,7 @@ const offgl = {
             type: 'input',
             dm: 'remarks',
             dis:true,
+            max:160,
             col:8
         },       
     ]  
@@ -1784,6 +1787,7 @@ const jzzdhc = {
             type: 'input',
             dm: 'remarks',
             dis:true,
+            max:160,
             col:8
         },     
     ]  
@@ -1958,6 +1962,7 @@ function editShow(jb,isE) {
                 cm: '备注',
                 type: 'joinInput',
                 dm: 'remarks',
+                max:160,
                 dis:isE == '0'?true : false
             },
             {
@@ -2214,7 +2219,8 @@ function handShow(jb) {
             {
                 cm: '备注',
                 type: 'input',
-                dm: 'remarks'
+                dm: 'remarks',
+                max:160,
             },
             {
                 title:'数据归属',
@@ -2379,6 +2385,7 @@ function handCL(){
                 type: 'input',
                 dm: 'remarks',
                 dis:true,
+                max:160,
                 col:8
             },
             // {
@@ -2510,6 +2517,7 @@ function offhandCL(){
                 type: 'input',
                 dm: 'remarks',
                 dis:true,
+                max:160,
                 col:8
             },
             // {
@@ -2647,6 +2655,7 @@ function jzzdhandCL(){
                 type: 'input',
                 dm: 'remarks',
                 dis:true,
+                max:160,
                 col:8
             },
             // {

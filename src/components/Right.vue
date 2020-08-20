@@ -24,7 +24,7 @@
     </div>
     <img
       class="right-open"
-      :src="righttWidth=='28px'?require('@/assets/images/main/right_open.png'):require('@/assets/images/main/right_close.png')"
+      :src="righttWidth=='36px'?require('@/assets/images/main/right_open.png'):require('@/assets/images/main/right_close.png')"
       @click="openRight"
     />
   </el-aside>

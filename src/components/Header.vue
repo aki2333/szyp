@@ -69,7 +69,7 @@ export default {
       this.$store.state.menu = [];
       this.$store.state.token = "";
       this.$store.state.leftMenu = [];
-
+      this.$store.state.itstate = false;
       if (url) {
         window.location.href = url.replace(/login\?/, "logout?");
       } else {

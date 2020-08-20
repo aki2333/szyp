@@ -105,7 +105,7 @@ const sjkz = {
       },
       {
         cm: '规定颜色',
-        type: 'inpColor',
+        type: 'block',
         dm: 'gdyssh',
       },
   ]

@@ -68,42 +68,57 @@ const routes = [
       {
         path: '/Specialcheck',
         name: 'Specialcheck',
-        component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/Specialcheck.vue')
+        component: () => import(/* webpackChunkName: "Businessmanagement" */ '../views/Businessmanagement/Overseasperson/Specialcheck.vue')
       },
       {
         path: '/Temporary',
         name: 'Temporary',
-        component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/Temporary.vue')
+        component: () => import(/* webpackChunkName: "Businessmanagement" */ '../views/Businessmanagement/Overseasperson/Temporary.vue')
       },
       {
         path: '/ZrqVistManage',
         name: 'ZrqVistManage',
-        component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/ZrqVistManage.vue')
+        component: () => import(/* webpackChunkName: "Businessmanagement" */ '../views/Businessmanagement/Overseasperson/ZrqVistManage.vue')
       },
       {
         path: '/ResidentAnalyze',
         name: 'ResidentAnalyze',
-        component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/ResidentAnalyze.vue')
+        component: () => import(/* webpackChunkName: "Businessmanagement" */ '../views/Businessmanagement/Overseasperson/ResidentAnalyze.vue')
       },
       {
         path: '/CheckZXHC',
         name: 'CheckZXHC',
-        component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/CheckZXHC.vue')
+        component: () => import(/* webpackChunkName: "Businessmanagement" */ '../views/Businessmanagement/Overseasperson/CheckZXHC.vue')
       },
       {
         path: '/CzInformationDefend',
         name: 'CzInformationDefend',
-        component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/CzInformationDefend.vue')
+        component: () => import(/* webpackChunkName: "Businessmanagement" */ '../views/Businessmanagement/Overseasperson/CzInformationDefend.vue')
       },
       {
         path: '/Check144',
         name: 'Check144',
-        component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/Check144.vue')
+        component: () => import(/* webpackChunkName: "Businessmanagement" */ '../views/Businessmanagement/Overseasperson/Check144.vue')
       },
       {
         path: '/CheckReporter',
         name: 'CheckReporter',
-        component: () => import(/* webpackChunkName: "Overseasperson" */ '../views/Businessmanagement/Overseasperson/CheckReporter.vue')
+        component: () => import(/* webpackChunkName: "Businessmanagement" */ '../views/Businessmanagement/Overseasperson/CheckReporter.vue')
+      },
+      /**
+       * 分析研判CzChangingTrend
+       */
+      //分析研判
+      {
+        path: '/CzChangingTrend',
+        name: 'CzChangingTrend',
+        component: () => import(/* webpackChunkName: "AnalysisAndJudgment" */ '../views/AnalysisAndJudgment/AAJudge/CzChangingTrend.vue')
+      },
+      //智能搜索
+      {
+        path: '/RYHX',
+        name: 'RYHX',
+        component: () => import(/* webpackChunkName: "AnalysisAndJudgment" */ '../views/AnalysisAndJudgment/IntelligentSearch/RYHX.vue')
       },
     ]
   },

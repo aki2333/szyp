@@ -43,7 +43,7 @@
     </div>
     <Dialog :width="'700px'" :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
       <Form
-        :key="timer"
+        :key="new Date().getTime()"
         :cxData="labelData"
         :dialogType="dialogType"
         :dialogData="dialogData"
@@ -179,7 +179,7 @@ export default {
       this.dialogType = data.py;
       if(data.py == 'xz'){
         this.dialogData = {};
-        this.timer = new Date().getTime()
+        // this.timer = new Date().getTime()
         this.labelData = this.$cdata.pzgl.sjkz.xzLabel
         this.isShowDialog = true;
       }

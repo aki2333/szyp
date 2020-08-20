@@ -9,6 +9,7 @@ import http from './request/api.js'
 import fnc from './base/fnc.js'
 import cdata from './base/cdata.js'
 import echarts from "echarts";
+import vcolorpicker from 'vcolorpicker'
 
 Vue.config.productionTip = false
 document.title = "苏州市公安局·涉外综合分析研判系统"
@@ -17,6 +18,7 @@ Vue.prototype.$http = http
 Vue.prototype.$fnc = fnc
 Vue.prototype.$cdata = cdata
 Vue.prototype.$echarts = echarts;
+Vue.use(vcolorpicker)
 var bv = fnc.getBroswerAndVersion()
 console.log("navigator", fnc.getBroswerAndVersion(), fnc.getBroswerAndVersion().indexOf('Chrome'), bv.substring(6))
 // if (bv.indexOf('Chrome') < 0) {

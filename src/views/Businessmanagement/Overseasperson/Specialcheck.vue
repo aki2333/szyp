@@ -181,6 +181,8 @@ export default {
       //时间轴
       timeData:{},
       jbData:[],
+
+      userIt:{}
     };
   },
   watch: {
@@ -206,6 +208,25 @@ export default {
     }
   },
   mounted() {
+      // 由其他平台登入
+      // console.log('由其他平台登入',window.location.href,window.location.href.includes("sfzh"),this.getItsUrl(window.location.href,'sfzh'))
+      // if(window.location.href.includes("sfzh")){
+      //   let sfzh = this.getItsUrl(window.location.href,"sfzh");
+      //   // let sfzh = 'ceshi'
+      //   if(sfzh){
+      //     this.userIt.type = '0'
+      //     this.userIt.name = sfzh
+      //     this.$api.post(this.$api.aport1 + "/accountLogin", this.userIt, r => {
+      //       if (r.authorization) {
+      //         this.$store.dispatch("aGetToken", r.authorization).then(data => {
+      //           console.log("第三方登陆成功", data);
+      //           this.getUser();
+      //         });
+      //         this.$store.dispatch("aGetItS",true)
+      //       }
+      //     });
+      //   }
+      // }
       this.$store.dispatch("aGetNation");
       this.$store.dispatch("aGetGender");
       this.$store.dispatch("aGetPassport");
@@ -223,6 +244,26 @@ export default {
       });
   },
   methods: {
+    getUser() {//由其他平台登入
+      this.$api.post(this.$api.aport1 + "/userController/getUser", {}, r => {
+        this.$store.dispatch("aGetUser", r).then(data => {
+          console.log("获取用户信息成功", data);
+          this.$router.push({ name: "Specialcheck" });
+          this.isLogin = false;
+        });
+      });
+    },
+    getItsUrl(url,name){
+      //取得url中?后面的字符
+      // console.log('==',url,url.split("?")[1].split("&"))
+      var query = url.split("?")[1];
+      var pair = query.split("&");
+      for(var i=0;i<pair.length;i++){
+        if(pair[i].split('=')[0] == name){
+          return pair[i].split('=')[1]
+        }
+      }
+    },
     getSpInit(){
       this.$cdata.qxgl.getSjBm(this.$store.state.user.bmbh).then(data => {
         this.$store.dispatch("aGetssdw", {
@@ -518,7 +559,7 @@ export default {
               showClose: true,
               type: "success"
             });
-            this.getTable();
+            this.queryShowFnc(this.cxShow);
             this.selection = [];
           }
         );
@@ -735,7 +776,7 @@ export default {
               showClose: true,
               type: "success"
             });
-            this.getTable();
+            this.queryShowFnc(this.cxShow);
           })
         }).catch(()=>{
           this.$message({
@@ -873,7 +914,7 @@ export default {
                 showClose: true,
                 type: "success"
               });
-              this.getTable();
+              this.queryShowFnc(this.cxShow);
               this.isShowDialog = false;
               this.innerVisible = false;
               this.selection = [];
@@ -895,7 +936,7 @@ export default {
           type: "success"
         });
         this.isShowDialog = false;
-        this.getTable();
+        this.queryShowFnc(this.cxShow);
         })
       }
     },
@@ -952,7 +993,7 @@ export default {
             showClose: true,
             type: "success"
           });
-          this.getTable();
+          this.queryShowFnc(this.cxShow);
           this.isShowDialog = false;
           this.innerVisible = false;
           this.selection = [];
@@ -986,7 +1027,7 @@ export default {
           showClose: true,
           type: "success"
         });
-        this.getTable();
+        this.queryShowFnc(this.cxShow);
         this.isShowDialog = false;
         this.innerVisible = false;
         this.selection = [];
@@ -1010,7 +1051,7 @@ export default {
           showClose: true,
           type: "success"
         });
-        this.getTable();
+        this.queryShowFnc(this.cxShow);
         this.isShowDialog = false;
         this.selection = [];
       });

@@ -70,21 +70,42 @@ export default {
     },
     toChildren(item, index) {
       this.active1 = index;
-      console.log(2, item);
+      console.log(2, item,this.$store.state.turnPage);
       this.chilrenNav = item.childrenMenu;
       this.bread = [];
       this.bread.push(item);
-      this.toPage(this.chilrenNav[0], 0);
+      if(this.$store.state.turnPage){//由第三方进入系统 跳转页面
+        var result = this.chilrenNav.some((item,ind)=>{
+          if(item.menu_url==this.$store.state.turnPage){
+              this.toPage(item, ind);
+              return true
+          } 
+        })
+        if(!result){
+          this.$alert(" 没有此功能权限，请联系管理员", "提示", {
+            confirmButtonText: "确定",
+            type: "warning"
+          })
+        }
+        // for(var i=0;i<this.chilrenNav.length;i++){
+        //   if(this.chilrenNav[i].menu_url == this.$store.state.turnPage){
+        //     this.toPage(this.chilrenNav[i], i);
+        //   }
+        // }
+      }else{
+        this.toPage(this.chilrenNav[0], 0);
+      }
     },
     toPage(item, index) {
       if (item.menu_url.indexOf("http") > -1) {
         window.open(item.menu_url, "_blank");
-      } else {
+      }else {
         console.log(3, item);
         this.active2 = index;
         this.bread[1] = item;
         console.log("this.bread", this.bread);
         this.$store.dispatch("aGetBread", this.bread);
+        console.log("this.childrenMenu", item.childrenMenu);
         if (item.childrenMenu) {
           this.$store.dispatch("aGetPlBtn", item.childrenMenu).then(() => {
             this.$router.push({ name: item.menu_url });

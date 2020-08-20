@@ -20,9 +20,11 @@
 .ml-5 {
     margin-left: 5px!important;
 }
-.ml-10{
+
+.ml-10 {
     margin-left: 10px!important;
 }
+
 .mr-5 {
     margin-right: 5px!important;
 }
@@ -46,9 +48,11 @@
 .mb-10 {
     margin-bottom: 10px;
 }
-.mb-5{
+
+.mb-5 {
     margin-bottom: 5px;
 }
+
 .mb-12 {
     margin-bottom: 12px;
 }
@@ -75,12 +79,18 @@
     margin-left: -33px;
 }
 
+.pr-15 {
+    padding-right: 15px!important;
+}
+
 .no-padding {
     padding: 0!important;
 }
-.pl-5{
+
+.pl-5 {
     padding-left: 5px;
 }
+
 .red {
     color: red;
 }
@@ -111,10 +121,12 @@
 }
 
 /* 元素样式 */
-.dia-tab-box{
+
+.dia-tab-box {
     border-bottom: 1px solid #e2e7ed;
     padding-bottom: 10px;
 }
+
 .dia-tab-box span {
     font-size: 12px;
     color: #9ea5bf;
@@ -132,6 +144,11 @@
 .page {
     min-height: 96%;
     background-color: #ffffff;
+    border-radius: 0 0 20px 20px;
+}
+
+.no-color-page {
+    min-height: 96%;
     border-radius: 0 0 20px 20px;
 }
 
@@ -284,28 +301,35 @@
 .imgbox .el-carousel__arrow:hover {
     background-color: rgba(31, 45, 61, .73);
 }
-.chart-title{
+
+.chart-title {
     text-align: center;
     font-weight: bold;
 }
-.quire-check{
+
+.quire-check {
     margin-left: 20px;
 }
-.quire-check .el-checkbox__label{
+
+.quire-check .el-checkbox__label {
     font-weight: bold;
     font-size: 12px!important;
     color: #000;
 }
-.cusArr-form{
+
+.cusArr-form {
     border-bottom: 1px solid #eee;
 }
-.chart-select.el-select{
+
+.chart-select.el-select {
     width: 150px!important;
 }
-.chart-outer{
+
+.chart-outer {
     position: relative;
 }
-.chart-outer-label{
+
+.chart-outer-label {
     position: absolute;
     font-size: 12px;
     color: #919294;
@@ -313,4 +337,141 @@
     left: 20px;
     background: #fff;
     z-index: 1;
+}
+
+.chart-box {
+    display: flex;
+    justify-content: space-evenly;
+    border: 1px solid transparent;
+}
+
+.chart-tip {
+    text-align: center;
+    color: #919294;
+    font-size: 12px;
+}
+
+.trend-title {
+    color: #458CE0;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.trend-radio {
+    padding: 20px 20px 20px 50px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.trend-radio .el-radio {
+    margin-top: 8px;
+}
+
+.trend-page-btn-box {
+    display: flex;
+    justify-content: center;
+}
+.search-head{
+    width: 60%;
+    margin: 0 auto;
+}
+.search-legend ul,.search-legend li{
+    display: flex;
+}
+.search-legend .legend-data{
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 14px;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+.input-with-search .el-input__inner{
+    border-radius: 0 0 0 5px!important;
+    border: 1px #2A61AA solid!important;
+    background-color: #203D69;
+    height: 55px;
+    line-height: 55px;
+}
+.input-with-search .el-input-group__append{
+    background-color: #0688E0;
+    border: 1px solid #0688E0;
+    border-radius: 0 5px 5px 0;
+}
+.input-with-search .el-input-group__append .el-icon-search{
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+}
+.ak-tabs {
+    display: flex;
+}
+
+.ak-tab-item {
+    background: #19325B;
+    color: #838D9F;
+    font-size: 14px;
+    margin-right: 6px;
+    border-radius: 6px 6px 0 0;
+    padding: 0 16px;
+    line-height: 30px!important;
+}
+
+.ak-tab-item:hover {
+    background: #203D69;
+}
+
+.ak-checked {
+    background: #203D69;
+    color: #fff;
+    border: 1px #2A61AA solid;
+    border-bottom: 1px solid #203D69;
+    margin-bottom: -1px;
+    z-index: 1;
+}
+
+.ak-tab-pane {
+    border: 1px #dddddd solid;
+    padding: 12px;
+    border-radius: 0 3px 3px 3px;
+}
+
+.m-colorPicker .box {
+    width: 215px!important;
+}
+
+.m-colorPicker .colorBtn {
+    width: 20px!important;
+    height: 20px!important;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.m-color .el-form-item__error {
+    right: 121px!important;
+}
+
+.m-colorPicker .box.open {
+    z-index: 1;
+}
+.copyright{
+    color: #ccc;
+    text-align: center;
+    font-size: 12px;
+}
+.login-bottom{
+    /* position: relative;
+    bottom: -200px; */
+    /* left: 45%; */
+    /* margin-top: 200px; */
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    width: 200px;
+    height: 90px;
+    margin-left:auto;
+    margin-right:auto;
 }

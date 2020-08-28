@@ -19,6 +19,7 @@ export default new Vuex.Store({
     turnPage:'',
     itstate:itstate||false,
     sfzhTurn:sfzhTurn||'',
+    menuTo:{},
     user: user || {},
     menu: menu || [],
     leftMenu: [],
@@ -83,6 +84,9 @@ export default new Vuex.Store({
     },
     getLeftMenu(state, data) {
       state.leftMenu = data;
+    },
+    getMenuTo(state,data){
+      state.menuTo = data;
     },
     getChilrenNav(state, data) {
       state.chilrenNav = data;

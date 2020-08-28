@@ -52,15 +52,39 @@ export default {
   created() {
     this.getNav();
   },
+  watch:{
+    $route:{
+      handler(val){
+        if(val.query.turn){
+          for(var k=0;k<this.$store.state.menu.length;k++){
+            for(var i=0;i<this.$store.state.menu[k].childrenMenu.length;i++){
+              for(var j=0;j<this.$store.state.menu[k].childrenMenu[i].childrenMenu.length;j++){
+                if(this.$store.state.menu[k].childrenMenu[i].childrenMenu[j].menu_url == val.query.turn){
+                  // this.active2 = j;
+                  // this.active1 = i;
+                  this.active = k;
+                  this.toLeftMenu(this.$store.state.menu[k],k,i,j);
+                  console.log('header',this.$store.state.menu[k],k,i,j)
+                }
+              }
+            }
+          }
+        }
+      },
+      deep:true,
+      immediate: true
+    }
+  },
   methods: {
     getNav() {
       console.log(this.$store.state.menu, this.$store.state.menu[0], 0);
       this.toLeftMenu(this.$store.state.menu[0], 0);
     },
-    toLeftMenu(item, index) {
+    toLeftMenu(item, index ,active1,active2) {
       console.log(1, item);
       this.active = index;
       this.$store.commit("getLeftMenu", item.childrenMenu);
+      this.$store.commit("getMenuTo",{active1:active1,active2:active2})
     },
     logout() {
       let url = this.$store.state.aurl;
@@ -93,9 +117,9 @@ export default {
 }
 .head-logo {
   margin-left: 14px;
-  width: 450px;
+  width: 516px;
   height: 46px;
-  background: url(../assets/images/main/title.png);
+  background: url(../assets/images/main/title_1.png);
 }
 .head-nav {
   /* width: 905px; */

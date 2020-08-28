@@ -120,6 +120,11 @@ const routes = [
         name: 'RYHX',
         component: () => import(/* webpackChunkName: "AnalysisAndJudgment" */ '../views/AnalysisAndJudgment/IntelligentSearch/RYHX.vue')
       },
+      {
+        path: '/RYHXXQ',
+        name: 'RYHXXQ',
+        component: () => import(/* webpackChunkName: "AnalysisAndJudgment" */ '../views/AnalysisAndJudgment/IntelligentSearch/RYHXXQ.vue')
+      },
     ]
   },
   {
@@ -135,7 +140,6 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-
   let islogin = store.state.token;
   if (to.name === 'Login'
     || to.name === 'OtherPage') {
@@ -144,7 +148,35 @@ router.beforeEach((to, from, next) => {
     return //以下的代码不执行
   }
   if (islogin) {
-    next()
+    // console.log('to==',to,'from',from)
+    if(window.location.href.includes("sfzh")){
+      var query = window.location.href.split("?")[1].split("&");
+      let sfzh = ''
+      for (var i = 0; i < query.length; i++) {
+        if (query[i].split("=")[0] == 'sfzh') {
+          sfzh = query[i].split("=")[1];
+        }
+      }
+      // console.log('to==shzh',sfzh,store.state.sfzhTurn)
+      if(sfzh == store.state.sfzhTurn){
+        if(to.path==='/Frame'&&to.query.page=='Specialcheck'){
+          store.dispatch("aGetPage", 'Specialcheck'); //存入跳转页面page
+          next({ name: 'Specialcheck', query: to.query })
+        }else if(to.path==='/Frame'&&to.query.page=='ZrqManagement'){
+          store.dispatch("aGetPage", 'ZrqManagement'); //存入跳转页面page
+          next({ name: 'ZrqManagement', query: to.query })
+        }else if(to.path==='/Frame'&&to.query.page=='ZrqVistManage'){
+          store.dispatch("aGetPage", 'ZrqVistManage'); //存入跳转页面page
+          next({ name: 'ZrqVistManage', query: to.query })
+        }else{
+          next()
+        }
+      }else{
+        next({ name: 'Login', query: to.query })
+      }
+    }else{
+      next()
+    }
   } else {
     next({ name: 'Login', query: to.query })
   }

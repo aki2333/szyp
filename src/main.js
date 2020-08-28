@@ -20,7 +20,8 @@ Vue.prototype.$cdata = cdata
 Vue.prototype.$echarts = echarts;
 Vue.use(vcolorpicker)
 var bv = fnc.getBroswerAndVersion()
-console.log("navigator", fnc.getBroswerAndVersion(), fnc.getBroswerAndVersion().indexOf('Chrome'), bv.substring(6))
+console.log(bv)
+// console.log("navigator", fnc.getBroswerAndVersion(), fnc.getBroswerAndVersion().indexOf('Chrome'), bv.substring(6))
 // if (bv.indexOf('Chrome') < 0) {
 //   window.location.href = "#/OtherPage"
 // }

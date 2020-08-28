@@ -3,6 +3,7 @@ import zxhc from './modules/zxhc.js'
 import lzsb from './modules/lzsb.js'
 import pzgl from './modules/pzgl.js'
 import czxx from './modules/czxx.js'
+import ryhx from './modules/ryhx.js'
 import api from '@/api/index.js'
 import store from '@/store'
 
@@ -350,6 +351,7 @@ export default {
     lzsb,
     pzgl,
     czxx,
+    ryhx,
     api,
     store,
     tabImg_1,

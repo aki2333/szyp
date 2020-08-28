@@ -25,7 +25,10 @@ h6 {
   margin: 0;
   padding: 0;
 }
-
+html,body,#app{
+  height: 100%;
+  overflow: auto;
+}
 h1,
 h2,
 h3,
@@ -185,12 +188,19 @@ th {
 .el-table--small td, .el-table--small th{
   padding: 6px 0!important;
 }
+.ryhx-table .el-table--small td, .el-table--small th{
+  padding: 3px 0!important;
+}
 .el-table th>.cell{
   padding-left: 5px!important;
 }
 .el-table th{
   background-color: #85bcfc!important;
   color: #ffffff!important;
+}
+.ryhx-table .el-table th{
+  background-color: #F5F9FC!important;
+  color: #696B6A!important;
 }
 .el-table .cell{
   width: 100%!important;
@@ -305,4 +315,14 @@ input[type="number"]{
 .color-block .el-select-dropdown__item{
   padding: 0 9px;
   text-overflow: unset;
+}
+.right-one-data .el-badge__content.is-fixed{
+  right: 2px;
+}
+.right-one-data .el-badge__content{
+  border: none;
+}
+.badge-sum .el-badge__content{
+  border: 1px solid #F56C6C;
+
 }

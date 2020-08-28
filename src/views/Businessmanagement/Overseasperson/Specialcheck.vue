@@ -41,6 +41,7 @@
         :czWidth="'100'"
         :clearSort="clearSort"
         :expData="cx"
+        :key="timer"
         :expUrl="$api.aport2+'/issueData/exportIssueData'"
         @plFnc="plFnc"
         @pageSizeFnc="pageSizeFnc"
@@ -182,10 +183,39 @@ export default {
       timeData:{},
       jbData:[],
 
-      userIt:{}
+      userIt:{},
+      timer:'',
     };
   },
   watch: {
+    $route:{
+      handler(val){
+        console.log('val==',val,val.query.turn)
+        if(val.query.turn == 'Specialcheck'){
+          console.log('val.query.page==',val.query.page)
+          this.plBtn = this.$store.state.plBtn;
+          if(val.query.page == '1'){
+            this.plBtn = this.plBtn.filter(item => ['sb'].indexOf(item.py) == -1);
+            this.lbData = this.jbData.length==0?this.$cdata.zxhc.zxhc.lb:this.jbData;
+          }else if(val.query.page == '3'){
+            this.plBtn = this.plBtn.filter(item => ['sb','xf'].indexOf(item.py) == -1);
+            this.lbData = this.lbData.filter(item => ['datasources_desc'].indexOf(item.dm) == -1);
+          }else if(val.query.page == '2'){
+            this.plBtn = this.plBtn.filter(item => ['sb'].indexOf(item.py) == -1);
+            this.lbData = this.lbData.filter(item => ['datasources_desc'].indexOf(item.dm) == -1);
+          }
+          this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data => {
+            this.lbTab = data.lbTab;
+            this.page = val.query.page
+            this.cx.pageNum = 1;
+            this.selection = [];
+            this.queryShowFnc(this.cxShow);
+          });
+        }
+      },
+      deep:true,
+      immediate: true
+    },
     page(val) {
       if (this.clzt == 1) {
         //未处理
@@ -208,25 +238,6 @@ export default {
     }
   },
   mounted() {
-      // 由其他平台登入
-      // console.log('由其他平台登入',window.location.href,window.location.href.includes("sfzh"),this.getItsUrl(window.location.href,'sfzh'))
-      // if(window.location.href.includes("sfzh")){
-      //   let sfzh = this.getItsUrl(window.location.href,"sfzh");
-      //   // let sfzh = 'ceshi'
-      //   if(sfzh){
-      //     this.userIt.type = '0'
-      //     this.userIt.name = sfzh
-      //     this.$api.post(this.$api.aport1 + "/accountLogin", this.userIt, r => {
-      //       if (r.authorization) {
-      //         this.$store.dispatch("aGetToken", r.authorization).then(data => {
-      //           console.log("第三方登陆成功", data);
-      //           this.getUser();
-      //         });
-      //         this.$store.dispatch("aGetItS",true)
-      //       }
-      //     });
-      //   }
-      // }
       this.$store.dispatch("aGetNation");
       this.$store.dispatch("aGetGender");
       this.$store.dispatch("aGetPassport");
@@ -239,31 +250,15 @@ export default {
         this.$cdata.zxhc.lbTabShow(this.$store.state.user.jb).then(data => {
           this.lbTab = data.lbTab;
           this.page = this.lbTab[0].dm;
+          if(this.$route.query.page){
+            this.page = this.$route.query.page
+            this.timer = new Date().getTime()//路由切换时 page变，重新请求Table组件 使page渲染
+          }
           this.getTable();
         });
       });
   },
   methods: {
-    getUser() {//由其他平台登入
-      this.$api.post(this.$api.aport1 + "/userController/getUser", {}, r => {
-        this.$store.dispatch("aGetUser", r).then(data => {
-          console.log("获取用户信息成功", data);
-          this.$router.push({ name: "Specialcheck" });
-          this.isLogin = false;
-        });
-      });
-    },
-    getItsUrl(url,name){
-      //取得url中?后面的字符
-      // console.log('==',url,url.split("?")[1].split("&"))
-      var query = url.split("?")[1];
-      var pair = query.split("&");
-      for(var i=0;i<pair.length;i++){
-        if(pair[i].split('=')[0] == name){
-          return pair[i].split('=')[1]
-        }
-      }
-    },
     getSpInit(){
       this.$cdata.qxgl.getSjBm(this.$store.state.user.bmbh).then(data => {
         this.$store.dispatch("aGetssdw", {

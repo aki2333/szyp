@@ -1,6 +1,9 @@
 <template>
   <div id="app">
     <router-view v-if="isRouterAlive"/>
+    <el-backtop target="#app" :visibility-height="50">
+      <div class="backbtn el-icon-arrow-up"></div>
+    </el-backtop>
   </div>
 </template>
 <script>
@@ -30,4 +33,18 @@ export default {
 <style>
 @import 'assets/css/reset.css';
 @import 'assets/css/style.css';
+.backbtn{
+  height:100%!important;
+  width:100%!important;
+  background-color: #626262!important;
+  box-shadow: 0 0 6px rgba(0,0,0, .12)!important;
+  border-radius: 5px!important;
+  text-align: center!important;
+  line-height: 40px!important;
+  color: #fff!important;
+  font-size: 18px;
+}
+.el-backtop{
+  background-color: transparent!important;
+}
 </style>

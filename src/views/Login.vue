@@ -1,69 +1,71 @@
 <template>
-  <div class="login">
-    <div class="other-page">
-      <el-popover placement="bottom" width="300" trigger="hover">
-        <div class="other-dia">
-          <!-- <img src="@/assets/images/main/chrome.png" alt /> -->
-          <h3>推荐浏览器下载</h3>
-          <img src="@/assets/images/main/chrome.png" alt />
-          <a href="http://50.73.70.116:8080/83.0.4103.97_chrome_installerX32.exe">chrome 32位</a>
-          <a href="http://50.73.70.116:8080/83.0.4103.97_chrome_installer.exe">chrome 64位</a>
-        </div>
-        <span slot="reference" class="other-title hand">
-          <i class="el-icon-question mr-5"></i>帮助中心
-        </span>
-      </el-popover>
+  <div>
+    <div class="login" v-show="!$store.state.itstate">
+      <div class="other-page">
+        <el-popover placement="bottom" width="300" trigger="hover">
+          <div class="other-dia">
+            <!-- <img src="@/assets/images/main/chrome.png" alt /> -->
+            <h3>推荐浏览器下载</h3>
+            <img src="@/assets/images/main/chrome.png" alt />
+            <a href="http://50.73.70.116:8080/83.0.4103.97_chrome_installerX32.exe">chrome 32位</a>
+            <a href="http://50.73.70.116:8080/83.0.4103.97_chrome_installer.exe">chrome 64位</a>
+          </div>
+          <span slot="reference" class="other-title hand">
+            <i class="el-icon-question mr-5"></i>帮助中心
+          </span>
+        </el-popover>
 
-      <!-- <img src="@/assets/images/main/chrome.png" alt />
+        <!-- <img src="@/assets/images/main/chrome.png" alt />
         <a
         href="http://50.73.70.116:8080/83.0.4103.97_chrome_installerX32.exe"
       >32位</a>
 
       <a
         href="http://50.73.70.116:8080/83.0.4103.97_chrome_installer.exe"
-      >64位</a>-->
-    </div>
-    <div class="login_main">
-      <img src="../assets/images/login/pro_tip.png" alt />
-      <img class="mt-30" src="../assets/images/login/login_tip_1.png" @click="loginPassword" alt />
-      <img
-        class="mt-50"
-        src="../assets/images/login/login_btn.png"
-        @click="login"
-        alt
-        v-show="!isLogin"
-      />
+        >64位</a>-->
+      </div>
+      <div class="login_main">
+        <img src="../assets/images/login/pro_tip.png" alt />
+        <img class="mt-30" src="../assets/images/login/login_tip_1.png" @click="loginPassword" alt />
+        <img
+          class="mt-50"
+          src="../assets/images/login/login_btn.png"
+          @click="login"
+          alt
+          v-show="!isLogin"
+        />
 
-      <div class="login-box" v-if="isLogin">
-        <div class="logintitle" style="color:#fff">用户登录</div>
-        <div class="login-item yzform">
-          <el-input placeholder="用户名" v-model="user.name" @keyup.enter.native="keyLogin">
-            <i slot="prefix" class="el-input__icon"></i>
-          </el-input>
-        </div>
-        <div class="login-item yzform">
-          <el-input
-            placeholder="密码"
-            type="password"
-            v-model="user.password"
-            @keyup.enter.native="keyLogin"
-          >
-            <i slot="prefix" class="el-input__icon"></i>
-          </el-input>
-        </div>
-        <div class="foot-btn">
-          <button class="login-btn" @click="keyLogin">登录</button>
-          <button
-            class="login-btn"
-            @click="isLogin=false"
-            style="background: #99d8ff;margin-left: 20px;"
-          >取消</button>
+        <div class="login-box" v-if="isLogin">
+          <div class="logintitle" style="color:#fff">用户登录</div>
+          <div class="login-item yzform">
+            <el-input placeholder="用户名" v-model="user.name" @keyup.enter.native="keyLogin">
+              <i slot="prefix" class="el-input__icon"></i>
+            </el-input>
+          </div>
+          <div class="login-item yzform">
+            <el-input
+              placeholder="密码"
+              type="password"
+              v-model="user.password"
+              @keyup.enter.native="keyLogin"
+            >
+              <i slot="prefix" class="el-input__icon"></i>
+            </el-input>
+          </div>
+          <div class="foot-btn">
+            <button class="login-btn" @click="keyLogin">登录</button>
+            <button
+              class="login-btn"
+              @click="isLogin=false"
+              style="background: #99d8ff;margin-left: 20px;"
+            >取消</button>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="login-bottom">
-      <div class="copyright">© 版权所有：苏州市公安局</div>
-      <!-- <div class="copyright">安全备案号：苏050200000003</div> -->
+      <div class="login-bottom">
+        <div class="copyright">© 版权所有：苏州市公安局</div>
+        <!-- <div class="copyright">安全备案号：苏050200000003</div> -->
+      </div>
     </div>
   </div>
 </template>
@@ -73,47 +75,48 @@ export default {
     return {
       clickFive: 0,
       user: {},
-      userIt:{},
+      userIt: {},
       isLogin: false,
-      turnPage:'',
-      sfzh:this.$store.state.sfzhTurn,
-      loginFlag:false,
+      turnPage: "",
+      sfzh: this.$store.state.sfzhTurn,
+      loginFlag: false
     };
   },
   mounted() {
     // 由其他平台登入
-    // console.log('由其他平台登入',window.location.href,window.location.href.includes("sfzh"),this.getItsUrl(window.location.href,'sfzh'))
-    if(window.location.href.includes("sfzh")){
-      console.log('this.$store.sfzh前',this.$store.state.sfzhTurn)
-      this.sfzh = this.getItsUrl(window.location.href,"sfzh");
-      this.turnPage = this.getItsUrl(window.location.href,"page");
-      this.$store.dispatch("aGetPage",this.turnPage)//存入跳转页面page
-      console.log('this.turnPage',this.turnPage)
-      this.$store.dispatch("aGetItS",true)//是否隐藏菜单标志
-      if(this.sfzh != this.$store.state.sfzhTurn){ //身份证号是否变更
-        console.log('身份证号已变更',this.sfzh)
-        this.userIt.type = '0'
-        this.userIt.name = this.sfzh
+    console.log('由其他平台登入',window.location.href,window.location.href.includes("sfzh"),this.getItsUrl(window.location.href,'sfzh'))
+    if (window.location.href.includes("sfzh")) {
+      console.log("this.$store.sfzh前", this.$store.state.sfzhTurn);
+      this.sfzh = this.getItsUrl(window.location.href, "sfzh");
+      this.turnPage = this.getItsUrl(window.location.href, "page");
+      this.$store.dispatch("aGetPage", this.turnPage); //存入跳转页面page
+      console.log("this.turnPage", this.turnPage);
+      this.$store.dispatch("aGetItS", true); //是否隐藏菜单标志
+      if (this.sfzh != this.$store.state.sfzhTurn) {
+        //身份证号是否变更
+        console.log("身份证号已变更", this.sfzh);
+        this.userIt.type = "0";
+        this.userIt.name = this.sfzh;
         this.$api.post(this.$api.aport1 + "/accountLogin", this.userIt, r => {
           if (r.authorization) {
             this.$store.dispatch("aGetToken", r.authorization).then(data => {
               console.log("第三方登陆成功", data);
               this.getUser();
             });
-            this.$store.dispatch("aGetSfzhT",this.sfzh)//存入身份证号
-            console.log('this.$store.sfzh后',this.$store.state.sfzhTurn)
+            this.$store.dispatch("aGetSfzhT", this.sfzh); //存入身份证号
+            console.log("this.$store.sfzh后", this.$store.state.sfzhTurn);
           }
         });
-      }else{
-        console.log('身份证号未变更')
+      } else {
+        console.log("身份证号未变更");
         this.getUser();
       }
     }
-    console.log('====',window.location.href)
+    console.log("====", window.location.href);
     if (window.location.href.includes("authorization")) {
-      if(this.$store.state.token){
+      if (this.$store.state.token) {
         this.getUser();
-      }else{
+      } else {
         let token = this.getUrlParam("authorization");
         // if (token == 1) {
         //   let url = this.$store.state.aurl;
@@ -131,8 +134,8 @@ export default {
         //     type: "warning"
         //   });
         // }
-        }
-    } 
+      }
+    }
     // else if (this.$store.state.token) {
     //   this.getUser();
     // }
@@ -158,14 +161,14 @@ export default {
         return pair[1];
       }
     },
-    getItsUrl(url,name){
+    getItsUrl(url, name) {
       //取得url中?后面的字符
       // console.log('==',url,url.split("?")[1].split("&"))
       var query = url.split("?")[1];
       var pair = query.split("&");
-      for(var i=0;i<pair.length;i++){
-        if(pair[i].split('=')[0] == name){
-          return pair[i].split('=')[1]
+      for (var i = 0; i < pair.length; i++) {
+        if (pair[i].split("=")[0] == name) {
+          return pair[i].split("=")[1];
         }
       }
     },
@@ -218,8 +221,8 @@ export default {
     getUser() {
       this.$api.post(this.$api.aport1 + "/userController/getUser", {}, r => {
         this.$store.dispatch("aGetUser", r).then(data => {
-          console.log("获取用户信息成功", data);     
-          this.getNav(data); 
+          console.log("获取用户信息成功", data);
+          this.getNav(data);
         });
       });
     },
@@ -267,7 +270,7 @@ export default {
   margin: 20px 25px 0px 0px;
   display: inline-block;
 }
-.other-dia{
+.other-dia {
   text-align: center;
 }
 .other-dia h3 {
@@ -284,7 +287,7 @@ export default {
   color: #000;
   margin: 10px;
 }
-.other-dia a:hover{
+.other-dia a:hover {
   color: #4186f4;
 }
 .login {

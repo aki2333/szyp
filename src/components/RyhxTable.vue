@@ -1,5 +1,5 @@
 <template>
-  <div class="table-box">
+  <div class="table-box ryhx-table">
     <div class="table-other" v-if="isTab||isPl">
       <div class="table-tab-box" v-if="isTab">
         <span
@@ -10,8 +10,6 @@
           @click="lbTabFun(lt.dm)"
         >{{lt.mc}}</span>
       </div>
-      <!-- :type="pb.type" -->
-      <!--           :disabled="pb.user_ctrl==1&&disPlBtn" -->
       <div class="table-btn-box" v-if="isPl">
         <template v-for="(pb,pbi) in plBtn">
           <el-button
@@ -85,10 +83,7 @@
                 @click="handleClick(scope.row,lbt)"
                 type="text"
                 size="small"
-                v-else-if="!lbt.user_ctrl||(lbt.user_ctrl==scope.row.status&&!lbt.status)
-                ||(lbt.user_ctrl==scope.row.whetherUpdateState&&!lbt.control)
-                ||(lbt.control&&page1=='1'&&clzt1==1&&((scope.row.backstatus_desc=='无效地址'||!scope.row.backstatus_desc))
-                &&(scope.row.datatype!='3')&&(scope.row.datatype!='4')&&(scope.row.datatype!='5'))"
+                v-else
               >{{lbt.button_name}}</el-button>
             </span>
           </template>
@@ -143,10 +138,6 @@ export default {
     },
     isPl: {
       type: Boolean,
-      default: true
-    },
-    disPlBtn: {
-      type: Boolean,
       default: false
     },
     refName: {
@@ -171,7 +162,7 @@ export default {
     },
     isSort: {
       type: Boolean,
-      default: true
+      default: false
     },
     pageSizeArr: {
       type: Array,
@@ -251,13 +242,6 @@ export default {
     };
   },
   watch: {
-    refName(val){
-      console.log('进入',val)
-      if(val=='jbxxTable'){
-        console.log('进入来了',val)
-        
-      }
-    },
     selection(val) {
       this.$nextTick(function() {
         this.toggleSelection(val);
@@ -268,22 +252,12 @@ export default {
         this.page1 = val[0].dm;
       }
     },
-    plBtn: {
-      handler() {},
-      deep: true
-    },
-    // lbData: {
-    //   handler(n) {
-    //     this.lbArr = n;
-    //   },
-    //   deep: true
-    // },
+    
     page(val) {
       console.log('page1',val)
       this.page1 = val;
     },
     clzt(val){
-      // this.transData = this.lbData;
       this.clzt1 = val;
     },
     //清除排序
@@ -295,11 +269,7 @@ export default {
   },
   mounted() {
     this.$nextTick(function() {
-      // this.transData = this.lbData;
       this.toggleSelection(this.selection);
-      if(this.$route.query.page){
-        this.page1 = this.$route.query.page
-      }
     });
   },
   methods: {
@@ -372,10 +342,6 @@ export default {
             this.transData = this.lbControlData
           }
         }
-        // this.pointData = [];//选中值
-        // this.pointData = this.lbData;//选中值
-        // console.log('this.transData',this.transData)
-        // console.log('this.pointData',this.lbData)
         this.isShowDialog = true;
       }
       if(val.py == 'dc'){//导出

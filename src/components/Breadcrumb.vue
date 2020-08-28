@@ -19,12 +19,22 @@ export default {
     };
   },
   watch: {
-    $route(val) {
-      console.log("$route", val, this.$store.state.breadcrumb);
-      this.bread = this.$store.state.breadcrumb;
-      this.bread = JSON.parse(JSON.stringify(this.bread));
-      console.log(this.bread);
-    }
+    $route:{
+      handler(val){
+        console.log("$route", val, this.$store.state.breadcrumb);
+        this.bread = this.$store.state.breadcrumb;
+        this.bread = JSON.parse(JSON.stringify(this.bread));
+        console.log(this.bread);
+      },
+      deep:true,
+      immediate: true
+    },
+    // $route(newVal,oldVal){
+    //   console.log("$route", newVal,oldVal);
+    //   this.bread = this.$store.state.breadcrumb;
+    //   this.bread = JSON.parse(JSON.stringify(this.bread));
+    //   console.log(this.bread);
+    // }
   },
   mounted() {
     //this.bread = this.$store.state.breadcrumb;

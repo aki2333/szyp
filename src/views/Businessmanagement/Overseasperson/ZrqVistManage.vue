@@ -13,17 +13,21 @@
                     <el-button type="primary" size="small" class="ml-5" @click="getHandData()">查询</el-button>
                 </div>
                 <div class="base-flex left-query" v-if="$store.state.user.jb!='3'">
-                    <el-tooltip content="请选择派出所" :popper-class="$store.state.leftWid=='auto'?'zrq-pop':'zrq-pop-left'" placement="bottom-start" :value="pcsQuery==$store.state.user.bmbh" :manual="true" :offset="50">
-                      <el-select v-model="pcsQuery" filterable placeholder="请选择" size="mini" @change="getHandData()">
-                        <el-option
-                          v-for="item in pcsArr"
-                          :key="item.dm"
-                          :label="item.mc"
-                          :value="item.dm">
-                        </el-option>
-                      </el-select>
-                    </el-tooltip>
+                    <div class="custom-tip" v-show="pcsQuery==$store.state.user.bmbh">请选择派出所
+                      <div class="custom-arrow"></div>
+                    </div>
+                    <!-- <el-tooltip content="请选择派出所"  :popper-class="$store.state.leftWid=='auto'?'zrq-pop':'zrq-pop-left'" placement="bottom-start" :value="pcsQuery==$store.state.user.bmbh" :manual="true" :offset="50"> -->
+                    <el-select v-model="pcsQuery" filterable placeholder="请选择" size="mini" @change="getHandData()">
+                      <el-option
+                        v-for="item in pcsArr"
+                        :key="item.dm"
+                        :label="item.mc"
+                        :value="item.dm">
+                      </el-option>
+                    </el-select>
+                    <!-- </el-tooltip> -->
                 </div>
+                
                 <div class="base-flex mb-12">
                     <div class="text-tip">待接收</div>
                     <div class="num-tip">共<span class="red">{{handData.length}}</span>条待接收信息</div>
@@ -811,6 +815,7 @@ export default {
 }
 .left-query{
     padding: 0 0 30px;
+    position: relative;
 }
 .text-tip{
     font-size: 15px;

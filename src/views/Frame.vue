@@ -9,7 +9,7 @@
         </el-main>
       </el-container>
     </div>   -->
-    <div id="frame">
+    <div :class="$store.state.itstate?'frameT':'frame'">
       <Header :headData="$store.state.menu" v-show="!$store.state.itstate"></Header>
       <el-container>
         <Left :leftMenu="$store.state.leftMenu" v-show="!$store.state.itstate"></Left>
@@ -45,22 +45,19 @@ export default {
     };
   },
   mounted() {
-    // this.turnPage = this.$route.query.page
-    // if(this.turnPage == 'Specialcheck'){
-    //   this.$router.push({ name: "Specialcheck" });
-    // }else if(this.turnPage == 'ZrqManagement'){
-    //   this.$router.push({ name: "ZrqManagement" });
-    // }else if(this.turnPage == 'ZrqVistManage'){
-    //   this.$router.push({ name: "ZrqVistManage" });
-    // }
     console.log("store", this.$store.state,this.turnPage);
   },
   methods: {}
 };
 </script>
 <style scoped>
-#frame {
+.frame {
   background: url(../assets/images/main/bg.jpg);
+  background-size: 100% 100%;
+  min-height: 100vh;
+}
+.frameT {
+  background: #fff;
   background-size: 100% 100%;
   min-height: 100vh;
 }

@@ -56,24 +56,43 @@ export default {
   },
   watch: {
     leftMenu() {
-      this.toChildren(this.$store.state.leftMenu[0], 0);
+      console.log('leftwatch==',this.$store.state.leftMenu)
+      if(JSON.stringify(this.$store.state.menuTo) == "{}"){
+        this.toChildren(this.$store.state.leftMenu[0], 0);//二级菜单
+      }else{
+        console.log('000000',this.$store.state.leftMenu[this.$store.state.menuTo.active1],this.$store.state.menuTo.active1)
+        this.toChildren(this.$store.state.leftMenu[this.$store.state.menuTo.active1], this.$store.state.menuTo.active1,true);//二级菜单
+      }
+    },
+    $route:{
+      handler(val){
+        if(val.query.turn){
+          console.log('this.$store.state.menuTo',JSON.stringify(this.$store.state.menuTo) != "{}")
+          if(JSON.stringify(this.$store.state.menuTo) != "{}"){
+            console.log('111111',this.$store.state.leftMenu[this.$store.state.menuTo.active1],this.$store.state.menuTo.active1)
+            // this.toChildren(this.$store.state.leftMenu[this.$store.state.menuTo.active1], this.$store.state.menuTo.active1,true);//二级菜单
+          }
+        }
+      },
+      // deep:true,
+      // immediate: true
     }
   },
   mounted() {
-    console.log('===',this.$store.state.leftMenu)
-    this.toChildren(this.$store.state.leftMenu[0], 0);
+    console.log('left===',this.$store.state.leftMenu)
+    this.toChildren(this.$store.state.leftMenu[0], 0);//首次加载第一个二级菜单
   },
   methods: {
     openLeft() {
       this.leftWidth = this.leftWidth == "36px" ? "auto" : "36px";
       this.$store.commit('getLeftWid',this.leftWidth)
     },
-    toChildren(item, index) {
+    toChildren(item, index, mt) {//item 点击选中的二级菜单
       this.active1 = index;
       console.log(2, item,this.$store.state.turnPage);
-      this.chilrenNav = item.childrenMenu;
+      this.chilrenNav = item.childrenMenu;//三级菜单data
       this.bread = [];
-      this.bread.push(item);
+      this.bread.push(item);//面包屑 第一项记录二级菜单
       if(this.$store.state.turnPage){//由第三方进入系统 跳转页面
         var result = this.chilrenNav.some((item,ind)=>{
           if(item.menu_url==this.$store.state.turnPage){
@@ -87,26 +106,25 @@ export default {
             type: "warning"
           })
         }
-        // for(var i=0;i<this.chilrenNav.length;i++){
-        //   if(this.chilrenNav[i].menu_url == this.$store.state.turnPage){
-        //     this.toPage(this.chilrenNav[i], i);
-        //   }
-        // }
       }else{
-        this.toPage(this.chilrenNav[0], 0);
+        if(mt){
+          this.toPage(this.chilrenNav[this.$store.state.menuTo.active2], this.$store.state.menuTo.active2);
+        }else{
+          this.toPage(this.chilrenNav[0], 0);//首先跳转到第一个二级菜单下的第一个三级菜单
+        }
       }
     },
-    toPage(item, index) {
+    toPage(item, index) {//点击选中的三级菜单，跳转到相应的页面
       if (item.menu_url.indexOf("http") > -1) {
         window.open(item.menu_url, "_blank");
       }else {
         console.log(3, item);
         this.active2 = index;
-        this.bread[1] = item;
+        this.bread[1] = item;//面包屑 第二项记录三级菜单
         console.log("this.bread", this.bread);
         this.$store.dispatch("aGetBread", this.bread);
         console.log("this.childrenMenu", item.childrenMenu);
-        if (item.childrenMenu) {
+        if (item.childrenMenu) {//菜单第四级 按钮权限 1-系统按钮，2-表格按钮，3-操作按钮
           this.$store.dispatch("aGetPlBtn", item.childrenMenu).then(() => {
             this.$router.push({ name: item.menu_url });
           });
@@ -116,6 +134,7 @@ export default {
           });
         }
       }
+      this.$store.commit("getMenuTo",{})
     }
   }
 };

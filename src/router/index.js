@@ -175,6 +175,7 @@ router.beforeEach((to, from, next) => {
         next({ name: 'Login', query: to.query })
       }
     }else{
+      console.log('menu',store.state.menu)
       next()
     }
   } else {

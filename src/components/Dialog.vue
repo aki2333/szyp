@@ -42,6 +42,8 @@ closed	Dialog 关闭动画结束时的回调	—
     :close-on-press-escape="true"
     :before-close="handleClose"
     center
+    :top="top"
+    ref="dialog"
   >
     <slot></slot>
   </el-dialog>
@@ -81,10 +83,17 @@ export default {
     isShowBtn: {
       type: Boolean,
       default: true
+    },
+    top:{
+      type: String,
+      default: "15vh"
     }
   },
   data() {
     return {};
+  },
+  mounted(){
+    console.log('dialog',this.$refs.dialog)
   },
   methods: {
     hideDialog() {

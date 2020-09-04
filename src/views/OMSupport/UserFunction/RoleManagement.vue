@@ -15,9 +15,13 @@
       </el-col>
       <el-col :span="16">
         <Table
+          :page="page"
           :lbData="lbData"
+          :refName="'jsgl'"
           :isSelect="isSelect"
           :isEdit="isEdit"
+          :isTab="true"
+          :lbTab="$cdata.qxgl.jsgl.lbTab"
           :isPagination="false"
           :lbBtn="lbBtn"
           :plBtn="plBtn"
@@ -29,6 +33,7 @@
           @plFnc="plFnc"
           @sortChange="sortChange"
           @transSaveFnc="transSaveFnc"
+          @tabFnc="tabFnc"
         ></Table>
       </el-col>
     </el-row>
@@ -87,6 +92,7 @@ export default {
         pageSize: 10,
         pageNum: 1
       },
+      page:'1',
       clearSort:0,
       treeBmbh:'',
       // 弹窗数据
@@ -115,10 +121,15 @@ export default {
       this.cx.direction = data.direction;
       this.getRole(this.treeBmbh);
     },
+    tabFnc(data){
+      this.page = data
+      this.getRole(this.cx.bmbh)
+    },
     // 获取角色列表
     getRole(bmbh,flag) {
       if(flag){this.clearSort = new Date().getTime();delete this.cx.order;delete this.cx.direction }
       this.cx.bmbh = bmbh;
+      this.cx.status = this.page
       this.$api.post(this.$api.aport1 + "/role/getRole", this.cx, r => {
         this.tableData.list = r;
       });
@@ -160,11 +171,29 @@ export default {
       // data.data行内信息
       this.dialogData = data.data;
       if (this.dialogType == "bj") {
-        this.isShowDialog = true;
+        if(data.data.status=='0'){//状态无效
+          this.$message({
+            message: '请先启用该角色！',
+            showClose: true,
+            duration:13000,
+          });
+          return
+        }else{
+          this.isShowDialog = true;
+        }
       } else if (this.dialogType == "yh") {
-        this.dialogData.bmbh = this.treeBMXX.bmbh;
-        this.dialogData.bmmc = this.treeBMXX.bmmc;
-        this.isShowDialog = true;
+        if(data.data.status=='0'){//状态无效
+          this.$message({
+            message: '请先启用该角色！',
+            showClose: true,
+            duration:13000,
+          });
+          return
+        }else{
+          this.dialogData.bmbh = this.treeBMXX.bmbh;
+          this.dialogData.bmmc = this.treeBMXX.bmmc;
+          this.isShowDialog = true;
+        }
       } else if (this.dialogType == "ty") {
         this.deleteRole(data.data);
       } else if (this.dialogType == "qy") {

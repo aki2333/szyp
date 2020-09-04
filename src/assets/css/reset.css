@@ -121,13 +121,13 @@ th {
   height: 38px;
 }
 .el-input.is-disabled .el-input__inner {
-  color: #8a8a8a!important;
+  color: #656262!important;
 }
 .el-radio__input.is-disabled+span.el-radio__label{
-  color: #8a8a8a!important;
+  color: #656262!important;
 }
 .el-checkbox__input.is-disabled+span.el-checkbox__label{
-  color: #8a8a8a!important;
+  color: #656262!important;
 }
 .el-form-item--mini .el-form-item__content, .el-form-item--mini .el-form-item__label {
   line-height: 26px!important;
@@ -316,13 +316,36 @@ input[type="number"]{
   padding: 0 9px;
   text-overflow: unset;
 }
-.right-one-data .el-badge__content.is-fixed{
+.db-right .one-menu .el-badge__content.is-fixed{
+  top: 7px;
+}
+.db-right .el-badge__content.is-fixed{
   right: 2px;
 }
-.right-one-data .el-badge__content{
+.db-right .el-badge__content{
   border: none;
 }
 .badge-sum .el-badge__content{
   border: 1px solid #F56C6C;
-
+}
+.db-right.el-collapse{
+  border: none;
+  margin-left: 20px;
+}
+.db-right .el-collapse-item__header{
+  background-color: transparent;
+  color: #fff;
+  border: none;
+  height: 30px;
+  line-height: 30px;
+}
+.db-right .el-collapse-item__wrap{
+  background-color: transparent;
+  border: none;
+}
+.db-right .el-collapse-item__wrap .el-collapse-item__content{
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  margin-left: 12px;
 }

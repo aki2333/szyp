@@ -307,6 +307,16 @@ const jsgl = {
             "serial": "201",
         }
     ],
+    lbTab: [
+        {
+            "mc": '已启用',
+            "dm": '1',
+        },
+        {
+            "mc": '已停用',
+            "dm": '0',
+        }
+    ],
     plBtn: [
         {
             "button_name": "导出",

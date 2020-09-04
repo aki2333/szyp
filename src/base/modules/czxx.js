@@ -655,6 +655,101 @@ const xxwhgl = {
     // }
   ],
 }
+const bhqs = {
+  cx:[
+    {
+      cm: '性别',
+      type: 'select',
+      dm: 'gender',
+    },
+    {
+      cm: '国家地区',
+      type: 'select',
+      dm: 'nationality',
+    },
+    {
+      cm: '证件种类',
+      type: 'select',
+      dm: 'paper_type',
+    },
+    {
+      cm: '签证种类',
+      type: 'select',
+      dm: 'visa_type',
+    },
+    {
+      cm: '身份',
+      type: 'select',
+      dm: 'degree_code',
+    },
+    {
+      cm: '境外人员类别',
+      type: 'select',
+      dm: 'personnel_area_type',
+    },
+    {
+      cm: '迁入时间',
+      type: 'double',
+      dm: 'qrTime',
+      children: [
+        {
+          cm: '开始时间',
+          type: 'date',
+          dm: 'time_begin'
+        },
+        {
+          cm: '结束时间',
+          type: 'date',
+          dm: 'time_end'
+        },
+      ],
+    },
+    {
+      cm: '居住地辖区',
+      type: 'select',
+      dm: 'inhabi_police_station',
+    },
+    {
+      cm: '居住地责任区',
+      type: 'select',
+      dm: 'turnoutarea',
+      optype:true
+    },
+    {
+      cm: '存量时间',
+      type: 'double',
+      dm: 'clTime',
+      children: [
+        {
+          cm: '开始时间',
+          type: 'date',
+          dm: 'history_time_begin'
+        },
+        {
+          cm: '结束时间',
+          type: 'date',
+          dm: 'history_time_end'
+        },
+      ],
+    },
+    {
+      cm: '工作单位辖区',
+      type: 'select',
+      dm: 'workplace_police_station',
+    },
+  ],
+  cxCheck:[
+    {
+      mc: '居住地或工作地',
+      type: 'checkbox',
+      dm: 'jzd_gzd',
+      trueLabel:'or',
+      falseLabel:'and',
+      check:true,
+    },
+  ]
+}
 export default{
-  xxwhgl
+  xxwhgl,
+  bhqs
 }

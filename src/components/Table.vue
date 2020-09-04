@@ -13,6 +13,14 @@
       <!-- :type="pb.type" -->
       <!--           :disabled="pb.user_ctrl==1&&disPlBtn" -->
       <div class="table-btn-box" v-if="isPl">
+        <!-- <el-popover
+          placement="left"
+          title="颜色说明"
+          width="200"
+          trigger="hover"
+          content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
+          <el-button class="mr-10" slot="reference" icon="el-icon-s-help" circle type="success" size="mini" v-show="refName=='hczf'&&clzt1==1"></el-button>
+        </el-popover> -->
         <template v-for="(pb,pbi) in plBtn">
           <el-button
             size="mini"

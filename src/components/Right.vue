@@ -1,25 +1,35 @@
 <template>
   <el-aside :width="righttWidth" class="right-box">
-    <div class="right-box-content" v-if="righttWidth=='182px'">
-      <div class="right-box-one">
-        <span class="right-title"><i class="title-icon el-icon-edit-outline"></i>待办事项</span>
-        <ul class="right-one-data">
-          <li v-for="(item,ind) in dbData.dataList" :key="ind" @click="$router.push({name:item.url,query:{page:item.page,turn:item.url}})">
-            <el-badge  :value="item.num" class="badge-item hand">{{item.name}}</el-badge>
-            <!-- <el-badge :value="10" class="badge-item">数据查询</el-badge> -->
-          </li>
-        </ul>
+    <div class="right-box-content" v-if="righttWidth=='182px'" >
+      <div class="right-box-one" @click.self="openRight">
+        <span class="right-title">
+          <i class="title-icon el-icon-edit-outline"></i>待办事项
+        </span>
+        <el-collapse accordion class="db-right targetItem">
+          <el-collapse-item class="targetItem" v-for="(item,ind) in dbData.allData" :key="ind">
+            <template slot="title">
+              <div class="one-menu targetItem" @click="openPage(item)">
+                <el-badge :value="item.sum" class="badge-item-title hand targetItem">{{item.menu_name}}</el-badge>
+              </div>
+            </template>
+            <div class="targetItem" v-for="(child,inds) in item.dataList" :key="inds" @click="$router.push({name:child.url,query:{page:child.page,turn:child.url}})">
+              <el-badge  :value="child.num" class="badge-item hand targetItem">{{child.name}}</el-badge>
+            </div>
+          </el-collapse-item>
+        </el-collapse>
       </div>
-      <div class="right-box-two">
-        <span class="right-title"><i class="title-icon el-icon-s-help"></i>操作提示</span>
+      <div class="right-box-two" @click.self="openRight">
+        <span class="right-title">
+          <i class="title-icon el-icon-s-help"></i>操作提示
+        </span>
       </div>
     </div>
-    <div class="right-box-content" v-else>
+    <div class="right-box-content" v-else @click="openRight">
       <div class="right-box-one">
         <div class="short-title">
           <i class="title-icon el-icon-edit-outline"></i>
           <span class="short-text">待办事项</span>
-          <el-badge class="badge-sum" :value="dbData.sum" :max="99"></el-badge>
+          <el-badge class="badge-sum" :value="dbData.total" :max="99"></el-badge>
         </div>
       </div>
       <div class="right-box-two">
@@ -43,41 +53,69 @@ export default {
   data() {
     return {
       righttWidth: "36px",
-      dbData:{
-        dataList:[
+      dbData: {
+        total: 8000,
+        allData: [
           {
-            name:'市局未处理',
-            num:'4000',
-            url:'Specialcheck',
-            page:'1'
+            menu_url: "Specialcheck",
+            menu_name: "核查走访",
+            dataList: [
+              {
+                name: "市局未处理",
+                num: "4000",
+                url: "Specialcheck",
+                page: "1"
+              },
+              {
+                name: "派出所未处理",
+                num: "3000",
+                url: "Specialcheck",
+                page: "3"
+              }
+            ],
+            sum: 6000
           },
           {
-            name:'派出所未处理',
-            num:'3000',
-            url:'Specialcheck',
-            page:'3'
-          },
+            menu_url: "Temporary",
+            menu_name: "网报临住",
+            dataList: [],
+            sum: 6000
+          }
         ]
-      },
+      }
     };
   },
-  mounted(){
+  mounted() {
     this.oneData();
   },
   methods: {
     openRight() {
-      this.righttWidth = this.righttWidth == "36px" ? "182px" : "36px";
-      this.oneData();
+      // console.log('e==',e)
+      // if (!e.target.className.includes("targetItem") && e.target.tagName != "SUP") {
+        this.righttWidth = this.righttWidth == "36px" ? "182px" : "36px";
+        this.oneData();
+      // }
     },
-    oneData(){
-      let p={
-        jb:this.$store.state.user.jb,
-        bmbh:this.$store.state.user.bmbh
+    openPage(val){
+      if(val.dataList.length==0){
+        this.$router.push({name:val.menu_url,query:{turn:val.menu_url}})
       }
-      this.$api.post(this.$api.aport2+'/pendingData/pendingDataStatistics',p,r=>{
-        this.dbData = r.hczf
-      })
     },
+    oneData() {
+      let p = {
+        jb: this.$store.state.user.jb,
+        bmbh: this.$store.state.user.bmbh,
+        userId:this.$store.state.user.userId,
+        zrqList:this.$store.state.user.zrqList,
+      };
+      this.$api.post(
+        this.$api.aport2 + "/pendingData/pendingDataStatistics",
+        p,
+        r => {
+          this.dbData = r;
+        }
+      );
+    }
   }
 };
 </script>
@@ -91,17 +129,17 @@ export default {
   color: #fff;
   font-size: 14px;
 }
-.right-box-content{
+.right-box-content {
   height: 100%;
 }
-.right-one-data{
+.right-one-data {
   padding: 0 0 0 20px;
 }
-.right-title{
+.right-title {
   padding: 40px 0px 15px 20px;
   display: inline-block;
 }
-.title-icon{
+.title-icon {
   padding-right: 10px;
   font-size: 18px;
   vertical-align: bottom;
@@ -110,22 +148,22 @@ export default {
   height: 49.5%;
   border-bottom: 1px solid #888;
 }
-/* .right-box-two {
+.right-box-two {
   height: 49%;
-} */
+}
 .right-open {
   position: absolute;
   left: 0;
   top: 47%;
 }
-.short-title{
-  width: 20px;  
-  margin: 0 auto;  
+.short-title {
+  width: 20px;
+  margin: 0 auto;
   padding-top: 40px;
   box-sizing: border-box;
-  line-height: 20px;  
+  line-height: 20px;
 }
-.short-text{
+.short-text {
   display: block;
   padding-left: 1px;
 }

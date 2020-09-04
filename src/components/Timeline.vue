@@ -24,5 +24,8 @@ export default {
 }
 </script>
 <style scoped>
-
+.timeLine{
+    max-height: 900px;
+    overflow-y: auto;
+}
 </style>

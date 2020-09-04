@@ -36,7 +36,8 @@
         @transSaveFnc="transSaveFnc"
       ></Table>
     </div>
-    <Dialog :width="dialogType=='edit'?'1300px':'1000px'" :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
+    <Dialog :width="dialogType=='edit'?'1300px':'1000px'" 
+      :top="dialogType=='edit'?'3vh':'15vh'" :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
       <Edit 
       :timer="timer"
       :jbxxdiaData="jbxxdiaData"

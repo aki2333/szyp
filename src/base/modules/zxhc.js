@@ -681,12 +681,12 @@ const zxhcgl = {
             type: 'input',
             dm: 'address'
         },
-        {
-            cm: '下发状态',
-            type: 'select',
-            dm: 'issuedate_status',
-            optype:true
-        },
+        // {
+        //     cm: '下发状态',
+        //     type: 'select',
+        //     dm: 'issuedate_status',
+        //     optype:true
+        // },
         {
             cm: '出入境时间',
             type: 'double',
@@ -1381,7 +1381,89 @@ const offgl = {
             dis:true,
             max:160,
             col:8
+        }, 
+        {
+            title:'出入境记录',
+            type:'line'
+        },
+        {
+            cm: '签证类型',
+            type: 'input',
+            dm: 'visaType_desc',
+            dis:true,
+        },
+        {
+            cm: '出入口岸',
+            type: 'input',
+            dm: 'ioPort_desc',
+            dis:true,
+        },           
+        {
+            cm: '前往地',
+            type: 'input',
+            dm: 'destination_desc',
+            dis:true,
+        },
+        {
+            cm: '发证机关',
+            type: 'input',
+            dm: 'grantCertOrg_desc',
+            dis:true,
+        },    
+        {
+            cm: '交通工具',
+            type: 'input',
+            dm: 'trafficTool',
+            dis:true,
+        },    
+        {
+            cm: '交通方式',
+            type: 'input',
+            dm: 'trafficMode_desc',
+            dis:true,
         },       
+        {
+            cm: '人员类别',
+            type: 'input',
+            dm: 'personType_desc',
+            dis:true,
+        },    
+        {
+            cm: '出入境日期及时间',
+            type: 'input',
+            dm: 'ioDateTime',
+            dis:true,
+        },    
+        {
+            cm: '出入境事由',
+            type: 'input',
+            dm: 'outReason_desc',
+            dis:true,
+        },    
+        {
+            cm: '通道号',
+            type: 'input',
+            dm: 'channelNO',
+            dis:true,
+        },    
+        {
+            cm: '检查员号码',
+            type: 'input',
+            dm: 'inspectorID',
+            dis:true,
+        },    
+        {
+            cm: '旅游团号',
+            type: 'input',
+            dm: 'tourGroupNO',
+            dis:true,
+        },  
+        {
+            cm: '证件种类',
+            type: 'input',
+            dm: 'certificateType_desc',
+            dis:true,
+        },     
     ]  
 }
 //记者自动
@@ -2269,7 +2351,7 @@ function handShow(jb) {
 //专项核查
 function handCL(){
     return new Promise((resolve) => {
-        zrqzf.cl = [
+        zxhcgl.cl = [
             {
                 mRow:24,
                 labelWid:'100px',
@@ -2363,6 +2445,101 @@ function handCL(){
                 col:16
             },
             {
+                title:'出入境记录',
+                type:'line'
+            },
+            {
+                cm: '签证类型',
+                type: 'input',
+                dm: 'visaType_desc',
+                dis:true,
+                col:8
+            },
+            {
+                cm: '出入口岸',
+                type: 'input',
+                dm: 'ioPort_desc',
+                dis:true,
+                col:8
+            },           
+            {
+                cm: '前往地',
+                type: 'input',
+                dm: 'destination_desc',
+                dis:true,
+                col:8
+            },
+            {
+                cm: '发证机关',
+                type: 'input',
+                dm: 'grantCertOrg_desc',
+                dis:true,
+                col:8
+            },    
+            {
+                cm: '交通工具',
+                type: 'input',
+                dm: 'trafficTool',
+                dis:true,
+                col:8
+            },    
+            {
+                cm: '交通方式',
+                type: 'input',
+                dm: 'trafficMode_desc',
+                dis:true,
+                col:8
+            },       
+            {
+                cm: '人员类别',
+                type: 'input',
+                dm: 'personType_desc',
+                dis:true,
+                col:8
+            },    
+            {
+                cm: '出入境日期及时间',
+                type: 'input',
+                dm: 'ioDateTime',
+                dis:true,
+                col:8
+            },    
+            {
+                cm: '出入境事由',
+                type: 'input',
+                dm: 'outReason_desc',
+                dis:true,
+                col:8
+            },    
+            {
+                cm: '通道号',
+                type: 'input',
+                dm: 'channelNO',
+                dis:true,
+                col:8
+            },    
+            {
+                cm: '检查员号码',
+                type: 'input',
+                dm: 'inspectorID',
+                dis:true,
+                col:8
+            },    
+            {
+                cm: '旅游团号',
+                type: 'input',
+                dm: 'tourGroupNO',
+                dis:true,
+                col:8
+            },  
+            {
+                cm: '证件种类',
+                type: 'input',
+                dm: 'certificateType_desc',
+                dis:true,
+                col:8
+            },       
+            {
                 title:'标准走访信息',
                 type:'line'
             },
@@ -2394,9 +2571,9 @@ function handCL(){
             //     dm: 'address',
             //     dis:true,
             //     col:16           
-            // },        
+            // }, 
         ]  
-        resolve(zrqzf.cl)
+        resolve(zxhcgl.cl)
     })
 }
 function offhandCL(){
@@ -2495,6 +2672,101 @@ function offhandCL(){
                 col:16
             },
             {
+                title:'出入境记录',
+                type:'line'
+            },
+            {
+                cm: '签证类型',
+                type: 'input',
+                dm: 'visaType_desc',
+                dis:true,
+                col:8
+            },
+            {
+                cm: '出入口岸',
+                type: 'input',
+                dm: 'ioPort_desc',
+                dis:true,
+                col:8
+            },           
+            {
+                cm: '前往地',
+                type: 'input',
+                dm: 'destination_desc',
+                dis:true,
+                col:8
+            },
+            {
+                cm: '发证机关',
+                type: 'input',
+                dm: 'grantCertOrg_desc',
+                dis:true,
+                col:8
+            },    
+            {
+                cm: '交通工具',
+                type: 'input',
+                dm: 'trafficTool',
+                dis:true,
+                col:8
+            },    
+            {
+                cm: '交通方式',
+                type: 'input',
+                dm: 'trafficMode_desc',
+                dis:true,
+                col:8
+            },       
+            {
+                cm: '人员类别',
+                type: 'input',
+                dm: 'personType_desc',
+                dis:true,
+                col:8
+            },    
+            {
+                cm: '出入境日期及时间',
+                type: 'input',
+                dm: 'ioDateTime',
+                dis:true,
+                col:8
+            },    
+            {
+                cm: '出入境事由',
+                type: 'input',
+                dm: 'outReason_desc',
+                dis:true,
+                col:8
+            },    
+            {
+                cm: '通道号',
+                type: 'input',
+                dm: 'channelNO',
+                dis:true,
+                col:8
+            },    
+            {
+                cm: '检查员号码',
+                type: 'input',
+                dm: 'inspectorID',
+                dis:true,
+                col:8
+            },    
+            {
+                cm: '旅游团号',
+                type: 'input',
+                dm: 'tourGroupNO',
+                dis:true,
+                col:8
+            },  
+            {
+                cm: '证件种类',
+                type: 'input',
+                dm: 'certificateType_desc',
+                dis:true,
+                col:8
+            },
+            {
                 title:'标准走访信息',
                 type:'line'
             },
@@ -2526,7 +2798,8 @@ function offhandCL(){
             //     dm: 'address',
             //     dis:true,
             //     col:16           
-            // },        
+            // },  
+                  
         ]  
         resolve(offgl.cl)
     })

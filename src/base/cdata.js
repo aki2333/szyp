@@ -190,11 +190,11 @@ const options = {
     czpzlx:[
         {
             dm:'1',
-            mc:'下发'
+            mc:'待下发'
         },
         {
             dm:'2',
-            mc:'上报'
+            mc:'待上报'
         },
     ],
     turnoutarea: [],

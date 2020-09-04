@@ -63,8 +63,8 @@ export default {
                   // this.active2 = j;
                   // this.active1 = i;
                   this.active = k;
-                  this.toLeftMenu(this.$store.state.menu[k],k,i,j);
-                  console.log('header',this.$store.state.menu[k],k,i,j)
+                  this.toLeftMenu(this.$store.state.menu[k],k,i,j,val.query);
+                  // console.log('header',this.$store.state.menu[k],k,i,j)
                 }
               }
             }
@@ -80,11 +80,11 @@ export default {
       console.log(this.$store.state.menu, this.$store.state.menu[0], 0);
       this.toLeftMenu(this.$store.state.menu[0], 0);
     },
-    toLeftMenu(item, index ,active1,active2) {
+    toLeftMenu(item, index ,active1,active2,query) {
       console.log(1, item);
       this.active = index;
       this.$store.commit("getLeftMenu", item.childrenMenu);
-      this.$store.commit("getMenuTo",{active1:active1,active2:active2})
+      this.$store.commit("getMenuTo",{active1:active1,active2:active2,query:query})
     },
     logout() {
       let url = this.$store.state.aurl;

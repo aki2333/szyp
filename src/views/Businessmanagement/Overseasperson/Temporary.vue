@@ -40,7 +40,7 @@
       :isShowDialog="isShowDialog"
       :title="dialogTitle"
       @hideDialog="isShowDialog=false"
-      style="margin-top: -9vh;"
+      :top="'3vh'"
     >
       <el-dialog width="50%" :visible.sync="innerVisible" append-to-body>
         <el-form :model="innerForm" :rules="rules" ref="innerForm" label-width="100px" class="tc-form">

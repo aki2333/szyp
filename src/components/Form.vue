@@ -130,6 +130,14 @@
                   >{{item.mc}}</el-radio>
                 </el-radio-group>
               </template>
+              <template v-else-if="cx.type=='textarea'">
+                <el-input
+                  type="textarea"
+                  :rows="1"
+                  placeholder="请输入内容"
+                  v-model="dialogData[cx.dm]">
+                </el-input>
+              </template>
             </el-form-item>
             <el-row  :gutter="30">
               <el-col :span="cus.col" v-for="(cus,ind) in cx.issueDataFeedbackList" :key="ind">

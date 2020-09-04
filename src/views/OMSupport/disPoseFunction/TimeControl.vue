@@ -19,7 +19,7 @@
       <Table
         :clzt="pageState"
         :lbData="lbData"
-        :isSelect="true"
+        :isSelect="false"
         :lbBtn="lbBtn"
         :plBtn="plBtn"
         :tableData="tableData"

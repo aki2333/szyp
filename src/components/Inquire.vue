@@ -156,7 +156,11 @@
         </el-col>
       </el-row>
     </el-form>
-    <img :src="queryIsShow==true?closeImg:openImg" alt @click="queryShow" class="changeBtn" />
+    <div class="changeBtn hand"  @click="queryShow">
+      <i :class="queryIsShow==true?'el-icon-d-arrow-right':'el-icon-d-arrow-left'"></i>
+      <span>{{queryIsShow==true?'快速筛选':'筛选条件'}}</span>
+    </div>
+    <!-- <img :src="queryIsShow==true?closeImg:openImg" alt @click="queryShow" class="changeBtn" /> -->
   </div>
 </template>
 <script>
@@ -272,7 +276,6 @@ export default {
       }
       if(data.dm=='backstatus'){//走访状态 选中与未选中
         if(this.backstatus == value.dm){//取消选中
-          
           this.backstatus = ''
         }else{
           this.backstatus = value.dm
@@ -329,9 +332,11 @@ export default {
         if (valid) {
           console.log(pb)
           // console.log('bread',this.$store.state.breadcrumb[this.$store.state.breadcrumb.length-1].menu_name)
-          this.cxPara.menu_name = this.$store.state.breadcrumb[this.$store.state.breadcrumb.length-1].menu_name;
-          this.cxPara.btn_name = pb.menu_name;
-          this.cxPara.user = this.$store.state.user;
+          if(this.cxType!='noCbtn'){
+            this.cxPara.menu_name = this.$store.state.breadcrumb[this.$store.state.breadcrumb.length-1].menu_name;
+            this.cxPara.btn_name = pb.menu_name;
+            this.cxPara.user = this.$store.state.user;
+          }
           this.$emit("cxFnc", this.inquire);
         } else {
           console.log("error submit!!");
@@ -373,6 +378,16 @@ export default {
   position: absolute;
   bottom: 0px;
   right: 0px;
+  width: 80px;
+  height: 20px;
+  line-height: 20px;
+  background-color:#7FCEFF;
+  font-size: 12px;
+  color: #fff;
+  text-align: center;
+}
+.changeBtn span{
+  padding: 0 5px;
 }
 .cx-btn {
   margin-bottom: 18px;
@@ -383,5 +398,13 @@ export default {
 }
 .double {
   width: 48%;
+}
+</style>
+<style>
+.changeBtn .el-icon-d-arrow-left{
+  transform: rotate(-90deg);
+}
+.changeBtn .el-icon-d-arrow-right{
+  transform: rotate(-90deg);
 }
 </style>

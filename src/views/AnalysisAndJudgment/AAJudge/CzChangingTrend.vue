@@ -1,6 +1,12 @@
 <template>
   <div class="page">
-    <Inquire :cxData="$cdata.qxgl.zrqgl.cx" :pd="cx.pd" :cxPara="cx" @cxFnc="cxFnc" @lcFnc="lcFnc"></Inquire>
+    <Inquire 
+    :cxData="$cdata.czxx.bhqs.cx"
+    :cxCheck="$cdata.czxx.bhqs.cxCheck" 
+    :pd="cx.pd" 
+    :cxPara="cx" 
+    @cxFnc="cxFnc" 
+    @lcFnc="lcFnc"></Inquire>
     <div class="t-tab-top">
       <div class="tab-top-item tabImgActive_1 hand">常住变化趋势</div>
     </div>
@@ -8,10 +14,8 @@
       <div style="padding:20px 20px 0">
         <p class="trend-title">计算维度</p>
         <div class="trend-radio">
-          <el-radio-group v-model="radio">
-            <el-radio :label="3">备选项</el-radio>
-            <el-radio :label="6">备选项</el-radio>
-            <el-radio :label="9">备选项</el-radio>
+          <el-radio-group v-model="cx.pd.analysisType">
+            <el-radio v-for="(item,ind) in analysisType" :key="ind" :label="item.dm">{{item.mc}}</el-radio>
           </el-radio-group>
           <div class="trend-page-btn-box">
              <template v-for="(pb,pbi) in $store.state.plBtn">
@@ -44,23 +48,68 @@ export default {
         pageSize: 10,
         pageNum: 1,
       },
+      analysisType:[
+        {
+          mc:'性别',
+          dm:'gender'
+        },
+        {
+          mc:'国家地区',
+          dm:'nationality'
+        },
+        {
+          mc:'证件种类',
+          dm:'paper_type'
+        },
+        {
+          mc:'签证种类',
+          dm:'visa_type'
+        },
+        {
+          mc:'身份',
+          dm:'degree_code'
+        },
+        {
+          mc:'境外人员类别',
+          dm:'personnel_area_type'
+        },
+        {
+          mc:'年龄段',
+          dm:'age'
+        },
+      ],
       optData:{},
       radio:''
     };
   },
   mounted() {
+    this.$store.dispatch("aGetGender");
+    this.$store.dispatch("aGetPassport");
+    this.$store.dispatch("aGetNation");
+    this.$store.dispatch("aGetDM",'qzzl');
+    this.$store.dispatch("aGetDMPro",'dm_jwrysf');
+    this.$store.dispatch("aGetDMPro",'dm_pcswlb');
+    this.$store.dispatch("aGetDMPro",'dm_rydylbb');
+    this.$cdata.jzdZrq()
     this.chartShow();
+    this.getChart();
   },
   methods: {
     // 获取查询参数
     cxFnc(data) {
       this.cx.pd = data;
+      this.getChart();
     },
     lcFnc(data) {
       console.log(data)
     },
     btnClick(){},
-    chartShow() {
+    getChart(){
+      this.$api.post(this.$api.aport4+'/residetrend/trendchart',this.cx,r=>{
+        this.chartShow(r.xAxis.data,r.series[0].data)
+      })
+    },
+    chartShow(xdata,series) {
       this.optData = {
         grid: {
           x: 45,
@@ -69,6 +118,7 @@ export default {
         },
         xAxis: {
           type: "category",
+          data: xdata,
           boundaryGap: false,
           axisPointer: {
             type: "none"
@@ -154,29 +204,7 @@ export default {
               shadowOffsetY: 10,
               shadowOffsetX: 10,
             },
-            // areaStyle: {
-            //   color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            //     {
-            //       offset: 0,
-            //       color: "rgba(85,137,247,0.5)"
-            //     },
-            //     {
-            //       offset: 1,
-            //       color: "rgba(85,137,247,0.1)"
-            //     }
-            //   ])
-            // },
-            data: [
-              ["2019-10-10", 200],
-              ["2019-10-11", 400],
-              ["2019-10-12", 650],
-              ["2019-10-13", 500],
-              ["2019-10-14", 250],
-              ["2019-10-15", 300],
-              ["2019-10-16", 450],
-              ["2019-10-17", 300],
-              ["2019-10-18", 100]
-            ]
+            data: series,
           }
         ]
       };

@@ -69,6 +69,7 @@ export default new Vuex.Store({
     exit_entry_status:[],//出入境状态
     inhabi_police_station:[],//居住地所在派出所
     workplace_police_station:[],//单位所在地派出所
+    personnel_area_type:[]//境外人员类别
   },
   mutations: {
     getLeftWid(state,data){
@@ -176,6 +177,8 @@ export default new Vuex.Store({
       }else if(data.type == 'dm_pcswlb'){
         state.inhabi_police_station = data.data//居住地所在派出所
         state.workplace_police_station = data.data//单位所在地派出所
+      }else if(data.type == 'dm_rydylbb'){
+        state.personnel_area_type = data.data//境外人员类别
       }
     },
     getXzqh(state,data){//只包含苏州

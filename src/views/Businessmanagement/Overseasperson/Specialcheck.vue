@@ -56,7 +56,8 @@
       ></Table>
     </div>
     <!-- 弹窗 -->
-    <Dialog :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false" :class="{'hczf-dia':dialogType == 'edit'}">
+    <Dialog :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false" 
+    :top="dialogType=='edit'||dialogType=='ck'?'3vh':'15vh'" :class="{'hczf-dia':dialogType == 'edit'}">
       <Form
         :key="new Date().getTime()"
         :cxData="labelData"

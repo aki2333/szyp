@@ -302,7 +302,10 @@ export default {
         }
         if(!data.data.issue_time){data.data.issue_time='0'}//反馈时间回填  没有反馈时间默认0
         // data.data.photoEncoder=this.$cdata.tabImgActive_1
-        this.dialogData = Object.assign({},data.data);
+        this.$api.post(this.$api.aport2+'/hx/getEntryAndExitData',{gjdq:data.data.nationality,zjhm:data.data.passportno},r=>{
+          this.dialogData = Object.assign({},data.data,r);
+        })
+        // this.dialogData = Object.assign({},data.data);
         this.$store.dispatch("aGetBackstatus", data.data.datatype);
         this.isShowDialog = true;
         if(this.$refs.zxhcForm){

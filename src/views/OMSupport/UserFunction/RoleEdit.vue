@@ -1,6 +1,6 @@
 <template>
   <div class="page-box page">
-    <el-row v-if="dialogType!='bj'" type="flex" justify="center" class="mb-10">
+    <el-row type="flex" justify="center" class="mb-10">
       <el-col :span="8">
         <el-input placeholder="请输入" v-model="roleName" size="small">
           <template slot="prepend">角色名称</template>

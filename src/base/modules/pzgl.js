@@ -79,6 +79,11 @@ const sjkz = {
       dm: 'czpzlx',
       optype:true,
     },
+    // {
+    //   cm:'颜色说明',
+    //   type:'textarea',
+    //   dm:'ysshbz'
+    // }
   ],
   bjLabel:[
     {
@@ -108,6 +113,11 @@ const sjkz = {
         type: 'block',
         dm: 'gdyssh',
       },
+      // {
+      //   cm:'颜色说明',
+      //   type:'textarea',
+      //   dm:'ysshbz'
+      // }
   ]
 }
 export default{

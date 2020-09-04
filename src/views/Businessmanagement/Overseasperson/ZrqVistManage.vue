@@ -120,7 +120,7 @@
     </el-container>
    
     <!-- 弹窗 -->
-    <Dialog :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
+    <Dialog :isShowDialog="isShowDialog" :top="dialogType=='cl'||dialogType=='ck'?'3vh':'15vh'" :title="dialogTitle" @hideDialog="isShowDialog=false">
       <Form
         v-if="isShowDialog"
         :cxData="labelData"

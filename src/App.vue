@@ -44,6 +44,14 @@ export default {
   color: #fff!important;
   font-size: 18px;
 }
+
+.icon {
+  width: 1.5em; 
+  height: 1.5em;
+  vertical-align: middle;
+  fill: currentColor;
+  overflow: hidden;
+}
 .el-backtop{
   background-color: transparent!important;
 }

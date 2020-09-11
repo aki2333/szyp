@@ -21,6 +21,15 @@ export default {
     Cheight:{
       type:String,
       default:'240px'
+    },
+    // MyChart:{
+    //   type: Object,
+    //   default: () => null
+    // }
+  },
+  data(){
+    return{
+      MyChart:null
     }
   },
   mounted() {
@@ -29,12 +38,16 @@ export default {
   methods: {
     initchart() {
       // 初始化
-      let mychart = this.$echarts.init(document.getElementById("akiChart"+this.id));
+      this.MyChart = this.$echarts.init(document.getElementById("akiChart"+this.id));
+      console.log('====',this.MyChart)
       // 绘制
-      mychart.setOption(this.optData);
+      this.MyChart.setOption(this.optData);
+      this.MyChart.on('click',(params)=>{
+        this.$emit('chartClick',params)
+      })
       // 监听浏览器尺寸
       window.addEventListener("resize", function() {
-        mychart.resize();
+       this.MyChart.resize();
       });
     }
   }

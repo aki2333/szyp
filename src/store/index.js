@@ -6,6 +6,7 @@ import fnc from '@/base/fnc.js'
 let breadData = JSON.parse(sessionStorage.getItem('bread'))
 let user = JSON.parse(sessionStorage.getItem('user'))
 let menu = JSON.parse(sessionStorage.getItem('menu'))
+let menuC = JSON.parse(sessionStorage.getItem('menuC'))
 let token = sessionStorage.getItem('token')
 let sfzhTurn = sessionStorage.getItem('sfzhTurn')
 let aurl = sessionStorage.getItem('aurl')
@@ -22,6 +23,7 @@ export default new Vuex.Store({
     menuTo:{},
     user: user || {},
     menu: menu || [],
+    menuC:menuC|| [],
     leftMenu: [],
     chilrenNav: [],
     plBtn: [],
@@ -69,7 +71,10 @@ export default new Vuex.Store({
     exit_entry_status:[],//出入境状态
     inhabi_police_station:[],//居住地所在派出所
     workplace_police_station:[],//单位所在地派出所
-    personnel_area_type:[]//境外人员类别
+    personnel_area_type:[],//境外人员类别
+
+    jzd_ssfj:[],
+    gzd_ssfj:[],
   },
   mutations: {
     getLeftWid(state,data){
@@ -82,6 +87,10 @@ export default new Vuex.Store({
     getMenu(state, data) {
       state.menu = data;
       window.sessionStorage.setItem("menu", JSON.stringify(data));
+    },
+    getMenuC(state,data){//三级菜单集合
+      state.menuC = data;
+      window.sessionStorage.setItem("menuC",JSON.stringify(data));
     },
     getLeftMenu(state, data) {
       state.leftMenu = data;
@@ -214,11 +223,20 @@ export default new Vuex.Store({
     getssfj(state, data) {
       state.ssfj = data
       state.suboffice = data
+      state.jzd_ssfj = data
+      state.gzd_ssfj = data
     },
     getsspcs(state, data) {
       state.sspcs = data
       state.policestation = data
     },
+    getpcsPro(state, data){
+      if(data.ptype == 'jzd'){
+        state.inhabi_police_station = data.data
+      }else if(data.ptype == 'gzd'){
+        state.workplace_police_station = data.data
+      }
+    }
   },
   actions: {
     aGetToken(context, payload) {
@@ -262,6 +280,12 @@ export default new Vuex.Store({
     aGetMenu(context, payload) {
       return new Promise((resolve) => {
         context.commit('getMenu', payload)
+        resolve(payload)
+      })
+    },
+    aGetMenuC(context,payload){
+      return new Promise((resolve) => {
+        context.commit('getMenuC',payload)
         resolve(payload)
       })
     },
@@ -404,7 +428,11 @@ export default new Vuex.Store({
           if (payload.type == "ssfj") {
             context.commit('getssfj', fnc.sortByKey(r, 'dm'))
           } else if (payload.type == "sspcs") {
-            context.commit('getsspcs', fnc.sortByKey(r, 'dm'))
+            if(payload.ptype){
+              context.commit('getpcsPro', {data:fnc.sortByKey(r, 'dm'),ptype:payload.ptype})
+            }else{
+              context.commit('getsspcs', fnc.sortByKey(r, 'dm'))
+            }
           } else if (payload.type == "zrq") {
             context.commit('getzrq', fnc.sortByKey(r, 'dm'))
           }

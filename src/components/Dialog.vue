@@ -93,7 +93,7 @@ export default {
     return {};
   },
   mounted(){
-    console.log('dialog',this.$refs.dialog)
+    // console.log('dialog',this.$refs.dialog)
   },
   methods: {
     hideDialog() {

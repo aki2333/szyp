@@ -692,3 +692,12 @@
     font-size: 16px!important;
     color: #000!important;
 }
+.color-des li{
+    display: flex;
+    flex-flow:row;
+    padding: 7px 5px;
+    border-bottom: 1px solid #e2e0e0;
+}
+.yssm.el-form-item.is-required>.el-form-item__label:before{
+    content: ''!important;
+}

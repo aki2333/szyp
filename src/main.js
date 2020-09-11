@@ -10,6 +10,8 @@ import fnc from './base/fnc.js'
 import cdata from './base/cdata.js'
 import echarts from "echarts";
 import vcolorpicker from 'vcolorpicker'
+import './assets/icon/iconfont.css'
+import './assets/icon/iconfont.js'
 
 Vue.config.productionTip = false
 document.title = "苏州市公安局·涉外综合分析研判系统"

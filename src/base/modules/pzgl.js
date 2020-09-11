@@ -63,6 +63,9 @@ const sjkz = {
   ], 
   xzLabel:[
     {
+      labelWid:'130px'
+    },
+    {
       cm: '业务类别',
       type: 'select',
       dm: 'ywlb',
@@ -79,13 +82,11 @@ const sjkz = {
       dm: 'czpzlx',
       optype:true,
     },
-    // {
-    //   cm:'颜色说明',
-    //   type:'textarea',
-    //   dm:'ysshbz'
-    // }
   ],
   bjLabel:[
+    {
+      labelWid:'130px'
+    },
     {
         cm: '业务类别',
         type: 'select',
@@ -104,20 +105,20 @@ const sjkz = {
         optype:true,
       },
       {
-        cm: '规定时间',
+        cm: '超期时间',
         type: 'inpUnit',
         dm: 'gdsj',
       },
       {
-        cm: '规定颜色',
+        cm: '超期显示(颜色)',
         type: 'block',
         dm: 'gdyssh',
       },
-      // {
-      //   cm:'颜色说明',
-      //   type:'textarea',
-      //   dm:'ysshbz'
-      // }
+      {
+        cm:'颜色说明',
+        type:'textarea',
+        dm:'ysshbz'
+      }
   ]
 }
 export default{

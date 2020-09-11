@@ -84,17 +84,17 @@ export default {
   },
   mounted() {
     // 由其他平台登入
-    console.log('由其他平台登入',window.location.href,window.location.href.includes("sfzh"),this.getItsUrl(window.location.href,'sfzh'))
+    // console.log('由其他平台登入',window.location.href,window.location.href.includes("sfzh"),this.getItsUrl(window.location.href,'sfzh'))
     if (window.location.href.includes("sfzh")) {
-      console.log("this.$store.sfzh前", this.$store.state.sfzhTurn);
+      // console.log("this.$store.sfzh前", this.$store.state.sfzhTurn);
       this.sfzh = this.getItsUrl(window.location.href, "sfzh");
       this.turnPage = this.getItsUrl(window.location.href, "page");
       this.$store.dispatch("aGetPage", this.turnPage); //存入跳转页面page
-      console.log("this.turnPage", this.turnPage);
+      // console.log("this.turnPage", this.turnPage);
       this.$store.dispatch("aGetItS", true); //是否隐藏菜单标志
       if (this.sfzh != this.$store.state.sfzhTurn) {
         //身份证号是否变更
-        console.log("身份证号已变更", this.sfzh);
+        // console.log("身份证号已变更", this.sfzh);
         this.userIt.type = "0";
         this.userIt.name = this.sfzh;
         this.$api.post(this.$api.aport1 + "/accountLogin", this.userIt, r => {
@@ -104,15 +104,15 @@ export default {
               this.getUser();
             });
             this.$store.dispatch("aGetSfzhT", this.sfzh); //存入身份证号
-            console.log("this.$store.sfzh后", this.$store.state.sfzhTurn);
+            // console.log("this.$store.sfzh后", this.$store.state.sfzhTurn);
           }
         });
       } else {
-        console.log("身份证号未变更");
+        // console.log("身份证号未变更");
         this.getUser();
       }
     }
-    console.log("====", window.location.href);
+    // console.log("====", window.location.href);
     if (window.location.href.includes("authorization")) {
       if (this.$store.state.token) {
         this.getUser();
@@ -236,6 +236,17 @@ export default {
         r => {
           this.$store.dispatch("aGetMenu", r[0].childrenMenu).then(data2 => {
             console.log("获取菜单成功", data2);
+            let menuC = [];
+            data2.forEach(item => {
+              item.childrenMenu.forEach(jtem => {
+                // console.log(jtem.childrenMenu)
+                jtem.childrenMenu.forEach(ktem => {
+                  menuC.push(ktem)
+                  // console.log('menuC',menuC)
+                  this.$store.dispatch("aGetMenuC",menuC)
+                })
+              })
+            });
             if (data2.length == 0) {
               this.$confirm(" 没有功能权限，请联系管理员", "提示", {
                 confirmButtonText: "确定",

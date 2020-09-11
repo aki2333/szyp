@@ -10,14 +10,14 @@
                         v-model="adressQuery"
                         size="small">
                     </el-input>
-                    <el-button type="primary" size="small" class="ml-5" @click="getHandData()">查询</el-button>
+                    <el-button type="primary" size="small" class="ml-5" @click="reloadList()">查询</el-button>
                 </div>
                 <div class="base-flex left-query" v-if="$store.state.user.jb!='3'">
                     <div class="custom-tip" v-show="pcsQuery==$store.state.user.bmbh">请选择派出所
                       <div class="custom-arrow"></div>
                     </div>
                     <!-- <el-tooltip content="请选择派出所"  :popper-class="$store.state.leftWid=='auto'?'zrq-pop':'zrq-pop-left'" placement="bottom-start" :value="pcsQuery==$store.state.user.bmbh" :manual="true" :offset="50"> -->
-                    <el-select v-model="pcsQuery" filterable placeholder="请选择" size="mini" @change="getHandData()">
+                    <el-select v-model="pcsQuery" filterable placeholder="请选择" size="mini" @change="reloadList()">
                       <el-option
                         v-for="item in pcsArr"
                         :key="item.dm"
@@ -30,7 +30,8 @@
                 
                 <div class="base-flex mb-12">
                     <div class="text-tip">待接收</div>
-                    <div class="num-tip">共<span class="red">{{handData.length}}</span>条待接收信息</div>
+                    <!-- <div class="num-tip">共<span class="red">{{handData.length}}</span>条待接收信息</div> -->
+                    <div class="num-tip">共<span class="red">{{leftTotal}}</span>条待接收信息</div>
                 </div>
                 <div class="base-flex pb-5 border-b">
                     <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
@@ -39,7 +40,7 @@
            </div>
            <div class="left-content" ref="tree">
                <el-checkbox-group v-model="checkedList" @change="handChangeFun" v-infinite-scroll="load"
-                     infinite-scroll-distance="10">
+                     infinite-scroll-distance="10" infinite-scroll-disabled="disabled">
                     <el-checkbox v-for="(item,ind) in handShowData" :label="item.serial" :key="ind">
                         <template>
                           <div class="item-item">
@@ -62,6 +63,8 @@
                             </div>
                         </template>
                     </el-checkbox>
+                    <p v-if="loading">加载中...</p>
+                    <p v-if="noMore">没有更多了</p>
                 </el-checkbox-group>
            </div>
            <div class="page-btn-box">
@@ -94,7 +97,10 @@
             </div>
             <div class="page-box">
             <Table
+                :clzt="clzt"
+                :refName="'zrqzf'"
                 :lbData="lbData"
+                :colorDes="colorDes"
                 :isSelect="isSelect"
                 :lbBtn="lbBtn"
                 :plBtn="plBtn"
@@ -153,8 +159,9 @@ export default {
         //左栏
         adressQuery:'',
         pcsQuery:'',
-        checkedList:[],
-        checkedListAll:[],
+        checkedList:[],//选中数据
+        checkedListAll:[],//全选数据
+        checkedListPart:[],//分页请求回的数据
         isIndeterminate:false,
         checkAll:false,
         handData:[],
@@ -163,6 +170,14 @@ export default {
         xzCount:0,
         scrollW:0,
         pcsArr:[],
+        //左栏修改
+        leftData:[],
+        leftPage:0,
+        leftSize:20,
+        leftTotal:0,
+        Aflag:1,
+        loading:false,
+
 
       // 查询项
       tabImg_1: require("../../../assets/images/main/tab_2.png"),
@@ -171,6 +186,7 @@ export default {
       tabImgActive_2: require("../../../assets/images/main/tab_1_pre.png"),
       //数据展示
       isSelect: true,
+      colorDes:[],
       isEdit:true,
       isTab: false,
       isPageS:true,
@@ -210,25 +226,6 @@ export default {
     };
   },
   mounted() {
-    // 由其他平台登入
-      // console.log('由其他平台登入',window.location.href,window.location.href.includes("sfzh"),this.getItsUrl(window.location.href,'sfzh'))
-      // if(window.location.href.includes("sfzh")){
-      //   let sfzh = this.getItsUrl(window.location.href,"sfzh");
-      //   // let sfzh = 'ceshi'
-      //   if(sfzh){
-      //     this.userIt.type = '0'
-      //     this.userIt.name = sfzh
-      //     this.$api.post(this.$api.aport1 + "/accountLogin", this.userIt, r => {
-      //       if (r.authorization) {
-      //         this.$store.dispatch("aGetToken", r.authorization).then(data => {
-      //           console.log("第三方登陆成功", data);
-      //           this.getUser();
-      //         });
-      //         this.$store.dispatch("aGetItS",true)
-      //       }
-      //     });
-      //   }
-      // }
     this.$nextTick(() => {
       console.log('yemian',this.$store.state.leftWid)
       this.$store.dispatch("aGetNation");
@@ -252,34 +249,28 @@ export default {
         this.$store.dispatch("aGetPolice",this.$store.state.user.bmbh);
         this.$store.dispatch("aGetZrq",this.$store.state.user.bmbh.slice(0, 8));
       } 
-
       this.$store.dispatch("aGetDatatype");
       this.getPcsQueryData();
       this.pcsQuery = this.$store.state.user.bmbh
       this.getTable();
-      this.getHandData();
+      // this.getLeftData();
+      // this.getHandData();
+      this.getColorDes();
     });
   },
+  computed: {
+    noMore () {
+      return (this.handShowData.length >= this.leftTotal && this.leftTotal!=0) && this.Aflag == 0
+    },
+    disabled () {
+      return this.loading || this.noMore
+    }
+  },
   methods: {
-      getUser() {//由其他平台登入
-        this.$api.post(this.$api.aport1 + "/userController/getUser", {}, r => {
-          this.$store.dispatch("aGetUser", r).then(data => {
-            console.log("获取用户信息成功", data);
-            this.$router.push({ name: "ZrqVistManage"});
-            this.isLogin = false;
-          });
-        });
-      },
-      getItsUrl(url,name){
-        //取得url中?后面的字符
-        // console.log('==',url,url.split("?")[1].split("&"))
-        var query = url.split("?")[1];
-        var pair = query.split("&");
-        for(var i=0;i<pair.length;i++){
-          if(pair[i].split('=')[0] == name){
-            return pair[i].split('=')[1]
-          }
-        }
+      getColorDes(){
+        this.$api.post(this.$api.aport2+'/issueTimeControl/getIssueTimeControlShAndBzList',{dwjb:'4'},r=>{
+          this.colorDes = r
+        })
       },
       aaa(val){
         console.log(val.length)
@@ -288,25 +279,73 @@ export default {
       transSaveFnc(data){
         this.lbData = data
       },
-      load(){
-        let aa=[];
-        console.log(this.handData.length-this.xzCount)
-        if(this.handData.length-this.xzCount>20){
-          this.xzCount+=20;
-          aa=(this.handData).slice(this.xzCount,this.xzCount+20)
-        }else if(0<=Math.abs(this.handData.length-this.xzCount)<=20){
-          // this.xzCount+=20;
-          console.log(this.xzCount,this.xzCount+Math.abs(this.handData.length-this.xzCount),aa)
-          aa=(this.handData).slice(this.xzCount,this.xzCount+Math.abs(this.handData.length-this.xzCount))
-          return
-        }else{
-          return
+      getLeftData(){
+        this.checkedList = [];
+        let p={
+            pd:{
+                address:this.adressQuery,
+                jb:(this.$store.state.user.jb!='3'&&this.pcsQuery == this.$store.state.user.bmbh)?this.$store.state.user.jb:'3',
+                bmbh: this.pcsQuery,
+                clzt:1,
+                cljg:3
+            },
+            pageNum:this.leftPage,
+            pageSize:this.leftSize,
         }
-        for(var i in aa){
-          this.allArr.push(aa[i])
-        }
-        this.handShowData = this.allArr;
+        this.$api.post(this.$api.aport2+'/issueData/getIssueDataPage',p,r=>{
+          this.leftTotal = r.total;
+          this.Aflag = r.total;
+          if(r.list.length!=0){
+            this.handShowData = this.handShowData.concat(r.list)
+            this.checkedListPart = [];
+            r.list.forEach(item => {
+              this.checkedListPart.push(item.serial)
+            });
+            this.checkedListAll = this.checkedListAll.concat(this.checkedListPart)
+            if(this.checkAll||this.isIndeterminate){
+              this.checkedList = this.checkedListAll
+            }
+            // console.log('----',this.checkedListAll,this.checkedList)
+            this.loading = false
+          }
+        })
       },
+      reloadList(){
+        this.leftPage = 0;
+        this.loading = false;
+        this.handShowData=[];
+        this.checkedListAll=[];
+        this.checkAll=false;
+        this.isIndeterminate=false;
+        // this.noMore = false;
+        if(!this.loading){
+          this.load();
+        }
+      },
+      load(){
+        this.loading = true
+        this.leftPage++;
+        this.getLeftData();  
+      },
+      // load(){
+      //   let aa=[];
+      //   console.log(this.handData.length-this.xzCount)
+      //   if(this.handData.length-this.xzCount>20){
+      //     this.xzCount+=20;
+      //     aa=(this.handData).slice(this.xzCount,this.xzCount+20)
+      //   }else if(0<=Math.abs(this.handData.length-this.xzCount)<=20){
+      //     // this.xzCount+=20;
+      //     console.log(this.xzCount,this.xzCount+Math.abs(this.handData.length-this.xzCount),aa)
+      //     aa=(this.handData).slice(this.xzCount,this.xzCount+Math.abs(this.handData.length-this.xzCount))
+      //     return
+      //   }else{
+      //     return
+      //   }
+      //   for(var i in aa){
+      //     this.allArr.push(aa[i])
+      //   }
+      //   this.handShowData = this.allArr;
+      // },
       getPcsQueryData(){
         let p={
           jb:this.$store.state.user.jb,
@@ -325,8 +364,8 @@ export default {
       },
       handChangeFun(value){
         let checkedCount = value.length;
-        this.checkAll = checkedCount === this.handData.length;
-        this.isIndeterminate = checkedCount > 0 && checkedCount < this.handData.length;
+        this.checkAll = checkedCount === this.handShowData.length;
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.handShowData.length;
       },
       handleCheckAllChange(val){
         if(val){
@@ -369,7 +408,8 @@ export default {
             type: "success"
           });
           this.isShowDialog = false;
-          this.getHandData();
+          this.reloadList();
+          // this.getHandData();
           this.getTable();
           this.checkedList = [];
           this.handChangeFun(this.checkedList)
@@ -420,7 +460,8 @@ export default {
             type: "success"
           });
            this.isShowDialog = false;
-          this.getHandData();
+           this.reloadList();
+          // this.getHandData();
           this.getTable();
           this.checkedList = [];
           this.handChangeFun(this.checkedList)
@@ -712,7 +753,8 @@ export default {
               type: "success"
             });
             this.getTable();
-            this.getHandData();
+            this.reloadList();
+            // this.getHandData();
           })
         }).catch(()=>{
           this.$message({

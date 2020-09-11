@@ -116,6 +116,7 @@ export default {
       }
     };
   },
+
   mounted() {
     this.$store.dispatch("aGetNation");
     this.$store.dispatch("aGetGender");
@@ -133,6 +134,25 @@ export default {
     this.$store.dispatch("aGetDM", "sjly");
     this.getSpInit();
     this.tabTopClick(0);
+    if(this.$route.query.pageA){
+      this.tabTopClick(this.$route.query.pageA);
+    }
+  },
+  watch:{
+    $route:{
+      handler(val){
+        console.log('val==',val,val.query.turn)
+        if(val.query.turn == 'Temporary'){
+          console.log('pageA==',val.query.pageA)
+          if(val.query.pageA==0||val.query.pageA){
+            this.cx.pd.shzt = "shzt_" + val.query.pageA;
+            this.tabTopClick(val.query.pageA);
+          }
+        }
+      },
+      deep:true,
+      immediate:true,
+    }
   },
   methods: {
     getSpInit(){

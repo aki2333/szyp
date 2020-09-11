@@ -546,7 +546,8 @@ const zrqgl = {
         {
             cm: '责任区代码',
             type: 'input',
-            dm: 'zrqDm' //必填
+            dm: 'zrqDm', //必填
+            dis:true
         },
         {
             cm: '责任区名称',

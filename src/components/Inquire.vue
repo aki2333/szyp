@@ -74,6 +74,8 @@
                   placeholder="请选择"
                   :clearable="!cx.must"
                   :disabled="inquire[cx.dm+'dis']"
+                  :multiple="cx.mult"
+                  :collapse-tags="cx.mult"
                   @change="linkChange(cx,inquire[cx.dm],inquire)"
                 >
                   <el-option

@@ -93,7 +93,7 @@ export default {
       this.dwlbBmmh1 = val;
     },
     defaultChecked(val) {
-      console.log("defaultChecked", val);
+      // console.log("defaultChecked", val);
       this.$refs.tree.setCheckedKeys(val);
       setTimeout(() => {
         this.getTree();

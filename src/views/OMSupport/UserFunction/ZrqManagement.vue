@@ -99,48 +99,9 @@ export default {
     };
   },
   mounted() {
-    // 由其他平台登入
-      // console.log('由其他平台登入',window.location.href,window.location.href.includes("sfzh"),this.getItsUrl(window.location.href,'sfzh'))
-      // if(window.location.href.includes("sfzh")){
-      //   let sfzh = this.getItsUrl(window.location.href,"sfzh");
-      //   // let sfzh = 'ceshi'
-      //   if(sfzh){
-      //     this.userIt.type = '0'
-      //     this.userIt.name = sfzh
-      //     this.$api.post(this.$api.aport1 + "/accountLogin", this.userIt, r => {
-      //       if (r.authorization) {
-      //         this.$store.dispatch("aGetToken", r.authorization).then(data => {
-      //           console.log("第三方登陆成功", data);
-      //           this.getUser();
-      //         });
-      //         this.$store.dispatch("aGetItS",true)
-      //       }
-      //     });
-      //   }
-      // }
     this.dwxx();
   },
   methods: {
-    getUser() {//由其他平台登入
-      this.$api.post(this.$api.aport1 + "/userController/getUser", {}, r => {
-        this.$store.dispatch("aGetUser", r).then(data => {
-          console.log("获取用户信息成功", data);
-          this.$router.push({ name: "ZrqManagement"});
-          this.isLogin = false;
-        });
-      });
-    },
-    getItsUrl(url,name){
-      //取得url中?后面的字符
-      // console.log('==',url,url.split("?")[1].split("&"))
-      var query = url.split("?")[1];
-      var pair = query.split("&");
-      for(var i=0;i<pair.length;i++){
-        if(pair[i].split('=')[0] == name){
-          return pair[i].split('=')[1]
-        }
-      }
-    },
     // 单位信息
     dwxx() {
       this.$cdata.qxgl.getSjBm(this.$store.state.user.bmbh).then(data => {

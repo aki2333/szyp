@@ -661,31 +661,37 @@ const bhqs = {
       cm: '性别',
       type: 'select',
       dm: 'gender',
+      mult:true,
     },
     {
       cm: '国家地区',
       type: 'select',
       dm: 'nationality',
+      mult:true,
     },
     {
       cm: '证件种类',
       type: 'select',
       dm: 'paper_type',
+      mult:true,
     },
     {
       cm: '签证种类',
       type: 'select',
       dm: 'visa_type',
+      mult:true,
     },
     {
       cm: '身份',
       type: 'select',
       dm: 'degree_code',
+      mult:true,
     },
     {
       cm: '境外人员类别',
       type: 'select',
       dm: 'personnel_area_type',
+      mult:true,
     },
     {
       cm: '迁入时间',
@@ -705,15 +711,14 @@ const bhqs = {
       ],
     },
     {
-      cm: '居住地辖区',
+      cm: '居住地分局',
       type: 'select',
-      dm: 'inhabi_police_station',
+      dm: 'jzd_ssfj',
     },
     {
-      cm: '居住地责任区',
+      cm: '居住地派出所',
       type: 'select',
-      dm: 'turnoutarea',
-      optype:true
+      dm: 'inhabi_police_station',
     },
     {
       cm: '存量时间',
@@ -733,7 +738,12 @@ const bhqs = {
       ],
     },
     {
-      cm: '工作单位辖区',
+      cm: '工作地分局',
+      type: 'select',
+      dm: 'gzd_ssfj',
+    },
+    {
+      cm: '工作地派出所',
       type: 'select',
       dm: 'workplace_police_station',
     },

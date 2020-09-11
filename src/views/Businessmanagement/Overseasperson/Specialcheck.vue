@@ -28,6 +28,7 @@
         :page="page"
         :clzt="clzt"
         :lbData="lbData"
+        :colorDes="colorDes"
         :lbControlData="lbControlData"
         :isSelect="isSelect"
         :lbBtn="lbBtn"
@@ -121,6 +122,7 @@ export default {
       isSelect: true,
       isTab: true,
       cxShow:false,
+      colorDes:[],
       cxData: this.$cdata.zxhc.zxhc.cx,
       facxData: this.$cdata.zxhc.zxhc.facx,//快速查询项
       lbData: this.$cdata.zxhc.zxhc.lb,
@@ -191,9 +193,9 @@ export default {
   watch: {
     $route:{
       handler(val){
-        console.log('val==',val,val.query.turn)
+        // console.log('val==',val,val.query.turn)
         if(val.query.turn == 'Specialcheck'){
-          console.log('val.query.page==',val.query.page)
+          // console.log('val.query.page==',val.query.page)
           this.plBtn = this.$store.state.plBtn;
           if(val.query.page == '1'){
             this.plBtn = this.plBtn.filter(item => ['sb'].indexOf(item.py) == -1);
@@ -211,6 +213,7 @@ export default {
             this.cx.pageNum = 1;
             this.selection = [];
             this.queryShowFnc(this.cxShow);
+            this.getColorDes()
           });
         }
       },
@@ -254,12 +257,19 @@ export default {
           if(this.$route.query.page){
             this.page = this.$route.query.page
             this.timer = new Date().getTime()//路由切换时 page变，重新请求Table组件 使page渲染
+            this.getColorDes()
           }
           this.getTable();
+          this.getColorDes();
         });
       });
   },
   methods: {
+    getColorDes(){
+      this.$api.post(this.$api.aport2+'/issueTimeControl/getIssueTimeControlShAndBzList',{dwjb:this.page},r=>{
+        this.colorDes = r
+      })
+    },
     getSpInit(){
       this.$cdata.qxgl.getSjBm(this.$store.state.user.bmbh).then(data => {
         this.$store.dispatch("aGetssdw", {
@@ -367,6 +377,7 @@ export default {
       this.cx.pageNum = 1;
       this.selection = [];
       this.queryShowFnc(this.cxShow);
+      this.getColorDes();
       // this.getTable(true);
     },
     rowClick(data) {
@@ -704,7 +715,7 @@ export default {
             this.commonBtn = true;
             this.isDb = true;
             this.$cdata.zxhc
-              .innerBtn(data.data.whetherUpdateState, this.page,data.data.datatype)
+              .innerBtn(data.data.whetherUpdateState, this.page,data.data.datatype,data.data.backstatus_desc)
               .then(data => {
                 this.dbBtn = data;
               });
@@ -714,7 +725,7 @@ export default {
           this.isEditBtn = true;
           this.commonBtn = false;
           this.isDb = true;
-          this.$cdata.zxhc.innerBtn("2", this.page,data.data.datatype).then(data => {
+          this.$cdata.zxhc.innerBtn("2", this.page,data.data.datatype,data.data.backstatus_desc).then(data => {
             this.dbBtn = data;
           });
         }

@@ -12,7 +12,7 @@
                 <el-badge :value="item.sum" class="badge-item-title hand targetItem">{{item.menu_name}}</el-badge>
               </div>
             </template>
-            <div class="targetItem" v-for="(child,inds) in item.dataList" :key="inds" @click="$router.push({name:child.url,query:{page:child.page,turn:child.url}})">
+            <div class="targetItem" v-for="(child,inds) in item.dataList" v-show="child.name!='走访中'" :key="inds" @click="toPageFun(child)">
               <el-badge  :value="child.num" class="badge-item hand targetItem">{{child.name}}</el-badge>
             </div>
           </el-collapse-item>
@@ -54,34 +54,34 @@ export default {
     return {
       righttWidth: "36px",
       dbData: {
-        total: 8000,
-        allData: [
-          {
-            menu_url: "Specialcheck",
-            menu_name: "核查走访",
-            dataList: [
-              {
-                name: "市局未处理",
-                num: "4000",
-                url: "Specialcheck",
-                page: "1"
-              },
-              {
-                name: "派出所未处理",
-                num: "3000",
-                url: "Specialcheck",
-                page: "3"
-              }
-            ],
-            sum: 6000
-          },
-          {
-            menu_url: "Temporary",
-            menu_name: "网报临住",
-            dataList: [],
-            sum: 6000
-          }
-        ]
+        // total: 8000,
+        // allData: [
+        //   {
+        //     menu_url: "Specialcheck",
+        //     menu_name: "核查走访",
+        //     dataList: [
+        //       {
+        //         name: "市局未处理",
+        //         num: "4000",
+        //         url: "Specialcheck",
+        //         page: "1"
+        //       },
+        //       {
+        //         name: "派出所未处理",
+        //         num: "3000",
+        //         url: "Specialcheck",
+        //         page: "3"
+        //       }
+        //     ],
+        //     sum: 6000
+        //   },
+        //   {
+        //     menu_url: "Temporary",
+        //     menu_name: "网报临住",
+        //     dataList: [],
+        //     sum: 6000
+        //   }
+        // ]
       }
     };
   },
@@ -95,6 +95,20 @@ export default {
         this.righttWidth = this.righttWidth == "36px" ? "182px" : "36px";
         this.oneData();
       // }
+    },
+    toPageFun(val){
+      var result = this.$store.state.menuC.some((item)=>{
+        if(item.menu_url==val.url){
+          this.$router.push({name:val.url,query:{pageA:val.pageA,page:val.page,turn:val.url}})
+          return true
+        }
+      })
+      if(!result){
+        this.$alert(" 没有此功能权限，请联系管理员", "提示", {
+          confirmButtonText: "确定",
+          type: "warning"
+        })
+      }
     },
     openPage(val){
       if(val.dataList.length==0){
@@ -131,6 +145,7 @@ export default {
 }
 .right-box-content {
   height: 100%;
+  overflow: hidden;
 }
 .right-one-data {
   padding: 0 0 0 20px;

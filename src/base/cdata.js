@@ -343,6 +343,30 @@ function aGetArea(){
         })
     })
   }
+  function czpzlxFuc(dwjb){
+      return new Promise((resolve) => {
+        if(dwjb == '1'){
+            options.czpzlx=[
+                {
+                    dm:'1',
+                    mc:'待下发'
+                },
+            ]
+        }else{
+            options.czpzlx=[
+                {
+                    dm:'1',
+                    mc:'待下发'
+                },
+                {
+                    dm:'2',
+                    mc:'待上报'
+                },
+            ]
+        }
+        resolve(options.czpzlx)
+      })
+  }
 export default {
     menu,
     options,
@@ -361,5 +385,6 @@ export default {
     zrqReciData,
     aGetArea,
     JoinZrq,
-    jzdZrq
+    jzdZrq,
+    czpzlxFuc
 }

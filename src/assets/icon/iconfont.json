@@ -1,0 +1,16 @@
+{
+  "id": "387349",
+  "name": "icon-li",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "8262412",
+      "name": "复色-01",
+      "font_class": "fuse-",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    }
+  ]
+}

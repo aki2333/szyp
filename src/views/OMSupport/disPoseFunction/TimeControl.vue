@@ -6,6 +6,7 @@
 		:pd="cx.pd" 
 		:cxPara="cx"
 		@cxFnc="cxFnc" 
+    @lcFnc="formLcFnc"
     @tagClickFnc="tagClickFnc"
 		@queryShowFnc="queryShowFnc"
     @commandfnc="commandfnc"></Inquire>
@@ -48,6 +49,7 @@
         :dialogType="dialogType"
         :dialogData="dialogData"
         :ZDYShow="dialogType=='xz'?true:false"
+        @formLcFnc="formLcFnc"
         @dialogCancel="isShowDialog=false"
         @dialogSave="dialogSave"
       ></Form>
@@ -129,6 +131,11 @@ export default {
         this.cxQ.pd[data.para[key].dmx] = data.para[key].dm;
       }
       this.getTable(true,this.cxQ)
+    },
+    formLcFnc(data){
+      if(data.key.dm == 'dwjb'){
+        this.$cdata.czpzlxFuc(data.data)
+      }
     },
 		//筛选条件 快速查询
     commandfnc(data){

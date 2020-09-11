@@ -183,10 +183,10 @@ const zxhc = {
             cm: '下发类别',
             dm: 'datatype_desc'
         },
-        // {
-        //     cm: '手机号码',
-        //     dm: 'phone',
-        // },
+        {
+            cm: '手机号码',
+            dm: 'phone',
+        },
         {
             cm: '走访状态',
             dm: 'backstatus_desc'
@@ -436,15 +436,27 @@ const zrqzf = {
             width:'280'
         },
         {
+            cm: '所属分局',
+            dm: 'suboffice_desc',
+            width:'280'
+        },
+        {
+            cm: '所属派出所',
+            dm: 'policestation_desc',
+            width:'280'
+        },
+        {
             cm: '接收责任区',
             dm: 'turnoutarea_desc',
-            
         },
         {
             cm: '接收人',
             dm: 'turnoutarea_receive_user'
         },
-
+        {
+            cm: '手机号码',
+            dm: 'phone',
+        },
         {
             cm: '接收时间',
             dm: 'turnoutarea_receivedate'
@@ -2147,7 +2159,7 @@ function innerSbDia(data){
         resolve(zxhc.innerDiaCon)
     })
 }
-function innerBtn(data,page,datatype){
+function innerBtn(data,page,datatype,backstatus){
     return new Promise((resolve) => {
         if(data == '1'){//已走访
             if(page=='1'){//市局已处理 只能下发
@@ -2161,17 +2173,17 @@ function innerBtn(data,page,datatype){
                 ]
             }else{
                 zxhc.dbBtn = [
-                    {
-                        "button_name": "上报",
-                        "serial": "201",
-                        "button_type": "singSb",
-                        "type": "primary",
-                    },
+                    // {
+                    //     "button_name": "上报",
+                    //     "serial": "201",
+                    //     "button_type": "singSb",
+                    //     "type": "primary",
+                    // },
                 ]
             }
         }else if(data == '2'){//未走访
             if(page=='1'){//市局未处理
-                if(datatype == '3'){//下发状态是专项核查 不要回退按钮
+                if((datatype == '3'||datatype == '4'||datatype == '5')||(backstatus!='无效地址'&&backstatus)){//下发状态是专项核查系列 不要回退按钮
                     zxhc.dbBtn = [
                         {
                             "button_name": "下发",

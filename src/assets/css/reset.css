@@ -349,3 +349,19 @@ input[type="number"]{
   flex-direction: column;
   margin-left: 12px;
 }
+.color-des .el-popover__title{
+    color: #303133;
+    font-size: 15px;
+    font-weight: bold;
+    background-color: #7fceff;
+    display: inline-block;
+    padding: 5px;
+    line-height: 1;
+    margin-bottom: 12px;
+}
+.el-popover.color-des{
+  max-width: 350px!important;
+}
+.el-select__tags .el-tag.el-tag--info{
+  color: #3c5982!important;
+}

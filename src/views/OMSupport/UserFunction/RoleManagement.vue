@@ -179,6 +179,7 @@ export default {
           });
           return
         }else{
+          this.dialogData.bmbh = this.treeBMXX.bmbh;
           this.isShowDialog = true;
         }
       } else if (this.dialogType == "yh") {

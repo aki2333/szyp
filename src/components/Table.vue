@@ -13,14 +13,24 @@
       <!-- :type="pb.type" -->
       <!--           :disabled="pb.user_ctrl==1&&disPlBtn" -->
       <div class="table-btn-box" v-if="isPl">
-        <!-- <el-popover
+        <el-popover
           placement="left"
-          title="颜色说明"
-          width="200"
           trigger="hover"
-          content="这是一段内容,这是一段内容,这是一段内容,这是一段内容。">
-          <el-button class="mr-10" slot="reference" icon="el-icon-s-help" circle type="success" size="mini" v-show="refName=='hczf'&&clzt1==1"></el-button>
-        </el-popover> -->
+          popper-class="color-des">
+          <ul v-if="colorDes.length!=0">
+            <li v-for="(color,inds) in colorDes" :key="inds">
+              <span style="width:20px;height:20px;display:inline-block;vertical-align: middle;" class="mr-10" :style="{backgroundColor:color.gdyssh}"></span>
+              <span style="flex:1;">{{color.ysshbz}}</span>
+            </li>
+          </ul>
+          <div v-else>无颜色说明</div>
+          <span class="mr-10" slot="reference" v-show="(refName=='hczf'&&clzt1==1)||(refName=='zrqzf'&&clzt1==1)">
+            <svg class="icon" aria-hidden="true">
+              <use xlink:href="#icon-fuse-"></use>
+            </svg>
+          </span>
+          <!-- <i class="mr-10 iconfont" slot="reference" circle type="success" size="mini" v-show="(refName=='hczf'&&clzt1==1)||(refName=='zrqzf'&&clzt1==1)">&#xe617;</i> -->
+        </el-popover>
         <template v-for="(pb,pbi) in plBtn">
           <el-button
             size="mini"
@@ -232,6 +242,10 @@ export default {
     expUrl:{
       type:String,
       default:''
+    },
+    colorDes:{
+      type:Array,
+      default: () => []
     }
   },
   data() {
@@ -255,7 +269,25 @@ export default {
       transData:this.lbData,//数据来源（全部展示列表项）
       pointData:[],//选中项
       confirmFlag:true,
-      expD:{}
+      expD:{},
+      // colorDes:[
+      //     {
+      //       "gdyssh": "#9aba60",
+      //       "ysshbz": "11"
+      //     },
+      //     {
+      //       "gdyssh": "#e2534d",
+      //       "ysshbz": "22"
+      //     },
+      //     {
+      //       "gdyssh": "#9aba60",
+      //       "ysshbz": "33"
+      //     },
+      //     {
+      //       "gdyssh": "#e2534d",
+      //       "ysshbz": "44"
+      //     }
+      //   ],
     };
   },
   watch: {

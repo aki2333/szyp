@@ -56,7 +56,7 @@
                   clearable
                   :disabled="cx.dis"
                   placeholder="请选择"
-                >
+                  @change="linkChange(cx,dialogData[cx.dm],dialogData)">
                   <el-option
                     v-for="item in $cdata.options[cx.dm]"
                     :key="item.dm"
@@ -205,15 +205,15 @@
           status-icon
           size="mini"
           ref="colorForm"
-          label-width="100px"
+          label-width="130px"
           class="form-ruleForm"
         >
         <el-row :gutter="30" type="flex" align="middle" justify="center">
         <el-col :span="16">
-          <el-col :span="24" v-for="(all,alls) in ColorData.data" :key="alls">
+          <el-col :span="24" class="color-part" v-for="(all,alls) in ColorData.data" :key="alls">
             <el-row type="flex">
-              <el-col :span="18">
-                  <el-form-item v-for="(item,ind) in ColorLabel" :key="ind" :label="item.cm" :prop="'data.'+alls+'.'+item.dm" 
+              <el-col :span="19">
+                  <el-form-item  v-for="(item,ind) in ColorLabel" :key="ind" :label="item.cm" :prop="item.dm=='ysshbz'?'':'data.'+alls+'.'+item.dm" 
                   :rules="{required: true, message: '此项必填', trigger: 'blur'}" :class="item.class">
                     <template v-if="item.type=='inpUnit'">
                       <el-row type="flex" justify="start">
@@ -226,19 +226,18 @@
                     </template>
                     <template v-if="item.type=='block'">
                       <colorPicker v-model="all[item.dm]"/>
-                      <!-- <el-select v-model="all[item.dm]" placeholder="请选择" popper-class="color-block" class="color-inp" @change="colorChange(all[item.dm],alls)">
-                        <el-option
-                          v-for="(item,its) in colorArr"
-                          :key="its"
-                          :label="item"
-                          :value="item">
-                          <span style="width:20px;height:20px;display: inline-block;" :style="{backgroundColor:item}"></span>
-                        </el-option>
-                      </el-select> -->
+                    </template>
+                    <template v-else-if="item.type=='textarea'">
+                      <el-input
+                        type="textarea"
+                        :rows="1"
+                        placeholder="请输入内容"
+                        v-model="all[item.dm]">
+                      </el-input>
                     </template>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6" class="ml-5 align-center"> 
+                <el-col :span="5" class="ml-5 align-center"> 
                   <el-button type="primary" icon="el-icon-plus" size="mini" circle @click="Add()" v-if="ColorData.data.length-1==alls"></el-button>
                   <el-button type="danger" icon="el-icon-minus" size="mini" circle @click="deleteModel(alls)" v-if="alls!=0"></el-button>
                 </el-col>
@@ -392,6 +391,7 @@ export default {
         czpzlx: [{ required: true, message: "此项必填", trigger: "blur" }],
         gdsj: [{ required: true, message: "此项必填", trigger: "blur" }],
         gdyssh: [{ required: true, message: "请选择颜色", trigger: "blur" }],
+        zrqMc: [{ required: true, message: "此项必填", trigger: "blur" }],
       },
       isXJ: false,
       newForm: {},
@@ -404,6 +404,7 @@ export default {
             id:1,
             gdsj:'',
             gdyssh:'',
+            ysshbz:''
           },
         ],
       },
@@ -411,20 +412,27 @@ export default {
         id:1,
         gdsj:'',
         gdyssh:'',
+        ysshbz:'',
       },
       count:1,
       ColorLabel:[
         {
-            cm:'规定时间',
+            cm:'超期时间',
             dm:'gdsj',
             type:'inpUnit',
             mold:'number'
           },
           {
-            cm:'规定颜色',
+            cm:'超期显示(颜色)',
             dm:'gdyssh',
             type:'block',
             class:'m-color'
+          },
+          {
+            cm:'颜色说明',
+            type:'textarea',
+            dm:'ysshbz',
+            class:'yssm'
           }
       ],
       colorArr:['#67C23A','#E6A23C','#F56C6C','#409EFF','#909399']
@@ -448,6 +456,7 @@ export default {
             id:1,
             gdsj:'',
             gdyssh:'',
+            ysshbz:'',
           },
         ],
       }
@@ -546,5 +555,9 @@ export default {
 }
 .double {
   width: 48%;
+}
+.color-part{
+  border-top: 1px solid #eee;
+  padding: 10px 15px 5px 15px!important;
 }
 </style>

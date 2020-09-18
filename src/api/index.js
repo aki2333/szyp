@@ -1,8 +1,8 @@
 // 配置API接口地址
 
-var root = 'http://192.168.3.131:1101/'//测试
+// var root = 'http://192.168.3.131:1101/'//测试
 // var root = 'http://50.73.70.121:1101/'//公安测试环境
-// var root = 'http://50.73.70.116:1101/'//公安正式环境
+var root = 'http://50.73.70.116:1101/'//公安正式环境
 
 // var root = 'http://10.0.30.43:1101'//石本地
 // var root = 'http://10.0.8.68:1101/'//任本地
@@ -77,7 +77,9 @@ axios.interceptors.request.use(
 
 function apiAxios(method, url, params, success, failure, isDownload,type,name) {
   let loadingInstance1 = null;
-  loadingInstance1 = Loading.service({ fullscreen: true, spinner: 'el-icon-loading', text: '正在加载中', background: 'rgba(0,0,0,0.6)', customClass: 'loadingClass' });
+  if(!(url==aport2+"/pendingData/pendingDataStatistics")){
+    loadingInstance1 = Loading.service({ fullscreen: true, spinner: 'el-icon-loading', text: '正在加载中', background: 'rgba(0,0,0,0.6)', customClass: 'loadingClass' });
+  }
   if (params) {
     params = filterNull(params);
   }

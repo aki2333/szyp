@@ -250,19 +250,22 @@ const lzsb = {
                 cm: '国家(地区)',
                 type: 'select',
                 dm: 'nationality',
-                weight:true
+                weight:true,
+                dis:true,
             },
             {
                 cm: '证件种类',
                 type: 'select',
                 dm: 'passportType',
-                weight:true
+                weight:true,
+                dis:true,
             },
             {
                 cm: '证件号码',
                 type: 'input',
                 dm: 'passportno',
-                weight:true
+                weight:true,
+                dis:true,
             },
             {
                 cm: '英文姓',
@@ -279,65 +282,81 @@ const lzsb = {
                 type: 'input',
                 dm: 'givenname'
             },
+            // {
+            //     cm: '核查英文姓名',
+            //     type: 'input',
+            //     dm: 'givenname'
+            // },
             {
                 cm: '中文姓名',
                 type: 'input',
-                dm: 'name'
+                dm: 'name',
             },
             {
                 cm: '性别',
                 type: 'select',
                 dm: 'gender',
+                dis:true,
             },
             {
                 cm: '出生日期',
                 type: 'datePicker',
-                dm: 'birthday'
+                dm: 'birthday',
+                dis:true,
             },
             {
                 cm: '身份证号码',
                 type: 'input',
                 dm: 'sfzh',
+                dis:true,
             },
             {
                 cm: '证件有效期',
                 type: 'datePicker',
-                dm: 'zjyxq'
+                dm: 'zjyxq',
+                dis:true,
             },
             {
                 cm: '签证种类',
                 type: 'select',
                 dm: 'visaType',
+                dis:true,
             },
             {
                 cm: '签证号码',
                 type: 'input',
-                dm: 'visaNo'
+                dm: 'visaNo',
+                dis:true,
             },
             {
                 cm: '签证有效期至',
                 type: 'datePicker',
-                dm: 'tlyxqz'
+                dm: 'tlyxqz',
+                dis:true,
             },
             {
                 cm: '签发地',
                 type: 'select',
-                dm: 'qfjg'
+                dm: 'qfjg',
+                dis:true,
             },
             {
                 cm: '入境日期',
                 type: 'datePicker',
-                dm: 'rjrq'
+                dm: 'rjrq',
+                dis:true,
             },
             {
                 cm: '入境口岸',
                 type: 'select',
-                dm: 'rjka'
+                dm: 'rjka',
+                dis:true,
             },
             {
                 cm: '停留事由',
                 type: 'select',
-                dm: 'rjsy'
+                dm: 'rjsy',
+                dis:true,
             },
         ],
         "b": [
@@ -363,113 +382,174 @@ const lzsb = {
                 cm: '在华工作机构名称',
                 type: 'input',
                 dm: 'gzjg',
+                dis:true,
             },
             {
                 cm: '住宿日期',
                 type: 'datePicker',
                 dm: 'zssj',
                 toS:true,//日期精确到秒
+                dis:true,
             },
             {
                 cm: '行政区划',
                 type: 'select',
                 dm: 'xzqh',
+                dis:true,
             },
             {
                 cm: '所属分局',
                 type: 'select',
                 dm: 'suboffice',
                 poupDm:'subofficeMc',
-                poup:true
+                poup:true,
+                dis:true,
             },
             {
                 cm: '所属派出所',
                 type: 'select',
                 dm: 'policestation',
                 poupDm:'policestationMc',
-                poup:true
+                poup:true,
+                dis:true,
             },
             {
                 cm: '本人联系电话',
                 type: 'input',
-                dm: 'sjhm'
+                dm: 'sjhm',
+                dis:true,
             },
             {
                 cm: '住宿地址',
                 type: 'input',
                 col: 16,
-                dm: 'zsdz'
+                dm: 'zsdz',
+                dis:true,
             },
 
             {
                 cm: '紧急联系人',
                 type: 'input',
-                dm: 'jjlxr'
+                dm: 'jjlxr',
+                dis:true,
             },
             {
                 cm: '定位地址',
                 type: 'input',
                 col: 16,
-                dm: 'dwdz'
+                dm: 'dwdz',
+                dis:true,
             },
             {
                 cm: '紧急联系人电话',
                 type: 'input',
-                dm: 'jjlxrdh'
+                dm: 'jjlxrdh',
+                dis:true,
             },
             {
                 cm: '住所性质',
                 type: 'select',
-                dm: 'zsxz'
+                dm: 'zsxz',
+                dis:true,
             },
             {
                 cm: '住房种类',
                 type: 'select',
-                dm: 'zfzl'
+                dm: 'zfzl',
+                dis:true,
             },
 
             {
                 cm: '上报时间',
                 type: 'datetimePicker',
-                dm: 'sbsj'
+                dm: 'sbsj',
+                dis:true,
             },
             {
                 cm: '数据比对结果',
                 type: 'input',
                 col: 16,
-                dm: 'yq_hcjg'
+                dm: 'yq_hcjg',
+                dis:true,
             },
+
+            {
+                cm: '出入境状态',
+                type: 'select',
+                dm: 'crjzt',
+                dis:true,
+            },
+            {
+                cm: '证件有效期至',
+                type: 'datePicker',
+                dm: 'zjyxqz',
+                dis:true,
+            },
+            {
+                cm: '职业',
+                type: 'select',
+                dm: 'zy',
+                dis:true,
+            },
+            {
+                cm: '房主姓名',
+                type: 'input',
+                dm: 'fzxm',
+                dis:true,
+            },
+            {
+                cm: '房主电话',
+                type: 'input',
+                dm: 'fzdh',
+                dis:true,
+            },
+            {
+                cm: '房主身份证',
+                type: 'input',
+                dm: 'fzsfz',
+                dis:true,
+            },
+            {
+                cm: '与境外人员关系',
+                type: 'select',
+                dm: 'jwrygx',
+                dis:true,
+            },
+
             {
                 cm: '备注',
                 type: 'textarea',
                 col: 24,
-                dm: 'bz'
+                dm: 'bz',
+                dis:true,
             },
             {
                 cm: '审核不通过原因',
                 type: 'textarea',
                 col: 24,
                 dm: 'shsm',
-                cshow: true
+                cshow: true,
+                dis:true,
             },
             {
                 cm: '核查不通过原因',
                 type: 'textarea',
                 col: 24,
                 dm: 'hcsm',
-                cshow: true
+                cshow: true,
+                dis:true,
             },
             {
                 cm: '审核人',
                 type: 'input',
                 dm: 'sprMc',
-                dis: true
+                dis: true,
             },
             {
                 cm: '审核单位',
                 type: 'input',
                 dm: 'sprdwMc',
-                dis: true
+                dis: true,
             },
             {
                 cm: '审核时间',

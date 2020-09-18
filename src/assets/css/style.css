@@ -701,3 +701,6 @@
 .yssm.el-form-item.is-required>.el-form-item__label:before{
     content: ''!important;
 }
+.browser-page{
+    margin: 30px 60px;
+}

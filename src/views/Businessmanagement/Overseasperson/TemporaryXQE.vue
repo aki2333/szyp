@@ -1,5 +1,5 @@
 <template>
-  <div class="page">
+  <div class="page-box page">
     <el-form
       :model="dialogData"
       status-icon
@@ -9,7 +9,7 @@
       label-width="137px"
       label-position="right"
       class="tc-form"
-      :disabled="dialogType == 'ck'"
+      :disabled="dialogType=='ck'"
     >
       <el-row :gutter="30">
         <el-col :span="16" class="no-padding">
@@ -25,7 +25,8 @@
               :class="{'yxg-form-item':dialogData.xgMap&&dialogData.xgMap[cx.dm],'font-blod':cx.weight}"
               v-popover="'popover'+i"
               :label="cx.cm"
-              :prop="cx.dm">
+              :prop="cx.dm"
+            >
               <template v-if="cx.type=='input'">
                 <el-input v-model="dialogData[cx.dm]" :disabled="cx.dis"></el-input>
               </template>
@@ -38,7 +39,7 @@
                   filterable
                   v-if="cx.optype"
                   clearable
-                  :disabled="dialogData[cx.dm+'dis']||cx.dis"
+                  :disabled="cx.dis"
                   placeholder="请选择"
                 >
                   <el-option
@@ -80,6 +81,7 @@
                     <el-date-picker
                       v-model="dialogData[cx.children[0].dm]"
                       :type="cx.children[0].type"
+                      :disabled="cx.children[0].dis"
                       placeholder="选择开始日期"
                       value-format="yyyy-MM-dd"
                     ></el-date-picker>
@@ -89,6 +91,7 @@
                     <el-date-picker
                       v-model="dialogData[cx.children[1].dm]"
                       :type="cx.children[1].type"
+                      :disabled="cx.children[1].dis"
                       value-format="yyyy-MM-dd"
                       placeholder="选择结束日期"
                     ></el-date-picker>
@@ -96,7 +99,7 @@
                 </div>
               </template>
               <template v-else-if="cx.type=='radio'">
-                <el-radio-group v-model="dialogData[cx.dm]">
+                <el-radio-group v-model="dialogData[cx.dm]" :disable="cx.dis">
                   <el-radio
                     :label="item.dm"
                     v-for="(item,ind) in $store.state[cx.dm]"
@@ -105,14 +108,6 @@
                 </el-radio-group>
               </template>
             </el-form-item>
-            <!-- <el-row>
-              <el-col :span="24"> -->
-                <template v-if="cx.type=='line'">
-                  <span class="divider-text">{{cx.title}}</span>
-                  <el-divider></el-divider>
-                </template>
-              <!-- </el-col>
-             </el-row> -->
           </el-col>
         </el-col>
         <el-col :span="8">
@@ -153,12 +148,20 @@
               v-if="dialogData.xgMap&&dialogData.xgMap[cx.dm]"
               :content="dialogData.xgMap[cx.dm]"
             ></el-popover>
+             <el-popover
+              :ref="'popover2'+i"
+              placement="top-end"
+              trigger="hover"
+              v-else-if="(cx.poup&&dialogData[cx.dm])"
+              :content="dialogData[cx.poupDm]"
+            ></el-popover>
             <el-form-item
               :class="{'yxg-form-item':dialogData.xgMap&&dialogData.xgMap[cx.dm]}"
               v-popover="'popover2'+i"
               :label="cx.cm"
               :prop="cx.dm"
-              v-if="!cx.cshow||(cx.cshow&&dialogData[cx.dm])">
+              v-if="!cx.cshow||(cx.cshow&&dialogData[cx.dm])"
+            >
               <template v-if="cx.type=='input'">
                 <el-input v-model="dialogData[cx.dm]" :disabled="cx.dis"></el-input>
               </template>
@@ -166,7 +169,7 @@
                 <el-input type="textarea" v-model="dialogData[cx.dm]" :disabled="cx.dis"></el-input>
               </template>
               <template v-else-if="cx.type=='password'">
-                <el-input type="password" v-model="dialogData[cx.dm]"></el-input>
+                <el-input type="password" v-model="dialogData[cx.dm]" :disabled="cx.dis"></el-input>
               </template>
               <template v-else-if="cx.type=='select'">
                 <el-select
@@ -225,6 +228,7 @@
                     <el-date-picker
                       v-model="dialogData[cx.children[0].dm]"
                       :type="cx.children[0].type"
+                      :disabled="cx.children[0].dis"
                       value-format="yyyy-MM-dd"
                       placeholder="选择开始日期"
                     ></el-date-picker>
@@ -234,6 +238,7 @@
                     <el-date-picker
                       v-model="dialogData[cx.children[1].dm]"
                       :type="cx.children[1].type"
+                      :disabled="cx.children[1].dis"
                       placeholder="选择结束日期"
                       value-format="yyyy-MM-dd"
                     ></el-date-picker>
@@ -241,7 +246,7 @@
                 </div>
               </template>
               <template v-else-if="cx.type=='radio'">
-                <el-radio-group v-model="dialogData[cx.dm]">
+                <el-radio-group v-model="dialogData[cx.dm]" :disabled="cx.dis">
                   <el-radio
                     :label="item.dm"
                     v-for="(item,ind) in $store.state[cx.dm]"
@@ -249,19 +254,25 @@
                   >{{item.mc}}</el-radio>
                 </el-radio-group>
               </template>
+              <template v-else-if="cx.type=='checkbox'">
+                <el-checkbox-group v-model="dialogData[cx.dm]" :disabled="cx.dis">
+                  <el-checkbox 
+                   v-for="(item,ind) in $cdata.options[cx.dm]"
+                   :key="ind"
+                   :name="cx.dm"
+                   :label="item.dm">{{item.mc}}</el-checkbox>
+                </el-checkbox-group>
+              </template>
             </el-form-item>
-            <template v-if="cx.type=='line'">
-              <span class="divider-text">{{cx.title}}</span>
-              <el-divider></el-divider>
-            </template>
           </el-col>
         </el-col>
       </el-row>
     </el-form>
-    <!-- <div class="page-btn-box">
-      <el-button size="mini" type="primary" @click="save('form')">保存</el-button>
+    <div class="page-btn-box">
+      <el-button size="mini" type="primary" @click="save('form',1)" v-if="dialogType=='bj'">初审通过</el-button>
+      <el-button size="mini" type="primary" @click="save('form',0)" v-if="dialogType=='bj'">初审不通过</el-button>
       <el-button size="mini" @click="cancel">取消</el-button>
-    </div>-->
+    </div>
   </div>
 </template>
 <script>
@@ -285,7 +296,11 @@ export default {
     },
     dialogData: {
       type: Object,
-      default: () => {}
+      default: () => {
+        return{
+          checklist:[]
+        }
+      }
     }
   },
   data() {
@@ -303,48 +318,63 @@ export default {
     //     callback();
     //   }
     // };
+    // var validqz = (rule, value, callback) => {
+    //   if ((this.dialogData.nationality != "MAC" && this.dialogData.nationality != "HKG" && this.dialogData.nationality != "TWN")&&value == "") {
+    //     callback(new Error("此项必填"));
+    //   } else {
+    //     callback();
+    //   }
+    // };
+    // var validqzhm = (rule, value, callback) => {
+    //   if(((this.dialogData.nationality != "MAC" && this.dialogData.nationality != "HKG" && this.dialogData.nationality != "TWN")&&
+    //   (this.dialogData.visaType != 'M' && this.dialogData.visaType != 'V'))&&value == ""){
+    //     callback(new Error("此项必填"));
+    //   }else{
+    //     callback();
+    //   }
+    // }
     return {
-      rules: {},
-      // rules: {
-      //   nationality: [{ required: true, message: "此项必填", trigger: "blur" }],
-      //   passportType: [
-      //     { required: true, message: "此项必填", trigger: "blur" }
-      //   ],
-      //   passportno: [{ required: true, message: "此项必填", trigger: "blur" }],
-      //   surname: [{ validator: validatesurname, trigger: "blur" }],
-      //   firstname: [{ validator: validatesurname, trigger: "blur" }],
-      //   name: [{ validator: validatename, trigger: "blur" }],
-      //   gender: [{ required: true, message: "此项必填", trigger: "blur" }],
-      //   birthday: [{ required: true, message: "此项必填", trigger: "blur" }],
-      //   visaType: [{ required: true, message: "此项必填", trigger: "blur" }],
-      //   visaNo: [{ required: true, message: "此项必填", trigger: "blur" }],
-      //   tlyxqz: [{ required: true, message: "此项必填", trigger: "blur" }],
-      //   rjsy: [{ required: true, message: "此项必填", trigger: "blur" }],
-      //   sjhm: [
-      //     { required: true, message: "此项必填", trigger: "blur" },
-      //     { max: 11, message: "长度不可超过11位", trigger: "blur" },
-      //     {
-      //       required: true,
-      //       pattern: /^-?[1-9]\d*$/,
-      //       message: "请输入正确的电话号码",
-      //       trigger: "blur"
-      //     }
-      //   ],
-      //   jjlxrdh: [
-      //     { required: true, message: "此项必填", trigger: "blur" },
-      //     { max: 11, message: "长度不可超过11位", trigger: "blur" },
-      //     {
-      //       required: true,
-      //       pattern: /^-?[1-9]\d*$/,
-      //       message: "请输入正确的电话号码",
-      //       trigger: "blur"
-      //     }
-      //   ],
-      //   suboffice: [{ required: true, message: "此项必填", trigger: "blur" }],
-      //   policestation: [
-      //     { required: true, message: "此项必填", trigger: "blur" }
-      //   ]
-      // },
+      rules: {
+        // nationality: [{ required: true, message: "此项必填", trigger: "blur" }],
+        // passportType: [
+        //   { required: true, message: "此项必填", trigger: "blur" }
+        // ],
+        // passportno: [{ required: true, message: "此项必填", trigger: "blur" }],
+        // surname: [{ validator: validatesurname, trigger: "blur" }],
+        // firstname: [{ validator: validatesurname, trigger: "blur" }],
+        // name: [{ validator: validatename, trigger: "blur" }],
+        // gender: [{ required: true, message: "此项必填", trigger: "blur" }],
+        // birthday: [{ required: true, message: "此项必填", trigger: "blur" }],
+        // visaType: [{ validator:validqz, trigger: "blur" }],
+        // visaNo: [{ validator:validqzhm, trigger: "blur" }],
+        // tlyxqz: [{ validator:validqz, trigger: "blur" }],
+        // rjsy: [{ required: true, message: "此项必填", trigger: "blur" }],
+        // sjhm: [
+        //   { required: true, message: "此项必填", trigger: "blur" },
+        //   { max: 11, message: "长度不可超过11位", trigger: "blur" },
+        //   {
+        //     required: true,
+        //     pattern: /^-?[1-9]\d*$/,
+        //     message: "请输入正确的电话号码",
+        //     trigger: "blur"
+        //   }
+        // ],
+        // jjlxrdh: [
+        //   { required: true, message: "此项必填", trigger: "blur" },
+        //   { max: 11, message: "长度不可超过11位", trigger: "blur" },
+        //   {
+        //     required: true,
+        //     pattern: /^-?[1-9]\d*$/,
+        //     message: "请输入正确的电话号码",
+        //     trigger: "blur"
+        //   }
+        // ],
+        // suboffice: [{ required: true, message: "此项必填", trigger: "blur" }],
+        // policestation: [
+        //   { required: true, message: "此项必填", trigger: "blur" }
+        // ]
+      },
+      isXJ: false,
       newForm: {},
       isimgclick: false,
       imgList:
@@ -359,14 +389,13 @@ export default {
     }
   },
   mounted() {
-    console.log("erceng", this.dialogData.name);
     // this.form = this.dialogData;
     // console.log(this.form);
   },
   directives: {
     drag: {
       // 指令的定义
-      bind: el => {
+      bind: (el) => {
         let odiv = el; //获取当前元素
         let left = "";
         let top = "";
@@ -390,11 +419,7 @@ export default {
               //用鼠标的位置减去鼠标相对元素的位置，得到元素的位置
               console.log("e.clientX", e.clientX);
               console.log("disX", disX);
-              console.log(
-                "oImg.offsetLeft",
-                oImg.offsetLeft,
-                oImg.offsetParent.offsetLeft
-              );
+              console.log("oImg.offsetLeft", oImg.offsetLeft,oImg.offsetParent.offsetLeft);
               leftImg = e.clientX - disX - 40;
               topImg = e.clientY - disY - 40;
               //绑定元素位置到positionX和positionY上面
@@ -432,18 +457,27 @@ export default {
     }
   },
   methods: {
-    save(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          this.$emit("dialogSave", {
-            type: this.dialogType,
-            data: this.dialogData
-          });
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
+    save(formName, type) {
+      if (type == 0) {
+        this.$emit("dialogSave", {
+          type: this.dialogType,
+          data: this.dialogData,
+          btnType: type
+        });
+      } else {
+        this.$refs[formName].validate(valid => {
+          if (valid) {
+            this.$emit("dialogSave", {
+              type: this.dialogType,
+              data: this.dialogData,
+              btnType: type
+            });
+          } else {
+            console.log("error submit!!");
+            return false;
+          }
+        });
+      }
     },
     getSrcList(url) {
       return ["data:image/jpg;base64," + url];
@@ -458,6 +492,17 @@ export default {
     },
     linkChange(key, val, dialogData) {
       this.$emit("formLcFnc", { key: key, data: val, obj: dialogData });
+    },
+    //移除表单校验
+    clearValid() {
+      this.$refs['form'].clearValidate();
+    },
+    cancel() {
+      if (this.isXJ) {
+        this.isXJ = false;
+      } else {
+        this.$emit("dialogCancel");
+      }
     }
   }
 };

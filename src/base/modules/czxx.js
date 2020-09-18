@@ -682,18 +682,6 @@ const bhqs = {
       mult:true,
     },
     {
-      cm: '身份',
-      type: 'select',
-      dm: 'degree_code',
-      mult:true,
-    },
-    {
-      cm: '境外人员类别',
-      type: 'select',
-      dm: 'personnel_area_type',
-      mult:true,
-    },
-    {
       cm: '迁入时间',
       type: 'double',
       dm: 'qrTime',
@@ -711,14 +699,16 @@ const bhqs = {
       ],
     },
     {
-      cm: '居住地分局',
+      cm: '身份',
       type: 'select',
-      dm: 'jzd_ssfj',
+      dm: 'degree_code',
+      mult:true,
     },
     {
-      cm: '居住地派出所',
+      cm: '境外人员类别',
       type: 'select',
-      dm: 'inhabi_police_station',
+      dm: 'personnel_area_type',
+      mult:true,
     },
     {
       cm: '存量时间',
@@ -738,6 +728,17 @@ const bhqs = {
       ],
     },
     {
+      cm: '居住地分局',
+      type: 'select',
+      dm: 'jzd_ssfj',
+    },
+    {
+      cm: '居住地派出所',
+      type: 'select',
+      dm: 'inhabi_police_station',
+    },
+    
+    {
       cm: '工作地分局',
       type: 'select',
       dm: 'gzd_ssfj',
@@ -746,6 +747,11 @@ const bhqs = {
       cm: '工作地派出所',
       type: 'select',
       dm: 'workplace_police_station',
+    },
+    {
+      cm: '快速预览',
+      type: 'button',
+      dm: 'timeUnit',
     },
   ],
   cxCheck:[
@@ -757,7 +763,14 @@ const bhqs = {
       falseLabel:'and',
       check:true,
     },
-  ]
+  ],
+  lbBtn: [
+    {
+      "button_name": "详情",
+      "button_type": 'ck',
+      "serial": "201",
+    },
+  ],
 }
 export default{
   xxwhgl,

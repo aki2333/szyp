@@ -197,6 +197,24 @@ const options = {
             mc:'待上报'
         },
     ],
+    timeUnit:[
+        {
+            dm:'year',
+            mc:'年',
+        },
+        {
+            dm:'quarter',
+            mc:'季度',
+        },
+        {
+            dm:'month',
+            mc:'月',
+        },
+        {
+            dm:'day',
+            mc:'天',
+        },
+    ],
     turnoutarea: [],
     checklist:[
         {

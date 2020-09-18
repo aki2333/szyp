@@ -72,7 +72,7 @@
              <el-button
               class="cx-btn"
               size="small"
-              :type="pb.py=='js'?'primary':'info'"
+              :type="pb.py=='js'?'primary':'success'"
               round
               v-if="pb.button_type==3"
               :key="pbi"
@@ -287,7 +287,7 @@ export default {
                 jb:(this.$store.state.user.jb!='3'&&this.pcsQuery == this.$store.state.user.bmbh)?this.$store.state.user.jb:'3',
                 bmbh: this.pcsQuery,
                 clzt:1,
-                cljg:3
+                cljg:6
             },
             pageNum:this.leftPage,
             pageSize:this.leftSize,
@@ -476,7 +476,7 @@ export default {
                 jb:(this.$store.state.user.jb!='3'&&this.pcsQuery == this.$store.state.user.bmbh)?this.$store.state.user.jb:'3',
                 bmbh: this.pcsQuery,
                 clzt:1,
-                cljg:3
+                cljg:6
             }
         }
         this.$api.post(this.$api.aport2+'/issueData/getIssueDataPage',p,r=>{

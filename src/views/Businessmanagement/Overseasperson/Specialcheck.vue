@@ -715,7 +715,7 @@ export default {
             this.commonBtn = true;
             this.isDb = true;
             this.$cdata.zxhc
-              .innerBtn(data.data.whetherUpdateState, this.page,data.data.datatype,data.data.backstatus_desc)
+              .innerBtn(data.data.whetherUpdateState, this.page,data.data.datatype,data.data.backstatus_desc,data.data.statusName)
               .then(data => {
                 this.dbBtn = data;
               });
@@ -725,7 +725,7 @@ export default {
           this.isEditBtn = true;
           this.commonBtn = false;
           this.isDb = true;
-          this.$cdata.zxhc.innerBtn("2", this.page,data.data.datatype,data.data.backstatus_desc).then(data => {
+          this.$cdata.zxhc.innerBtn("2", this.page,data.data.datatype,data.data.backstatus_desc,data.data.statusName).then(data => {
             this.dbBtn = data;
           });
         }

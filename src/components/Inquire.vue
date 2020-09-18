@@ -129,6 +129,14 @@
                   </div>
                 </div>
               </template>
+              <template v-else-if="cx.type=='button'">
+                <el-button 
+                :type="item.dm==btnChecked?'success':'primary'" 
+                size="mini"
+                v-for="(item,inds) in $cdata.options[cx.dm]"
+                :key="inds"
+                @click="quickView(item.dm)">{{item.mc}}</el-button>
+              </template>
             </el-form-item>
           </el-col>
           <el-checkbox v-for="(cc,ind) in cxCheck" :key="ind+'che'" class="quire-check" v-model="inquire[cc.dm]" :true-label="cc.trueLabel" :false-label="cc.falseLabel" :checked="cc.check">{{cc.mc}}</el-checkbox>
@@ -231,7 +239,8 @@ export default {
       },
       QcxObj:{},
       aa:true,
-      backstatus:''//走访状态
+      backstatus:'',//走访状态
+      btnChecked:''
     };
   },
   watch:{
@@ -261,6 +270,14 @@ export default {
       } else if (py == "qc") {
         this.resetForm("inquire");
       }
+    },
+    quickView(val){
+      if(this.btnChecked == val){
+        this.btnChecked = ''
+      }else{
+        this.btnChecked = val;
+      }
+      this.$emit('quickView',this.btnChecked)
     },
     tagClick(value,data,ind){
       this.checkArr[ind] = JSON.parse(JSON.stringify(this.$store.state[data.dm]))

@@ -69,6 +69,9 @@ export default new Vuex.Store({
     assignment_org:[],//签发地
     entry_port:[],//入境口岸
     exit_entry_status:[],//出入境状态
+    crjzt:[],
+    zy:[],//职业
+    jwrygx:[],//与境外人员关系
     inhabi_police_station:[],//居住地所在派出所
     workplace_police_station:[],//单位所在地派出所
     personnel_area_type:[],//境外人员类别
@@ -183,11 +186,16 @@ export default new Vuex.Store({
         state.entry_port = data.data
       }else if(data.type == 'dm_crjbs'){
         state.exit_entry_status = data.data
+        state.crjzt = data.data
       }else if(data.type == 'dm_pcswlb'){
         state.inhabi_police_station = data.data//居住地所在派出所
         state.workplace_police_station = data.data//单位所在地派出所
       }else if(data.type == 'dm_rydylbb'){
         state.personnel_area_type = data.data//境外人员类别
+      }else if(data.type == 'dm_zyb'){
+        state.zy = data.data
+      }else if(data.type == 'dm_jwrygxb'){
+        state.jwrygx = data.data
       }
     },
     getXzqh(state,data){//只包含苏州

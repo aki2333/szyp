@@ -101,7 +101,7 @@ export default {
           } 
         })
         if(!result){
-          this.$alert(" 没有此功能权限，请联系管理员", "提示", {
+          this.$alert("没有此功能权限，请联系所护分县局出入境管理大队", "提示", {
             confirmButtonText: "确定",
             type: "warning"
           })

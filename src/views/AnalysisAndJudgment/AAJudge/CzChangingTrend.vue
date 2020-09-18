@@ -6,7 +6,8 @@
     :pd="cx" 
     :cxPara="cx" 
     @cxFnc="cxFnc" 
-    @lcFnc="lcFnc"></Inquire>
+    @lcFnc="lcFnc"
+    @quickView="quickView"></Inquire>
     <div class="t-tab-top">
       <div class="tab-top-item tabImgActive_1 hand">常住变化趋势</div>
     </div>
@@ -14,33 +15,34 @@
       <div style="padding:20px 20px 0">
         <p class="trend-title">计算维度</p>
         <div class="trend-radio">
-          <el-radio-group v-model="cx.analysisType" @change="calcuFun()">
+          <el-radio-group v-model="analysisTypeCx" @change="calcuFun()">
             <el-radio v-for="(item,ind) in analysisType" :key="ind" :label="item.dm">{{item.mc}}</el-radio>
           </el-radio-group>
           <div class="trend-page-btn-box">
-             <template v-for="(pb,pbi) in $store.state.plBtn">
-              <el-button
-                class="cx-btn"
-                size="small"
-                :type="pb.py=='hb'?'success':'primary'"
-                round
-                v-if="pb.button_type==3"
-                :key="pbi"
-                @click="btnClick(pb.py)"
-              >{{pb.button_name||pb.menu_name}}</el-button>
-            </template>
+            
+            <el-button size="small" class="cx-btn" type="success" round @click="btnClick(btnText)">{{btnText}}</el-button>
           </div>
         </div>
         <Charts :key="new Date().getTime()" :optData="optData" :Cheight="'400px'" @chartClick="chartClick"></Charts>
       </div>
     </div>
+    <Dialog :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
+      <CzTable
+      :key="new Date().getTime()"
+      :pd="tablePd"
+      :dialogType="dialogType"
+      :dialogData="dialogData"
+      @dialogCancel="isShowDialog=false"></CzTable>
+    </Dialog>
   </div>
 </template>
 <script>
 import Inquire from "@/components/Inquire.vue";
+import Dialog from "@/components/Dialog.vue";
 import Charts from "@/components/Charts.vue";
+import CzTable from "./CzTable.vue"
 export default {
-  components: { Inquire,Charts },
+  components: { Inquire,Charts,Dialog,CzTable },
   data() {
     return {
       cx: {},
@@ -74,7 +76,16 @@ export default {
           dm:'age'
         },
       ],
+      analysisTypeCx:'',
+      btnText:'合并',
       optData:{},
+      //弹窗
+      tablePd:{},
+      isShowDialog: false,
+      dialogTitle: "",
+      dialogType: "",
+      dialogData: {},
+      labelData: [],
     };
   },
   mounted() {
@@ -126,6 +137,7 @@ export default {
     // 获取查询参数
     cxFnc(data) {
       this.cx = data;
+      this.cx.analysisType = this.analysisTypeCx
       this.getChart();
     },
     lcFnc(data) {
@@ -147,13 +159,32 @@ export default {
         this.$store.dispatch("aGetssdw", { bmbh: data.data, type: "sspcs",ptype:'gzd'});
       }
     },
+    quickView(data){
+      this.cx.timeUnit = data;
+      this.getChart();
+    },
     btnClick(data){
-      if(data == 'hb'){
-        this.cx.analysisType = '';
+      if(data == '合并'){
+        if(!this.analysisTypeCx){
+          this.$message({
+            message: '无拆分数据，无需合并！',
+            duration: 13000,
+            showClose: true,
+            type: "warning"
+          });
+        }else{
+          this.cx.analysisType = '';
+          this.getChart();
+          this.btnText="拆分"
+        }
+      }else if(data == '拆分'){
+        this.cx.analysisType = this.analysisTypeCx
         this.getChart();
+        this.btnText="合并"
       }
     },
     calcuFun(){
+      this.cx.analysisType = this.analysisTypeCx
       this.getChart();
     },
     getChart(){
@@ -289,7 +320,12 @@ export default {
       };
     },
     chartClick(data){
-      console.log('data==',data)
+      this.tablePd = Object.assign({},this.cx)
+      this.tablePd.xAxis = data.name
+      this.tablePd.id = data.seriesId
+      this.dialogTitle="列表"
+      this.isShowDialog = true
+      // console.log('data==',data)
     },
   }
 };

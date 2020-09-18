@@ -131,7 +131,11 @@ const routes = [
     path: '/OtherPage',
     name: 'OtherPage',
     component: () => import(/* webpackChunkName: "OtherPage" */ '../views/OtherPage.vue')
-
+  },
+  {
+    path: '/CzCTXQ',
+    name: 'CzCTXQ',
+    component: () => import(/* webpackChunkName: "AnalysisAndJudgment" */ '../views/AnalysisAndJudgment/AAJudge/CzCTXQ.vue')
   },
 ]
 

@@ -2159,7 +2159,7 @@ function innerSbDia(data){
         resolve(zxhc.innerDiaCon)
     })
 }
-function innerBtn(data,page,datatype,backstatus){
+function innerBtn(data,page,datatype,backstatus,statusName){
     return new Promise((resolve) => {
         if(data == '1'){//已走访
             if(page=='1'){//市局已处理 只能下发
@@ -2172,14 +2172,7 @@ function innerBtn(data,page,datatype,backstatus){
                     },
                 ]
             }else{
-                zxhc.dbBtn = [
-                    // {
-                    //     "button_name": "上报",
-                    //     "serial": "201",
-                    //     "button_type": "singSb",
-                    //     "type": "primary",
-                    // },
-                ]
+                zxhc.dbBtn = []
             }
         }else if(data == '2'){//未走访
             if(page=='1'){//市局未处理
@@ -2198,6 +2191,32 @@ function innerBtn(data,page,datatype,backstatus){
                             "button_name": "回退",
                             "serial": "201",
                             "button_type": "singback",
+                            "type": "primary",
+                        },
+                        {
+                            "button_name": "下发",
+                            "serial": "201",
+                            "button_type": "singXf",
+                            "type": "primary",
+                        },
+                    ]
+                }
+            }else if(page == '3'){//派出所未处理
+                if(statusName == '派出所已下发'){
+                    zxhc.dbBtn = [
+                        {
+                            "button_name": "上报",
+                            "serial": "201",
+                            "button_type": "singSb",
+                            "type": "primary",
+                        },
+                    ]
+                }else{
+                    zxhc.dbBtn = [
+                        {
+                            "button_name": "上报",
+                            "serial": "201",
+                            "button_type": "singSb",
                             "type": "primary",
                         },
                         {

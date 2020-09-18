@@ -47,6 +47,13 @@
           <el-form-item label="不通过原因" prop="shsm">
             <el-input v-model="innerForm.shsm" autocomplete="off"></el-input>
           </el-form-item>
+          <el-form-item label="对外说辞" prop="dwsc">
+            <el-radio-group v-model="innerForm.dwsc">
+              <el-radio label="申报信息有误"></el-radio>
+              <el-radio label="请入境后再申报临住"></el-radio>
+              <el-radio label="此申报信息不符合网上申报条件，请至居住地派出所申报"></el-radio>
+            </el-radio-group>
+          </el-form-item>
           <div class="page-btn-box">
             <el-button type="primary" @click="shwtg('innerForm')">提交</el-button>
           </div>
@@ -70,14 +77,14 @@
 import Inquire from "@/components/Inquire.vue";
 import Table from "@/components/Table.vue";
 import Dialog from "@/components/Dialog.vue";
-import TemporaryXQ from "./TemporaryXQ.vue";
+import TemporaryXQ from "./TemporaryXQE.vue";
 
 export default {
   components: { Inquire, Table, Dialog, TemporaryXQ },
   data() {
     return {
       rules:{
-        shsm:[{ required: true, message: "此项必填", trigger: "blur" }],
+        dwsc:[{ required: true, message: "此项必填", trigger: 'change' }],
       },
       isTab: false,
       lbTab: [],
@@ -112,7 +119,7 @@ export default {
       dialogImgData: [],
       labelData: [],
       innerForm: {
-        shsm: "审核信息有误"
+        dwsc:''
       }
     };
   },
@@ -132,6 +139,10 @@ export default {
     this.$store.dispatch("aGetDM", "wgr_sqsy");
     this.$store.dispatch("aGetDM", "spqfd");
     this.$store.dispatch("aGetDM", "sjly");
+    this.$store.dispatch("aGetDMPro", "dm_crjbs");//出入境状态
+    this.$store.dispatch("aGetDMPro", "dm_zyb");//职业
+    this.$store.dispatch("aGetDMPro", "dm_jwrygxb");//境外人员关系
+    
     this.getSpInit();
     this.tabTopClick(0);
     if(this.$route.query.pageA){
@@ -188,6 +199,7 @@ export default {
       if (index == 1) {
         this.isTab = true;
         this.cx.pd.hczt = "hczt_0";
+        this.tabPage = "hczt_0"
         this.lbTab = this.$cdata.lzsb.lzsb.lbTab;
         this.lbBtn = this.$cdata.lzsb.lzsb.lbBtn2;
       } else if (index == 0) {
@@ -219,7 +231,12 @@ export default {
     cxFnc(data) {
       this.cx.pd = data;
       this.cx.pageNum = 1;
-      this.getTable(true);
+      if(this.cx.pd.shzt == 'shzt_0'){
+        this.tabTopClick(0)
+      }else{
+        this.getTable(true);
+      }
+      
     },
     // 获取分页等信息
     pageSizeFnc(data) {

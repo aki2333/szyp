@@ -39,7 +39,6 @@ export default {
     initchart() {
       // 初始化
       this.MyChart = this.$echarts.init(document.getElementById("akiChart"+this.id));
-      console.log('====',this.MyChart)
       // 绘制
       this.MyChart.setOption(this.optData);
       this.MyChart.on('click',(params)=>{

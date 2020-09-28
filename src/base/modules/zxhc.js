@@ -68,7 +68,7 @@ const zxhc = {
                 {
                     cm: '反馈开始时间',
                     type: 'date',
-                    dm: 'policestation_backtimeStar'
+                    dm: 'policestation_backtimeStart'
                 },
                 {
                     cm: '反馈结束时间',
@@ -357,11 +357,7 @@ const zrqzf = {
             type: 'input',
             dm: 'passportno'
         },
-        {
-            cm: '接收责任区',
-            type: 'select',
-            dm: 'turnoutarea'
-        },
+        
         {
             cm: '接收人',
             type: 'input',
@@ -390,6 +386,21 @@ const zrqzf = {
             ],
         },
         {
+            cm: '所属分局',
+            type: 'select',
+            dm: 'suboffice'
+        },
+        {
+            cm: '所属派出所',
+            type: 'select',
+            dm: 'policestation'
+        },
+        {
+            cm: '接收责任区',
+            type: 'select',
+            dm: 'turnoutarea'
+        },
+        {
             cm: '下发类别',
             type: 'select',
             dm: 'datatype'
@@ -400,7 +411,6 @@ const zrqzf = {
             dm: 'backstatus',
             disdm:true//查询项下拉选不展示dm
         },
-
     ],
     lb: [
         {

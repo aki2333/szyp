@@ -232,23 +232,24 @@ export default {
       this.$store.dispatch("aGetGender");
       this.$store.dispatch("aGetPassport");
       this.$cdata.zrqReciData(this.$store.state.user.zrqList).then();
-      if (this.$store.state.user.jb == '1') {
-        this.$store.dispatch("aGetSuboffice");
-      } else if (this.$store.state.user.jb == '2') {
-        this.$store.dispatch("aGetSuboffice",this.$store.state.user.bmbh.slice(0, 6));
-      } else if (this.$store.state.user.jb == '3') {
-        this.$store.dispatch("aGetSuboffice",this.$store.state.user.bmbh.slice(0, 6) + '000000');
-      }  
-      if (this.$store.state.user.jb == '1') {
-        this.$store.dispatch("aGetPolice");
-        this.$store.dispatch("aGetZrq");
-      } else if (this.$store.state.user.jb == '2') {
-        this.$store.dispatch("aGetPolice",this.$store.state.user.bmbh.slice(0, 6));
-        this.$store.dispatch("aGetZrq",this.$store.state.user.bmbh.slice(0, 6));
-      } else if (this.$store.state.user.jb == '3') {
-        this.$store.dispatch("aGetPolice",this.$store.state.user.bmbh);
-        this.$store.dispatch("aGetZrq",this.$store.state.user.bmbh.slice(0, 8));
-      } 
+      this.getSpInit();
+      // if (this.$store.state.user.jb == '1') {
+      //   this.$store.dispatch("aGetSuboffice");
+      // } else if (this.$store.state.user.jb == '2') {
+      //   this.$store.dispatch("aGetSuboffice",this.$store.state.user.bmbh.slice(0, 6));
+      // } else if (this.$store.state.user.jb == '3') {
+      //   this.$store.dispatch("aGetSuboffice",this.$store.state.user.bmbh.slice(0, 6) + '000000');
+      // }  
+      // if (this.$store.state.user.jb == '1') {
+      //   this.$store.dispatch("aGetPolice");
+      //   this.$store.dispatch("aGetZrq");
+      // } else if (this.$store.state.user.jb == '2') {
+      //   this.$store.dispatch("aGetPolice",this.$store.state.user.bmbh.slice(0, 6));
+      //   this.$store.dispatch("aGetZrq",this.$store.state.user.bmbh.slice(0, 6));
+      // } else if (this.$store.state.user.jb == '3') {
+      //   this.$store.dispatch("aGetPolice",this.$store.state.user.bmbh);
+      //   this.$store.dispatch("aGetZrq",this.$store.state.user.bmbh.slice(0, 8));
+      // } 
       this.$store.dispatch("aGetDatatype");
       this.getPcsQueryData();
       this.pcsQuery = this.$store.state.user.bmbh
@@ -267,6 +268,30 @@ export default {
     }
   },
   methods: {
+    getSpInit(){
+      this.$cdata.qxgl.getSjBm(this.$store.state.user.bmbh).then(data => {
+        this.$store.dispatch("aGetssdw", {
+          bmbh: "320500000000",
+          type: "ssfj"
+        });
+        if (this.$store.state.user.jb == 2) {
+          if(data.fj){
+            this.cx.pd.suboffice = data.fj
+          }else{
+            this.cx.pd.suboffice = data.bmbh
+          }
+          this.$store.dispatch("aGetssdw", { bmbh: data.bmbh, type: "sspcs" });
+          this.cx.pd.subofficedis = true;
+        } else if (this.$store.state.user.jb == 3) {
+          this.$store.dispatch("aGetssdw", { bmbh: data.fj, type: "sspcs" });
+          this.$store.dispatch("aGetssdw", { bmbh: data.bmbh, type: "zrq" });
+          this.cx.pd.suboffice = data.fj;
+          this.cx.pd.policestation = data.bmbh;
+          this.cx.pd.subofficedis = true;
+          this.cx.pd.policestationdis = true;
+        }
+      });
+    },
       getColorDes(){
         this.$api.post(this.$api.aport2+'/issueTimeControl/getIssueTimeControlShAndBzList',{dwjb:'4'},r=>{
           this.colorDes = r
@@ -539,7 +564,16 @@ export default {
         if(data.obj.policestation){
           data.obj.policestation = '';
         }
-        this.$store.dispatch("aGetPolice",data.data.slice(0,6));
+        this.$store.dispatch("aGetssdw", { bmbh: data.data, type: "sspcs" });
+      }
+      if (data.key.dm == "policestation") {
+        if (data.data == "") {
+          data.obj.turnoutarea = "";
+        }
+        if (data.obj.turnoutarea) {
+          data.obj.turnoutarea = "";
+        }
+        this.$store.dispatch("aGetssdw", { bmbh: data.data, type: "zrq" });
       }
     },
     //弹窗form下拉框联动
@@ -554,7 +588,8 @@ export default {
         if(data.obj.policestation){
           data.obj.policestation = '';
         }
-        this.$store.dispatch("aGetPolice",data.data.slice(0,6));
+        this.$store.dispatch("aGetssdw", { bmbh: data.data, type: "sspcs" });
+        // this.$store.dispatch("aGetPolice",data.data.slice(0,6));
       }
     },
     dbFnc(data){

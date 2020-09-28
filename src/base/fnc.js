@@ -49,7 +49,19 @@ function ToArray(data) {
   }
   return sortByKey(returnValue, 'dm')
 }
-
+function objCompare(obj1,obj2){
+  for(var i in obj2){
+    for(var j in obj1){
+      if(j==i){
+        if(Array.isArray(obj2[i])){//如果obj2是数组
+          obj1[j] = [obj1[j]]
+        }
+        delete obj2[i]
+      }
+    }
+  }
+  return {obj1:obj1,obj2:obj2}
+}
 function getBroswerAndVersion() {
   // var os = navigator.platform;
   var userAgent = navigator.userAgent;
@@ -156,5 +168,6 @@ export default {
   ToArray,
   cxSort,
   getBroswerAndVersion,
-  format
+  format,
+  objCompare
 }

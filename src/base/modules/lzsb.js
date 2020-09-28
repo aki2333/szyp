@@ -277,11 +277,11 @@ const lzsb = {
                 type: 'input',
                 dm: 'firstname'
             },
-            {
-                cm: '英文姓名',
-                type: 'input',
-                dm: 'givenname'
-            },
+            // {
+            //     cm: '英文姓名',
+            //     type: 'input',
+            //     dm: 'givenname'
+            // },
             // {
             //     cm: '核查英文姓名',
             //     type: 'input',
@@ -358,6 +358,12 @@ const lzsb = {
                 dm: 'rjsy',
                 dis:true,
             },
+            {
+                cm: '在华工作机构名称',
+                type: 'input',
+                dm: 'gzjg',
+                dis:true,
+            },
         ],
         "b": [
 
@@ -379,9 +385,15 @@ const lzsb = {
             //     dm: 'jddw',
             // },
             {
-                cm: '在华工作机构名称',
+                cm: '登记人',
                 type: 'input',
-                dm: 'gzjg',
+                dm: 'djr',
+                dis:true,
+            },
+            {
+                cm: '登记单位',
+                type: 'input',
+                dm: 'djdw',
                 dis:true,
             },
             {

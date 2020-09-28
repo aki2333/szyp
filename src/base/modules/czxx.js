@@ -655,6 +655,7 @@ const xxwhgl = {
     // }
   ],
 }
+// 【常住变化趋势】
 const bhqs = {
   cx:[
     {
@@ -772,7 +773,131 @@ const bhqs = {
     },
   ],
 }
+// 【常住综合分析】
+const zhfx = {
+  cx:[
+    {
+      cm: '性别',
+      type: 'select',
+      dm: 'gender',
+      mult:true,
+    },
+    {
+      cm: '国家地区',
+      type: 'select',
+      dm: 'nationality',
+      mult:true,
+    },
+    {
+        cm: '年龄段',
+        type: 'ageDouble',
+        dm: 'age',
+        children: [
+            {
+                cm: '开始年龄',
+                type: 'number',
+                dm: 'ageBegin'
+            },
+            {
+                cm: '结束年龄',
+                type: 'number',
+                dm: 'ageEnd'
+            },
+        ],
+    },
+    {
+      cm: '证件种类',
+      type: 'select',
+      dm: 'paper_type',
+      mult:true,
+    },
+    {
+      cm: '签证种类',
+      type: 'select',
+      dm: 'visa_type',
+      mult:true,
+    },
+    {
+      cm: '迁入时间',
+      type: 'double',
+      dm: 'qrTime',
+      children: [
+        {
+          cm: '开始时间',
+          type: 'date',
+          dm: 'time_begin'
+        },
+        {
+          cm: '结束时间',
+          type: 'date',
+          dm: 'time_end'
+        },
+      ],
+    },
+    {
+      cm: '身份',
+      type: 'select',
+      dm: 'degree_code',
+      mult:true,
+    },
+    {
+      cm: '境外人员类别',
+      type: 'select',
+      dm: 'personnel_area_type',
+      mult:true,
+    },
+    {
+      cm: '存量时间',
+      type: 'datePicker',
+      dm: 'history_time',
+    },
+    {
+      cm: '出入境状态',
+      type: 'select',
+      dm: 'exit_entry_status',
+    },
+    {
+      cm: '居住地分局',
+      type: 'select',
+      dm: 'jzd_ssfj',
+    },
+    {
+      cm: '居住地派出所',
+      type: 'select',
+      dm: 'inhabi_police_station',
+    },
+    
+    {
+      cm: '工作地分局',
+      type: 'select',
+      dm: 'gzd_ssfj',
+    },
+    {
+      cm: '工作地派出所',
+      type: 'select',
+      dm: 'workplace_police_station',
+    },
+  ],
+  cxCheck:[
+    {
+      mc: '居住地或工作地',
+      type: 'checkbox',
+      dm: 'jzd_gzd',
+      trueLabel:'or',
+      falseLabel:'and',
+      check:true,
+    },
+  ],
+  lbBtn: [
+    {
+      "button_name": "详情",
+      "button_type": 'detail',
+      "serial": "201",
+    },
+  ],
+}
 export default{
   xxwhgl,
-  bhqs
+  bhqs,
+  zhfx
 }

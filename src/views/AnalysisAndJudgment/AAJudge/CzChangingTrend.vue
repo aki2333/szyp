@@ -19,7 +19,7 @@
             <el-radio v-for="(item,ind) in analysisType" :key="ind" :label="item.dm">{{item.mc}}</el-radio>
           </el-radio-group>
           <div class="trend-page-btn-box">
-            
+            <el-button size="mini" type="success" :icon="numChange==true?'el-icon-open':'el-icon-turn-off'" circle style="font-size:16px" :title="numChange==true?'关闭数字':'展示数字'" @click="numCF"></el-button>
             <el-button size="small" class="cx-btn" type="success" round @click="btnClick(btnText)">{{btnText}}</el-button>
           </div>
         </div>
@@ -86,6 +86,7 @@ export default {
       dialogType: "",
       dialogData: {},
       labelData: [],
+      numChange:true,
     };
   },
   mounted() {
@@ -187,6 +188,10 @@ export default {
       this.cx.analysisType = this.analysisTypeCx
       this.getChart();
     },
+    numCF(){
+      this.numChange = !this.numChange
+      this.getChart();
+    },
     getChart(){
       this.$api.post(this.$api.aport4+'/residetrend/trendchart',this.cx,r=>{
         if(this.cx.analysisType){//多条线
@@ -196,7 +201,7 @@ export default {
             symbolSize: 8,
             symbol: "emptyCircle", //设定为实心点
             label: {
-              show: true,
+              show: this.numChange,
               fontSize: 14,
               position:'right',
               // color: "#000",
@@ -226,7 +231,7 @@ export default {
                     }
                   },
                   label: {
-                    show: true,
+                    show: this.numChange,
                     fontSize: 14,
                     color: "#000",
                     fontWeight:'bold'

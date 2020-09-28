@@ -353,6 +353,11 @@ export default {
     dialogSave(data) {
       console.log(data);
       if (data.type == "bj") {
+        if(data.data.firstname){
+          data.data.givenname = data.data.firstname +' '+data.data.surname
+        }else{
+          data.data.givenname = data.data.surname
+        }
         if (data.btnType == 1) {//审核通过
           let p = data.data;
           p.shzt = "shzt_1";
@@ -360,7 +365,7 @@ export default {
         } else if (data.btnType == 0) {//审核未通过
           this.innerForm = data.data;
           this.innerForm.shzt = "shzt_2";
-          this.innerForm.shsm="审核信息有误";
+          // this.innerForm.shsm="审核信息有误";
           this.innerVisible = true;
         }
       }

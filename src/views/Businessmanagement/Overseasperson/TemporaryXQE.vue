@@ -304,20 +304,20 @@ export default {
     }
   },
   data() {
-    // var validatesurname = (rule, value, callback) => {
-    //   if (this.dialogData.nationality != "CHN" && value == "") {
-    //     callback(new Error("此项必填"));
-    //   } else {
-    //     callback();
-    //   }
-    // };
-    // var validatename = (rule, value, callback) => {
-    //   if (this.dialogData.nationality == "CHN" && value == "") {
-    //     callback(new Error("此项必填"));
-    //   } else {
-    //     callback();
-    //   }
-    // };
+    var validatesurname = (rule, value, callback) => {
+      if (this.dialogData.nationality != "CHN" && this.dialogData.nationality != "MAC" && this.dialogData.nationality != "HKG" && this.dialogData.nationality != "TWN" && value == "") {
+        callback(new Error("此项必填"));
+      } else {
+        callback();
+      }
+    };
+    var validatename = (rule, value, callback) => {
+      if (this.dialogData.nationality == "CHN" && this.dialogData.nationality == "MAC" && this.dialogData.nationality == "HKG" && this.dialogData.nationality == "TWN" && value == "") {
+        callback(new Error("此项必填"));
+      } else {
+        callback();
+      }
+    };
     // var validqz = (rule, value, callback) => {
     //   if ((this.dialogData.nationality != "MAC" && this.dialogData.nationality != "HKG" && this.dialogData.nationality != "TWN")&&value == "") {
     //     callback(new Error("此项必填"));
@@ -340,9 +340,9 @@ export default {
         //   { required: true, message: "此项必填", trigger: "blur" }
         // ],
         // passportno: [{ required: true, message: "此项必填", trigger: "blur" }],
-        // surname: [{ validator: validatesurname, trigger: "blur" }],
+        surname: [{ validator: validatesurname, trigger: "blur" }],
         // firstname: [{ validator: validatesurname, trigger: "blur" }],
-        // name: [{ validator: validatename, trigger: "blur" }],
+        name: [{ validator: validatename, trigger: "blur" }],
         // gender: [{ required: true, message: "此项必填", trigger: "blur" }],
         // birthday: [{ required: true, message: "此项必填", trigger: "blur" }],
         // visaType: [{ validator:validqz, trigger: "blur" }],

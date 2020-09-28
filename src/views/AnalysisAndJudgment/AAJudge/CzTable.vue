@@ -41,6 +41,10 @@ export default {
     pd:{
       type: Object,
       default: () => {}
+    },
+    pageRef:{
+      type: String,
+      default: ""
     }
   },
   data() {
@@ -74,7 +78,13 @@ export default {
     // 查询用户列表
     getTable(flag) {
       if(flag){this.clearSort = new Date().getTime();delete this.cx.order;delete this.cx.direction }
-      this.$api.post(this.$api.aport4 + "/residetrend/getTrendRYxx", this.cx, r => {
+      let url = ''
+      if(this.pageRef == 'zhfx'){
+        url = '/comprehensive/listdata'
+      }else{
+        url = '/residetrend/getTrendRYxx'
+      }
+      this.$api.post(this.$api.aport4 + url, this.cx, r => {
         this.tableData.list = r.list;
         this.tableData.total = r.total;
       });
@@ -88,9 +98,7 @@ export default {
           path: '/CzCTXQ',
           query:{onlyId:data.data.personnel_id}
         });
-        // this.$store.dispatch("aGetItS", true); //是否隐藏菜单标志
         window.open(routeData.href, '_blank');
-        console.log(data)
       }
     },
     // 获取分页等信息

@@ -1,6 +1,12 @@
 <template>
   <div class="page">
-    <Inquire :cxData="$cdata.lzsb.lzsb.cx" :pd="cx.pd" :cxPara="cx" @cxFnc="cxFnc"></Inquire>
+    <Inquire 
+    :cxData="$cdata.czxx.zhfx.cx" 
+    :pd="cx.pd"
+    :cxCheck="$cdata.czxx.zhfx.cxCheck"   
+    :cxPara="cx" 
+    @lcFnc="lcFnc"
+    @cxFnc="cxFnc"></Inquire>
     <div class="t-tab-top">
       <div class="tab-top-item hand" :class="tab=='1'?'tabImgActive_1':'tabImg_1'" @click="tabTopClick('1')">
         列表
@@ -10,7 +16,34 @@
       </div>
     </div>
     <div class="page-box">
-      <el-row v-if="tab=='1'">{{'liebiao'}}</el-row>
+      <el-row v-if="tab=='1'">
+        <p class="trend-title mb-12">统计类别</p>
+        <el-checkbox-group v-model="cx.pd.statiType">
+          <el-checkbox v-for="(item,ind) in checkList" :key="ind" :label="item.dm">{{item.mc}}</el-checkbox>
+        </el-checkbox-group>
+        <Table
+          :lbData="lbData"
+          :isSelect="true"
+          :lbBtn="lbBtn"
+          :plBtn="plBtn"
+          :tableData="tableData"
+          :refName="'czzhfx'"
+          :selection="selection"
+          :pageSizeArr="pageSizeArr"
+          :clearSort="clearSort"
+          :expData="cx"
+          :expUrl="$api.aport2+''"
+          @plFnc="plFnc"
+          @pageSizeFnc="pageSizeFnc"
+          @pageNumFnc="pageNumFnc"
+          @blFnc="blFnc"
+          @SelectionChange="SelectionChange"
+          @rowClick="rowClick"
+          @rowDbClick="blFnc"
+          @sortChange="sortChange"
+          @transSaveFnc="transSaveFnc"
+        ></Table>
+      </el-row>
       <el-row v-if="tab=='2'">
         <!-- 迁入量 -->
         <el-col :xl="6" :lg="12" class="pr-15">
@@ -101,8 +134,8 @@
           <p class="chart-title mb-10">国家地区</p>
           <div class="chart-outer ml-10">
             <div class="chart-outer-label">分析维度</div>
-            <el-select class="chart-select" placeholder="请选择" size="medium">
-              <el-option>{{'1'}}</el-option>
+            <el-select class="chart-select" v-model="cx.pd.analysisType" placeholder="请选择" size="medium">
+              <el-option v-for="(item,ind) in analysis_3" :key="ind" :label="item.mc" :value="item.dm"></el-option>
             </el-select>
           </div>
           <Charts :key="new Date().getTime()" :Cheight="'210px'" :optData="optData_3" :id="'3'"></Charts>
@@ -142,19 +175,155 @@
         </el-col>
       </el-row>
     </div>
+    <Dialog :isShowDialog="isShowDialog" :title="dialogTitle" @hideDialog="isShowDialog=false">
+      <CzTable
+        :key="timer"
+        :pd="tablePd"
+        :dialogType="dialogType"
+        :dialogData="dialogData"
+        :pageRef="pageRef"
+        @dialogCancel="isShowDialog=false"></CzTable>
+    </Dialog>
   </div>
 </template>
 <script>
 import Inquire from "@/components/Inquire.vue";
 import Charts from "@/components/Charts.vue";
+import Table from "@/components/Table.vue";
+import CzTable from "../../AnalysisAndJudgment/AAJudge/CzTable.vue"
+import Dialog from "@/components/Dialog.vue";
 
 export default {
-  components: { Inquire, Charts },
+  components: { Inquire, Charts,Table,CzTable,Dialog },
   data() {
     return {
       cx: {
-        pd: {}
+        pd: {
+          statiType:[],
+          analysisType:''
+        },
+        pageSize: 15,
+        pageNum: 1,
       },
+      lbData:this.$cdata.czxx.xxwhgl.lb,
+      lbBtn: this.$cdata.czxx.zhfx.lbBtn,
+			plBtn: this.$store.state.plBtn,
+			pageSizeArr: [15, 100, 500],
+      selection: [],
+      tableData: {
+        list: [],
+        total: 0,
+        pageSize: 10,
+        pageNum: 1
+			},
+      clearSort:0,
+
+      checkList:[
+        {
+          dm:'gender',
+          mc:'性别'
+        },
+        {
+          dm:'nationality',
+          mc:'国家地区'
+        },
+        {
+          dm:'paper_type',
+          mc:'证件种类'
+        },
+        {
+          dm:'visa_type',
+          mc:'签证种类'
+        },
+        {
+          dm:'degree_code',
+          mc:'身份'
+        },
+        {
+          dm:'personnel_area_type',
+          mc:'境外人员类别'
+        },
+        {
+          dm:'age',
+          mc:'年龄段'
+        },
+      ],
+      tableHead:[
+        {
+          dm:'gender_desc',
+          cm:'性别'
+        },
+        {
+          dm:'nationality_desc',
+          cm:'国家地区'
+        },
+        {
+          dm:'paper_type_desc',
+          cm:'证件种类'
+        },
+        {
+          dm:'visa_type_desc',
+          cm:'签证种类'
+        },
+        {
+          dm:'degree_code_desc',
+          cm:'身份'
+        },
+        {
+          dm:'personnel_area_type_desc',
+          cm:'境外人员类别'
+        },
+        {
+          dm:'age',
+          cm:'年龄段'
+        },
+      ],
+      tableHeadReal:[
+        {
+          dm:'count',
+          cm:'统计数量'
+        },
+      ],
+      //弹窗
+      tablePd:{},
+      pageRef:'',
+      timer:'',
+      isShowDialog: false,
+      dialogTitle: "",
+      dialogType: "",
+      dialogData: {},
+      labelData: [],
+
+      analysis_3:[
+        {
+          dm:'gender',
+          mc:'性别'
+        },
+        {
+          dm:'nationality',
+          mc:'国家地区'
+        },
+        {
+          dm:'paper_type',
+          mc:'证件种类'
+        },
+        {
+          dm:'visa_type',
+          mc:'签证种类'
+        },
+        {
+          dm:'degree_code',
+          mc:'身份'
+        },
+        {
+          dm:'personnel_area_type',
+          mc:'境外人员类别'
+        },
+        {
+          dm:'age',
+          mc:'年龄段'
+        },
+      ],
       tab: "1",
       optData_1_1: {},
       optData_1_2: {},
@@ -171,23 +340,135 @@ export default {
     };
   },
   mounted() {
-    
+    this.$store.dispatch("aGetGender");
+    this.$store.dispatch("aGetPassport");
+    this.$store.dispatch("aGetNation");
+    this.$store.dispatch("aGetDM",'qzzl');
+    this.$store.dispatch("aGetDMPro",'dm_jwrysf');
+    this.$store.dispatch("aGetDMPro",'dm_crjbs');
+    this.$store.dispatch("aGetDMPro",'dm_rydylbb');
+    this.getTable();
   },
   methods: {
     // 获取查询参数
     cxFnc(data) {
       this.cx.pd = data;
-      //   this.getTable();
+      this.cx.pageNum = 1;
+      this.getTable(true);
     },
     tabTopClick(index) {
       this.tab = index;
       if(this.tab == '1'){
-        //   this.getTable();
+        this.getTable();
       }else if(this.tab == '2'){
         this.chartsBegin()
       }
-      
     },
+    lcFnc(data) {
+      if(data.key.dm == 'jzd_ssfj'){
+        if(data.data == ""){
+          data.obj.inhabi_police_station = "";
+        }else if(data.obj.inhabi_police_station){
+          data.obj.inhabi_police_station = "";
+        }
+        this.$store.dispatch("aGetssdw", { bmbh: data.data, type: "sspcs",ptype:'jzd'});
+      }
+      if(data.key.dm == "gzd_ssfj"){
+        if(data.data == ""){
+          data.obj.workplace_police_station = ""
+        }else if(data.obj.workplace_police_station){
+          data.obj.workplace_police_station = "";
+        }
+        this.$store.dispatch("aGetssdw", { bmbh: data.data, type: "sspcs",ptype:'gzd'});
+      }
+    },
+    //简表数据 子组件通知父组件改表格数据
+    transSaveFnc(data){
+      this.lbData = data
+    },
+		// 获取分页等信息
+    pageSizeFnc(data) {
+      this.cx.pageSize = data;
+      this.getTable();
+    },
+    pageNumFnc(data) {
+      this.cx.pageNum = data;
+      this.getTable();
+		},
+		//表格排序
+		sortChange(data){
+			this.cx.order = data.prop;
+      this.cx.direction = data.direction
+      this.getTable();
+		},
+		// 查询用户列表
+    getTable(flag,pdQ) {
+      if(flag){this.clearSort = new Date().getTime();delete this.cx.order;delete this.cx.direction }
+      if(this.cx.pd.statiType.length==0){
+        this.lbData = this.$cdata.czxx.xxwhgl.lb
+        this.$api.post(this.$api.aport4 + "/comprehensive/listdata", pdQ||this.cx, r => {
+          this.tableData.list = r.list;
+          this.tableData.total = r.total
+        });
+      }else{
+        this.$api.post(this.$api.aport4 + '/comprehensive/getGroupData',pdQ||this.cx, r => {
+          this.tableData.list = r.list;
+          this.tableData.total = r.total;
+          this.tableHeadReal = [
+            {
+              dm:'count',
+              cm:'统计数量'
+            },
+          ];
+          this.cx.pd.statiType.forEach((item) => {
+            this.tableHead.forEach((jtem) => {
+              if(item == jtem.dm||item+'_desc' == jtem.dm){
+                this.tableHeadReal.splice(this.tableHeadReal.length-1,0,jtem)
+              }
+            })
+          })
+          this.lbData = this.tableHeadReal
+        })
+      }
+    },
+		//批量按钮
+		plFnc(data){
+      console.log(data)
+      // this.dialogTitle = data.menu_name;
+      // this.dialogType = data.py;
+		},
+		//列表内按钮&&双击行
+		blFnc(data){
+      console.log(data)
+      this.dialogType = data.btn.button_type;
+      this.dialogTitle = data.btn.button_name;
+      // this.onlyId = data.data.personnel_id;
+      if(data.double){
+        this.dialogType = 'detail',
+        this.dialogTitle = '详情'
+      }
+      if(this.dialogType == 'detail'){
+        if(this.cx.pd.statiType.length == 0){
+          let routeData = this.$router.resolve({
+            path: '/CzCTXQ',
+            query:{onlyId:data.data.personnel_id}
+          });
+          window.open(routeData.href, '_blank');
+        }else{
+          this.pageRef="zhfx"//常住综合分析
+          this.tablePd = {};
+          let queryPd = this.cx.pd;
+          let basicPd = this.$fnc.objCompare(data.data, queryPd);
+          this.tablePd = Object.assign({},basicPd.obj1,basicPd.obj2)
+          this.timer = new Date().getTime();
+          this.isShowDialog = true;
+        }
+      }
+    },
+    //表格复选框选择
+		SelectionChange(){},
+		//点击行
+		rowClick(){},
     chartsBegin(){
       /////
       this.chartShow_1_1();
@@ -198,7 +479,8 @@ export default {
       this.chartShow_2_2();
       this.chartShow_2_3();
       /////
-      this.chartShow_3();
+      // this.chartShow_3();
+      this.chartFun_3()
       /////
       this.chartShow_4();
       /////
@@ -261,7 +543,7 @@ export default {
             data: [
               {
                 name: "作文得分",
-                value: 70,
+                value: 20,
                 itemStyle: {
                   normal: {
                     color: {
@@ -288,24 +570,24 @@ export default {
             radius: ["20%", "52%"],
             z: 2 //柱状图组件的所有图形的z值。控制图形的前后顺序。z值小的图形会被z值大的图形覆盖。
           },
-          {
-            // 灰色环
-            type: "bar",
-            data: [
-              {
-                value: 100,
-                itemStyle: {
-                  color: "#eee"
-                }
-              }
-            ],
-            coordinateSystem: "polar",
-            roundCap: true,
-            barWidth: 11,
-            barGap: "-110%", // 两环重叠
-            radius: ["20%", "53%"],
-            z: 1
-          }
+          // {
+          //   // 灰色环
+          //   type: "bar",
+          //   data: [
+          //     {
+          //       value: 100,
+          //       itemStyle: {
+          //         color: "#eee"
+          //       }
+          //     }
+          //   ],
+          //   coordinateSystem: "polar",
+          //   roundCap: true,
+          //   barWidth: 11,
+          //   barGap: "-110%", // 两环重叠
+          //   radius: ["20%", "53%"],
+          //   z: 1
+          // }
         ]
       };
     },
@@ -821,6 +1103,12 @@ export default {
       };
     },
     //
+    chartFun_3(){
+      this.$api.post(this.$api.aport4 + '/comprehensive/pieChart',this.cx,r=>{
+        this.chartShow_3();
+        console.log(r)
+      })
+    },
     chartShow_3() {
       this.optData_3 = {
         tooltip: {
